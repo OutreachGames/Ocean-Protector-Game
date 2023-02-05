@@ -1,0 +1,14 @@
+
+	if action_id == HSH.control_touch and action.pressed then
+
+		local screen_pos = CAM.screen_to_world(nil, vmath.vector3(action.x, action.y, 0))
+
+		local start_swimming_info = {
+			minfo_swim_to_x = screen_pos.x,
+			minfo_swim_to_y = screen_pos.y,
+			-- also set subgroup list name with this message for convenience
+			minfo_stop_is_instant = false,
+		}
+
+		--msg.post("fish_tuna/go", HSH.msg_order_swim_to_pos, start_swimming_info)
+	end

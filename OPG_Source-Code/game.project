@@ -1,0 +1,32 @@
+[bootstrap]
+main_collection = /main/levels/ocean_level.collectionc
+render = /orthographic/render/orthographic.renderc
+
+[script]
+shared_state = 1
+
+[display]
+width = 1600
+height = 900
+
+[android]
+input_method = HiddenInputField
+
+[project]
+title = Ocean Protector
+version = 0.1
+publisher = Outreach Games
+developer = Alex Zimmerman
+dependencies#0 = https://github.com/britzl/gooey/archive/master.zip
+dependencies#1 = https://github.com/britzl/defold-orthographic/archive/master.zip
+dependencies#2 = https://github.com/defold/extension-spine/archive/master.zip
+
+[native_extension]
+app_manifest = /generated.appmanifest
+
+[html5]
+show_made_with_defold = 0
+cssfile = /builtins/manifests/web/dark_theme.css
+splash_image = /asset_files/images/background/Asset_logo.png
+show_fullscreen_button = 0
+

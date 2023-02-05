@@ -1,0 +1,1146 @@
+-- OVERVIEW:
+-- setups and controls the ocean visuals
+
+-- dependencies
+local CAM = require ("orthographic.camera")
+local RES = require ("modules.screen_res_md")
+local HSH = require ("modules.hashes_md")
+local EXT = require ("modules.extend_md")
+
+-- constants for easy tuning
+local CV_Base_Z_Weather = 0.1
+local CV_Base_Z_Fish = -0.2
+
+local CV_Spawn_Keys = {
+
+	group_weather = {
+		subgroup_clouds = {
+			spawn_list_key = "weather_clouds",
+			spawn_coll_factory = "spawner_weather_clouds#collectionfactory",
+			spawn_z_base = CV_Base_Z_Weather,
+			spawn_y_range = {280, 380}
+		},
+		subgroup_waterlines = {
+			spawn_list_key = "weather_waterlines",
+			spawn_coll_factory = "spawner_weather_waterlines#collectionfactory",
+			spawn_z_base = CV_Base_Z_Weather + 0.1,
+			spawn_y_range = {155, 155}
+		},
+		subgroup_waves = {
+			spawn_list_key = "weather_waves",
+			spawn_coll_factory = "spawner_weather_waves#collectionfactory",
+			spawn_z_base = CV_Base_Z_Weather,
+			spawn_y_range = {175, 200}
+		},
+	},
+
+	group_fish = {
+		subgroup_tuna = {
+			spawn_list_key = "fish_tuna",
+			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
+			spawn_z_base = CV_Base_Z_Fish,
+			spawn_y_range = {-20, 140},
+			spawn_x_min = -10,
+			--spawn_x_max is based on max count of spawn needed
+			spawn_max_count = 10,
+			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
+			object_scale_base = 0.4,
+			object_rotation_speed_base = 60,
+			object_translation_speed_base = 40,
+		}
+	}
+}
+
+local CV_Update_Property = {
+	method_overwrite = 0,
+	method_multiply = 1,
+	method_add = 2,
+}
+
+-- functions
+local function SetBins_X(t, disable_x_correction)
+
+	-- get equal length bins given some options
+	-- also corrects for center of screen being 0 by default
+
+	-- get input and set default values
+	local num_bins = t.num_bins or 1
+	local yrange_table_unscaled = t.yrange_table_unscaled or {0 ,0}
+	local scaling_y = t.scaling_y or RES.Scaling_Y
+	local screen_width = t.screen_width or RES.Internal_X
+	local use_center_bins = t.use_center_bins --default false
+	local sort_y = t.sort_y --default false
+	local z_base = t.z_base or 0
+	local num_extra_bins_left_right_tbl = t.num_extra_bins_left_right_tbl or {1,1}
+	local use_random_x = t.use_random_x --default false
+
+	-- setup usage variables
+	local bin_width = screen_width/num_bins
+	local y_range = {math.floor(yrange_table_unscaled[1] * scaling_y), math.floor(yrange_table_unscaled[2] * scaling_y)}
+	local bins = {}
+
+	-- correction of x 0 as center of screen instead of far left
+	local x_correction
+	if disable_x_correction then
+		x_correction = 0
+	else
+		x_correction = -(screen_width/2)
+	end
+
+	-- add extra bins on each side if specified 
+	-- (ie increase number and x range)
+	if num_extra_bins_left_right_tbl ~= nil then
+		for i_side,v_num_bins in ipairs(num_extra_bins_left_right_tbl) do
+			if v_num_bins > 0 then
+				screen_width = screen_width + bin_width*v_num_bins
+				num_bins = num_bins + v_num_bins
+				--only have to add to x correction for bins on left side offscreen
+				if i_side == 1 then
+					x_correction = x_correction - ((bin_width/2)*v_num_bins)
+				end
+			end
+		end
+	end
+
+	-- check and save if not using center bins
+	local no_bins
+	if not use_center_bins then
+		local half_bins = num_bins / 2
+		if (num_bins % 2 == 0) then
+			--even
+			no_bins = {half_bins, half_bins+1}
+		else
+			--odd
+			local mid = num_bins - math.floor(half_bins)
+			no_bins = {mid, mid}
+		end
+	end
+
+	-- go through bins and choose and set positions
+	local bins_j = 1
+	for i=1,num_bins do
+		local bin_center_x = (bin_width/2) + (bin_width)*(i-1)
+		--plus or minus some random amount from bin center
+		local x = bin_center_x + x_correction
+		if use_random_x then
+			local x_offset_range = math.floor(bin_width * 0.3)
+			x = x + math.random(-x_offset_range, x_offset_range)
+		end
+		local y = math.random(y_range[1], y_range[2])
+		-- add this bin to list 
+		if ( use_center_bins ) or ( not use_center_bins and no_bins ~= nil and ( (i < no_bins[1]) or (i > no_bins[1]) ) ) then
+			bins[bins_j] = {x, y, z_base}
+			bins_j = bins_j + 1
+		end
+	end
+
+	-- depth Y sort if specified
+	if sort_y then
+		-- sort with largest y first (ie highest up)
+		local function compareY(a, b)
+			return a[2] > b[2]
+		end
+		table.sort(bins, compareY)
+		-- as we go down list add to z, cap at 1
+		local current_z = z_base
+		for i_bin,_ in ipairs(bins) do
+			local new_z = current_z + ( 0.001 * (i_bin - 1) )
+			if new_z > 1 then
+				new_z = 1
+			end
+			bins[i_bin][3] = new_z
+		end
+	end
+
+	return bins
+
+end
+
+local function Scale_by_Y(pos_y, yrange_table_unscaled, scaling_y, new_y_range)
+
+	-- set depth y-scaling
+
+	-- the smallest scales should correspond with the highest y (small things high up in background)
+	-- smaller high up seems to look good...
+		--recall positions are ordered from:
+			--first: highest y/most in background
+			--last: lowest y/most in foreground
+	-- so get percentage of how high object is in y-range and scale within scaling bounds
+	-- then randomize size a tiny bit
+
+	local range_diff = (yrange_table_unscaled[2] - yrange_table_unscaled[1]) * scaling_y
+	local percent_height = (pos_y - (yrange_table_unscaled[1] * scaling_y)) / range_diff -- AKA x in y m*x+b
+	local m = ((new_y_range[2] - new_y_range[1]) * percent_height)
+
+	-- y = m*x + b
+	-- scale = m * percent_height + b
+	return ( m * percent_height  + new_y_range[1]) * ((math.random(90, 110)/100) ) -- and some minor variation
+
+end
+
+local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_factors, use_center, print_results)
+
+    -- given an area and cell size, return a set of grid points
+
+    -- setup variables
+    if use_center == nil then
+        use_center = true
+    end
+
+	required_num = required_num or 1
+
+    local x_min = range_tbl.x[1]
+    local x_max = range_tbl.x[2]
+    local y_min = range_tbl.y[1]
+    local y_max = range_tbl.y[2]
+
+    local cell_width = cellsize_tbl.x
+    local cell_height = cellsize_tbl.y
+    local z_base = cellsize_tbl.z or 0
+
+    -- validity checking
+    if x_min > x_max or y_min > y_max then
+        print("Error, values for grid are incongruent. X min, max "..x_min..", "..x_max..", Y min, max"..y_min..", "..y_max.."\n")
+        return nil
+    end
+
+    if cell_width <= 0 or cell_height <= 0 then
+        print("Error, values for cell are incongruent. Cell width, height are "..cell_width..", "..cell_height.."\n")
+        return nil
+    end
+
+    -- setup ranges
+    local x_range = math.abs(x_max - x_min)
+    local y_range = math.abs(y_max - y_min)
+
+    -- get max number of whole cells with thesx and y ranges
+    local number_cells_in_x_axis = math.floor(x_range/cell_width)
+    local number_cells_in_y_axis = math.floor(y_range/cell_height)
+    local total_number_cells = number_cells_in_x_axis * number_cells_in_y_axis
+
+    -- make sure there are some cells to continue
+    if total_number_cells <= 0 then
+        print("Error, no grid cells are possible, number of cells for x, y are "..number_cells_in_x_axis..", "..number_cells_in_y_axis.."\n")
+        return nil
+    end
+
+	-- check if this setup reaches the required number
+	if required_num > total_number_cells then
+		-- add cells in x direction until reach number
+		local num_per_addition = number_cells_in_y_axis
+		local extra_needed_cells = required_num - total_number_cells
+		local extra_columns = 1
+		if extra_needed_cells > num_per_addition then
+			extra_columns = math.ceil(extra_needed_cells/num_per_addition)
+		end
+		-- add these values and recalcuate
+		number_cells_in_x_axis = number_cells_in_x_axis + extra_columns
+		total_number_cells = number_cells_in_x_axis * number_cells_in_y_axis
+	end
+
+	if print_results then
+		print("Grid contains "..total_number_cells.." cells with dimensions: "..number_cells_in_x_axis..","..number_cells_in_y_axis.."\n")
+	end
+
+    -- setup grid variables
+    local cells_tbl = {}
+    local center_cell_x, center_cell_y = 0, 0
+    if use_center then
+        center_cell_x = cell_width/2
+        center_cell_y = cell_height/2
+    end
+
+	-- setup random offset if specified
+	local rand_x, rand_y, use_random_offset
+	if rand_offset_factors ~= nil and rand_offset_factors.x ~= nil and rand_offset_factors.y ~= nil then
+        use_random_offset = true
+		rand_x = math.floor(cell_width * rand_offset_factors.x)
+		rand_y = math.floor(cell_height * rand_offset_factors.y)
+    end
+
+
+    -- run grid setting
+    local num_cells = 0
+
+    for num_row = 1, number_cells_in_y_axis do
+        for num_column = 1, number_cells_in_x_axis do
+
+			if num_cells < required_num then
+				-- get base x and y
+				local x = x_min + center_cell_x + (cell_width)*(num_column-1)
+				local y = y_min + center_cell_y + (cell_height)*(num_row-1)
+
+				-- add random offset if specified
+				if use_random_offset then
+					x = x + math.random(-rand_x, rand_x)
+					y = y + math.random(-rand_y, rand_y)
+				end
+
+				-- save to table
+				num_cells = num_cells + 1
+				cells_tbl[num_cells] = {x = x, y = y, z = z_base, i_index = num_cells}
+				if print_results then
+					print("x: "..x..",   y: "..y.."\n")
+				end
+			else
+				break
+			end
+
+        end
+    end
+
+	return cells_tbl
+
+end
+
+local function Set_Sea_Particles(self, toggle_on, clear_instant)
+
+	-- toggle sea dust on or off
+
+	if toggle_on then
+		-- tell bubbler to start, and it is only ever triggered once
+		if not self.bubble_retimer_started then
+			self.bubble_retimer_started = true
+			msg.post("spawner_bubbles", "msg_make_bubbles")
+			timer.delay(6, true, function(self)
+				if self.weather_changeable and math.random(0, 1) == 1 then
+					msg.post("spawner_bubbles", "msg_make_bubbles")
+				end
+			end)
+		end
+		-- sea dust particle effect is set to loop already in the effect file
+		particlefx.play("spawner_sea_dust#particlefx")
+	else
+		-- does not seem like there is an easy way to fade out tint of particles 
+		-- tint can be set with `particlefx.set_constant` but that is instant
+		particlefx.stop("spawner_bubbles#particlefx", { clear = clear_instant })
+		particlefx.stop("spawner_sea_dust#particlefx", { clear = clear_instant })
+	end
+
+end
+
+local function Spawned_ResetAll(self, spawn_list_key)
+
+	-- reset all spawned objects from given list key
+
+	-- if there have been objects spawned then delete and clear them all
+	if self.spawned_objects_list[spawn_list_key] ~= nil then
+		if self.spawned_objects_sum[spawn_list_key] > 0 then
+			go.delete(self.spawned_objects_list[spawn_list_key])
+		end
+	end
+
+	-- reset tracker variables
+	self.spawned_objects_list[spawn_list_key] = nil
+	self.spawned_objects_list[spawn_list_key] = {}
+	self.spawned_objects_sum[spawn_list_key] = 0
+
+	-- if running this function as part of a subgroup weather
+	-- then recall clouds have internal script function that stops particle effects on death
+	-- also recall that we do not have to disable
+	-- particle effects on gos in the water such as bubbler and ocean duster, 
+	-- since those are in the water and not affected by weather
+	-- also, so far, things like the bubbler, sea dust, and sun and not in spawn list
+	-- because they are always present in set amounts and easy to disable or change 
+
+end
+
+local function Spawned_AddObject(self, spawn_list_key, go)
+
+	-- add spawned object to list key tracker tables
+
+	local current_count = self.spawned_objects_sum[spawn_list_key]
+
+	if current_count == nil then
+		print("Warning: Add Spawned Object provided with non-initalized key "..spawn_list_key..", initializing now...\n")
+		Spawned_ResetAll(self, spawn_list_key)
+		current_count = 0
+	end
+
+	local new_sum = current_count + 1
+	self.spawned_objects_sum[spawn_list_key] = new_sum
+	self.spawned_objects_list[spawn_list_key][new_sum] = go
+
+end
+
+local function Spawned_UpdateProperty(self, spawn_list_key, list_prop_tbls) --{ {prop_name, prop_value, prop_method, prop_custom} }
+
+	-- update a property of a given spawned game object
+
+	-- validity checks
+	local list = self.spawned_objects_list[spawn_list_key]
+
+	if list == nil then
+		print("Warning: Update property of spawned object provided with invalid key "..spawn_list_key.."...\n")
+		return 
+	end
+
+	local method_multiply = CV_Update_Property.method_multiply
+	local method_add = CV_Update_Property.method_add
+
+	local function update_prop(obj_id, update_info)
+
+		-- setup variables
+		local new_val
+		local obj_url 
+
+		local is_custom_property = update_info.prop_custom
+		local method = update_info.prop_method
+		local property_to_update = update_info.prop_name
+		local prop_val = update_info.prop_value
+
+		-- if the property is custom then it has to be sent to script component
+		if is_custom_property then
+			obj_url = msg.url(nil, obj_id, "script")
+		else
+			obj_url = obj_id
+		end
+		-- get new value using method type
+		if method == method_multiply then
+			-- multiply
+			new_val = go.get(obj_url, property_to_update) * prop_val
+		elseif method == method_add then
+			-- add
+			new_val = go.get(obj_url, property_to_update) + prop_val
+		else 
+			-- overwrite
+			new_val = prop_val
+		end
+
+		-- update the value
+		go.set(obj_url, property_to_update, new_val)
+
+	end
+
+	-- go through all objects in this list and update that property 
+	for _, v_id in ipairs(list) do
+
+		for _,prop_info in ipairs(list_prop_tbls) do
+			update_prop(v_id, prop_info)
+		end
+
+	end
+
+end
+
+local function Spawn_WaterLines(self, wave_direction, is_raining)
+
+	-- add in the main water line
+
+	local scaling_y = RES.Scaling_Y
+	local screen_width = RES.Internal_X
+
+	local sgroup = CV_Spawn_Keys.group_weather.subgroup_waterlines
+
+	local tint
+	if is_raining then
+		tint = {0.75, 0.75, 0.75}
+	else
+		tint = {1, 1, 1}
+	end
+
+	local side_bins
+	if wave_direction > 0 then 
+		side_bins = {1, 0}
+	elseif wave_direction < 0 then
+		side_bins = {0, 1}
+	else
+		side_bins = {1, 1}
+	end
+
+	local bin_t = {
+		num_bins = 1,
+		yrange_table_unscaled = sgroup.spawn_y_range,
+		scaling_y = scaling_y,
+		screen_width = screen_width,
+		use_center_bins = true,
+		sort_y = false,
+		z_base = sgroup.spawn_z_base,
+		num_extra_bins_left_right_tbl = side_bins,
+		use_random_x = false
+	}
+
+	local bins = SetBins_X(bin_t)
+
+	local movex_time = 30
+	if wave_direction == 0 then
+		-- if swaying there is a shorter distance so time tuning is trickier
+		movex_time = math.floor(movex_time * 1.6) -- when using sway it was 0.7
+		wave_direction = self.no_wind_default
+		-- also main wave not moving in same direction as clouds is strange
+		-- so either clouds do not move with wind direction 0, or we track what direction 0 actually is
+	end
+
+	local collfact_name = sgroup.spawn_coll_factory
+	local spawn_group = sgroup.spawn_list_key
+
+	for _,v_bin in ipairs(bins) do
+		local pos = vmath.vector3(v_bin[1], v_bin[2], v_bin[3])
+		local rot = nil
+
+		local props = {
+			[HSH.STR_go] = { 
+				Obj_Wave_Movment_X_Buffer = false,
+				Obj_Wave_Movment_X_Direction = wave_direction,
+				Obj_Wave_Movment_X_Time = movex_time,
+				Obj_Wave_Movment_X_Multiplier = 0.2, -- only valid if x direction == 0
+				Obj_Tint_R = tint[1],
+				Obj_Tint_G = tint[2],
+				Obj_Tint_B = tint[3]
+			}
+		}
+
+		local new_collection = collectionfactory.create(collfact_name, pos, rot, props)
+		Spawned_AddObject(self, spawn_group, new_collection[HSH.STR_go])
+	end
+
+end
+
+local function Spawn_Clouds(self, wave_direction, is_raining)
+
+	-- add in and arrange all clouds
+
+	local scaling_y = RES.Scaling_Y
+	local screen_width = RES.Internal_X
+
+	local sgroup = CV_Spawn_Keys.group_weather.subgroup_clouds
+
+	local tint
+	if is_raining then
+		tint = {0.75, 0.75, 0.75}
+	else
+		tint = {1, 1, 1}
+	end
+
+	-- if sunny, then do not use middle one so sun can keep shining for now
+	-- sorted by y-height, higher y is lower z/more in background
+	local y_range = sgroup.spawn_y_range
+
+	local y_override, z_override, scale_override
+	local num_bins, sort_y, center_bins, bins_tbl
+	if is_raining then
+		y_override = (y_range[1]+60)*scaling_y
+		z_override = sgroup.spawn_z_base
+		num_bins = 8
+		sort_y = false
+		center_bins = true
+		scale_override = 1.5 -- too large and it gets fuzzy
+		bins_tbl = {1,1}
+	else
+		num_bins = 5
+		sort_y = true
+		center_bins = false
+		bins_tbl = {0,0}
+	end
+
+	local bin_t = {
+		num_bins = num_bins,
+		yrange_table_unscaled = y_range,
+		scaling_y = scaling_y,
+		screen_width = screen_width,
+		use_center_bins = center_bins,
+		sort_y = sort_y,
+		z_base = sgroup.spawn_z_base,
+		num_extra_bins_left_right_tbl = bins_tbl,
+		use_random_x = true
+	}
+
+	local bins = SetBins_X(bin_t)
+
+	-- clouds either move in wave direction with wind, or choose a random direction
+	local num_options = 3
+	local sign
+	local mtime = 130 
+	if wave_direction > 0 then
+		sign = 1
+	elseif wave_direction < 0 then
+		sign = -1
+	else
+		-- move slower if no large wind
+		mtime = mtime * 1.7
+		sign = self.no_wind_default
+	end
+
+	local collfact_name = sgroup.spawn_coll_factory
+	local spawn_group = sgroup.spawn_list_key
+
+	for _,v_bin in ipairs(bins) do
+		local y = y_override or v_bin[2]
+		local z = z_override or v_bin[3]
+		local pos = vmath.vector3(v_bin[1], y, z)
+		local rot = nil
+
+		-- 0.0 -> 1.5 and 1.0 -> 0.5 
+		local scale = scale_override or Scale_by_Y(pos.y, y_range, scaling_y, {1.5, 0.5})
+
+		-- smaller clouds appear to be in background, so they should move slower
+		-- inverse the scale, so smaller scale is larger/slower travel time
+		local movetime = mtime / scale
+		if wave_direction == 0 then
+			movetime = movetime * 1.6
+		end
+
+		local props = {
+			[HSH.STR_go] = { 
+				Obj_Wave_Movment_X_Buffer = true,
+				Obj_Wave_Movment_X_Direction = sign,
+				Obj_Wave_Movment_X_Time = movetime, 
+				Obj_Wave_Movment_X_Multiplier = 2.0*sign, -- only valid if x direction == 0
+				Obj_Number_Sprite_Options = num_options,
+				Obj_Selected_Sprite_Option = math.random(1, num_options),
+				Obj_Wave_Sprite_FlipH = math.random(0,1) == 1,
+				Obj_Tint_R = tint[1],
+				Obj_Tint_G = tint[2],
+				Obj_Tint_B = tint[3],
+				Obj_PlayParticleFX = is_raining
+			}
+		}
+
+		local new_collection = collectionfactory.create(collfact_name, pos, rot, props, scale)
+		Spawned_AddObject(self, spawn_group, new_collection[HSH.STR_go])
+
+		if is_raining then
+			-- spawn some new clouds with bit of random x, higher y, lower z
+			local new_pos = {
+				v_bin[1] * (math.random(80, 120)/100),
+				y + (scaling_y * math.random(40, 60)),
+				z - 0.01
+			}
+
+			-- these new clouds do not rain though
+			props[HSH.STR_go].Obj_PlayParticleFX = false
+
+			local extra_collection = collectionfactory.create(collfact_name, vmath.vector3(new_pos[1], new_pos[2], new_pos[3]), rot, props, scale)
+			Spawned_AddObject(self, spawn_group, extra_collection[HSH.STR_go])
+		end
+
+	end
+
+end
+
+local function Spawn_Waves(self, wave_direction, is_raining)
+
+	-- add in and arrange the surface waves
+
+	local scaling_y = RES.Scaling_Y
+	local screen_width = RES.Internal_X
+
+	local sgroup = CV_Spawn_Keys.group_weather.subgroup_waves
+
+	local tint
+	if is_raining then
+		tint = {0.75, 0.75, 0.75}
+	else
+		tint = {1, 1, 1}
+	end
+
+	local y_range = sgroup.spawn_y_range
+	local waves_t = {
+		num_bins = 7,
+		yrange_table_unscaled = y_range,
+		scaling_y = scaling_y,
+		screen_width = screen_width,
+		use_center_bins = true,
+		sort_y = true,
+		z_base = sgroup.spawn_z_base,
+		num_extra_bins_left_right_tbl = {1,1},
+		use_random_x = true
+	}
+
+	local bins = SetBins_X(waves_t)
+
+	local base_time_x = 30
+
+	local collfact_name = sgroup.spawn_coll_factory
+	local spawn_group = sgroup.spawn_list_key
+
+	for _,v_bin in ipairs(bins) do
+		local pos = vmath.vector3(v_bin[1], v_bin[2], v_bin[3])
+		local rot = nil
+		local selected_sprite_i, fliph
+		-- use uneven wave if there is a wave direction
+		local move_time, move_x_multi
+
+		-- 0.0 -> 1.1 and 1.0 -> 0.8 
+		local scale = Scale_by_Y(pos.y, y_range, scaling_y, {1.1, 0.8})
+
+		local y_scale
+		if wave_direction == 0 then
+			-- bit of random time and offset of just swaying
+			move_time = math.floor((math.random(85, 115)/100) * base_time_x)
+			move_x_multi = math.random(70, 90)/100
+			y_scale = 0.75
+		else
+			move_time = math.floor(base_time_x * 1.3)
+			move_x_multi = 1
+			y_scale = 0.70
+		end
+		if wave_direction ~= 0 then
+			selected_sprite_i = 2 -- uneven is sprite2
+			fliph = wave_direction < 0
+		else
+			selected_sprite_i = 1
+			fliph = math.random(0, 1) == 1
+		end
+
+		local props = {
+			[HSH.STR_go] = { 
+				Obj_Wave_Movment_X_Buffer = true,
+				Obj_Wave_Movment_X_Time = move_time,
+				Obj_Wave_Movment_X_Direction = wave_direction,
+				Obj_Wave_Movment_X_Multiplier = move_x_multi, -- only valid if x direction == 0
+				Obj_Wave_Movment_Y_Use = true,
+				Obj_Wave_Movment_Y_Time = 2.5,
+				Obj_Wave_Movment_Y_Scale = y_scale,
+				Obj_Number_Sprite_Options = 2,
+				Obj_Selected_Sprite_Option = selected_sprite_i,
+				Obj_Wave_Sprite_FlipH = fliph,
+				Obj_Tint_R = tint[1],
+				Obj_Tint_G = tint[2],
+				Obj_Tint_B = tint[3]
+			}
+		}
+
+		local new_collection = collectionfactory.create(collfact_name, pos, rot, props, scale)
+		Spawned_AddObject(self, spawn_group, new_collection[HSH.STR_go])
+
+	end
+
+end
+
+local function Run_CoastalOA(self, percentage_to_hide)
+
+	-- plays particle effect for coastal acidification
+	-- make sure weather going from left to right when OACoast is running
+	-- to reduce amount shown just move spawner game object more off to the left
+	-- full throttle coastal OA effect is when game object of "spawner_coastOA" is at x pos of -800
+
+	if self.coastal_oa_playing then
+		print("Notice: Run Coastal OA function called while currently running, requested run will not occur...")
+		return
+	end
+
+	-- default args
+	-- includes amount of effect to hide/show, 1 is fullly hidden, 0 is show everything
+	if type(percentage_to_hide) ~= "number" then
+		percentage_to_hide = 0
+	end
+
+	-- if hiding entire effect then return early, otherwise clamp
+	if percentage_to_hide >= 1 then
+		return
+	end
+	percentage_to_hide = EXT:math_clamp(percentage_to_hide, 0, 1)
+
+	-- play particle effect suite and save status
+	self.coastal_oa_playing = true
+
+	-- move spawner object to starting position based on amount of effect to show
+	local runoff_emitter_length = 800
+	local runoff_offset = 100
+	local amount_to_hide = runoff_emitter_length * percentage_to_hide
+	local start_x = RES.Boundary_X[1] - (runoff_emitter_length/2) - amount_to_hide + runoff_offset
+	local end_x = start_x + runoff_emitter_length
+	local duration = 10
+	local delay = 1.0 --gives time for runoff to spawn and to say something if needed
+
+	go.set("spawner_coastOA", "position.x", start_x)
+	go.animate("spawner_coastOA", "position.x", go.PLAYBACK_ONCE_FORWARD, end_x, go.EASING_OUTSINE, duration, delay)
+
+	-- play effect while moving object
+	particlefx.play("spawner_coastOA#particlefx")
+
+	-- wait until particle effects are done before being able to do again
+	local anim_duration = 30
+	timer.delay(anim_duration, false, function(self)
+		self.coastal_oa_playing = false
+	end)
+
+end
+
+local function SetStatic_Weather(self, is_raining) 
+
+	-- set the visuals for static sprites specific to the weather
+	-- does not spawn anything, changes tint and simply starts particle fx
+	-- so can be called repeatedly without having to worry about spawning objects first
+
+	-- setup 
+	local vmath1 = vmath.vector4(1.0, 1.0, 1.0, 1.0)
+	local tint_sky, tint_watertop, tint_waterbottom
+	local str_set 
+	if is_raining then
+		-- also darken sky a bit and hide sun and light
+		-- disable sprites of light and also shadow collisions
+		str_set = "disable"
+		tint_sky = vmath.vector4(0.50, 0.50, 0.50, 1)
+		tint_watertop = vmath.vector4(0.75, 0.75, 0.75, 1)
+		tint_waterbottom = vmath.vector4(0.80, 0.80, 0.80, 1)
+	else
+		str_set = "enable"
+	end
+
+	-- run
+	go.set("background_sky_ocean#sprite", "tint", tint_sky or vmath1)
+	go.set("background_water_top#sprite", "tint", tint_watertop or vmath1)
+	go.set("background_water_bottom_full#sprite", "tint", tint_waterbottom or vmath1)
+
+	msg.post("background_sun#sprite", str_set)
+	msg.post("background_water_light#rays_bottom", str_set)
+	msg.post("background_water_light#rays_top", str_set)
+	msg.post("background_water_light#shade_inner", str_set)
+	msg.post("background_water_light#shade_middle", str_set)
+	msg.post("background_water_light#shade_outer", str_set)
+
+	msg.post("background_water_light", "msg_reset_shadows")
+
+end
+
+local function Setup_Weather(self, at_scene_start, is_raining, wave_direction)
+
+	-- setup all aspects involved with the weather 
+
+	-- note, weather is setup all at once and has objects reused
+	--   this is b/c knowing what all objects are at once allows script 
+	--   to arrange them in a nice looking way, whereas if objects created at intervals
+	--   then it might be more random and not look as nice
+
+	-- setup default args
+	if is_raining == nil then
+		is_raining = false
+	end
+	if type(wave_direction) ~= "number" then
+		wave_direction = 1
+	end
+
+	-- clear anything that was around previously
+	-- note, cannot delete objects then spawn more in same frame, 
+	-- as that overrides buffer and makes other bugs
+	for _, v_groupkey in pairs(CV_Spawn_Keys.group_weather) do
+		Spawned_ResetAll(self, v_groupkey.spawn_list_key)
+	end
+
+	local function loader_helper(self)
+		-- setup the ocean water and lights, does not spawn
+		SetStatic_Weather(self, is_raining)
+
+		-- spawn the water lines
+		Spawn_WaterLines(self, wave_direction, is_raining)
+
+		-- spawn some clouds
+		Spawn_Clouds(self, wave_direction, is_raining)
+
+		-- spawn some waves, sorted by y-height, 
+		-- higher y is lower z/more in background
+		Spawn_Waves(self, wave_direction, is_raining)
+
+		-- sparkle light rays? works, 
+		-- but shows artifacts with the transparency
+		-- plus will not always have light rays
+
+		-- start spawning some bubbles and sea dust
+		Set_Sea_Particles(self, true)
+
+		-- stop any raining sound then play if needed sound
+		-- if it is supposed to rain (is_raining == true)
+			-- if already raining (self.weather_is_rain_sound_playing == true)
+				-- no need to change sound
+			-- if not raining (self.weather_is_rain_sound_playing == false)
+				-- play sound
+		-- if it is supposed to not rain (is_raining == false)
+			-- if already raining (self.weather_is_rain_sound_playing == true)
+				-- stop sound
+			-- if not raining (self.weather_is_rain_sound_playing == false)
+				-- no need to change sound
+		if is_raining then
+			if not self.weather_is_rain_sound_playing then
+
+				self.weather_is_rain_sound_playing = true
+
+				sound.play("sound_controller#sound_rain", {delay = 0, gain = 0.01, pan = 0, speed = 1.0})
+				go.animate("sound_controller#sound_rain", "gain", go.PLAYBACK_ONCE_FORWARD, 0.3, go.EASING_LINEAR, 0.25)
+
+			end
+		else
+			if self.weather_is_rain_sound_playing then
+
+				local function func_stop_sound(self)
+					sound.stop("sound_controller#sound_rain")
+					self.weather_is_rain_sound_playing = false
+				end
+
+				go.animate("sound_controller#sound_rain", "gain", go.PLAYBACK_ONCE_FORWARD, 0.01, go.EASING_LINEAR, 0.25, 0, func_stop_sound)
+			end
+		end
+
+	end
+
+	-- if at scene start then load right away
+	-- otherwise give time for unloading
+	if at_scene_start then
+		loader_helper(self)
+	else
+		timer.delay(self.reload_time, false, loader_helper)
+	end
+
+end
+
+local function Weather_Change(self, is_raining, wave_direction)
+
+	-- change the weather to raining or sunny
+
+	-- do not change weather if currently doing a weather change
+	if not self.weather_changeable then
+		print("Notice: Change Weather function called while weather was undergoing change, proposed change will not occur...")
+		return
+	end
+
+	-- switch weather 
+	self.weather_changeable = false
+
+	-- fade out, then run Setup Scene with weather arguments
+	-- recall particles are above go sprites, so use GUI fader
+	local fader_time = 0.75
+	msg.post("hud#gui", HSH.msg_fade_out, {minfo_fade_duration = fader_time})
+
+	-- once fadeout done and fully black and hiding view, then update scene
+	timer.delay(fader_time + 0.25 , false, function(self)
+
+		-- run weather setup again
+		-- recall the overall setup clears out anything that was spawned, 
+		-- then spawns in new stuff a few moments later
+		Setup_Weather(self, false, is_raining, wave_direction)
+
+		-- fade back in, wait enough time for setup scene to clear and reload
+		timer.delay(self.reload_time*2, false, function(self)
+
+			-- fade back in
+			msg.post("hud#gui", HSH.msg_fade_in, {minfo_fade_duration = fader_time})
+
+			-- once fully visible again allow weather to be changed again
+			timer.delay(1.0, false, function(self)
+				self.weather_changeable = true
+			end)
+		end)
+
+	end)
+
+end
+
+local function Spawn_Fish(self, subgroup_tbl, i_position_in_grid)
+
+	-- spawn an individual fish
+
+	-- validity
+	if subgroup_tbl == nil then
+		print("Warning: Spawn fish provided with nil info, will not complete...\n")
+		return
+	end
+
+	-- setup
+	local fish_name = subgroup_tbl.spawn_list_key
+	local collfact_name = subgroup_tbl.spawn_coll_factory
+	local obj_dimensions = subgroup_tbl.object_dimensions
+	local obj_scale_base = subgroup_tbl.object_scale_base
+	local obj_rot_speed_base = subgroup_tbl.object_rotation_speed_base
+	local obj_translate_speed_base = subgroup_tbl.object_translation_speed_base
+	local pos_tbl = subgroup_tbl.spawn_position_grid[i_position_in_grid]
+
+	-- prepare properties
+	-- smaller blurrier ones go in back? size range represents age, not really distance from camera..
+	-- but would still visually make more sense to save slightly blurrier/smaller fish be slightly in background?
+	-- could also say they are too much in the foreground and that's why they are blurry, too...
+	local rand_base = (math.random(80,120)/100)
+	local scale = obj_scale_base * rand_base
+	local pos = vmath.vector3(pos_tbl.x, pos_tbl.y, pos_tbl.z)
+	local rot
+
+	-- for the pixel based arguments using the scale value, too
+	-- though it may seem we want to keep movements equal so that fish stay together
+	-- if speeds get high or low, over time fish fall behind or go too far ahead
+	-- custom easing though allows for internal variation in this speed while keeping overall duration
+	local move_speed_multi = 1
+
+	-- compile into properties table
+	local props = {
+		[HSH.STR_go] = { 
+			Obj_Translation_Speed_Max = move_speed_multi * obj_translate_speed_base,
+			Obj_Rotation_Speed_Max = move_speed_multi * obj_rot_speed_base,
+			Obj_On_Force_Stop_Slowdown_Distance = scale * obj_dimensions.x * 1.5, --x fish lengths to slowdown
+			Obj_On_Done_Flip_Target_Pos_X = true,
+			-- give some minor variation in flip time in case they all flip at once
+			Obj_Flip_Time = 0.4 * rand_base * 2
+		}
+	}
+
+	-- create fish
+	local new_collection = collectionfactory.create(collfact_name, pos, rot, props, scale)
+
+	-- add fish GO to tracker
+	Spawned_AddObject(self, fish_name, new_collection[HSH.STR_go])
+
+	-- set location along x-axis somewhere to start fish movement
+	-- want half the x dimension plus a bit more so when flipping we don't see rotation?
+	--   so far rotation is fine to view, 
+	--   if it turns out not to be then just use subtract instead of add here
+	local start_swimming_info = {
+		minfo_swim_to_x = pos.x + (-RES.Internal_X/1.5),
+		minfo_swim_to_y = pos.y,
+		-- also set subgroup list name with this message for convenience
+		minfo_spawn_keys_subgroup_list_key = fish_name,
+		minfo_stop_is_instant = false,
+		minfo_is_on_init = true
+	}
+
+	-- send message to start swim to with these coordinates
+	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, start_swimming_info)
+
+end
+
+local function SetupAnimals(self)
+
+	-- spawn in all the animals 
+
+	local function func_easy_grid(sgroup)
+
+		-- get grid points from just a few variables
+
+		local count = sgroup.spawn_max_count
+		local obj_size = sgroup.object_dimensions
+		local scale = sgroup.object_scale_base
+
+		local min_x = sgroup.spawn_x_min
+		local max_x = min_x + (obj_size.x*1.2)
+
+		local min_y = sgroup.spawn_y_range[1]
+		local max_y = sgroup.spawn_y_range[2]
+		if max_y + obj_size.y < min_y then
+			max_y = min_y + obj_size.y*1.2
+		end
+
+		local rand_offset_factor = {x=0.25, y=0.3}
+
+		return GetGridPoints({x={min_x, max_x}, y={min_y, max_y}}, {x = obj_size.x*scale, y = obj_size.y*scale}, count, rand_offset_factor)
+
+	end
+
+	for k_subgroup, v_subgroup in pairs(CV_Spawn_Keys.group_fish) do
+
+		-- reset all in this group 
+		Spawned_ResetAll(self, v_subgroup.spawn_list_key)
+
+		-- add fish if there are any
+		local number_to_spawn = v_subgroup.spawn_max_count
+		if number_to_spawn > 0 then
+			-- add position grid
+			CV_Spawn_Keys.group_fish[k_subgroup].spawn_position_grid = nil
+			CV_Spawn_Keys.group_fish[k_subgroup].spawn_position_grid = func_easy_grid(v_subgroup)
+
+			-- spawn fish
+			local sgroup = CV_Spawn_Keys.group_fish[k_subgroup]
+			for i=1,number_to_spawn do
+				Spawn_Fish(self, sgroup, i)
+			end
+
+		end
+	
+	end
+
+end
+
+local function Make_Bubbles(self, x_pos)
+
+	-- trigger some bubbles at given x position
+
+	-- initialize if empty 
+	if 	self.bubbles_playable == nil then
+		self.bubbles_playable = true
+	end
+
+	-- run bubbles if able to
+	if self.bubbles_playable then
+		-- set scale and status
+		self.bubbles_playable = false
+		local scale = math.random(75, 115)/100
+		go.set_scale(scale, "spawner_bubbles")
+
+		-- set x position, default is random
+		local x_bounds = RES.Boundary_X
+		local x = x_pos or math.random(x_bounds[1], x_bounds[2])
+		go.set("spawner_bubbles", "position.x", x)
+
+		-- play bubbles
+		particlefx.play("spawner_bubbles#particlefx")
+
+		-- play sound
+		sound.play("spawner_bubbles#sound_bubbles", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
+
+		-- declare callback for readability and thought of optimization
+		local function func_reset_playable()
+			self.bubbles_playable = true
+		end
+
+		-- wait duration of bubble time them allow to play again 
+		timer.delay(3.0, false, func_reset_playable)
+	end
+
+end
+
+local function SceneStart(self)
+
+	-- setup the scene variables and objects
+
+	-- set base variables
+	self.weather_changeable = true
+	self.weather_is_rain_sound_playing = false
+	self.reload_time = 0.25
+	self.no_wind_default = 1
+	self.spawned_objects_list = {}
+	self.spawned_objects_sum = {}
+	Make_Bubbles(self)
+
+	-- setup weather
+	Setup_Weather(self, true)
+
+	-- setup animals
+	SetupAnimals(self)
+
+	-- play sounds 
+	sound.play("sound_controller#sound_underwater", {delay = 0, gain = 0.15, pan = 0, speed = 1.0})
+	sound.play("sound_controller#sound_waves", {delay = 0, gain = 0.08, pan = 0, speed = 1.0})
+
+end
+
+
+function init(self)
+
+	--#TODO- may move or take out eventually
+		msg.post(".", "acquire_input_focus")
+		-- randomize random generator
+		math.randomseed(socket.gettime())
+		Run_CoastalOA(self)
+
+	SceneStart(self)
+
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_change_weather then
+		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction)
+	elseif message_id == HSH.msg_report_swim_run_started then
+	elseif message_id == HSH.msg_report_swim_run_completed then
+	elseif message_id == HSH.msg_make_bubbles then
+		Make_Bubbles(self, message.minfo_make_bubbles_x)
+	end
+
+end
+
+function on_input(self, action_id, action)
+
+	-- press to make bubbles
+	if action_id == HSH.control_touch and action.pressed then
+		local screen_pos = CAM.screen_to_world(nil, vmath.vector3(action.x, action.y, 0))
+		Make_Bubbles(self, screen_pos.x)
+	end
+
+end

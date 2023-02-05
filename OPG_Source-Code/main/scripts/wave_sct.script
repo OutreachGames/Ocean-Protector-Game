@@ -1,0 +1,151 @@
+-- OVERVIEW:
+-- controls game objects that move across the screen in a back and forth motion
+
+-- dependencies
+local RES = require ("modules.screen_res_md")
+
+-- properties
+go.property("Obj_Wave_Movment_X_Use", true)
+go.property("Obj_Wave_Movment_X_Buffer", true)
+go.property("Obj_Wave_Movment_X_Direction", 0)
+go.property("Obj_Wave_Movment_X_Time", 30)
+go.property("Obj_Wave_Movment_X_Multiplier", 0.1)
+go.property("Obj_Wave_Movment_Y_Use", false)
+go.property("Obj_Wave_Movment_Y_Time", 2)
+go.property("Obj_Wave_Movment_Y_Scale", 0.60)
+go.property("Obj_Number_Sprite_Options", 1)
+go.property("Obj_Selected_Sprite_Option", 1)
+go.property("Obj_Wave_Sprite_FlipH", false)
+go.property("Obj_Tint_R", 1)
+go.property("Obj_Tint_G", 1)
+go.property("Obj_Tint_B", 1)
+go.property("Obj_PlayParticleFX", false)
+
+
+-- functions
+local function Move_Wave_X(self)
+
+	-- run animations to move waves
+
+	-- declare function for readability and the thought of optimization
+	local function func_reset_position()
+		-- move wave back off screen and then move again
+		-- keep it local within this function since it cannot take values and needs a self reference
+			go.set(".", "position.x", self.Distance_offscreen_start)
+			Move_Wave_X(self)
+	end
+
+	if self.Obj_Wave_Movment_X_Direction == 0 then
+		-- move wave back and forth
+		local sway_movement = go.get_position().x + (self.Sprite_width * self.Obj_Wave_Movment_X_Multiplier)
+		local sway_time = self.Obj_Wave_Movment_X_Time
+		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, sway_movement, go.EASING_LINEAR, sway_time, 0)
+	else	
+		-- move the wave from the start side to finish side, eventually offscreen
+		-- note that the distance should always be the same to ensure the wave velocity is consistent
+		-- if we tried to only move the wave just off screen it might result in a very slow wave 
+		-- if wave is starting on right side of screen b/c wave only has short distance to travel but long duration	
+		local wave_speed = self.Obj_Wave_Movment_X_Time
+		local wave_velocity = RES.Internal_X / wave_speed -- x seconds to go across screen for given pixels
+		local distance_to_travel = math.abs(self.Distance_offscreen_end - go.get_position().x)
+		local duration = distance_to_travel / wave_velocity
+		go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.Distance_offscreen_end, go.EASING_LINEAR, duration, 0, func_reset_position)
+	end
+
+end
+
+local function Wave_Toggle_ParticleFX(self, toggle_on)
+
+	-- toggle any particle FX
+
+	if self.Obj_PlayParticleFX then
+		if toggle_on then
+			particlefx.play("#particlefx")
+		else
+			particlefx.stop("#particlefx", { clear = true })
+		end
+	end
+
+end
+
+local function Wave_Setup(self)
+
+	-- setup variables and values for new wave
+
+	-- if multiple options for sprites, then disable all of them and choose 1 to enable
+	-- disable all sprites except for chosen i
+	self.Current_sprite_string = "#sprite1"
+	-- recall, this sprite options need to be here, so that we can get the width
+	-- cannot change sprite after init since width might be different
+	if self.Obj_Number_Sprite_Options > 1 then
+		for i=1,self.Obj_Number_Sprite_Options do
+			if i ~= self.Obj_Selected_Sprite_Option then
+				msg.post("#sprite"..i , "disable")
+			end
+		end
+		self.Current_sprite_string = "#sprite" ..self.Obj_Selected_Sprite_Option
+	end
+
+	-- now tint
+	go.set(self.Current_sprite_string, "tint", vmath.vector4(self.Obj_Tint_R, self.Obj_Tint_G, self.Obj_Tint_B, 1))
+
+	-- flip if specified
+	if self.Obj_Wave_Sprite_FlipH then
+		sprite.set_hflip(self.Current_sprite_string, true)
+	end
+
+	-- check particle fx
+	Wave_Toggle_ParticleFX(self, self.Obj_PlayParticleFX)
+
+	-- move the wave in Y if specified
+	if self.Obj_Wave_Movment_Y_Use then
+		local vertical_time = self.Obj_Wave_Movment_Y_Time or 0.20
+		local vertical_scale = self.Obj_Wave_Movment_Y_Scale or 0.60
+		go.animate(".", "scale.y", go.PLAYBACK_LOOP_PINGPONG, vertical_scale, go.EASING_INOUTSINE, vertical_time)
+	end
+
+	-- move the wave in X if specified
+	if self.Obj_Wave_Movment_X_Use then
+
+		local scr_width = RES.Internal_X
+		-- get sprite width, but make sure to scale by go scale!!
+		-- assume scale x=y=z
+		self.Sprite_width = go.get(self.Current_sprite_string, "size.x") * go.get(".", "scale.x")
+
+		-- default values are from left to right
+		local buffer = 0
+		if self.Obj_Wave_Movment_X_Buffer then
+			buffer = self.Sprite_width * 0.15
+		end
+		self.Distance_offscreen_end = (scr_width/2) + (self.Sprite_width/2) + buffer
+		self.Distance_offscreen_start = -self.Distance_offscreen_end
+
+		-- special case if this sprite is larger than game resolution
+		if self.Sprite_width > scr_width then
+			self.Distance_offscreen_start = self.Distance_offscreen_start - (self.Sprite_width - scr_width)
+		end
+
+		-- above was default for movement from left to right, so now flip if movement is from right to left
+		if self.Obj_Wave_Movment_X_Direction < 0 then
+			self.Distance_offscreen_end = -self.Distance_offscreen_end
+			self.Distance_offscreen_start = -self.Distance_offscreen_start
+		end
+
+		Move_Wave_X(self)
+
+	end
+
+end
+
+
+function init(self)
+
+	Wave_Setup(self)
+
+end
+
+function final(self)
+
+	Wave_Toggle_ParticleFX(self, false)
+
+end

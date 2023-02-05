@@ -1,0 +1,77 @@
+--OVERVIEW:
+--setups and controls main HUD
+
+-- dependencies
+local HSH = require ("modules.hashes_md")
+local MY_GOO = require ("gui.gooey_theme_md")
+
+
+-- functions 
+local function Run_Fader(self, fade_out, time)
+
+	-- run either fade in or fade out
+
+	-- setup variables
+	local fader_node = gui.get_node("gnode_screen_fader")
+	local alpha, disable_at_end
+	if fade_out then
+		gui.set_enabled(fader_node, true)
+		alpha = 1.0
+		disable_at_end = false
+	else
+		alpha = 0.0
+		disable_at_end = true
+	end
+
+	time = time or 2.0
+
+	-- cancel any current fades
+	gui.cancel_animation(fader_node, "color.w")
+
+	-- declare callback for readability and thought of optimization
+	local function func_set_status()
+		if disable_at_end then
+			gui.set_enabled(fader_node, false)
+		end
+	end
+
+	-- run fader animation
+	gui.animate(fader_node, "color.w", alpha, go.EASING_LINEAR, time, 0, func_set_status)
+
+end
+
+
+function init(self)
+
+	msg.post(".", "acquire_input_focus")
+
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_fade_out or message_id == HSH.msg_fade_in then
+		Run_Fader(self, message_id == HSH.msg_fade_out, message.minfo_fade_duration)
+	end
+
+end
+
+function on_input(self, action_id, action)
+
+	--EXAMPLE of getting button to work
+	--if action_id == HASH_TOUCH and action.pressed then
+		--local button = gui.get_node("weather_change_grp")
+		--if gui.pick_node(button, action.x, action.y) then
+			--local is_raining = false 
+			--local wave_direction = 1
+			--msg.post("level_controller", "msg_change_weather", {minfo_is_raining=is_raining, minfo_wave_direction=wave_direction})
+		--end
+	--end
+
+	--#TODO remove eventually
+	if action_id == HSH.control_right or action_id == HSH.control_left then
+		local is_raining = action_id == HSH.control_right
+		local wave_direction = math.random(0,1)
+		msg.post("level_controller", HSH.msg_change_weather, {minfo_is_raining=is_raining, minfo_wave_direction=wave_direction})
+	end
+
+end

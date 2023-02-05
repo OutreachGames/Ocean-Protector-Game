@@ -1,0 +1,719 @@
+
+-- OVERVIEW:
+-- setups and controls an individual fish
+-- Requirements: 
+--   fish must be be spine model with specified animations 
+--   have game object called waypoint in collection
+
+-- dependencies
+local HSH = require ("modules.hashes_md")
+local EXT = require ("modules.extend_md")
+
+-- properties
+go.property("Obj_Translation_Speed_Max", 40)
+go.property("Obj_Rotation_Speed_Max", 60)
+go.property("Obj_Rotation_Speed_Min", 1.5)
+go.property("Obj_TranslationGo_Easing_Options", 1)
+go.property("Obj_TranslationStop_Easing_Options", 2)
+go.property("Obj_Rotation_Easing_Options", 5)
+go.property("Obj_Resting_Euler_Z", 90)
+go.property("Obj_On_Force_Stop_Slowdown_Distance", 50)
+go.property("Obj_On_Done_Flip_Target_Pos_X", false)
+go.property("Obj_Flip_Time", 0.4)
+go.property("Obj_Use_Float_Animation", true)
+
+-- local hashes and constants for easy tuning
+local CV_Anim_Swim_Hash = hash("anim_moving_FacingLeft")
+local CV_Anim_Swim_Track = 1
+local CV_Anim_Look_Hash = hash("anim_eye_FacingLeft")
+local CV_Anim_Look_Track = 2
+local CV_Anim_Float_Hash = hash("anim_float_FacingLeft")
+local CV_Anim_Float_Track = 3
+
+local CV_UP_Vector = vmath.vector3(0, 1, 0)
+local CV_AnimBlend_Time = 0.5
+local CV_Buffer_Time = 0.05
+local CV_Deadzone_Radius = 5
+
+local CV_Timer_Keys = {
+	start_key = "start_key",
+	stop_key = "stop_key"
+}
+
+local CV_Status_Type = {
+	no_run_active = 0, --set on init and when Movement_Stop_Run delay over
+	start_run_active = 1, --started On_Movement_Start after previous run check done, ended when Movement_Stop_Run delay over 
+	stop_run_active = -1, --started when On_Movement_StopForce called, ended when Movement_Stop_Run delay over
+}
+
+
+-- functions
+local function GetRandomEasing(list_opt_i)
+
+	-- get a random easing given smooth option 
+
+	-- using varying easing args will given visual movement variation 
+	-- while ensuring overall time to target is constant
+	-- https://forum.defold.com/t/easing-cheat-sheet/68727
+	local easing_opts = {
+		{ -- 1. smooth in either direction: all
+			-- smoothest in both directions
+			go.EASING_INOUTCUBIC, 
+			go.EASING_INOUTQUAD,
+			go.EASING_INOUTSINE,
+
+			-- slow then fast then slow
+			go.EASING_INOUTQUART,
+			go.EASING_INOUTQUINT,
+
+			-- bit of back then forward at start and end
+			go.EASING_INOUTBACK
+		},
+		{ -- 2. smooth in either direction: smoothest in both directions
+			go.EASING_INOUTCUBIC, 
+			go.EASING_INOUTQUAD,
+			go.EASING_INOUTSINE,
+		},
+		{ -- 3. smooth in out direction
+			go.EASING_OUTCUBIC, 
+			go.EASING_OUTQUAD,
+			go.EASING_OUTSINE,
+		},
+		{ -- 4. only linear
+			go.EASING_LINEAR
+		},
+		{ -- 5. only back
+			go.EASING_INOUTBACK
+		}
+	}
+
+	list_opt_i = list_opt_i or 1
+	if easing_opts[list_opt_i] == nil then
+		print("Error: Get Random Easing function provided with invalid key "..tostring(list_opt_i)..", choosing default instead...\n")
+		list_opt_i = 1
+	end
+	local list_opt = easing_opts[list_opt_i]
+
+	return EXT:Random_fromTable(list_opt)
+
+end
+
+local function Toggle_MovingAnimation(self, turn_ismoving_on, blend_time)
+
+	-- toggle spine animation to idle or moving
+
+	-- set swim rate depending on movement
+	local swim_rate
+	if turn_ismoving_on then
+		swim_rate = EXT:Random_fromTable({1.4, 1.6, 1.8, 2.0})
+	else
+		swim_rate = EXT:Random_fromTable({0.8, 1.0, 1.0, 1.2})
+	end
+
+	-- set look and float rate regardless of movement status, 
+	-- mainly just using this as a convienent way to randomize so not always the same 
+	-- floating gives sense of floating in water, 
+	-- so want somewhat similar values regardless of movement 
+	-- b/c that will show all objects going through same water current
+	local float_rate = EXT:Random_fromTable({0.20, 0.25, 0.30, 0.35})
+	local look_rate = (math.random(6, 11))/10
+
+	blend_time = blend_time or CV_AnimBlend_Time
+
+	-- run swimming 
+	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD, 
+		{ blend_duration = CV_AnimBlend_Time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
+	)
+	-- run eyes looking around
+	spine.play_anim("#spinemodel", CV_Anim_Look_Hash, go.PLAYBACK_LOOP_FORWARD, 
+		{ blend_duration = CV_AnimBlend_Time, playback_rate = look_rate, track = CV_Anim_Look_Track}
+	)
+	-- run floating
+	if self.Obj_Use_Float_Animation then
+		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD, 
+			{ blend_duration = CV_AnimBlend_Time, playback_rate = float_rate, track = CV_Anim_Float_Track}
+		)
+	end
+
+end
+
+local function Get_Duration_Translate(max_translate_speed, self_pos, target_pos) --returns duration
+
+	-- get how long a translation should take given max speed
+
+	if max_translate_speed < 0 then 
+		return 0 
+	end
+
+	local distance = vmath.length(target_pos - self_pos)
+
+	-- max_translate_speed in pixels/s, ie 10 pixels / 1 second
+	-- so get how long it would take to go certain distance at this speed
+	return distance / max_translate_speed
+
+end
+
+local function Get_Duration_Rotate(max_rot_speed, self_angle_deg, target_angle_deg, min_rot_time) --returns duration
+
+	-- get how long a rotation should take given max speed
+
+	if max_rot_speed < 0 then 
+		return 0 
+	end
+
+	-- max_rot_speed is how many degrees per second 
+	-- so get how long it would take to rotate to rotation distance at this speed
+	local angle_dist_deg = math.abs(self_angle_deg - target_angle_deg) % 360
+
+	if angle_dist_deg > 180 then
+		angle_dist_deg = 360 - angle_dist_deg
+	end
+
+	local time_abs = (angle_dist_deg / max_rot_speed) * 2
+
+	-- rotations look better with some duration
+	-- especially given that the easing makes some parts go faster then other parts
+	-- no need to add min if rotation super small though
+	min_rot_time = min_rot_time or 0
+	local too_small = 2
+	if min_rot_time < too_small and time_abs < min_rot_time then 
+		time_abs = min_rot_time
+	end
+
+	return time_abs
+
+end
+
+local function Timer_Add_Queue(self, timer_listkey, timer_handle)
+
+	-- add timer to respective list in order to cancel later if needed
+	table.insert(self.active_timer_list[timer_listkey], timer_handle)
+
+end
+
+local function Timer_ResetAll_Queue(self, timer_listkey)
+
+	-- cancel all timers then clear out list
+	for _, v_timerhandle in ipairs(self.active_timer_list[timer_listkey]) do
+		timer.cancel(v_timerhandle)
+	end
+
+	self.active_timer_list[timer_listkey] = nil
+	self.active_timer_list[timer_listkey] = {}
+
+end
+
+local function Cancel_Animations_List(list_or_str)
+
+	-- cancel animations for a string or list of strings
+
+	if type(list_or_str) == "string" then
+		-- single string
+		go.cancel_animations(".", list_or_str)
+
+	elseif type(list_or_str) == "table" then
+		-- list of strings 
+		for _, v_str in ipairs(list_or_str) do
+			go.cancel_animations(".", v_str)
+		end
+
+	end
+
+end
+
+local function Movement_SetTime_Start(self)
+
+	self.currently_active_run_time_start = socket.gettime()
+
+end
+
+local function Movement_SetTime_End(self, delay_to_add)
+
+	local start_time = self.currently_active_run_time_start
+	if start_time < 0 then 
+		print("Warning: start time for movement animation < 0, at this stage it should be > 0... \n")
+	end
+
+	self.currently_active_run_time_end = start_time + delay_to_add
+
+end
+
+local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check)
+
+	-- runs when overall animation should finish
+
+	-- helper function to use with timer delays
+	local function func_helper_run(self)
+
+		-- switch off spine animation
+		-- okay to not wait until animation time blend done
+		-- since spine already blends to make look good
+		Toggle_MovingAnimation(self, false, CV_AnimBlend_Time)
+
+		-- cancel any movement animations
+		Cancel_Animations_List(anims_to_cancel)
+
+		-- get ping-pong position here before clearing it
+		local pingpong_x_target_pos = { x = self.goal_self_starting_position.x, y = self.goal_target_position.y}
+
+		-- update other variables and animation
+		self.goal_status_moving = false
+		self.goal_self_starting_position = nil
+		self.goal_target_position = nil
+		self.goal_target_angle_to_degrees = nil
+		self.goal_scale_y = nil
+
+		self.currently_active_run_type = CV_Status_Type.no_run_active
+		self.currently_active_run_time_start = -1
+		self.currently_active_run_time_end = -1
+
+		-- send message to controller that run is done
+		msg.post("/level_controller", HSH.msg_report_swim_run_completed, {minfo_spawn_keys_subgroup_list_key = self.spawn_keys_subgroup_list_key or ""})
+
+		-- check if ping-pong update needed and run via message 
+		--   (so we do not have to forward declare functions)
+		if do_pingpong_check and self.Obj_On_Done_Flip_Target_Pos_X then
+			local start_swimming_info = {
+				minfo_swim_to_x = pingpong_x_target_pos.x,
+				minfo_swim_to_y = pingpong_x_target_pos.y,
+				minfo_stop_is_instant = false,
+			}
+			msg.post("#", HSH.msg_order_swim_to_pos, start_swimming_info)
+		end
+
+	end
+
+	-- clear any other stop timers just for failsafe
+	Timer_ResetAll_Queue(self, CV_Timer_Keys.stop_key)
+
+	-- run timer or instantly 
+	if delay ~= nil and delay > 0 then
+		local add_timer = timer.delay(delay, false, function(self)
+			func_helper_run(self)
+			-- also make sure to remove it from tracker list
+			-- it is safe to cancel already cancelled timer
+			Timer_ResetAll_Queue(self, CV_Timer_Keys.stop_key)
+		end)
+		-- add timer to tracker list in case needed to cancel later
+		Timer_Add_Queue(self, CV_Timer_Keys.stop_key, add_timer)
+
+	else
+		func_helper_run()
+	end
+
+end
+
+local function On_Movement_StopForce(self, is_instant)
+
+	-- prematurely stops any ongoing animation and returns time to when it will be fully stopped 
+	-- tries to do this in a semi-smart way, with 
+	--   if during flip then end when flip over
+	--   if in initial rotation then end when rotation over
+	--   if near target then let finish
+	--   if in middle then stop and drift forward a bit
+
+	-- clear any start timers just for failsafe
+	-- stop timers will be removed on Stop Run function
+	Timer_ResetAll_Queue(self, CV_Timer_Keys.start_key)
+
+	-- no need to stop if not moving
+	if not self.goal_status_moving then 
+		return 0 
+	end
+
+	-- set run type status
+	self.currently_active_run_type = CV_Status_Type.stop_run_active
+	Movement_SetTime_Start(self)
+	-- stop time is accounted for in all following cases below
+
+	-- cancel all animations if instant to ensure set values works below
+	if is_instant then
+		Cancel_Animations_List({"euler", "position", "scale"})
+	end
+
+	-- if in middle of flip then either 
+	-- force to goal instantly or wait for flip to be done
+	local current_scale = go.get(".", "scale.y")
+	if math.abs(current_scale - self.goal_scale_y) > 0.01 then
+		if is_instant then
+			go.set(".", "scale.y", self.goal_scale_y)
+		else
+			-- wait for flip to be done then stop (since we are already stationary)
+			-- this might end up wait a bit longer then flip being done 
+			-- but that's fine since it's still relatively short
+			local l_delay = self.Obj_Flip_Time + CV_Buffer_Time
+			Movement_SetTime_End(self, l_delay)
+
+			-- position and rotation animations should be cancelled right away though
+			Cancel_Animations_List({"euler", "position"})
+			-- when done ensure scale animation cancelled (since natural stop will not trigger)
+			Movement_Stop_Run(self, l_delay, {"scale"})
+
+			return l_delay 
+		end
+	end
+
+	-- if this is instant then finish up and return 
+	if is_instant then 
+		-- do not need to set idle rotation, since this is a force instant stop b/c
+		--   it's likely we'll want to chain this with something else, 
+		--   and setting resting euler z will make it look jumpy
+
+		-- recall all animations have already been cancelled
+		Movement_SetTime_End(self, 0)
+		Movement_Stop_Run(self)
+
+		return 0
+	end
+
+	-- start to see if other conditions are met for early return
+	local self_pos = go.get_position()
+	local starting_pos = self.goal_self_starting_position
+	local target_vec = self.goal_target_position
+
+	-- if still at starting position then just let rotation finish
+	if vmath.length(self_pos - starting_pos) <= CV_Deadzone_Radius then
+		-- if not at target rotation then finish rotating
+		local current_rot = go.get(".", "euler.z")
+		local l_delay = CV_Buffer_Time + Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, self.goal_target_angle_to_degrees, current_rot, self.Obj_Rotation_Speed_Min)
+		Movement_SetTime_End(self, l_delay)
+
+		-- cancel any scale and translation animations just to be safe though
+		Cancel_Animations_List({"scale", "position"})
+
+		-- once delay done ensure that euler gets cancelled (since natural stop will not trigger)
+		Movement_Stop_Run(self, l_delay, {"euler"})
+
+		return l_delay
+	end
+
+	-- if within slowdown distance to target already then just let animation play out
+	-- we are not sure how long this will take though...so calculate with rough estimate (linear * x perhaps) 
+	local slowdown_dist = self.Obj_On_Force_Stop_Slowdown_Distance
+	if vmath.length(self_pos - target_vec) <= slowdown_dist then
+		-- need to account for translation and idle rotation time
+		local self_pos = go.get_position()
+		local duration_translate = Get_Duration_Translate(self.Obj_Translation_Speed_Max, self_pos, target_vec) 
+		local duration_rot = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, self.goal_target_angle_to_degrees, self.Obj_Resting_Euler_Z, self.Obj_Rotation_Speed_Min)
+
+		local l_delay = (duration_rot + duration_translate) * 1.1
+
+		Movement_SetTime_End(self, l_delay)
+
+		-- Movement_Stop_Run will be called naturally and cancel animations and reset timestamp and timer
+
+		return l_delay
+	end
+
+	-- if still here then we are translating
+	-- so run a go animate a bit in forward direction with easing that starts linear and ends slowly
+	-- make sure to cancel all animations so they do not trigger then override if their timers come in
+	Cancel_Animations_List({"scale", "position", "euler"})
+
+	-- figure out stopping position that is a bit forward of current position 
+	local ang_to_target = math.rad(self.goal_target_angle_to_degrees)
+	local quat_to_target = vmath.quat_rotation_z(ang_to_target)
+	local direction = vmath.rotate(quat_to_target, CV_UP_Vector)
+
+	-- actually run gradual stop animation
+	-- if stop is triggered when rotating to idle rotation
+	-- then could be case that we are at an idle rotation but then translate to old target angle, 
+	-- which looks odd since we are not facing direction of movement
+	local stop_pos = self_pos + (direction * slowdown_dist)
+	local delay = 0
+	local duration_slowdown = Get_Duration_Translate(self.Obj_Translation_Speed_Max, go.get_position(), stop_pos)
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, stop_pos, GetRandomEasing(self.Obj_TranslationStop_Easing_Options), duration_slowdown, delay)
+
+	-- update delay so that idle rotation kicks in as slide is almost done
+	delay = delay + duration_slowdown * 0.70
+
+	-- then run set to idle rotation
+	local duration_goto_idle_rotation = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, self.goal_target_angle_to_degrees, self.Obj_Resting_Euler_Z, self.Obj_Rotation_Speed_Min)
+	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, self.Obj_Resting_Euler_Z, GetRandomEasing(self.Obj_Rotation_Easing_Options), duration_goto_idle_rotation, delay)
+
+	-- finally run stop function
+	-- ensure that animation will takes at least as long as total animation time 
+	-- this ensures the callback will not be ran too early (ie when still translating into place)
+	-- a summation should work b/c the animation delays are less then these durations (the delays are set using multipliers < 1)
+	local total_animation_duration = duration_slowdown + duration_goto_idle_rotation + CV_Buffer_Time
+	Movement_Stop_Run(self, total_animation_duration, {"euler", "position"})
+
+	-- return time that this gradual stop required 
+	-- recall that the Movement Stop Run function uses Anim Blend Time
+	local l_delay = total_animation_duration + CV_AnimBlend_Time
+	Movement_SetTime_End(self, l_delay)
+
+	return l_delay
+
+end
+
+local function Movement_Start_Run(self, target_pos, on_init)
+
+	-- start an animation, does not check existing, 
+	-- that should have been done On Movement Start Function
+
+	-- update movement status and animation
+	local self_pos_vector = go.get_position()
+	local target_pos_vector = vmath.vector3(target_pos.x, target_pos.y, self_pos_vector.z)
+	local ang_to_target_deg = math.deg(math.atan2(self_pos_vector.x - target_pos.x, target_pos.y - self_pos_vector.y))
+	local goal_y_scale = go.get(".", "scale.y") -- assumes scale is correct! 
+
+	-- check if flip needed:
+	--   if target to right and we are facing left (y+)
+	--   if target to left and we are facing right (y-)
+	local flip_duration, next_anim_delay = 0, 0
+
+	if (ang_to_target_deg < 0 and goal_y_scale > 0) or (ang_to_target_deg > 0 and goal_y_scale < 0) then
+		-- delay subsequent animations so flip has time to complete first 
+		-- but flip instantly if this is at scene start 
+		if not on_init then
+			flip_duration = self.Obj_Flip_Time
+		end
+
+		-- run flip
+		goal_y_scale = -1 * goal_y_scale
+		if flip_duration > 0 then
+			go.animate(".", "scale.y", go.PLAYBACK_ONCE_FORWARD, goal_y_scale, go.EASING_INOUTEXPO, flip_duration)
+		else
+			go.set(".", "scale.y", goal_y_scale)
+		end
+
+	end
+
+	-- update angle to target if needed
+	-- not that is is updated instantly and does not use the timer
+	if goal_y_scale < 0 then
+		ang_to_target_deg = ang_to_target_deg + 180
+	end
+
+	-- set variables
+	-- fine to have moving status turned on here, 
+	--   since it instant it is now moving and if delayed this will run first
+	self.goal_status_moving = true
+	self.goal_self_starting_position = nil
+	self.goal_self_starting_position = self_pos_vector
+	self.goal_target_position = nil
+	self.goal_target_position = target_pos_vector
+	self.goal_target_angle_to_degrees = ang_to_target_deg
+	self.goal_scale_y = goal_y_scale
+
+	self.currently_active_run_type = CV_Status_Type.start_run_active
+
+	msg.post("/level_controller", HSH.msg_report_swim_run_started, {minfo_spawn_keys_subgroup_list_key = self.spawn_keys_subgroup_list_key or ""})
+
+	Toggle_MovingAnimation(self, true, CV_AnimBlend_Time)
+	Movement_SetTime_Start(self)
+
+	-- rotate to target
+	--   translate to target
+	--     rotate to idle orientation
+	-- use timer delays instead of nested callbacks so animations can have some blended overlap 
+	-- and overlap is okay since they are controlling separate things 
+
+	-- integrate these speeds into durations and add lateral variation with varying easing args
+	-- if negative then durations should be instant
+	-- also, likely do not need to calculate current values for durations, since everything is lined up at start
+	-- and even if a duration ends up strange it won't really be that noticeable
+
+	-- function setup reminder:
+	--   go.animate(url, property, playback, to, easing, duration, [delay], [complete_function])
+
+	-- rotate to target orientation
+	local duration_rotate_start = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, go.get(".", "euler.z"), ang_to_target_deg, self.Obj_Rotation_Speed_Min)
+	next_anim_delay = flip_duration * 0.8
+	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, ang_to_target_deg, GetRandomEasing(self.Obj_Rotation_Easing_Options), duration_rotate_start, next_anim_delay)
+
+	-- translate to target position
+	local duration_translate_to = Get_Duration_Translate(self.Obj_Translation_Speed_Max, go.get_position(), target_pos_vector)
+	next_anim_delay = next_anim_delay + duration_rotate_start * 0.3 --recall start swimming takes a while to get going due to easing
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, target_pos_vector, GetRandomEasing(self.Obj_TranslationGo_Easing_Options), duration_translate_to, next_anim_delay)
+
+	-- rotate to idle orientation
+	local duration_rotate_final = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, ang_to_target_deg, self.Obj_Resting_Euler_Z, self.Obj_Rotation_Speed_Min)
+	next_anim_delay = next_anim_delay + duration_translate_to * 0.80 
+	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, self.Obj_Resting_Euler_Z, GetRandomEasing(self.Obj_Rotation_Easing_Options), duration_rotate_final, next_anim_delay)
+
+	-- finally run stop function
+	-- ensure that animation will takes at least as long as total animation time 
+	-- this ensures the callback will not be ran too early (ie when still translating into place)
+	-- a summation should work b/c the animation delays are less then these durations (the delays are set using multipliers < 1)
+	local total_animation_duration = flip_duration + duration_rotate_start + duration_translate_to + duration_rotate_final + CV_Buffer_Time
+
+	-- set end time now that we know what it is and set Stop_Run function to trigger after that amount of time
+	Movement_SetTime_End(self, total_animation_duration)
+
+	Movement_Stop_Run(self, total_animation_duration, {"scale", "euler", "position"}, true)
+
+end
+
+local function On_Movement_Start(self, target_pos, previous_stop_is_instant, on_init, extra_delay, run_stop_previous)
+
+	-- start a movement to a position, though first stop any existing movements and then run
+
+	-- validity 
+	if target_pos == nil then
+		print("Error in function Start Movement, supplied target position is nil, no movement will occur...\n")
+		return
+	end
+
+	-- default args
+	if previous_stop_is_instant == nil then
+		previous_stop_is_instant = false
+	end
+	if on_init == nil then
+		on_init = false
+	end
+	extra_delay = extra_delay or 0
+	if run_stop_previous == nil then
+		run_stop_previous = true
+	end
+
+	-- don't move if too close to starting position?
+
+	-- if moving and called to go then slow down then continue with start
+	-- if not moving and called to go then just continue with start
+	-- the force stop function will return time needed to do gradual stop if moving, otherwise 0
+	local time_to_stop_previous_run = extra_delay
+	if run_stop_previous then
+		time_to_stop_previous_run = time_to_stop_previous_run + On_Movement_StopForce(self, previous_stop_is_instant)
+	else
+		-- reset just to be safe (start reset also runs in stop force check)
+		Timer_ResetAll_Queue(self, CV_Timer_Keys.start_key)
+	end
+
+	-- set run type status and timer? 
+	-- don't do that here since StopForce set animation time for stopping, 
+	-- and if that did not run then this will be triggered when Start_Run is triggered
+	-- also start timers are all cleared on any new orders, too
+
+	-- if need to wait for previous animation to finish then use timer
+	-- otherwise just run rest of start function right away
+	if time_to_stop_previous_run > 0 then
+		local add_timer = timer.delay(time_to_stop_previous_run, false, function(self)
+			Movement_Start_Run(self, target_pos, on_init)
+			-- also make sure to remove it from tracker list
+			-- it is safe to cancel already cancelled timer
+			Timer_ResetAll_Queue(self, CV_Timer_Keys.start_key)
+		end)
+		-- add to tracker list in case needed to cancel later
+		Timer_Add_Queue(self, CV_Timer_Keys.start_key, add_timer)
+	else
+		Movement_Start_Run(self, target_pos, on_init)
+	end
+
+end
+
+local function On_Message_StartMovement(self, target_pos, previous_stop_is_instant, on_init)
+
+	-- if message ordered to go -> clear any start timers
+		-- if we are moving then just stop current (and clear start timer) and then move
+		-- if we are about to move then clear any start timer and call move
+		-- if we have stopped then just run (fine to clear start timer)
+		-- if we are about to stop/in process of stopping then wait until stop done then move (fine to clear start timer)
+
+	-- clear out any existing start timers
+	Timer_ResetAll_Queue(self, CV_Timer_Keys.start_key)
+
+	local extra_delay = 0
+	local check_and_stop_for_previous = false
+
+	if self.currently_active_run_type == CV_Status_Type.start_run_active then
+		if self.goal_status_moving then
+			check_and_stop_for_previous = true
+		--else
+			--check_and_stop_for_previous = false
+		end
+	elseif self.currently_active_run_type == CV_Status_Type.stop_run_active then
+		local stop_time_remaining = self.currently_active_run_time_end - socket.gettime()
+		if stop_time_remaining > 0 then
+			extra_delay = stop_time_remaining
+		end
+	--else 
+	end
+
+	On_Movement_Start(self, target_pos, previous_stop_is_instant, on_init, extra_delay, check_and_stop_for_previous)
+
+end
+
+local function On_Message_StopMovement(self, is_instant)
+
+	-- when new message/order comes through
+	-- if message ordered to stop -> can clear any start timers
+		-- if we are moving then stop (clear any start timers)
+		-- if we are about to move then clear any start timer to prevent moving
+		-- if we have stopped then do nothing (clear any start timers fine)
+		-- if we are about to stop/in process of stopping then do nothing and let current stop finish (clear any start timers fine)
+
+	-- clear out any existing start timers
+	Timer_ResetAll_Queue(self, CV_Timer_Keys.start_key)
+
+	local run_force_stop
+
+	if self.currently_active_run_type == CV_Status_Type.start_run_active then
+		if self.goal_status_moving then
+			run_force_stop = true
+		else
+			-- not really possible to get to this point it seems, but just as a failsafe
+			self.currently_active_run_type = CV_Status_Type.no_run_active
+		end
+	--elseif self.currently_active_run_type == CV_Status_Type.stop_run_active then
+		--if self.goal_status_moving then
+			--
+		--else
+			--
+		--end
+	--else
+	end
+
+	if run_force_stop or is_instant then
+		On_Movement_StopForce(self, is_instant)
+	end
+
+end
+
+
+function init(self)
+
+	-- set resting euler z rotation when object spawned in scene
+	go.set(".", "euler.z", self.Obj_Resting_Euler_Z)
+
+	Toggle_MovingAnimation(self, false)
+
+	-- set up some internal tracking variables
+	self.scale_magnitude = go.get(".", "scale.y")
+	self.currently_active_run_type = CV_Status_Type.no_run_active
+
+	-- setup tracking of time stamps for movement
+	self.currently_active_run_time_start = -1
+	self.currently_active_run_time_end = -1
+
+	-- setup tracking of timers used to delay movement start or stops
+	self.active_timer_list = nil
+	self.active_timer_list = {}
+	for k_timername, _ in pairs(CV_Timer_Keys) do
+		self.active_timer_list[k_timername] = {}
+	end
+
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_order_swim_to_pos then
+		-- set subgroup list name if that was added to message
+		if message.minfo_spawn_keys_subgroup_list_key ~= nil then
+			self.spawn_keys_subgroup_list_key = message.minfo_spawn_keys_subgroup_list_key
+		end
+		-- start swimming to new position
+		On_Message_StartMovement(self, {x = message.minfo_swim_to_x, y = message.minfo_swim_to_y}, message.minfo_stop_is_instant, message.minfo_is_on_init)
+
+	elseif message_id == HSH.msg_order_stop_swim then
+		-- cease swimming with gradual stop
+		On_Message_StopMovement(self, message.minfo_stop_is_instant)
+
+	elseif message_id == HSH.msg_set_subgroup_list_key then
+		-- set which group this object belongs to
+		self.spawn_keys_subgroup_list_key = message.minfo_spawn_keys_subgroup_list_key
+
+	end
+
+end

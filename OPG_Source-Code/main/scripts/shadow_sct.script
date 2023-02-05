@@ -1,0 +1,120 @@
+-- OVERVIEW:
+-- fades out sunlight if a collision happens in shadow box
+
+-- dependencies
+local HSH = require ("modules.hashes_md")
+
+
+-- functions
+local function ShadowUpdate(self, shadow_level, is_entering)
+
+	-- run after each collision to check if shadows need updated, then update them if so
+
+	if shadow_level ~= nil then
+		local count_to_add 
+		if is_entering then
+			count_to_add = 1
+		else
+			count_to_add = -1
+		end
+		self.shadow_tracker[shadow_level] = self.shadow_tracker[shadow_level] + count_to_add
+		--print("Shadow zone "..shadow_level.." has "..self.shadow_tracker[shadow_level].." blockers")
+
+		-- loop through all shadow counts
+		-- if any in that level then set alpha to that value
+		-- also, since largest shadows are first, don't bother setting lighter shadows
+		local step_size = (1/self.number_shadow_zones)
+		local new_alpha = 1.0
+		local continue_checking = true
+		for i_shadowlevel,v_shadowcount in ipairs(self.shadow_tracker) do
+			if continue_checking and v_shadowcount > 0 then
+				new_alpha = step_size * (i_shadowlevel-1)
+				--print("  Stopping check at shadow zone "..i_shadowlevel.." with "..v_shadowcount.." blockers and new alpha of "..new_alpha)
+				continue_checking = false
+			end
+		end
+		if new_alpha > 1 then
+			new_alpha = 1
+		end
+		if new_alpha <= 0 then 
+			new_alpha = 0.12
+		end
+
+		-- if same alpha do not animate
+		if new_alpha == self.current_alpha then
+			--print("  New alpha same as old alpha, not running animation")
+			return 
+		end
+
+		-- if clouds leaving time to brighten should be shorter
+		local time 
+		if new_alpha > self.current_alpha then
+			-- brightening
+			time = 0.5
+		else
+			-- darkening
+			time = 2.0
+		end
+
+		--print("  Setting new alpha as "..new_alpha)
+		self.current_alpha = new_alpha
+
+		-- clear out any old animations and run some new ones
+		go.cancel_animations(".")
+
+		go.animate("#rays_bottom", "tint.w", go.PLAYBACK_ONCE_FORWARD, new_alpha, go.EASING_INOUTSINE, time, 0)
+		go.animate("#rays_top", "tint.w", go.PLAYBACK_ONCE_FORWARD, new_alpha, go.EASING_INOUTSINE, time, 0)
+	end
+
+end
+
+local function ResetShadows(self)
+
+	-- setup shadow tracking
+	local num_zones = 3
+	local shd_trck = {} -- number of objects in each shadow zone
+	for i=1,num_zones do
+		shd_trck[i] = 0
+	end
+
+	self.number_shadow_zones = num_zones
+	self.shadow_tracker = shd_trck
+	self.current_alpha = 1.0
+
+	go.cancel_animations(".")
+	go.set("#rays_bottom", "tint.w", self.current_alpha)
+	go.set("#rays_top", "tint.w", self.current_alpha)
+
+end
+
+
+function init(self)
+
+	ResetShadows(self)
+
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.trigger_response then
+
+		local shadow_level
+		if sender == msg.url("#shade_inner") then
+			shadow_level = 1
+		elseif sender == msg.url("#shade_middle") then
+			shadow_level = 2
+		elseif sender == msg.url("#shade_outer") then
+			shadow_level = 3
+		else
+			return
+		end
+
+		ShadowUpdate(self, shadow_level, message.enter)
+
+	elseif message_id == HSH.msg_reset_shadows then
+
+		ResetShadows(self)
+
+	end
+
+end
