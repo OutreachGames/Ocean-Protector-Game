@@ -67,11 +67,4 @@ function on_input(self, action_id, action)
 		--end
 	--end
 
-	--#TODO remove eventually
-	if action_id == HSH.control_right or action_id == HSH.control_left then
-		local is_raining = action_id == HSH.control_right
-		local wave_direction = math.random(0,1)
-		msg.post("level_controller", HSH.msg_change_weather, {minfo_is_raining=is_raining, minfo_wave_direction=wave_direction})
-	end
-
 end
