@@ -116,7 +116,7 @@ local function SetBins_X(t, disable_x_correction)
 		end
 	end
 
-	-- go through bins and choose and set positions
+	-- work through bins and choose and set positions
 	local bins_j = 1
 	for i=1,num_bins do
 		local bin_center_x = (bin_width/2) + (bin_width)*(i-1)
@@ -141,7 +141,7 @@ local function SetBins_X(t, disable_x_correction)
 			return a[2] > b[2]
 		end
 		table.sort(bins, compareY)
-		-- as we go down list add to z, cap at 1
+		-- as we move down list add to z, cap at 1
 		local current_z = z_base
 		for i_bin,_ in ipairs(bins) do
 			local new_z = current_z + ( 0.001 * (i_bin - 1) )
@@ -326,7 +326,9 @@ local function Spawned_ResetAll(self, spawn_list_key)
 	-- if there have been objects spawned then delete and clear them all
 	if self.spawned_objects_list[spawn_list_key] ~= nil then
 		if self.spawned_objects_sum[spawn_list_key] > 0 then
-			go.delete(self.spawned_objects_list[spawn_list_key])
+			for k_gourl, _ in pairs(self.spawned_objects_list[spawn_list_key]) do
+				go.delete(k_gourl)
+			end
 		end
 	end
 
@@ -345,7 +347,7 @@ local function Spawned_ResetAll(self, spawn_list_key)
 
 end
 
-local function Spawned_AddObject(self, spawn_list_key, go)
+local function Spawned_AddObject(self, spawn_list_key, go_id, opt_grid_index)
 
 	-- add spawned object to list key tracker tables
 
@@ -359,7 +361,14 @@ local function Spawned_AddObject(self, spawn_list_key, go)
 
 	local new_sum = current_count + 1
 	self.spawned_objects_sum[spawn_list_key] = new_sum
-	self.spawned_objects_list[spawn_list_key][new_sum] = go
+
+	self.spawned_objects_list[spawn_list_key][go_id] = {
+		self_grid_index = opt_grid_index or 1,
+		--self_scale = ,
+		--self_tint = ,
+		self_home_position = go.get_position(go_id)
+		--self_extra_info = ,
+	}
 
 end
 
@@ -412,7 +421,7 @@ local function Spawned_UpdateProperty(self, spawn_list_key, list_prop_tbls) --{ 
 
 	end
 
-	-- go through all objects in this list and update that property 
+	-- work through all objects in this list and update that property 
 	for _, v_id in ipairs(list) do
 
 		for _,prop_info in ipairs(list_prop_tbls) do
@@ -906,7 +915,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction)
 	self.weather_changeable = false
 
 	-- fade out, then run Setup Scene with weather arguments
-	-- recall particles are above go sprites, so use GUI fader
+	-- recall particles are above GO sprites, so use GUI fader
 	local fader_time = 0.75
 	msg.post("hud#gui", HSH.msg_fade_out, {minfo_fade_duration = fader_time})
 
@@ -954,7 +963,7 @@ local function Spawn_Fish(self, subgroup_tbl, i_position_in_grid)
 	local pos_tbl = subgroup_tbl.spawn_position_grid[i_position_in_grid]
 
 	-- prepare properties
-	-- smaller blurrier ones go in back? size range represents age, not really distance from camera..
+	-- smaller blurrier ones be in back? size range represents age, not really distance from camera..
 	-- but would still visually make more sense to save slightly blurrier/smaller fish be slightly in background?
 	-- could also say they are too much in the foreground and that's why they are blurry, too...
 	local rand_base = (math.random(80,120)/100)
@@ -964,7 +973,7 @@ local function Spawn_Fish(self, subgroup_tbl, i_position_in_grid)
 
 	-- for the pixel based arguments using the scale value, too
 	-- though it may seem we want to keep movements equal so that fish stay together
-	-- if speeds get high or low, over time fish fall behind or go too far ahead
+	-- if speeds get high or low, over time fish fall behind or be too far ahead
 	-- custom easing though allows for internal variation in this speed while keeping overall duration
 	local move_speed_multi = 1
 
@@ -984,7 +993,7 @@ local function Spawn_Fish(self, subgroup_tbl, i_position_in_grid)
 	local new_collection = collectionfactory.create(collfact_name, pos, rot, props, scale)
 
 	-- add fish GO to tracker
-	Spawned_AddObject(self, fish_name, new_collection[HSH.STR_go])
+	Spawned_AddObject(self, fish_name, new_collection[HSH.STR_go], i_position_in_grid)
 
 	-- set location along x-axis somewhere to start fish movement
 	-- want half the x dimension plus a bit more so when flipping we don't see rotation?
