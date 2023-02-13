@@ -354,13 +354,17 @@ local function Spawned_AddObject(self, spawn_list_key, go_id, opt_grid_index)
 	local current_count = self.spawned_objects_sum[spawn_list_key]
 
 	if current_count == nil then
-		print("Warning: Add Spawned Object provided with non-initalized key "..spawn_list_key..", initializing now...\n")
+		print("Warning: Add Spawned Object provided with non-initalized spawn type key "..spawn_list_key..", initializing now...\n")
 		Spawned_ResetAll(self, spawn_list_key)
 		current_count = 0
 	end
 
 	local new_sum = current_count + 1
 	self.spawned_objects_sum[spawn_list_key] = new_sum
+
+	if self.spawned_objects_list[spawn_list_key][go_id] ~= nil then
+		print("Error, spawn game object id is already present! Overriding old value. \n")
+	end
 
 	self.spawned_objects_list[spawn_list_key][go_id] = {
 		self_grid_index = opt_grid_index or 1,
