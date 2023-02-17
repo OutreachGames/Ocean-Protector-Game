@@ -18,9 +18,14 @@ go.property("Obj_TranslationStop_Easing_Options", 2)
 go.property("Obj_Rotation_Easing_Options", 5)
 go.property("Obj_Resting_Euler_Z", 90)
 go.property("Obj_On_Force_Stop_Slowdown_Distance", 50)
-go.property("Obj_On_Done_Flip_Target_Pos_X", false)
+go.property("Obj_On_Done_Loop_Waypoints", false)
 go.property("Obj_Flip_Time", 0.4)
 go.property("Obj_Use_Float_Animation", true)
+go.property("Obj_Formation_Position_Index", 1)
+go.property("Obj_Waypoint_1_X", 0)
+go.property("Obj_Waypoint_1_Y", 0)
+go.property("Obj_Waypoint_2_X", 0)
+go.property("Obj_Waypoint_2_Y", 0)
 
 -- local hashes and constants for easy tuning
 local CV_Anim_Swim_Hash = hash("anim_moving_FacingLeft")
@@ -238,6 +243,31 @@ local function Movement_SetTime_End(self, delay_to_add)
 
 end
 
+local function Current_WP_Location(self)
+
+	local function func_squarded_dist(x1, y1, x2, y2)
+
+		local diff_x = x2-x1
+		local diff_y = y2-y1
+		return ((diff_x * diff_x) + (diff_y * diff_y))
+
+	end
+
+	local current_pos = go.get_position()
+
+	local relative_distance_waypoint1 = func_squarded_dist(current_pos.x, current_pos.y, self.Obj_Waypoint_1_X, self.Obj_Waypoint_1_Y)
+	local relative_distance_waypoint2 = func_squarded_dist(current_pos.x, current_pos.y, self.Obj_Waypoint_2_X, self.Obj_Waypoint_2_Y)
+
+	if relative_distance_waypoint1 < relative_distance_waypoint2 then
+		--closer to waypoint 1, so at waypoint 1
+		return 1
+	else
+		--closer to waypoint 2, so at waypoint 2
+		return 2
+	end
+
+end
+
 local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check)
 
 	-- runs when overall animation should finish
@@ -252,9 +282,6 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 
 		-- cancel any movement animations
 		Cancel_Animations_List(anims_to_cancel)
-
-		-- get ping-pong position here before clearing it
-		local pingpong_x_target_pos = { x = self.goal_self_starting_position.x, y = self.goal_target_position.y}
 
 		-- update other variables and animation
 		self.goal_status_moving = false
@@ -272,10 +299,22 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 
 		-- check if ping-pong update needed and run via message 
 		--   (so we do not have to forward declare functions)
-		if do_pingpong_check and self.Obj_On_Done_Flip_Target_Pos_X then
+		if do_pingpong_check and self.Obj_On_Done_Loop_Waypoints then
+			-- which position are we farthest from? go to that one
+			local swimto_x, swimto_y
+			if Current_WP_Location(self) == 1 then
+				--closer to waypoint 1, then go to waypoint 2
+				swimto_x = self.Obj_Waypoint_2_X
+				swimto_y = self.Obj_Waypoint_2_Y
+			else
+				--closer to waypoint 2, then go to waypoint 1
+				swimto_x = self.Obj_Waypoint_1_X
+				swimto_y = self.Obj_Waypoint_1_Y
+			end
+
 			local start_swimming_info = {
-				minfo_swim_to_x = pingpong_x_target_pos.x,
-				minfo_swim_to_y = pingpong_x_target_pos.y,
+				minfo_swim_to_x = swimto_x,
+				minfo_swim_to_y = swimto_y,
 				minfo_stop_is_instant = false,
 			}
 			msg.post("#", HSH.msg_order_swim_to_pos, start_swimming_info)

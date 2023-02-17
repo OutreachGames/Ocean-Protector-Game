@@ -347,7 +347,18 @@ local function Spawned_ResetAll(self, spawn_list_key)
 
 end
 
-local function Spawned_AddObject(self, spawn_list_key, go_id, opt_grid_index)
+local function Spawned_RemoveObject(self, spawn_list_key, go_id)
+
+	-- delete go object
+	go.delete(go_id)
+
+	-- remove from list and update list sum
+	self.spawned_objects_list[spawn_list_key] = nil
+	self.spawned_objects_sum[spawn_list_key] = self.spawned_objects_sum[spawn_list_key] - 1
+
+end
+
+local function Spawned_AddObject(self, spawn_list_key, go_id)
 
 	-- add spawned object to list key tracker tables
 
@@ -366,13 +377,7 @@ local function Spawned_AddObject(self, spawn_list_key, go_id, opt_grid_index)
 		print("Error, spawn game object id is already present! Overriding old value. \n")
 	end
 
-	self.spawned_objects_list[spawn_list_key][go_id] = {
-		self_grid_index = opt_grid_index or 1,
-		--self_scale = ,
-		--self_tint = ,
-		self_home_position = go.get_position(go_id)
-		--self_extra_info = ,
-	}
+	self.spawned_objects_list[spawn_list_key][go_id] = true
 
 end
 
@@ -947,14 +952,35 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction)
 
 end
 
-local function Spawn_Fish(self, subgroup_tbl, i_position_in_grid)
+local function Remove_Fish(self, fish_subgroup_name, go_id)
+
+	local subgroup_tbl = CV_Spawn_Keys.group_fish[fish_subgroup_name]
+
+	-- validity
+	if subgroup_tbl == nil then
+		print("Warning: Remove fish provided with nil info, will not complete...\n")
+		return
+	end
+
+	local fish_name = subgroup_tbl.spawn_list_key
+	Spawned_RemoveObject(self, fish_name, go_id)
+
+end
+
+local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_offscreen)
 
 	-- spawn an individual fish
+	local subgroup_tbl = CV_Spawn_Keys.group_fish[fish_subgroup_name]
 
 	-- validity
 	if subgroup_tbl == nil then
 		print("Warning: Spawn fish provided with nil info, will not complete...\n")
 		return
+	end
+
+	-- default arguments
+	if spawn_offscreen == nil then
+		spawn_offscreen = false
 	end
 
 	-- setup
@@ -972,7 +998,22 @@ local function Spawn_Fish(self, subgroup_tbl, i_position_in_grid)
 	-- could also say they are too much in the foreground and that's why they are blurry, too...
 	local rand_base = (math.random(80,120)/100)
 	local scale = obj_scale_base * rand_base
-	local pos = vmath.vector3(pos_tbl.x, pos_tbl.y, pos_tbl.z)
+	local slowdown_distance = scale * obj_dimensions.x * 1.5 --x fish lengths to slowdown
+
+	-- set patrol location along x-axis somewhere to start fish movement
+	-- want half the x dimension plus a bit more so when flipping we don't see rotation?
+	--   so far rotation is fine to view, 
+	--   if it turns out not to be then just use subtract instead of add here
+	local waypoint1_pos_x = pos_tbl.x
+	local waypoint1_pos_y = pos_tbl.y
+	local waypoint2_pos_x = waypoint1_pos_x + (-RES.Internal_X/1.5)
+	local waypoint2_pos_y = waypoint1_pos_y
+
+	-- set spawn position, possibly offscreen
+	local spanwn_pos = vmath.vector3(waypoint1_pos_x, waypoint1_pos_y, pos_tbl.z)
+	if spawn_offscreen then
+		spanwn_pos.x = RES.Boundary_X[1] + slowdown_distance
+	end
 	local rot
 
 	-- for the pixel based arguments using the scale value, too
@@ -986,26 +1027,38 @@ local function Spawn_Fish(self, subgroup_tbl, i_position_in_grid)
 		[HSH.STR_go] = { 
 			Obj_Translation_Speed_Max = move_speed_multi * obj_translate_speed_base,
 			Obj_Rotation_Speed_Max = move_speed_multi * obj_rot_speed_base,
-			Obj_On_Force_Stop_Slowdown_Distance = scale * obj_dimensions.x * 1.5, --x fish lengths to slowdown
-			Obj_On_Done_Flip_Target_Pos_X = true,
+			Obj_On_Force_Stop_Slowdown_Distance = slowdown_distance,
+			Obj_On_Done_Loop_Waypoints = true,
 			-- give some minor variation in flip time in case they all flip at once
-			Obj_Flip_Time = 0.4 * rand_base * 2
+			Obj_Flip_Time = 0.4 * rand_base * 2,
+			Obj_Formation_Position_Index = i_position_in_grid,
+			Obj_Waypoint_1_X = waypoint1_pos_x,
+			Obj_Waypoint_1_Y = waypoint1_pos_y,
+			Obj_Waypoint_2_X = waypoint2_pos_x,
+			Obj_Waypoint_2_Y = waypoint2_pos_y
 		}
 	}
 
 	-- create fish
-	local new_collection = collectionfactory.create(collfact_name, pos, rot, props, scale)
+	local new_collection = collectionfactory.create(collfact_name, spanwn_pos, rot, props, scale)
 
 	-- add fish GO to tracker
-	Spawned_AddObject(self, fish_name, new_collection[HSH.STR_go], i_position_in_grid)
+	Spawned_AddObject(self, fish_name, new_collection[HSH.STR_go])
 
-	-- set location along x-axis somewhere to start fish movement
-	-- want half the x dimension plus a bit more so when flipping we don't see rotation?
-	--   so far rotation is fine to view, 
-	--   if it turns out not to be then just use subtract instead of add here
+	-- start swimming, go to waypoint 1 if spawned offscreen, otherwise go to waypoint 2
+	local swimto_x, swimto_y
+
+	if spawn_offscreen then
+		swimto_x = waypoint1_pos_x
+		swimto_y = waypoint1_pos_y
+	else
+		swimto_x = waypoint2_pos_x
+		swimto_y = waypoint2_pos_y
+	end
+
 	local start_swimming_info = {
-		minfo_swim_to_x = pos.x + (-RES.Internal_X/1.5),
-		minfo_swim_to_y = pos.y,
+		minfo_swim_to_x = swimto_x,
+		minfo_swim_to_y = swimto_y,
 		-- also set subgroup list name with this message for convenience
 		minfo_spawn_keys_subgroup_list_key = fish_name,
 		minfo_stop_is_instant = false,
@@ -1021,19 +1074,19 @@ local function SetupAnimals(self)
 
 	-- spawn in all the animals 
 
-	local function func_easy_grid(sgroup)
+	local function func_easy_grid(spawn_subgroup)
 
 		-- get grid points from just a few variables
 
-		local count = sgroup.spawn_max_count
-		local obj_size = sgroup.object_dimensions
-		local scale = sgroup.object_scale_base
+		local count = spawn_subgroup.spawn_max_count
+		local obj_size = spawn_subgroup.object_dimensions
+		local scale = spawn_subgroup.object_scale_base
 
-		local min_x = sgroup.spawn_x_min
+		local min_x = spawn_subgroup.spawn_x_min
 		local max_x = min_x + (obj_size.x*1.2)
 
-		local min_y = sgroup.spawn_y_range[1]
-		local max_y = sgroup.spawn_y_range[2]
+		local min_y = spawn_subgroup.spawn_y_range[1]
+		local max_y = spawn_subgroup.spawn_y_range[2]
 		if max_y + obj_size.y < min_y then
 			max_y = min_y + obj_size.y*1.2
 		end
@@ -1052,14 +1105,13 @@ local function SetupAnimals(self)
 		-- add fish if there are any
 		local number_to_spawn = v_subgroup.spawn_max_count
 		if number_to_spawn > 0 then
-			-- add position grid
+			-- first initialize formation grid
 			CV_Spawn_Keys.group_fish[k_subgroup].spawn_position_grid = nil
 			CV_Spawn_Keys.group_fish[k_subgroup].spawn_position_grid = func_easy_grid(v_subgroup)
 
-			-- spawn fish
-			local sgroup = CV_Spawn_Keys.group_fish[k_subgroup]
+			-- then spawn fish
 			for i=1,number_to_spawn do
-				Spawn_Fish(self, sgroup, i)
+				Spawn_Fish(self, k_subgroup, i)
 			end
 
 		end
