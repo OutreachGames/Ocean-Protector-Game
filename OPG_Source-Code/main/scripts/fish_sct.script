@@ -8,6 +8,7 @@
 -- dependencies
 local HSH = require ("modules.hashes_md")
 local EXT = require ("modules.extend_md")
+local RES = require ("modules.screen_res_md")
 
 -- properties
 go.property("Obj_Translation_Speed_Max", 40)
@@ -235,7 +236,7 @@ end
 local function Movement_SetTime_End(self, delay_to_add)
 
 	local start_time = self.currently_active_run_time_start
-	if start_time < 0 then 
+	if start_time < 0 then
 		print("Warning: start time for movement animation < 0, at this stage it should be > 0... \n")
 	end
 
@@ -557,19 +558,40 @@ local function Movement_Start_Run(self, target_pos, on_init)
 	-- function setup reminder:
 	--   go.animate(url, property, playback, to, easing, duration, [delay], [complete_function])
 
+	-- if on_init and offscreen then make rotation instant and translation uses out_sin
+	-- fine if maybe nose noticeable but it will likely not be since offscreen spawn is > fish length
+	local offscreen_and_init = false
+	if on_init then
+		if (self_pos_vector.x < RES.Boundary_X[1]) or (self_pos_vector.x > RES.Boundary_X[2]) then
+			offscreen_and_init = true
+		end
+	end
+
+	local duration_rotate_start
+	local rotate_start_easing, translate_easing
+
+	if offscreen_and_init then
+		duration_rotate_start = 0.1
+		rotate_start_easing = GetRandomEasing(3) --3 is smooth in out directions
+		translate_easing = GetRandomEasing(3) --3 is smooth in out directions
+	else
+		duration_rotate_start = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, go.get(".", "euler.z"), ang_to_target_deg, self.Obj_Rotation_Speed_Min)
+		rotate_start_easing = GetRandomEasing(self.Obj_Rotation_Easing_Options)
+		translate_easing = GetRandomEasing(self.Obj_TranslationGo_Easing_Options)
+	end
+
 	-- rotate to target orientation
-	local duration_rotate_start = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, go.get(".", "euler.z"), ang_to_target_deg, self.Obj_Rotation_Speed_Min)
 	next_anim_delay = flip_duration * 0.8
-	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, ang_to_target_deg, GetRandomEasing(self.Obj_Rotation_Easing_Options), duration_rotate_start, next_anim_delay)
+	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, ang_to_target_deg, rotate_start_easing, duration_rotate_start, next_anim_delay)
 
 	-- translate to target position
 	local duration_translate_to = Get_Duration_Translate(self.Obj_Translation_Speed_Max, go.get_position(), target_pos_vector)
 	next_anim_delay = next_anim_delay + duration_rotate_start * 0.3 --recall start swimming takes a while to get going due to easing
-	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, target_pos_vector, GetRandomEasing(self.Obj_TranslationGo_Easing_Options), duration_translate_to, next_anim_delay)
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, target_pos_vector, translate_easing, duration_translate_to, next_anim_delay)
 
 	-- rotate to idle orientation
 	local duration_rotate_final = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, ang_to_target_deg, self.Obj_Resting_Euler_Z, self.Obj_Rotation_Speed_Min)
-	next_anim_delay = next_anim_delay + duration_translate_to * 0.80 
+	next_anim_delay = next_anim_delay + duration_translate_to * 0.80
 	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, self.Obj_Resting_Euler_Z, GetRandomEasing(self.Obj_Rotation_Easing_Options), duration_rotate_final, next_anim_delay)
 
 	-- finally run stop function

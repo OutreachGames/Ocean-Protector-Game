@@ -998,7 +998,7 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 	-- could also say they are too much in the foreground and that's why they are blurry, too...
 	local rand_base = (math.random(80,120)/100)
 	local scale = obj_scale_base * rand_base
-	local slowdown_distance = scale * obj_dimensions.x * 1.5 --x fish lengths to slowdown
+	local slowdown_distance = scale * obj_dimensions.x * 1.5 --1.5 fish lengths to slowdown
 
 	-- set patrol location along x-axis somewhere to start fish movement
 	-- want half the x dimension plus a bit more so when flipping we don't see rotation?
@@ -1012,7 +1012,7 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 	-- set spawn position, possibly offscreen
 	local spanwn_pos = vmath.vector3(waypoint1_pos_x, waypoint1_pos_y, pos_tbl.z)
 	if spawn_offscreen then
-		spanwn_pos.x = RES.Boundary_X[1] + slowdown_distance
+		spanwn_pos.x = RES.Boundary_X[2] + slowdown_distance
 	end
 	local rot
 
