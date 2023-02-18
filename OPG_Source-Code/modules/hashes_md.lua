@@ -13,6 +13,7 @@ local HASH = {
     msg_fade_in = hash("msg_fade_in"),
     msg_order_swim_to_pos = hash("msg_order_swim_to_pos"),
     msg_order_stop_swim = hash("msg_order_stop_swim"),
+    msg_order_expire = hash("msg_order_expire"),
     msg_report_swim_run_started = hash("msg_report_swim_run_started"),
     msg_report_swim_run_completed = hash("msg_report_swim_run_completed"),
     msg_set_subgroup_list_key = hash("msg_set_subgroup_list_key"),

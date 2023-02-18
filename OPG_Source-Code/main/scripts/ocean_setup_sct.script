@@ -347,10 +347,13 @@ local function Spawned_ResetAll(self, spawn_list_key)
 
 end
 
-local function Spawned_RemoveObject(self, spawn_list_key, go_id)
+local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
 
 	-- delete go object
-	go.delete(go_id)
+	if delete_go == nil then delete_go = true end
+	if delete_go then
+		go.delete(go_id)
+	end
 
 	-- remove from list and update list sum
 	self.spawned_objects_list[spawn_list_key] = nil
@@ -963,7 +966,13 @@ local function Remove_Fish(self, fish_subgroup_name, go_id)
 	end
 
 	local fish_name = subgroup_tbl.spawn_list_key
-	Spawned_RemoveObject(self, fish_name, go_id)
+	local delete_go = false
+	Spawned_RemoveObject(self, fish_name, go_id, delete_go)
+
+	-- do not delete go until animation done
+	-- but remove from tracker list so we can add more fish if needed without
+	-- incorrectly hitting max amount
+	msg.post(go_id, HSH.msg_order_expire)
 
 end
 

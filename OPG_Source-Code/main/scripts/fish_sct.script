@@ -81,7 +81,7 @@ local function GetRandomEasing(list_opt_i)
 			go.EASING_INOUTSINE,
 		},
 		{ -- 3. smooth in out direction
-			go.EASING_OUTCUBIC, 
+			go.EASING_OUTCUBIC,
 			go.EASING_OUTQUAD,
 			go.EASING_OUTSINE,
 		},
@@ -104,16 +104,21 @@ local function GetRandomEasing(list_opt_i)
 
 end
 
-local function Toggle_MovingAnimation(self, turn_ismoving_on, blend_time)
+local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 
 	-- toggle spine animation to idle or moving
 
 	-- set swim rate depending on movement
-	local swim_rate
-	if turn_ismoving_on then
-		swim_rate = EXT:Random_fromTable({1.4, 1.6, 1.8, 2.0})
-	else
-		swim_rate = EXT:Random_fromTable({0.8, 1.0, 1.0, 1.2})
+
+	local speed_options = {
+		spine_is_moving = EXT:Random_fromTable({1.4, 1.6, 1.8, 2.0}),
+		spine_is_idle = EXT:Random_fromTable({0.8, 1.0, 1.0, 1.2}),
+		spine_is_dead = 0.001
+	}
+	local swim_rate = speed_options[speed_type_string_key]
+	if swim_rate == nil then
+		print("Error, invalid string key passed to function Toggle Moving Animation, assuming 1\n")
+		swim_rate = 1
 	end
 
 	-- set look and float rate regardless of movement status, 
@@ -127,16 +132,16 @@ local function Toggle_MovingAnimation(self, turn_ismoving_on, blend_time)
 	blend_time = blend_time or CV_AnimBlend_Time
 
 	-- run swimming 
-	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD, 
+	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD,
 		{ blend_duration = CV_AnimBlend_Time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
 	)
 	-- run eyes looking around
-	spine.play_anim("#spinemodel", CV_Anim_Look_Hash, go.PLAYBACK_LOOP_FORWARD, 
+	spine.play_anim("#spinemodel", CV_Anim_Look_Hash, go.PLAYBACK_LOOP_FORWARD,
 		{ blend_duration = CV_AnimBlend_Time, playback_rate = look_rate, track = CV_Anim_Look_Track}
 	)
 	-- run floating
 	if self.Obj_Use_Float_Animation then
-		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD, 
+		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD,
 			{ blend_duration = CV_AnimBlend_Time, playback_rate = float_rate, track = CV_Anim_Float_Track}
 		)
 	end
@@ -279,7 +284,7 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 		-- switch off spine animation
 		-- okay to not wait until animation time blend done
 		-- since spine already blends to make look good
-		Toggle_MovingAnimation(self, false, CV_AnimBlend_Time)
+		Toggle_MovingAnimation(self, "spine_is_idle", CV_AnimBlend_Time)
 
 		-- cancel any movement animations
 		Cancel_Animations_List(anims_to_cancel)
@@ -541,7 +546,7 @@ local function Movement_Start_Run(self, target_pos, on_init)
 
 	msg.post("/level_controller", HSH.msg_report_swim_run_started, {minfo_spawn_keys_subgroup_list_key = self.spawn_keys_subgroup_list_key or ""})
 
-	Toggle_MovingAnimation(self, true, CV_AnimBlend_Time)
+	Toggle_MovingAnimation(self, "spine_is_moving", CV_AnimBlend_Time)
 	Movement_SetTime_Start(self)
 
 	-- rotate to target
@@ -666,6 +671,8 @@ end
 
 local function On_Message_StartMovement(self, target_pos, previous_stop_is_instant, on_init)
 
+	if not self.is_alive then return end
+
 	-- if message ordered to go -> clear any start timers
 		-- if we are moving then just stop current (and clear start timer) and then move
 		-- if we are about to move then clear any start timer and call move
@@ -698,6 +705,8 @@ end
 
 local function On_Message_StopMovement(self, is_instant)
 
+	if not self.is_alive then return 0 end
+
 	-- when new message/order comes through
 	-- if message ordered to stop -> can clear any start timers
 		-- if we are moving then stop (clear any start timers)
@@ -726,9 +735,54 @@ local function On_Message_StopMovement(self, is_instant)
 	--else
 	end
 
+	local time_needed_to_stop = 0
 	if run_force_stop or is_instant then
-		On_Movement_StopForce(self, is_instant)
+		time_needed_to_stop = On_Movement_StopForce(self, is_instant)
 	end
+
+	return time_needed_to_stop
+
+end
+
+local function On_Death(self)
+
+	-- stop moving, flip upside down then fade away and delete go object
+
+	-- stop moving
+	local is_stop_instant = false
+	local time_needed_to_stop = On_Message_StopMovement(self, is_stop_instant)
+
+	-- set alive to false after the stop movement message
+	self.is_alive = false
+
+	-- save function to fade, trigger decomposition, and GO deletion
+	local function func_kill(self)
+		particlefx.play("#particle_decomposition")
+		go.delete()
+	end
+
+	-- once stopped, flip upside down and start to sink
+	local flip_delay = time_needed_to_stop
+	local float_down_delay = flip_delay + self.Obj_Flip_Time
+	local float_down_time = 4
+	local flot_down_y = go.get_position().y - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.8)
+	local float_down_easing = go.EASING_OUTSINE
+
+	Toggle_MovingAnimation(self, "spine_is_dead")
+
+	go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -1, go.EASING_INOUTEXPO, self.Obj_Flip_Time, flip_delay)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, flot_down_y, float_down_easing, float_down_time, float_down_delay)
+
+	-- while starting to sink, begin fade out
+	local fadeout_alpha = 0
+	local fadeout_delay = float_down_delay + (float_down_time * 0.5)
+	local fadeout_time = float_down_time * 0.5
+	local fadeout_easing = go.EASING_OUTSINE
+	go.animate("#spinemodel", "tint.w", go.PLAYBACK_ONCE_FORWARD, fadeout_alpha, fadeout_easing, fadeout_time, fadeout_delay)
+
+	-- once fade out mostly done then play decomposition particles
+	local decomp_delay = (fadeout_delay + fadeout_time) * 0.9
+	timer.delay(decomp_delay, false, func_kill)
 
 end
 
@@ -738,7 +792,7 @@ function init(self)
 	-- set resting euler z rotation when object spawned in scene
 	go.set(".", "euler.z", self.Obj_Resting_Euler_Z)
 
-	Toggle_MovingAnimation(self, false)
+	Toggle_MovingAnimation(self, "spine_is_idle")
 
 	-- set up some internal tracking variables
 	self.scale_magnitude = go.get(".", "scale.y")
@@ -754,6 +808,8 @@ function init(self)
 	for k_timername, _ in pairs(CV_Timer_Keys) do
 		self.active_timer_list[k_timername] = {}
 	end
+
+	self.is_alive = true
 
 end
 
@@ -775,6 +831,8 @@ function on_message(self, message_id, message, sender)
 		-- set which group this object belongs to
 		self.spawn_keys_subgroup_list_key = message.minfo_spawn_keys_subgroup_list_key
 
+	elseif message_id == HSH.msg_order_expire then
+		On_Death(self)
 	end
 
 end
