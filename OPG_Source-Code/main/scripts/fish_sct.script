@@ -300,10 +300,7 @@ local function On_Death(self)
 	local fadeout_delay = float_down_delay + (float_down_time*0.4)
 	local fadeout_time = 0.5
 	local fadeout_easing = go.EASING_LINEAR
-	local function func_delete(self)
-		--go.delete()
-	end
-	go.animate("#spinemodel", "tint.w", go.PLAYBACK_ONCE_FORWARD, fadeout_alpha, fadeout_easing, fadeout_time, fadeout_delay, func_delete)
+	go.animate("#spinemodel", "tint.w", go.PLAYBACK_ONCE_FORWARD, fadeout_alpha, fadeout_easing, fadeout_time, fadeout_delay)
 
 	-- once fade out mostly done then play decomposition particles
 	-- save function to fade, trigger decomposition, and GO deletion
@@ -313,6 +310,12 @@ local function On_Death(self)
 
 	local decomp_delay = fadeout_delay
 	timer.delay(decomp_delay, false, func_decompose)
+
+	local delete_time = fadeout_delay + fadeout_time + 5
+	local function func_delete(self)
+		go.delete()
+	end
+	timer.delay(delete_time, false, func_delete)
 
 end
 
