@@ -1077,6 +1077,12 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 	-- send message to start swim to with these coordinates
 	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, start_swimming_info)
 
+	if i_position_in_grid < 4 then
+	timer.delay(2, false, function(self)
+		Remove_Fish(self, fish_subgroup_name, new_collection[HSH.STR_go])
+	end)
+	end
+
 end
 
 local function SetupAnimals(self)

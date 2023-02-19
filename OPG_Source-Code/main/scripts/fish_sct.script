@@ -64,7 +64,7 @@ local function GetRandomEasing(list_opt_i)
 	local easing_opts = {
 		{ -- 1. smooth in either direction: all
 			-- smoothest in both directions
-			go.EASING_INOUTCUBIC, 
+			go.EASING_INOUTCUBIC,
 			go.EASING_INOUTQUAD,
 			go.EASING_INOUTSINE,
 
@@ -274,7 +274,49 @@ local function Current_WP_Location(self)
 
 end
 
-local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check)
+local function On_Death(self)
+
+	-- stop moving, flip upside down then fade away and delete go object
+
+	-- set alive to false after the stop movement message
+	self.is_alive = false
+
+	Toggle_MovingAnimation(self, "spine_is_dead")
+
+	-- once stopped, flip upside down and start to sink
+	local flip_delay = 0
+	local float_down_delay = flip_delay + self.Obj_Flip_Time
+	local float_down_time = 5
+	local self_pos = go.get_position()
+	local float_down_y = self_pos.y - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.8)
+	local float_down_x = self_pos.x - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.1)
+
+	go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -self.scale_magnitude, go.EASING_INOUTEXPO, self.Obj_Flip_Time, flip_delay)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, float_down_y, GetRandomEasing(2), float_down_time, float_down_delay)
+	go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, float_down_x, GetRandomEasing(2), float_down_time*0.5, float_down_delay)
+
+	-- while starting to sink, begin fade out
+	local fadeout_alpha = 0
+	local fadeout_delay = float_down_delay + (float_down_time*0.4)
+	local fadeout_time = 0.5
+	local fadeout_easing = go.EASING_LINEAR
+	local function func_delete(self)
+		--go.delete()
+	end
+	go.animate("#spinemodel", "tint.w", go.PLAYBACK_ONCE_FORWARD, fadeout_alpha, fadeout_easing, fadeout_time, fadeout_delay, func_delete)
+
+	-- once fade out mostly done then play decomposition particles
+	-- save function to fade, trigger decomposition, and GO deletion
+	local function func_decompose(self)
+		particlefx.play("#particle_decomposition")
+	end
+
+	local decomp_delay = fadeout_delay
+	timer.delay(decomp_delay, false, func_decompose)
+
+end
+
+local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check, kill_when_stopped)
 
 	-- runs when overall animation should finish
 
@@ -303,9 +345,14 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 		-- send message to controller that run is done
 		msg.post("/level_controller", HSH.msg_report_swim_run_completed, {minfo_spawn_keys_subgroup_list_key = self.spawn_keys_subgroup_list_key or ""})
 
+		if kill_when_stopped then
+			On_Death(self)
+			return
+		end
+
 		-- check if ping-pong update needed and run via message 
 		--   (so we do not have to forward declare functions)
-		if do_pingpong_check and self.Obj_On_Done_Loop_Waypoints then
+		if do_pingpong_check and self.Obj_On_Done_Loop_Waypoints and self.is_alive then
 			-- which position are we farthest from? go to that one
 			local swimto_x, swimto_y
 			if Current_WP_Location(self) == 1 then
@@ -348,7 +395,7 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 
 end
 
-local function On_Movement_StopForce(self, is_instant)
+local function On_Movement_StopForce(self, is_instant, kill_when_stopped)
 
 	-- prematurely stops any ongoing animation and returns time to when it will be fully stopped 
 	-- tries to do this in a semi-smart way, with 
@@ -361,8 +408,13 @@ local function On_Movement_StopForce(self, is_instant)
 	-- stop timers will be removed on Stop Run function
 	Timer_ResetAll_Queue(self, CV_Timer_Keys.start_key)
 
+	local do_pingpong_check = false
+	if kill_when_stopped == nil then
+		kill_when_stopped = false
+	end
+
 	-- no need to stop if not moving
-	if not self.goal_status_moving then 
+	if not self.goal_status_moving then
 		return 0 
 	end
 
@@ -392,21 +444,21 @@ local function On_Movement_StopForce(self, is_instant)
 			-- position and rotation animations should be cancelled right away though
 			Cancel_Animations_List({"euler", "position"})
 			-- when done ensure scale animation cancelled (since natural stop will not trigger)
-			Movement_Stop_Run(self, l_delay, {"scale"})
+			Movement_Stop_Run(self, l_delay, {"scale"}, do_pingpong_check, kill_when_stopped)
 
-			return l_delay 
+			return l_delay
 		end
 	end
 
 	-- if this is instant then finish up and return 
-	if is_instant then 
+	if is_instant then
 		-- do not need to set idle rotation, since this is a force instant stop b/c
 		--   it's likely we'll want to chain this with something else, 
 		--   and setting resting euler z will make it look jumpy
 
 		-- recall all animations have already been cancelled
 		Movement_SetTime_End(self, 0)
-		Movement_Stop_Run(self)
+		Movement_Stop_Run(self, 0, nil, do_pingpong_check, kill_when_stopped)
 
 		return 0
 	end
@@ -427,7 +479,7 @@ local function On_Movement_StopForce(self, is_instant)
 		Cancel_Animations_List({"scale", "position"})
 
 		-- once delay done ensure that euler gets cancelled (since natural stop will not trigger)
-		Movement_Stop_Run(self, l_delay, {"euler"})
+		Movement_Stop_Run(self, l_delay, {"euler"}, do_pingpong_check, kill_when_stopped)
 
 		return l_delay
 	end
@@ -481,7 +533,7 @@ local function On_Movement_StopForce(self, is_instant)
 	-- this ensures the callback will not be ran too early (ie when still translating into place)
 	-- a summation should work b/c the animation delays are less then these durations (the delays are set using multipliers < 1)
 	local total_animation_duration = duration_slowdown + duration_goto_idle_rotation + CV_Buffer_Time
-	Movement_Stop_Run(self, total_animation_duration, {"euler", "position"})
+	Movement_Stop_Run(self, total_animation_duration, {"euler", "position"}, do_pingpong_check, kill_when_stopped)
 
 	-- return time that this gradual stop required 
 	-- recall that the Movement Stop Run function uses Anim Blend Time
@@ -608,7 +660,7 @@ local function Movement_Start_Run(self, target_pos, on_init)
 	-- set end time now that we know what it is and set Stop_Run function to trigger after that amount of time
 	Movement_SetTime_End(self, total_animation_duration)
 
-	Movement_Stop_Run(self, total_animation_duration, {"scale", "euler", "position"}, true)
+	Movement_Stop_Run(self, total_animation_duration, {"scale", "euler", "position"}, true, false)
 
 end
 
@@ -641,7 +693,7 @@ local function On_Movement_Start(self, target_pos, previous_stop_is_instant, on_
 	-- the force stop function will return time needed to do gradual stop if moving, otherwise 0
 	local time_to_stop_previous_run = extra_delay
 	if run_stop_previous then
-		time_to_stop_previous_run = time_to_stop_previous_run + On_Movement_StopForce(self, previous_stop_is_instant)
+		time_to_stop_previous_run = time_to_stop_previous_run + On_Movement_StopForce(self, previous_stop_is_instant, false)
 	else
 		-- reset just to be safe (start reset also runs in stop force check)
 		Timer_ResetAll_Queue(self, CV_Timer_Keys.start_key)
@@ -703,7 +755,7 @@ local function On_Message_StartMovement(self, target_pos, previous_stop_is_insta
 
 end
 
-local function On_Message_StopMovement(self, is_instant)
+local function On_Message_StopMovement(self, is_instant, kill_when_stopped)
 
 	if not self.is_alive then return 0 end
 
@@ -737,52 +789,10 @@ local function On_Message_StopMovement(self, is_instant)
 
 	local time_needed_to_stop = 0
 	if run_force_stop or is_instant then
-		time_needed_to_stop = On_Movement_StopForce(self, is_instant)
+		time_needed_to_stop = On_Movement_StopForce(self, is_instant, kill_when_stopped)
 	end
 
 	return time_needed_to_stop
-
-end
-
-local function On_Death(self)
-
-	-- stop moving, flip upside down then fade away and delete go object
-
-	-- stop moving
-	local is_stop_instant = false
-	local time_needed_to_stop = On_Message_StopMovement(self, is_stop_instant)
-
-	-- set alive to false after the stop movement message
-	self.is_alive = false
-
-	-- save function to fade, trigger decomposition, and GO deletion
-	local function func_kill(self)
-		particlefx.play("#particle_decomposition")
-		go.delete()
-	end
-
-	-- once stopped, flip upside down and start to sink
-	local flip_delay = time_needed_to_stop
-	local float_down_delay = flip_delay + self.Obj_Flip_Time
-	local float_down_time = 4
-	local flot_down_y = go.get_position().y - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.8)
-	local float_down_easing = go.EASING_OUTSINE
-
-	Toggle_MovingAnimation(self, "spine_is_dead")
-
-	go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -1, go.EASING_INOUTEXPO, self.Obj_Flip_Time, flip_delay)
-	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, flot_down_y, float_down_easing, float_down_time, float_down_delay)
-
-	-- while starting to sink, begin fade out
-	local fadeout_alpha = 0
-	local fadeout_delay = float_down_delay + (float_down_time * 0.5)
-	local fadeout_time = float_down_time * 0.5
-	local fadeout_easing = go.EASING_OUTSINE
-	go.animate("#spinemodel", "tint.w", go.PLAYBACK_ONCE_FORWARD, fadeout_alpha, fadeout_easing, fadeout_time, fadeout_delay)
-
-	-- once fade out mostly done then play decomposition particles
-	local decomp_delay = (fadeout_delay + fadeout_time) * 0.9
-	timer.delay(decomp_delay, false, func_kill)
 
 end
 
@@ -791,6 +801,9 @@ function init(self)
 
 	-- set resting euler z rotation when object spawned in scene
 	go.set(".", "euler.z", self.Obj_Resting_Euler_Z)
+
+	-- remove z fighting
+	go.set(".", "position.z", go.get_position().z + (self.Obj_Formation_Position_Index*0.001))
 
 	Toggle_MovingAnimation(self, "spine_is_idle")
 
@@ -832,7 +845,8 @@ function on_message(self, message_id, message, sender)
 		self.spawn_keys_subgroup_list_key = message.minfo_spawn_keys_subgroup_list_key
 
 	elseif message_id == HSH.msg_order_expire then
-		On_Death(self)
+		local kill_when_stopped = true
+		On_Message_StopMovement(self, message.minfo_stop_is_instant, kill_when_stopped)
 	end
 
 end
