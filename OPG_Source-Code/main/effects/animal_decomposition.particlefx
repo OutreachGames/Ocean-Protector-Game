@@ -5,14 +5,14 @@ emitters {
   space: EMISSION_SPACE_EMITTER
   position {
     x: 0.0
-    y: 0.0
+    y: 45.0
     z: 0.0
   }
   rotation {
     x: 0.0
     y: 0.0
-    z: 0.0
-    w: 1.0
+    z: 1.0
+    w: 6.123234E-17
   }
   tile_source: "/main/asset_links/textures.atlas"
   animation: "particle_blob"
@@ -21,7 +21,7 @@ emitters {
   particle_orientation: PARTICLE_ORIENTATION_DEFAULT
   inherit_velocity: 100.0
   max_particle_count: 100
-  type: EMITTER_TYPE_BOX
+  type: EMITTER_TYPE_2DCONE
   start_delay: 0.0
   properties {
     key: EMITTER_KEY_SPAWN_RATE
@@ -37,7 +37,7 @@ emitters {
     key: EMITTER_KEY_SIZE_X
     points {
       x: 0.0
-      y: 300.0
+      y: 500.0
       t_x: 1.0
       t_y: 0.0
     }
@@ -67,7 +67,7 @@ emitters {
     key: EMITTER_KEY_PARTICLE_LIFE_TIME
     points {
       x: 0.0
-      y: 3.0
+      y: 3.5
       t_x: 1.0
       t_y: 0.0
     }
@@ -77,17 +77,17 @@ emitters {
     key: EMITTER_KEY_PARTICLE_SPEED
     points {
       x: 0.0
-      y: 30.0
+      y: 25.0
       t_x: 1.0
       t_y: 0.0
     }
-    spread: 10.0
+    spread: 25.0
   }
   properties {
     key: EMITTER_KEY_PARTICLE_SIZE
     points {
       x: 0.0
-      y: 30.0
+      y: 35.0
       t_x: 1.0
       t_y: 0.0
     }
@@ -311,65 +311,5 @@ emitters {
     x: 0.0
     y: 0.0
     z: 0.0
-  }
-}
-modifiers {
-  type: MODIFIER_TYPE_ACCELERATION
-  use_direction: 0
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  properties {
-    key: MODIFIER_KEY_MAGNITUDE
-    points {
-      x: 0.0
-      y: -50.0
-      t_x: 1.0
-      t_y: 0.0
-    }
-    spread: 0.0
-  }
-}
-modifiers {
-  type: MODIFIER_TYPE_RADIAL
-  use_direction: 0
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  properties {
-    key: MODIFIER_KEY_MAGNITUDE
-    points {
-      x: 0.0
-      y: 50.0
-      t_x: 1.0
-      t_y: 0.0
-    }
-    spread: 5.0
-  }
-  properties {
-    key: MODIFIER_KEY_MAX_DISTANCE
-    points {
-      x: 0.0
-      y: 1000.0
-      t_x: 1.0
-      t_y: 0.0
-    }
-    spread: 0.0
   }
 }
