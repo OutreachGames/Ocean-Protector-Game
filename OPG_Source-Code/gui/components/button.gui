@@ -1,7 +1,7 @@
 script: ""
 fonts {
   name: "font_medium"
-  font: "/gui/fonts/font_medium.font"
+  font: "/gui/fonts/font_36p_bold.font"
 }
 textures {
   name: "textures"
@@ -34,7 +34,7 @@ nodes {
   }
   size {
     x: 220.0
-    y: 64.0
+    y: 95.0
     z: 0.0
     w: 1.0
   }
@@ -46,8 +46,8 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "textures/button_normal"
-  id: "bg"
+  texture: "textures/gui_button_default"
+  id: "gui_button_core"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -55,10 +55,10 @@ nodes {
   layer: "below"
   inherit_alpha: true
   slice9 {
-    x: 12.0
-    y: 12.0
-    z: 12.0
-    w: 12.0
+    x: 30.0
+    y: 30.0
+    z: 30.0
+    w: 30.0
   }
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
@@ -90,8 +90,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 200.0
-    y: 100.0
+    x: 160.0
+    y: 40.0
     z: 0.0
     w: 1.0
   }
@@ -103,9 +103,9 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "LABEL"
+  text: "Submit"
   font: "font_medium"
-  id: "label"
+  id: "gui_button_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -123,7 +123,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "bg"
+  parent: "gui_button_core"
   layer: "text"
   inherit_alpha: true
   alpha: 1.0

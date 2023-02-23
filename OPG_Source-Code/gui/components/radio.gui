@@ -1,7 +1,7 @@
 script: ""
 fonts {
   name: "font_medium"
-  font: "/gui/fonts/font_medium.font"
+  font: "/gui/fonts/font_36p_bold.font"
 }
 textures {
   name: "textures"
@@ -33,10 +33,10 @@ nodes {
     w: 1.0
   }
   size {
-    x: 0.0
-    y: 0.0
+    x: 91.0
+    y: 91.0
     z: 0.0
-    w: 0.0
+    w: 1.0
   }
   color {
     x: 1.0
@@ -46,8 +46,8 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "textures/radio_normal"
-  id: "button"
+  texture: "textures/gui_radio_open_default"
+  id: "gui_radio_core"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -65,7 +65,7 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   template_node_child: false
-  size_mode: SIZE_MODE_AUTO
+  size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
   visible: true
@@ -90,7 +90,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 200.0
+    x: 500.0
     y: 100.0
     z: 0.0
     w: 1.0
@@ -103,9 +103,9 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "LABEL"
+  text: "Text"
   font: "font_medium"
-  id: "label"
+  id: "gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_W
@@ -123,6 +123,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
+  parent: "gui_radio_core"
   layer: "text"
   inherit_alpha: true
   alpha: 1.0

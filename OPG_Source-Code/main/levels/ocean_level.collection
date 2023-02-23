@@ -674,7 +674,7 @@ embedded_instances {
   id: "hud"
   data: "components {\n"
   "  id: \"gui\"\n"
-  "  component: \"/gui/main_gui.gui\"\n"
+  "  component: \"/gui/test_gui.gui\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
