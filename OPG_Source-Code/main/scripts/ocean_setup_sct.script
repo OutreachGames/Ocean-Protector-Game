@@ -1160,7 +1160,7 @@ local function Make_Bubbles(self, x_pos)
 		particlefx.play("spawner_bubbles#particlefx")
 
 		-- play sound
-		sound.play("spawner_bubbles#sound_bubbles", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
+		sound.play("sound_controller#sound_bubbles", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
 
 		-- declare callback for readability and thought of optimization
 		local function func_reset_playable()
