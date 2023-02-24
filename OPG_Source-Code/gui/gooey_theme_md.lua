@@ -85,7 +85,7 @@ local function check_run_juice(node, is_simple_button, do_shake)
 		local sound_to_play
 		if node.pressed_now then
 			sound_to_play = SOUND_ID_BUTTON_1
-		elseif node.checked or (is_simple_button and node.released_now and node.over) or node.selected then
+		elseif node.over and node.released_now then
 			sound_to_play = SOUND_ID_BUTTON_2
 		else
 			sound_to_play = SOUND_ID_BUTTON_3
@@ -156,13 +156,13 @@ local function refresh_radiobutton(radio)
 
 	check_run_juice(radio, false)
 
-	if radio.pressed_now and not radio.selected then
+	if radio.pressed and not radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_OPEN_PRESSED)
-	elseif radio.pressed_now and radio.selected then
+	elseif radio.pressed and radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_SELECTED_PRESSED)
-	elseif not radio.pressed_now and radio.selected then
+	elseif not radio.pressed and radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_SELECTED_DEFAULT)
-	elseif not radio.pressed_now and not radio.selected then
+	elseif not radio.pressed and not radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_OPEN_DEFAULT)
 	end
 
