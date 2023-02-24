@@ -11,26 +11,27 @@ local MY_GOO = GOO.create_theme()
 
 
 -- internal constants for easy tuning 
-local ANI_BUTTON_PRESSED = hash("gui_button_hover")
 local ANI_BUTTON_DEFAULT = hash("gui_button_default")
+local ANI_BUTTON_PRESSED = hash("gui_button_hover")
 
-local ANI_CHECKBOX_OPEN_PRESSED = hash("gui_box_selected_hover")
-local ANI_CHECKBOX_SELECTED_PRESSED = hash("gui_box_selected_default")
-local ANI_CHECKBOX_SELECTED_DEFAULT = hash("gui_box_selected_default")
 local ANI_CHECKBOX_OPEN_DEFAULT = hash("gui_box_open_default")
+local ANI_CHECKBOX_OPEN_PRESSED = hash("gui_box_open_hover")
+local ANI_CHECKBOX_SELECTED_DEFAULT = hash("gui_box_selected_default")
+local ANI_CHECKBOX_SELECTED_PRESSED = hash("gui_box_selected_hover")
 
-local ANI_RADIO_OPEN_PRESSED = hash("gui_radio_open_hover")
-local ANI_RADIO_SELECTED_PRESSED = hash("gui_radio_selected_default")
-local ANI_RADIO_SELECTED_DEFAULT = hash("gui_radio_selected_default")
 local ANI_RADIO_OPEN_DEFAULT = hash("gui_radio_open_default")
+local ANI_RADIO_OPEN_PRESSED = hash("gui_radio_open_hover")
+local ANI_RADIO_SELECTED_DEFAULT = hash("gui_radio_selected_default")
+local ANI_RADIO_SELECTED_PRESSED = hash("gui_radio_selected_hover")
 
-local ANI_SCROLLBAR_PRESSED = hash("gui_slider_grab_hover")
 local ANI_SCROLLBAR_DEFAULT = hash("gui_slider_grab_default")
+local ANI_SCROLLBAR_PRESSED = hash("gui_slider_grab_hover")
 
 local VEC3_1 = vmath.vector3(1)
 
-local COLOR_LIGHTGREY = vmath.vector4(0.7, 0.7, 0.7, 1)
-local COLOR_WHITE = vmath.vector4(1)
+local COLOR_GREY_LIGHT = vmath.vector4(0.90, 0.90, 0.90, 1)
+local COLOR_WHITE_BRIGHT = vmath.vector4(1.15, 1.15, 1.15, 1)
+local COLOR_WHITE_DEFAULT = vmath.vector4(1)
 
 
 -- functions 
@@ -79,9 +80,13 @@ local function check_run_juice(node, do_shake)
 	end
 
 	if node.over_now then
-		gui.set_color(node.node, COLOR_LIGHTGREY)
+		gui.set_color(node.node, COLOR_WHITE_BRIGHT)
 	elseif node.out_now then
-		gui.set_color(node.node, COLOR_WHITE)
+		if node.pressed then
+			gui.set_color(node.node, COLOR_GREY_LIGHT)
+		else
+			gui.set_color(node.node, COLOR_WHITE_DEFAULT)
+		end
 	end
 
 end
@@ -141,7 +146,7 @@ local function refresh_scrollbar(scrollbar)
 	check_run_juice(scrollbar)
 	if scrollbar.pressed then
 		gui.play_flipbook(scrollbar.node, ANI_SCROLLBAR_PRESSED)
-	else
+	elseif scrollbar.released_now then
 		gui.play_flipbook(scrollbar.node, ANI_SCROLLBAR_DEFAULT)
 	end
 end
