@@ -37,6 +37,7 @@ local COLOR_GREY_LIGHT = vmath.vector4(0.90, 0.90, 0.90, 1)
 local COLOR_WHITE_BRIGHT = vmath.vector4(1.15, 1.15, 1.15, 1)
 local COLOR_WHITE_DEFAULT = vmath.vector4(1)
 
+
 -- functions 
 
 function MYG.acquire_input()

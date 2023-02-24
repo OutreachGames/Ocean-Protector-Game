@@ -6,14 +6,14 @@ function init(self)
 
 	--MY_GUI.checkbox("checkbox").set_checked(true)
 	--MY_GUI.radio("radio2").set_selected(true)
-	MY_GUI.scrollbar("scrollbar").scroll_to(0, 0.75) --also can set the scroll
-	MY_GUI.scrollbar_updatebar("scrollbar", 0.75)
+	--MY_GUI.scrollbar("scrollbar").scroll_to(0, 0.75) --also can set the scroll
+	--MY_GUI.scrollbar_updatebar("scrollbar", 0.75)
 
 end
 
 function on_input(self, action_id, action)
 	local group = MY_GUI.group("group1", function()
-		MY_GUI.button("button", action_id,action, function(button)
+		MY_GUI.button("button", action_id, action, function(button)
 			if button.long_pressed then
 				print("Button was long pressed")
 			else
@@ -43,7 +43,7 @@ function on_input(self, action_id, action)
 			end
 			print("scrolled", scrollbar.scroll.y)
 		end)
-		
+
 	end)
 	return group.consumed
 end
