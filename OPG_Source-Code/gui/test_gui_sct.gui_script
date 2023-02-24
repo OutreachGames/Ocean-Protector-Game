@@ -3,9 +3,9 @@ local GUI = require "gui.gooey_theme_md"
 function init(self)
 	GUI.acquire_input()
 
-	GUI.checkbox("checkbox").set_checked(true)
-	GUI.radio("radio2").set_selected(true)
-	GUI.scrollbar("scrollbar").scroll_to(0, 0.75) --also can set the scroll
+	--GUI.checkbox("checkbox").set_checked(true)
+	--GUI.radio("radio2").set_selected(true)
+	--GUI.scrollbar("scrollbar").scroll_to(0, 0.75) --also can set the scroll
 
 end
 

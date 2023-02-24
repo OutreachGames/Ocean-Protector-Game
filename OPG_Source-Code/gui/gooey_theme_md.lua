@@ -69,16 +69,18 @@ end
 
 local function check_run_juice(node, do_shake)
 
-	-- provide some visual feedback for button like nodes
-	-- this includes node status changes or user is hovering over node
+	-- provide some visual feedback for button-like nodes
+	-- this includes node status changes or hovering effects
 
-	-- default arg
+	-- default arguments
 	if do_shake == nil then do_shake = true end
 
+	-- shake check and run
 	if do_shake and (node.pressed_now or node.released_now) then
 		shake_me(node.node, VEC3_1)
 	end
 
+	-- hover effect check and run
 	if node.over_now then
 		gui.set_color(node.node, COLOR_WHITE_BRIGHT)
 	elseif node.out_now then
