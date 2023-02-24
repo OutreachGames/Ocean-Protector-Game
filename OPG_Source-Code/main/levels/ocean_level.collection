@@ -836,7 +836,7 @@ embedded_instances {
   "  type: \"sound\"\n"
   "  data: \"sound: \\\"/asset_files/audio/sound_rain.ogg\\\"\\n"
   "looping: 1\\n"
-  "group: \\\"master\\\"\\n"
+  "group: \\\"soundgroup_weather\\\"\\n"
   "gain: 1.0\\n"
   "pan: 0.0\\n"
   "speed: 1.0\\n"

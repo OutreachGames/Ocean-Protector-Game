@@ -1,17 +1,17 @@
-local GUI = require "gui.gooey_theme_md"
+local MY_GUI = require "gui.gooey_theme_md"
 
 function init(self)
-	GUI.acquire_input()
+	MY_GUI.acquire_input()
 
-	--GUI.checkbox("checkbox").set_checked(true)
-	--GUI.radio("radio2").set_selected(true)
-	--GUI.scrollbar("scrollbar").scroll_to(0, 0.75) --also can set the scroll
+	--MY_GUI.checkbox("checkbox").set_checked(true)
+	--MY_GUI.radio("radio2").set_selected(true)
+	--MY_GUI.scrollbar("scrollbar").scroll_to(0, 0.75) --also can set the scroll
 
 end
 
 function on_input(self, action_id, action)
-	local group = GUI.group("group1", function()
-		GUI.button("button", action_id,action, function(button)
+	local group = MY_GUI.group("group1", function()
+		MY_GUI.button("button", action_id,action, function(button)
 			if button.long_pressed then
 				print("Button was long pressed")
 			else
@@ -19,27 +19,28 @@ function on_input(self, action_id, action)
 			end
 		end)
 
-		GUI.checkbox("checkbox", action_id, action, function(checkbox)
+		MY_GUI.checkbox("checkbox", action_id, action, function(checkbox)
 			print("checkbox", checkbox.checked)
 		end)
 
-		GUI.radiogroup("MYGROUP", action_id, action, function(group_id, action_id, action)
-			GUI.radio("radio1", group_id, action_id, action, function(radio)
+		MY_GUI.radiogroup("MYGROUP", action_id, action, function(group_id, action_id, action)
+			MY_GUI.radio("radio1", group_id, action_id, action, function(radio)
 				print("radio 1", radio.selected)
 			end)
-			GUI.radio("radio2", group_id, action_id, action, function(radio)
+			MY_GUI.radio("radio2", group_id, action_id, action, function(radio)
 				print("radio 2", radio.selected)
 			end)
-			GUI.radio("radio3", group_id, action_id, action, function(radio)
+			MY_GUI.radio("radio3", group_id, action_id, action, function(radio)
 				print("radio 3", radio.selected)
 			end)
 		end)
 
-		GUI.scrollbar("scrollbar", action_id, action, function(scrollbar)
+		MY_GUI.scrollbar("scrollbar", action_id, action, function(scrollbar)
 			if scrollbar.pressed then
 				-- also set fill of line
 				local progress_bar_node = gui.get_node("scrollbar".."/gui_scrollbar_progress")
-				local size_base = gui.get_scale(progress_bar_node).y * 264 -- <-- y value at scale 1 from GUI file
+				local core_bar_node = gui.get_node("scrollbar".."/gui_scrollbar_core")
+				local size_base = gui.get_scale(progress_bar_node).y * gui.get_size(core_bar_node).y -- <-- y value at scale 1 from MY_GUI file
 				local size_to_update = gui.get_size(progress_bar_node)
 				size_to_update.y = (1 - scrollbar.scroll.y) * size_base
 				gui.set_size(progress_bar_node, size_to_update)

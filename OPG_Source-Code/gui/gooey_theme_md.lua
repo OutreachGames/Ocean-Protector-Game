@@ -7,7 +7,7 @@
 local GOO = require ("gooey.gooey")
 
 -- setup theme and add option to return it using a module
-local MY_GOO = GOO.create_theme()
+local MYG = GOO.create_theme()
 
 
 -- internal constants for easy tuning 
@@ -36,7 +36,7 @@ local COLOR_WHITE_DEFAULT = vmath.vector4(1)
 
 -- functions 
 
-function MY_GOO.acquire_input()
+function MYG.acquire_input()
 
 	-- Convenience function to acquire input focus
 	msg.post(".", "acquire_input_focus")
@@ -102,7 +102,7 @@ local function refresh_button(button)
 		gui.play_flipbook(button.node, ANI_BUTTON_DEFAULT)
 	end
 end
-function MY_GOO.button(node_id, action_id, action, fn)
+function MYG.button(node_id, action_id, action, fn)
 	return GOO.button(node_id .. "/gui_button_core", action_id, action, fn, refresh_button)
 end
 
@@ -119,7 +119,7 @@ local function refresh_checkbox(checkbox)
 		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_OPEN_DEFAULT)
 	end
 end
-function MY_GOO.checkbox(node_id, action_id, action, fn)
+function MYG.checkbox(node_id, action_id, action, fn)
 	return GOO.checkbox(node_id .. "/gui_checkbox_core", action_id, action, fn, refresh_checkbox)
 end
 
@@ -136,10 +136,10 @@ local function refresh_radiobutton(radio)
 		gui.play_flipbook(radio.node, ANI_RADIO_OPEN_DEFAULT)
 	end
 end
-function MY_GOO.radiogroup(group_id, action_id, action, fn)
+function MYG.radiogroup(group_id, action_id, action, fn)
 	return GOO.radiogroup(group_id, action_id, action, fn)
 end
-function MY_GOO.radio(node_id, group_id, action_id, action, fn)
+function MYG.radio(node_id, group_id, action_id, action, fn)
 	return GOO.radio(node_id .. "/gui_radio_core", group_id, action_id, action, fn, refresh_radiobutton)
 end
 
@@ -148,13 +148,16 @@ local function refresh_scrollbar(scrollbar)
 	check_run_juice(scrollbar)
 	if scrollbar.pressed then
 		gui.play_flipbook(scrollbar.node, ANI_SCROLLBAR_PRESSED)
+		local scrollbar_socket = msg.url(gui.get_id(gui.get_parent(scrollbar.node)), nil, nil)
+		print(scrollbar_socket)
+		print(scrollbar_socket.socket)
 	elseif scrollbar.released_now then
 		gui.play_flipbook(scrollbar.node, ANI_SCROLLBAR_DEFAULT)
 	end
 end
-function MY_GOO.scrollbar(scrollbar_id, action_id, action, fn)
+function MYG.scrollbar(scrollbar_id, action_id, action, fn)
 	return GOO.vertical_scrollbar(scrollbar_id .. "/gui_scrollbar_handle", scrollbar_id .. "/gui_scrollbar_bounds", action_id, action, fn, refresh_scrollbar)
 end
 
 
-return MY_GOO
+return MYG
