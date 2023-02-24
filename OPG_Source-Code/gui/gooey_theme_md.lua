@@ -11,13 +11,21 @@ local MYG = GOO.create_theme()
 
 
 -- internal constants for easy tuning 
-local ANI_BUTTON_DEFAULT = hash("gui_button_default")
-local ANI_BUTTON_PRESSED = hash("gui_button_hover")
+local ANI_BUTTON_SIMPLE_DEFAULT = hash("gui_button_default")
+local ANI_BUTTON_SIMPLE_PRESSED = hash("gui_button_hover")
 
-local ANI_CHECKBOX_OPEN_DEFAULT = hash("gui_box_open_default")
-local ANI_CHECKBOX_OPEN_PRESSED = hash("gui_box_open_hover")
-local ANI_CHECKBOX_SELECTED_DEFAULT = hash("gui_box_selected_default")
-local ANI_CHECKBOX_SELECTED_PRESSED = hash("gui_box_selected_hover")
+local ANI_BUTTON_GOTO_DEFAULT = hash("gui_goto_default")
+local ANI_BUTTON_GOTO_PRESSED = hash("gui_goto_hover")
+
+local ANI_CHECKBOX_SIMPLE_OPEN_DEFAULT = hash("gui_box_open_default")
+local ANI_CHECKBOX_SIMPLE_OPEN_PRESSED = hash("gui_box_open_hover")
+local ANI_CHECKBOX_SIMPLE_SELECTED_DEFAULT = hash("gui_box_selected_default")
+local ANI_CHECKBOX_SIMPLE_SELECTED_PRESSED = hash("gui_box_selected_hover")
+
+local ANI_CHECKBOX_SIZER_OPEN_DEFAULT = hash("gui_minimize_default")
+local ANI_CHECKBOX_SIZER_OPEN_PRESSED = hash("gui_minimize_hover")
+local ANI_CHECKBOX_SIZER_SELECTED_DEFAULT = hash("gui_maximize_default")
+local ANI_CHECKBOX_SIZER_SELECTED_PRESSED = hash("gui_maximize_hover")
 
 local ANI_RADIO_OPEN_DEFAULT = hash("gui_radio_open_default")
 local ANI_RADIO_OPEN_PRESSED = hash("gui_radio_open_hover")
@@ -123,7 +131,19 @@ end
 
 local function refresh_button_simple(button)
 
-	refresh_button_core(button, ANI_BUTTON_DEFAULT, ANI_BUTTON_PRESSED)
+	refresh_button_core(button, ANI_BUTTON_SIMPLE_DEFAULT, ANI_BUTTON_SIMPLE_PRESSED)
+
+end
+
+local function refresh_button_goto(button)
+
+	refresh_button_core(button, ANI_BUTTON_GOTO_DEFAULT, ANI_BUTTON_GOTO_PRESSED)
+
+end
+
+function MYG.button_goto(node_id, action_id, action, fn)
+
+	return GOO.button(node_id .. "/gui_button_core", action_id, action, fn, refresh_button_goto)
 
 end
 
@@ -155,7 +175,19 @@ end
 
 local function refresh_checkbox_simple(checkbox)
 
-	refresh_checkbox_core(checkbox, ANI_CHECKBOX_OPEN_DEFAULT, ANI_CHECKBOX_OPEN_PRESSED, ANI_CHECKBOX_SELECTED_DEFAULT, ANI_CHECKBOX_SELECTED_PRESSED)
+	refresh_checkbox_core(checkbox, ANI_CHECKBOX_SIMPLE_OPEN_DEFAULT, ANI_CHECKBOX_SIMPLE_OPEN_PRESSED, ANI_CHECKBOX_SIMPLE_SELECTED_DEFAULT, ANI_CHECKBOX_SIMPLE_SELECTED_PRESSED)
+
+end
+
+local function refresh_checkbox_sizer(checkbox)
+
+	refresh_checkbox_core(checkbox, ANI_CHECKBOX_SIZER_OPEN_DEFAULT, ANI_CHECKBOX_SIZER_OPEN_PRESSED, ANI_CHECKBOX_SIZER_SELECTED_DEFAULT, ANI_CHECKBOX_SIZER_SELECTED_PRESSED)
+
+end
+
+function MYG.checkbox_sizer(node_id, action_id, action, fn)
+
+	return GOO.checkbox(node_id .. "/gui_checkbox_core", action_id, action, fn, refresh_checkbox_sizer)
 
 end
 
