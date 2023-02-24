@@ -1,4 +1,4 @@
-font: "/asset_files/fonts/Font-ExtraBold.ttf"
+font: "/asset_files/fonts/Font-Regular.ttf"
 material: "/builtins/fonts/font.material"
 size: 36
 antialias: 1

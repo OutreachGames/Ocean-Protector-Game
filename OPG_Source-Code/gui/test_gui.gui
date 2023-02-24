@@ -1,6 +1,6 @@
 script: "/gui/test_gui_sct.gui_script"
 fonts {
-  name: "dirtylarry"
+  name: "font_medium"
   font: "/asset_links/font_36p_bold.font"
 }
 textures {
