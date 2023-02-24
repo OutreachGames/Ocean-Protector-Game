@@ -109,45 +109,59 @@ end
 
 
 -- Simple Button
-local function refresh_button(button)
+local function refresh_button_core(button, ani_default, anim_pressed)
 
 	check_run_juice(button)
 
 	if button.pressed_now then
-		gui.play_flipbook(button.node, ANI_BUTTON_PRESSED)
+		gui.play_flipbook(button.node, anim_pressed)
 	elseif button.released_now then
-		gui.play_flipbook(button.node, ANI_BUTTON_DEFAULT)
+		gui.play_flipbook(button.node, ani_default)
 	end
 
 end
 
-function MYG.button(node_id, action_id, action, fn)
+local function refresh_button_simple(button)
 
-	return GOO.button(node_id .. "/gui_button_core", action_id, action, fn, refresh_button)
+	refresh_button_core(button, ANI_BUTTON_DEFAULT, ANI_BUTTON_PRESSED)
+
+end
+
+function MYG.button_simple(node_id, action_id, action, fn)
+
+	return GOO.button(node_id .. "/gui_button_core", action_id, action, fn, refresh_button_simple)
 
 end
 
 
 -- Checkbox
-local function refresh_checkbox(checkbox)
+local function refresh_checkbox_core(checkbox, ani_open_default, ani_open_pressed, ani_selected_default, ani_selected_pressed)
 
 	check_run_juice(checkbox)
 
+	-- note: the two pressed now's are slight optimization, though the not pressed are still needed as is
+
 	if checkbox.pressed_now and not checkbox.checked then
-		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_OPEN_PRESSED)
+		gui.play_flipbook(checkbox.node, ani_open_pressed)
 	elseif checkbox.pressed_now and checkbox.checked then
-		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_SELECTED_PRESSED)
-	elseif checkbox.checked then
-		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_SELECTED_DEFAULT)
-	elseif checkbox.released_now then
-		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_OPEN_DEFAULT)
+		gui.play_flipbook(checkbox.node, ani_selected_pressed)
+	elseif not checkbox.pressed and checkbox.checked then
+		gui.play_flipbook(checkbox.node, ani_selected_default)
+	elseif not checkbox.pressed and not checkbox.checked  then
+		gui.play_flipbook(checkbox.node, ani_open_default)
 	end
 
 end
 
-function MYG.checkbox(node_id, action_id, action, fn)
+local function refresh_checkbox_simple(checkbox)
 
-	return GOO.checkbox(node_id .. "/gui_checkbox_core", action_id, action, fn, refresh_checkbox)
+	refresh_checkbox_core(checkbox, ANI_CHECKBOX_OPEN_DEFAULT, ANI_CHECKBOX_OPEN_PRESSED, ANI_CHECKBOX_SELECTED_DEFAULT, ANI_CHECKBOX_SELECTED_PRESSED)
+
+end
+
+function MYG.checkbox_simple(node_id, action_id, action, fn)
+
+	return GOO.checkbox(node_id .. "/gui_checkbox_core", action_id, action, fn, refresh_checkbox_simple)
 
 end
 
@@ -206,6 +220,7 @@ end
 function MYG.scrollbar_updatebar(scrollbar_id, y_value)
 
 	-- set fill of scroll bar line
+	-- have as seperate function so can be called with scroll_set function, too
 	local progress_bar_node = gui.get_node(scrollbar_id.."/gui_scrollbar_progress")
 	local core_bar_node = gui.get_node(scrollbar_id.."/gui_scrollbar_core")
 	local size_base = gui.get_scale(progress_bar_node).y * gui.get_size(core_bar_node).y -- <-- y value at scale 1 from MY_GUI file
