@@ -98,7 +98,7 @@ local function refresh_button(button)
 	check_run_juice(button)
 	if button.pressed then
 		gui.play_flipbook(button.node, ANI_BUTTON_PRESSED)
-	else
+	elseif button.released_now then
 		gui.play_flipbook(button.node, ANI_BUTTON_DEFAULT)
 	end
 end
@@ -115,7 +115,7 @@ local function refresh_checkbox(checkbox)
 		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_SELECTED_PRESSED)
 	elseif checkbox.checked then
 		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_SELECTED_DEFAULT)
-	else
+	elseif checkbox.released_now then
 		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_OPEN_DEFAULT)
 	end
 end
@@ -130,9 +130,9 @@ local function refresh_radiobutton(radio)
 		gui.play_flipbook(radio.node, ANI_RADIO_OPEN_PRESSED)
 	elseif radio.pressed and radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_SELECTED_PRESSED)
-	elseif radio.selected then
+	elseif not radio.pressed and radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_SELECTED_DEFAULT)
-	else
+	elseif not radio.pressed and not radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_OPEN_DEFAULT)
 	end
 end
