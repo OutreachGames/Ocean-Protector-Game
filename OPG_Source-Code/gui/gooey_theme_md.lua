@@ -156,9 +156,9 @@ local function refresh_radiobutton(radio)
 
 	check_run_juice(radio)
 
-	if radio.pressed and not radio.selected then
+	if radio.pressed_now and not radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_OPEN_PRESSED)
-	elseif radio.pressed and radio.selected then
+	elseif radio.pressed_now and radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_SELECTED_PRESSED)
 	elseif not radio.pressed and radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_SELECTED_DEFAULT)
