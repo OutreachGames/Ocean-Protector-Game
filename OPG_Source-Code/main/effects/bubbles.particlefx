@@ -14,7 +14,7 @@ emitters {
     z: 0.0
     w: 1.0
   }
-  tile_source: "/main/asset_links/textures.atlas"
+  tile_source: "/asset_links/textures.atlas"
   animation: "white_dot"
   material: "/builtins/materials/particlefx.material"
   blend_mode: BLEND_MODE_SCREEN
@@ -145,17 +145,32 @@ emitters {
   }
   properties {
     key: EMITTER_KEY_PARTICLE_STRETCH_FACTOR_X
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0 }
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   properties {
     key: EMITTER_KEY_PARTICLE_STRETCH_FACTOR_Y
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0 }
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   properties {
     key: EMITTER_KEY_PARTICLE_ANGULAR_VELOCITY
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0}
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   particle_properties {
@@ -306,7 +321,7 @@ emitters {
     z: 0.0
     w: 1.0
   }
-  tile_source: "/main/asset_links/textures.atlas"
+  tile_source: "/asset_links/textures.atlas"
   animation: "white_dot2"
   material: "/builtins/materials/particlefx.material"
   blend_mode: BLEND_MODE_SCREEN
@@ -437,17 +452,32 @@ emitters {
   }
   properties {
     key: EMITTER_KEY_PARTICLE_STRETCH_FACTOR_X
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0 }
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   properties {
     key: EMITTER_KEY_PARTICLE_STRETCH_FACTOR_Y
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0 }
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   properties {
     key: EMITTER_KEY_PARTICLE_ANGULAR_VELOCITY
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0}
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   particle_properties {
@@ -573,7 +603,7 @@ emitters {
     z: 0.0
     w: 1.0
   }
-  tile_source: "/main/asset_links/textures.atlas"
+  tile_source: "/asset_links/textures.atlas"
   animation: "bubble_large"
   material: "/builtins/materials/particlefx.material"
   blend_mode: BLEND_MODE_SCREEN
@@ -704,17 +734,32 @@ emitters {
   }
   properties {
     key: EMITTER_KEY_PARTICLE_STRETCH_FACTOR_X
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0 }
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   properties {
     key: EMITTER_KEY_PARTICLE_STRETCH_FACTOR_Y
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0 }
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   properties {
     key: EMITTER_KEY_PARTICLE_ANGULAR_VELOCITY
-    points { x: 0.0 y: 0.0 t_x: 1.0 t_y: 0.0}
+    points {
+      x: 0.0
+      y: 0.0
+      t_x: 1.0
+      t_y: 0.0
+    }
     spread: 0.0
   }
   particle_properties {

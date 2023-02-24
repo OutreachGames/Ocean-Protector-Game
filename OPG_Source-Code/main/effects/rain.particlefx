@@ -14,7 +14,7 @@ emitters {
     z: -1.0
     w: 6.123234E-17
   }
-  tile_source: "/main/asset_links/textures.atlas"
+  tile_source: "/asset_links/textures.atlas"
   animation: "particle_blob"
   material: "/builtins/materials/particlefx.material"
   blend_mode: BLEND_MODE_MULT

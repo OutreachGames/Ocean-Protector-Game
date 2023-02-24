@@ -1,7 +1,7 @@
 script: ""
 textures {
   name: "textures"
-  texture: "/gui/gui_atlas.atlas"
+  texture: "/gui/gui_images.atlas"
 }
 background_color {
   x: 0.0

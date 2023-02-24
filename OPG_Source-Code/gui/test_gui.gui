@@ -1,11 +1,11 @@
 script: "/gui/test_gui_sct.gui_script"
 fonts {
   name: "dirtylarry"
-  font: "/gui/font_36p_bold.font"
+  font: "/asset_links/font_36p_bold.font"
 }
 textures {
   name: "dirtylarry"
-  texture: "/gui/gui_atlas.atlas"
+  texture: "/gui/gui_images.atlas"
 }
 background_color {
   x: 0.0
