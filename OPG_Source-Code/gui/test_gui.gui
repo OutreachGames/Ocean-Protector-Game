@@ -152,7 +152,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "button"
-  layer: "below"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 30.0
@@ -224,7 +224,7 @@ nodes {
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
   parent: "button/gui_button_core"
-  layer: "text"
+  layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -319,7 +319,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "checkbox"
-  layer: "below"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -419,7 +419,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "radio1"
-  layer: "below"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -491,7 +491,7 @@ nodes {
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
   parent: "radio1/gui_radio_core"
-  layer: "text"
+  layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -585,7 +585,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "radio2"
-  layer: "below"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -657,7 +657,7 @@ nodes {
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
   parent: "radio2/gui_radio_core"
-  layer: "text"
+  layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -751,7 +751,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "radio3"
-  layer: "below"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -823,7 +823,7 @@ nodes {
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
   parent: "radio3/gui_radio_core"
-  layer: "text"
+  layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -1148,7 +1148,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "scrollbar/gui_scrollbar_bounds"
-  layer: "below"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -1167,10 +1167,10 @@ nodes {
   visible: true
 }
 layers {
-  name: "below"
+  name: "gui_layer_below"
 }
 layers {
-  name: "text"
+  name: "gui_layer_text"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
