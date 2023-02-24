@@ -70,13 +70,13 @@ local function shake_me(node, initial_scale)
 
 end
 
-local function check_run_juice(node, is_simple_button, do_shake)
+local function check_run_juice(node, always_triggers, do_shake)
 
 	-- provide some visual feedback for button-like nodes
 	-- this includes node status changes or hovering effects
 
 	-- default arguments
-	if is_simple_button == nil then is_simple_button = true end
+	if always_triggers == nil then always_triggers = false end
 	if do_shake == nil then do_shake = true end
 
 	-- shake check and run
@@ -85,7 +85,7 @@ local function check_run_juice(node, is_simple_button, do_shake)
 		local sound_to_play
 		if node.pressed_now then
 			sound_to_play = SOUND_ID_BUTTON_1
-		elseif node.over and node.released_now then
+		elseif node.over and node.released_now or always_triggers then
 			sound_to_play = SOUND_ID_BUTTON_2
 		else
 			sound_to_play = SOUND_ID_BUTTON_3
@@ -130,7 +130,7 @@ end
 -- Checkbox
 local function refresh_checkbox(checkbox)
 
-	check_run_juice(checkbox, false)
+	check_run_juice(checkbox)
 
 	if checkbox.pressed_now and not checkbox.checked then
 		gui.play_flipbook(checkbox.node, ANI_CHECKBOX_OPEN_PRESSED)
@@ -154,7 +154,7 @@ end
 -- Radio Button
 local function refresh_radiobutton(radio)
 
-	check_run_juice(radio, false)
+	check_run_juice(radio)
 
 	if radio.pressed and not radio.selected then
 		gui.play_flipbook(radio.node, ANI_RADIO_OPEN_PRESSED)
@@ -184,7 +184,7 @@ end
 -- Scroll bar
 local function refresh_scrollbar(scrollbar)
 
-	check_run_juice(scrollbar)
+	check_run_juice(scrollbar, true)
 
 	if scrollbar.pressed_now then
 		gui.play_flipbook(scrollbar.node, ANI_SCROLLBAR_PRESSED)
