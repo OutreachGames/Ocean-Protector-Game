@@ -2261,64 +2261,6 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 1.0
-    y: 1.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
-  texture: ""
-  id: "group_plot/group_plot_1/gui_frame_positioner"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_S
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_1"
-  layer: ""
-  inherit_alpha: true
-  slice9 {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: false
-}
-nodes {
-  position {
-    x: 0.0
     y: -13.0
     z: 0.0
     w: 1.0
@@ -2355,7 +2297,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_1/gui_frame_positioner"
+  parent: "group_plot/group_plot_1"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -2372,7 +2314,7 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: false
+  visible: true
 }
 nodes {
   position {
@@ -2395,7 +2337,7 @@ nodes {
   }
   size {
     x: 33.0
-    y: 372.0
+    y: 32.0
     z: 0.0
     w: 1.0
   }
@@ -2413,7 +2355,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_1/gui_frame_positioner"
+  parent: "group_plot/group_plot_1"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -2453,7 +2395,7 @@ nodes {
   }
   size {
     x: 1.0
-    y: 372.0
+    y: 32.0
     z: 0.0
     w: 1.0
   }
@@ -2471,7 +2413,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_1/gui_frame_positioner"
+  parent: "group_plot/group_plot_1"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -2535,64 +2477,6 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 1.0
-    y: 1.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
-  texture: ""
-  id: "group_plot/group_plot_2/gui_frame_positioner"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_S
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_2"
-  layer: ""
-  inherit_alpha: true
-  slice9 {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: false
-}
-nodes {
-  position {
-    x: 0.0
     y: -13.0
     z: 0.0
     w: 1.0
@@ -2629,7 +2513,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_2/gui_frame_positioner"
+  parent: "group_plot/group_plot_2"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -2646,7 +2530,7 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: false
+  visible: true
 }
 nodes {
   position {
@@ -2669,7 +2553,7 @@ nodes {
   }
   size {
     x: 33.0
-    y: 372.0
+    y: 32.0
     z: 0.0
     w: 1.0
   }
@@ -2687,7 +2571,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_2/gui_frame_positioner"
+  parent: "group_plot/group_plot_2"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -2745,7 +2629,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot/group_plot_2/gui_frame_positioner"
+  parent: "group_plot/group_plot_2"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
