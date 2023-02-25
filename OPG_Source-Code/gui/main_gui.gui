@@ -5264,7 +5264,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/compounds/hud_timeplot.gui"
+  template: "/gui/compounds/hud_timeplot_full.gui"
   template_node_child: false
   custom_type: 0
   enabled: false
@@ -5738,7 +5738,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_graph.gui"
+  template: "/gui/compounds/hud_timeplot_graph.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
@@ -7498,184 +7498,10 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_healthbar_vertical.gui"
+  template: "/gui/compounds/hud_timeplot_bar.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
-}
-nodes {
-  position {
-    x: 0.0
-    y: -13.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 57.0
-    y: 58.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
-  texture: "textures/gui_bar_core"
-  id: "hud_timeplot/group_plot/group_plot_1/gui_frame_core"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_S
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "hud_timeplot/group_plot/group_plot_1"
-  layer: "gui_layer_below"
-  inherit_alpha: true
-  slice9 {
-    x: 20.0
-    y: 20.0
-    z: 20.0
-    w: 20.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: true
-}
-nodes {
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 33.0
-    y: 32.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
-  texture: "textures/gui_bar_progress"
-  id: "hud_timeplot/group_plot/group_plot_1/gui_frame_progress"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_S
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "hud_timeplot/group_plot/group_plot_1"
-  layer: "gui_layer_below"
-  inherit_alpha: true
-  slice9 {
-    x: 8.0
-    y: 8.0
-    z: 8.0
-    w: 8.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: true
-}
-nodes {
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 1.0
-    y: 32.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
-  texture: ""
-  id: "hud_timeplot/group_plot/group_plot_1/tracker_max_length"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_S
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "hud_timeplot/group_plot/group_plot_1"
-  layer: "gui_layer_below"
-  inherit_alpha: true
-  slice9 {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: false
 }
 nodes {
   position {
@@ -7709,8 +7535,8 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "hud_timeplot/group_plot/group_plot_2"
-  parent: "hud_timeplot/group_plot/group_plots"
+  id: "hud_timeplot/group_plot/group_plot_1/group_plot"
+  parent: "hud_timeplot/group_plot/group_plot_1"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -7753,12 +7579,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "textures/gui_bar_core"
-  id: "hud_timeplot/group_plot/group_plot_2/gui_frame_core"
+  id: "hud_timeplot/group_plot/group_plot_1/group_plot/gui_frame_core"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "hud_timeplot/group_plot/group_plot_2"
+  parent: "hud_timeplot/group_plot/group_plot_1/group_plot"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -7798,7 +7624,7 @@ nodes {
   }
   size {
     x: 33.0
-    y: 32.0
+    y: 372.0
     z: 0.0
     w: 1.0
   }
@@ -7811,12 +7637,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "textures/gui_bar_progress"
-  id: "hud_timeplot/group_plot/group_plot_2/gui_frame_progress"
+  id: "hud_timeplot/group_plot/group_plot_1/group_plot/gui_frame_progress"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "hud_timeplot/group_plot/group_plot_2"
+  parent: "hud_timeplot/group_plot/group_plot_1/group_plot"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -7856,7 +7682,7 @@ nodes {
   }
   size {
     x: 1.0
-    y: 32.0
+    y: 372.0
     z: 0.0
     w: 1.0
   }
@@ -7869,12 +7695,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "hud_timeplot/group_plot/group_plot_2/tracker_max_length"
+  id: "hud_timeplot/group_plot/group_plot_1/group_plot/tracker_max_length"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "hud_timeplot/group_plot/group_plot_2"
+  parent: "hud_timeplot/group_plot/group_plot_1/group_plot"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -7892,6 +7718,72 @@ nodes {
   custom_type: 0
   enabled: true
   visible: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: -47.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 76.0
+    y: 30.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "1"
+  font: "font_body_regular"
+  id: "hud_timeplot/group_plot/group_plot_1/gui_label"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  parent: "hud_timeplot/group_plot/group_plot_1"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  template_node_child: true
+  text_leading: 1.0
+  text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
 }
 nodes {
   position {
