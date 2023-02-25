@@ -283,7 +283,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  layer: ""
+  layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0

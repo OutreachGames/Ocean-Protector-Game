@@ -6229,7 +6229,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6295,7 +6295,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6361,7 +6361,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6427,7 +6427,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6493,7 +6493,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6559,7 +6559,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6625,7 +6625,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6691,7 +6691,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6757,7 +6757,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -6823,7 +6823,7 @@ nodes {
   text_tracking: 0.0
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
@@ -7773,7 +7773,7 @@ nodes {
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
   parent: "hud_timeplot/group_plot/group_plot_1"
-  layer: ""
+  layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
