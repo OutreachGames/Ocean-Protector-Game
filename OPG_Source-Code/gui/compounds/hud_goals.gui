@@ -186,7 +186,7 @@ nodes {
 nodes {
   position {
     x: 40.0
-    y: -117.0
+    y: -115.0
     z: 0.0
     w: 1.0
   }
@@ -204,7 +204,7 @@ nodes {
   }
   size {
     x: 234.0
-    y: 80.0
+    y: 92.0
     z: 0.0
     w: 1.0
   }
@@ -216,7 +216,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Things to do"
+  text: "Evaluate and submit decision"
   font: "font_body_bold"
   id: "gnode_body_text"
   xanchor: XANCHOR_NONE

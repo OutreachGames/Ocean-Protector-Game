@@ -355,7 +355,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "pH"
+  text: "Ocean pH"
   font: "font_body_bold"
   id: "group_item_ph/gnode_body_text"
   xanchor: XANCHOR_NONE
