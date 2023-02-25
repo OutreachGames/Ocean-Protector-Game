@@ -557,8 +557,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
+    x: -50.0
+    y: -30.0
     z: 0.0
     w: 1.0
   }
@@ -575,21 +575,21 @@ nodes {
     w: 1.0
   }
   size {
-    x: 800.0
-    y: 420.0
+    x: 900.0
+    y: 600.0
     z: 0.0
     w: 1.0
   }
   color {
-    x: 0.3019608
-    y: 0.4
-    z: 0.8
+    x: 0.2
+    y: 0.3019608
+    z: 0.7019608
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "group_plot/box"
+  id: "group_plot/gui_background"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -607,11 +607,12 @@ nodes {
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
+  overridden_fields: 46
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
 }
 nodes {
   position {
