@@ -122,7 +122,7 @@ nodes {
     w: 1.0
   }
   adjust_mode: ADJUST_MODE_FIT
-  line_break: false
+  line_break: true
   parent: "gui_radio_core"
   layer: "gui_layer_text"
   inherit_alpha: true

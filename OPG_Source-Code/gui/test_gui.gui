@@ -497,7 +497,7 @@ nodes {
     w: 1.0
   }
   adjust_mode: ADJUST_MODE_FIT
-  line_break: false
+  line_break: true
   parent: "radio1/gui_radio_core"
   layer: "gui_layer_text"
   inherit_alpha: true
@@ -663,7 +663,7 @@ nodes {
     w: 1.0
   }
   adjust_mode: ADJUST_MODE_FIT
-  line_break: false
+  line_break: true
   parent: "radio2/gui_radio_core"
   layer: "gui_layer_text"
   inherit_alpha: true
@@ -829,7 +829,7 @@ nodes {
     w: 1.0
   }
   adjust_mode: ADJUST_MODE_FIT
-  line_break: false
+  line_break: true
   parent: "radio3/gui_radio_core"
   layer: "gui_layer_text"
   inherit_alpha: true
