@@ -919,7 +919,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_healthbar.gui"
+  template: "/gui/components/frame_healthbar_horizontal.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
@@ -1097,6 +1097,64 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 199.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_data/group_item_ph/group_healthbar/tracker_max_length"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_data/group_item_ph/group_healthbar/gui_frame_positioner"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
 }
 nodes {
   position {
@@ -1443,7 +1501,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_healthbar.gui"
+  template: "/gui/components/frame_healthbar_horizontal.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
@@ -1621,6 +1679,64 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 199.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_data/group_item_plankton/group_healthbar/tracker_max_length"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_data/group_item_plankton/group_healthbar/gui_frame_positioner"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
 }
 nodes {
   position {
@@ -1967,7 +2083,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_healthbar.gui"
+  template: "/gui/components/frame_healthbar_horizontal.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
@@ -2145,6 +2261,64 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 199.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_data/group_item_coral/group_healthbar/tracker_max_length"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_data/group_item_coral/group_healthbar/gui_frame_positioner"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
 }
 nodes {
   position {
@@ -2491,7 +2665,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_healthbar.gui"
+  template: "/gui/components/frame_healthbar_horizontal.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
@@ -2669,6 +2843,64 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 199.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_data/group_item_fish/group_healthbar/tracker_max_length"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_data/group_item_fish/group_healthbar/gui_frame_positioner"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
 }
 nodes {
   position {
@@ -3015,7 +3247,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_healthbar.gui"
+  template: "/gui/components/frame_healthbar_horizontal.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
@@ -3193,6 +3425,64 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 199.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_data/group_item_mollusks/group_healthbar/tracker_max_length"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_data/group_item_mollusks/group_healthbar/gui_frame_positioner"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
 }
 nodes {
   position {
@@ -3539,7 +3829,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_healthbar.gui"
+  template: "/gui/components/frame_healthbar_horizontal.gui"
   template_node_child: true
   custom_type: 0
   enabled: true
@@ -3717,6 +4007,64 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 199.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_data/group_item_crustaceans/group_healthbar/tracker_max_length"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_data/group_item_crustaceans/group_healthbar/gui_frame_positioner"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
 }
 nodes {
   position {
