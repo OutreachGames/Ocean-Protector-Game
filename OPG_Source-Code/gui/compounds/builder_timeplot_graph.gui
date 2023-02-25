@@ -1216,7 +1216,7 @@ nodes {
 }
 nodes {
   position {
-    x: -454.0
+    x: -470.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -1770,7 +1770,7 @@ nodes {
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/compounds/hud_timeplot_bar.gui"
+  template: "/gui/compounds/builder_timeplot_bar.gui"
   template_node_child: false
   custom_type: 0
   enabled: true
