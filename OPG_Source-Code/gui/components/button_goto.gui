@@ -1,8 +1,4 @@
 script: ""
-fonts {
-  name: "font_medium"
-  font: "/asset_links/font_36p_bold.font"
-}
 textures {
   name: "textures"
   texture: "/gui/gui_images.atlas"
@@ -72,9 +68,6 @@ nodes {
 }
 layers {
   name: "gui_layer_below"
-}
-layers {
-  name: "gui_layer_text"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

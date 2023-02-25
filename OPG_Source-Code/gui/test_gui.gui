@@ -1,7 +1,15 @@
 script: "/gui/test_gui_sct.gui_script"
 fonts {
-  name: "font_medium"
+  name: "font_header_bold"
   font: "/asset_links/font_36p_bold.font"
+}
+fonts {
+  name: "font_body_bold"
+  font: "/asset_links/font_24p_bold.font"
+}
+fonts {
+  name: "font_body_regular"
+  font: "/asset_links/font_24p_regular.font"
 }
 textures {
   name: "dirtylarry"
@@ -204,7 +212,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "BUTTON"
-  font: "font_medium"
+  font: "font_header_bold"
   id: "button/gui_button_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -471,7 +479,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Text"
-  font: "font_medium"
+  font: "font_header_bold"
   id: "radio1/gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -637,7 +645,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Text"
-  font: "font_medium"
+  font: "font_header_bold"
   id: "radio2/gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -803,7 +811,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Text"
-  font: "font_medium"
+  font: "font_header_bold"
   id: "radio3/gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE

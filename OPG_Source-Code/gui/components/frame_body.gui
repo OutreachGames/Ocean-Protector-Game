@@ -1,6 +1,6 @@
 script: ""
 fonts {
-  name: "font_medium"
+  name: "font_header_bold"
   font: "/asset_links/font_36p_bold.font"
 }
 textures {
