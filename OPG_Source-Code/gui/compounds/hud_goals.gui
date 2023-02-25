@@ -102,7 +102,7 @@ nodes {
   inherit_alpha: true
   slice9 {
     x: 52.0
-    y: 52.0
+    y: 104.0
     z: 52.0
     w: 52.0
   }

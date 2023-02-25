@@ -20,173 +20,7 @@ background_color {
 nodes {
   position {
     x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEMPLATE
-  id: "group_frame"
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  template: "/gui/components/frame_side.gui"
-  template_node_child: false
-  custom_type: 0
-  enabled: true
-}
-nodes {
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 320.0
-    y: 240.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
-  texture: "textures/gui_frame_sidebar_dark"
-  id: "group_frame/gui_frame_core"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_NE
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "group_frame"
-  layer: "gui_layer_below"
-  inherit_alpha: true
-  slice9 {
-    x: 52.0
-    y: 52.0
-    z: 52.0
-    w: 52.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  overridden_fields: 3
-  overridden_fields: 4
-  template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: true
-}
-nodes {
-  position {
-    x: -276.0
-    y: -36.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 100.0
-    y: 50.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
-  text: "Data"
-  font: "font_header_bold"
-  id: "gnode_header_text"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_NW
-  outline {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  adjust_mode: ADJUST_MODE_FIT
-  line_break: false
-  layer: "gui_layer_text"
-  inherit_alpha: true
-  alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 1.0
-  template_node_child: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  custom_type: 0
-  enabled: true
-  visible: true
-}
-nodes {
-  position {
-    x: -276.0
-    y: -117.0
+    y: 40.0
     z: 0.0
     w: 1.0
   }
@@ -216,9 +50,9 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "pH"
+  text: "Data Label"
   font: "font_body_bold"
-  id: "gnode_body_text_pH"
+  id: "gnode_body_text"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_NW
@@ -250,8 +84,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
+    x: 208.0
+    y: 20.0
     z: 0.0
     w: 1.0
   }
@@ -280,107 +114,7 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "group_button_sizer"
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  template: "/gui/components/checkbox_sizer.gui"
-  template_node_child: false
-  custom_type: 0
-  enabled: true
-}
-nodes {
-  position {
-    x: -69.0
-    y: -61.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 51.0
-    y: 51.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
-  texture: "textures/gui_minimize_default"
-  id: "group_button_sizer/gui_checkbox_core"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "group_button_sizer"
-  layer: "gui_layer_below"
-  inherit_alpha: true
-  slice9 {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  overridden_fields: 1
-  template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: true
-}
-nodes {
-  position {
-    x: -68.0
-    y: -137.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  type: TYPE_TEMPLATE
-  id: "group_button_goto_pH"
+  id: "group_button_goto"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -423,12 +157,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "textures/gui_goto_default"
-  id: "group_button_goto_pH/gui_button_core"
+  id: "group_button_goto/gui_button_core"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_button_goto_pH"
+  parent: "group_button_goto"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -449,8 +183,8 @@ nodes {
 }
 nodes {
   position {
-    x: -276.0
-    y: -182.0
+    x: 12.0
+    y: -25.0
     z: 0.0
     w: 1.0
   }
@@ -479,7 +213,7 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "group_healthbar_pH"
+  id: "group_healthbar"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -490,7 +224,7 @@ nodes {
 }
 nodes {
   position {
-    x: 20.0
+    x: 0.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -522,12 +256,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "group_healthbar_pH/gui_frame_positioner"
+  id: "group_healthbar/gui_frame_positioner"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_healthbar_pH"
+  parent: "group_healthbar"
   layer: ""
   inherit_alpha: true
   slice9 {
@@ -540,7 +274,6 @@ nodes {
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
-  overridden_fields: 1
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
@@ -567,7 +300,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 216.0
+    x: 224.0
     y: 58.0
     z: 0.0
     w: 1.0
@@ -581,12 +314,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "textures/gui_bar_core"
-  id: "group_healthbar_pH/gui_frame_core"
+  id: "group_healthbar/gui_frame_core"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_healthbar_pH/gui_frame_positioner"
+  parent: "group_healthbar/gui_frame_positioner"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -626,7 +359,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 193.0
+    x: 199.0
     y: 32.0
     z: 0.0
     w: 1.0
@@ -640,12 +373,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "textures/gui_bar_progress"
-  id: "group_healthbar_pH/gui_frame_progress"
+  id: "group_healthbar/gui_frame_progress"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_healthbar_pH/gui_frame_positioner"
+  parent: "group_healthbar/gui_frame_positioner"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -660,6 +393,106 @@ nodes {
   alpha: 1.0
   overridden_fields: 4
   overridden_fields: 46
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
+}
+nodes {
+  position {
+    x: 112.0
+    y: -63.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEMPLATE
+  id: "group_line_divider"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  template: "/gui/components/frame_line.gui"
+  template_node_child: false
+  custom_type: 0
+  enabled: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 254.0
+    y: 36.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "textures/gui_line_divider"
+  id: "group_line_divider/gui_frame_core"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_line_divider"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 22.0
+    y: 18.0
+    z: 22.0
+    w: 18.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  overridden_fields: 4
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
