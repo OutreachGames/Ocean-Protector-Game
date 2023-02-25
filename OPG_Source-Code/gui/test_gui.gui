@@ -465,8 +465,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 500.0
-    y: 100.0
+    x: 725.0
+    y: 120.0
     z: 0.0
     w: 1.0
   }
@@ -479,7 +479,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Text"
-  font: "font_header_bold"
+  font: "font_body_regular"
   id: "radio1/gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -498,7 +498,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
-  parent: "radio1/gui_radio_core"
+  parent: "radio1"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -631,8 +631,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 500.0
-    y: 100.0
+    x: 725.0
+    y: 120.0
     z: 0.0
     w: 1.0
   }
@@ -645,7 +645,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Text"
-  font: "font_header_bold"
+  font: "font_body_regular"
   id: "radio2/gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -664,7 +664,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
-  parent: "radio2/gui_radio_core"
+  parent: "radio2"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -797,8 +797,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 500.0
-    y: 100.0
+    x: 725.0
+    y: 120.0
     z: 0.0
     w: 1.0
   }
@@ -811,7 +811,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Text"
-  font: "font_header_bold"
+  font: "font_body_regular"
   id: "radio3/gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -830,7 +830,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
-  parent: "radio3/gui_radio_core"
+  parent: "radio3"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0

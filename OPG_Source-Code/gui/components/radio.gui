@@ -1,7 +1,7 @@
 script: ""
 fonts {
-  name: "font_header_bold"
-  font: "/asset_links/font_36p_bold.font"
+  name: "font_body_regular"
+  font: "/asset_links/font_24p_regular.font"
 }
 textures {
   name: "textures"
@@ -90,8 +90,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 500.0
-    y: 100.0
+    x: 725.0
+    y: 120.0
     z: 0.0
     w: 1.0
   }
@@ -104,7 +104,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Text"
-  font: "font_header_bold"
+  font: "font_body_regular"
   id: "gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -123,7 +123,6 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
-  parent: "gui_radio_core"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
