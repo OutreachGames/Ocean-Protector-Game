@@ -115,6 +115,16 @@ local function check_run_juice(node, always_triggers, do_shake)
 
 end
 
+local function update_bar_length(progress_bar_node, core_bar_node, y_value)
+
+	-- set fill of bar
+	local size_base = gui.get_scale(progress_bar_node).y * gui.get_size(core_bar_node).y -- <-- y value at scale 1 from MY_GUI file
+	local size_to_update = gui.get_size(progress_bar_node)
+	size_to_update.y = (1 - y_value) * size_base
+	gui.set_size(progress_bar_node, size_to_update)
+
+end
+
 
 -- Simple Button
 local function refresh_button_core(button, ani_default, anim_pressed)
@@ -255,10 +265,7 @@ function MYG.scrollbar_updatebar(scrollbar_id, y_value)
 	-- have as seperate function so can be called with scroll_set function, too
 	local progress_bar_node = gui.get_node(scrollbar_id.."/gui_scrollbar_progress")
 	local core_bar_node = gui.get_node(scrollbar_id.."/gui_scrollbar_core")
-	local size_base = gui.get_scale(progress_bar_node).y * gui.get_size(core_bar_node).y -- <-- y value at scale 1 from MY_GUI file
-	local size_to_update = gui.get_size(progress_bar_node)
-	size_to_update.y = (1 - y_value) * size_base
-	gui.set_size(progress_bar_node, size_to_update)
+	update_bar_length(progress_bar_node, core_bar_node, y_value)
 
 end
 

@@ -6,7 +6,104 @@ local HSH = require ("modules.hashes_md")
 local MY_GOO = require ("gui.gooey_theme_md")
 
 
--- functions 
+-- functions
+local function Screen_Decision_Reset(self, enabled_setting)
+
+	-- reset Decision screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	-- set enabled status
+	local constant = self.hud_decision_constant
+	-- if setting to enabled
+		-- currently enabled -> do nothing
+		-- not enabled -> enable
+	-- if setting to disabled
+		-- currently enabled -> disable
+		-- not enabled -> do nothing
+	gui.set_enabled(gui.get_node(constant.gui_basename), enabled_setting)
+
+	-- reset tracking table
+	self.hud_decision_dynamic.is_active = enabled_setting
+	self.hud_decision_dynamic.node_option_selected = 0
+	self.hud_decision_dynamic.node_sumbit_active = false
+
+	-- actually reset radio nodes
+	for _,v_nodeid in ipairs(constant.node_option_names) do
+		MY_GOO.radio(v_nodeid).set_selected(false)
+	end
+
+end
+
+local function Screen_Decision_Initialize(self)
+
+	local basename = "hud_decision"
+
+	self.hud_decision_constant = nil
+	self.hud_decision_dynamic = nil
+
+	-- set constants
+	self.hud_decision_constant = {
+		gui_basename = basename,
+		node_option_names = {
+			basename.."/group_option_1",
+			basename.."/group_option_2",
+			basename.."/group_option_3"
+		},
+		node_submit_name = basename.."/group_button_submit",
+	}
+
+	-- set dynamics
+	self.hud_decision_dynamic = {}
+	Screen_Decision_Reset(self, true)
+
+end
+
+local function Screen_Decision_Input(self, action_id, action)
+
+	-- runs On Input for Decision screen on HUD
+
+	local Info = self.hud_decision_constant
+
+	local Consumed = false
+
+	local function func_radiogroup(local_group_id, local_action_id, local_action)
+
+		local function radio_base(index)
+			print("radio "..index.." selected")
+		end
+
+		local function func_radio_1(radio)
+			radio_base(1)
+		end
+		local function func_radio_2(radio)
+			radio_base(2)
+		end
+		local function func_radio_3(radio)
+			radio_base(3)
+		end
+
+		MY_GOO.radio(Info.node_option_names[1], local_group_id, local_action_id, local_action, func_radio_1)
+		MY_GOO.radio(Info.node_option_names[2], local_group_id, local_action_id, local_action, func_radio_2)
+		MY_GOO.radio(Info.node_option_names[3], local_group_id, local_action_id, local_action, func_radio_3)
+
+	end
+
+	local function func_button(button)
+
+		print("Button was pressed")
+
+	end
+
+	MY_GOO.radiogroup("radiogroup_answer_options", action_id, action, func_radiogroup)
+
+	MY_GOO.button_simple(Info.node_submit_name, action_id, action, func_button)
+
+end
+
 local function Run_Fader(self, fade_out, time)
 
 	-- run either fade in or fade out
@@ -41,9 +138,11 @@ local function Run_Fader(self, fade_out, time)
 end
 
 
+
 function init(self)
 
 	MY_GOO.acquire_input()
+	Screen_Decision_Initialize(self)
 
 end
 
@@ -57,6 +156,6 @@ end
 
 function on_input(self, action_id, action)
 
-	
+	Screen_Decision_Input(self, action_id, action)
 
 end
