@@ -7,6 +7,8 @@ local MY_GOO = require ("gui.gooey_theme_md")
 
 
 -- functions
+
+-- Decision HUD Screen
 local function Screen_Decision_Reset(self, enabled_setting)
 
 	-- reset Decision screen of HUD
@@ -158,6 +160,56 @@ local function Screen_Decision_Input(self, action_id, action)
 
 end
 
+
+-- Data HUD Screen
+local function Screen_Data_Reset(self, enabled_setting)
+
+	-- reset Data screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	-- set enabled status
+	local constant = self.hud_data_constant
+	-- if setting to enabled
+		-- currently enabled -> do nothing
+		-- not enabled -> enable
+	-- if setting to disabled
+		-- currently enabled -> disable
+		-- not enabled -> do nothing
+	gui.set_enabled(gui.get_node(constant.gui_controller), enabled_setting)
+
+	-- reset tracking table
+	self.hud_decision_dynamic.screen_isactive = enabled_setting
+
+
+end
+
+local function Screen_Data_Initialize(self, enabled_status)
+
+	-- set contants and setup dynamic values and components
+
+	local basename = "hud_data"
+
+	self.hud_data_constant = nil
+	self.hud_data_dynamic = nil
+
+	-- set constants
+	self.hud_data_constant = {
+		gui_basename = basename,
+		gui_controller = basename .. "/gnode_controller",
+		gui_subcontroller = basename .. "/gnode_subcontroller",
+	}
+
+	-- set dynamics
+	self.hud_data_dynamic = {}
+	Screen_Data_Reset(self, enabled_status)
+
+end
+
+
 local function Run_Fader(self, fade_out, time)
 
 	-- run either fade in or fade out
@@ -197,6 +249,7 @@ function init(self)
 
 	MY_GOO.acquire_input()
 	Screen_Decision_Initialize(self, true)
+	Screen_Data_Initialize(self, true)
 
 end
 

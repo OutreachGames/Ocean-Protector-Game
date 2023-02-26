@@ -444,6 +444,64 @@ nodes {
 nodes {
   position {
     x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "group_item_plankton/gnode_controller"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_item_plankton"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
+}
+nodes {
+  position {
+    x: 0.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -494,7 +552,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "group_item_plankton"
+  parent: "group_item_plankton/gnode_controller"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -541,7 +599,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_plankton/group_button_goto"
-  parent: "group_item_plankton"
+  parent: "group_item_plankton/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -641,7 +699,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_plankton/group_healthbar"
-  parent: "group_item_plankton"
+  parent: "group_item_plankton/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -857,7 +915,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_plankton/group_line_divider"
-  parent: "group_item_plankton"
+  parent: "group_item_plankton/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -969,6 +1027,64 @@ nodes {
 nodes {
   position {
     x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "group_item_mollusks/gnode_controller"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_item_mollusks"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
+}
+nodes {
+  position {
+    x: 0.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -1019,7 +1135,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "group_item_mollusks"
+  parent: "group_item_mollusks/gnode_controller"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -1066,7 +1182,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_mollusks/group_button_goto"
-  parent: "group_item_mollusks"
+  parent: "group_item_mollusks/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1166,7 +1282,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_mollusks/group_healthbar"
-  parent: "group_item_mollusks"
+  parent: "group_item_mollusks/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1382,7 +1498,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_mollusks/group_line_divider"
-  parent: "group_item_mollusks"
+  parent: "group_item_mollusks/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1494,6 +1610,64 @@ nodes {
 nodes {
   position {
     x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "group_item_ph/gnode_controller"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_item_ph"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
+}
+nodes {
+  position {
+    x: 0.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -1544,7 +1718,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "group_item_ph"
+  parent: "group_item_ph/gnode_controller"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -1591,7 +1765,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_ph/group_button_goto"
-  parent: "group_item_ph"
+  parent: "group_item_ph/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1691,7 +1865,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_ph/group_healthbar"
-  parent: "group_item_ph"
+  parent: "group_item_ph/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -1907,7 +2081,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_ph/group_line_divider"
-  parent: "group_item_ph"
+  parent: "group_item_ph/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -2019,6 +2193,64 @@ nodes {
 nodes {
   position {
     x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "group_item_fish/gnode_controller"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_item_fish"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
+}
+nodes {
+  position {
+    x: 0.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -2069,7 +2301,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "group_item_fish"
+  parent: "group_item_fish/gnode_controller"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -2116,7 +2348,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_fish/group_button_goto"
-  parent: "group_item_fish"
+  parent: "group_item_fish/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -2216,7 +2448,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_fish/group_healthbar"
-  parent: "group_item_fish"
+  parent: "group_item_fish/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -2432,7 +2664,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_fish/group_line_divider"
-  parent: "group_item_fish"
+  parent: "group_item_fish/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -2544,6 +2776,64 @@ nodes {
 nodes {
   position {
     x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "group_item_crustaceans/gnode_controller"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_item_crustaceans"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
+}
+nodes {
+  position {
+    x: 0.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -2594,7 +2884,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "group_item_crustaceans"
+  parent: "group_item_crustaceans/gnode_controller"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -2641,7 +2931,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_crustaceans/group_button_goto"
-  parent: "group_item_crustaceans"
+  parent: "group_item_crustaceans/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -2741,7 +3031,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_crustaceans/group_healthbar"
-  parent: "group_item_crustaceans"
+  parent: "group_item_crustaceans/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -2957,15 +3247,14 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_crustaceans/group_line_divider"
-  parent: "group_item_crustaceans"
+  parent: "group_item_crustaceans/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
-  overridden_fields: 45
   template: "/gui/components/frame_line.gui"
   template_node_child: true
   custom_type: 0
-  enabled: false
+  enabled: true
 }
 nodes {
   position {
@@ -3070,6 +3359,64 @@ nodes {
 nodes {
   position {
     x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "group_item_coral/gnode_controller"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_item_coral"
+  layer: ""
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: false
+}
+nodes {
+  position {
+    x: 0.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -3120,7 +3467,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "group_item_coral"
+  parent: "group_item_coral/gnode_controller"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -3167,7 +3514,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_coral/group_button_goto"
-  parent: "group_item_coral"
+  parent: "group_item_coral/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -3267,7 +3614,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_coral/group_healthbar"
-  parent: "group_item_coral"
+  parent: "group_item_coral/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
@@ -3483,7 +3830,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_item_coral/group_line_divider"
-  parent: "group_item_coral"
+  parent: "group_item_coral/gnode_controller"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
