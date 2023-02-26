@@ -201,6 +201,16 @@ local function Screen_Data_Initialize(self, enabled_status)
 		gui_basename = basename,
 		gui_controller = basename .. "/gnode_controller",
 		gui_subcontroller = basename .. "/gnode_subcontroller",
+		node_minimizer = "/group_button_sizer",
+		node_group_names = {
+			item_ph = basename .. "/group_item_ph",
+			item_coral = basename .. "/group_item_coral",
+			item_plankton = basename .. "/group_item_plankton",
+			item_fish = basename .. "/group_item_fish",
+			item_mollusks = basename .. "/group_item_mollusks",
+			item_crustaceans = basename .. "/group_item_crustaceans"
+		},
+		node_item_graph = basename .. "/group_button_goto"
 	}
 
 	-- set dynamics
