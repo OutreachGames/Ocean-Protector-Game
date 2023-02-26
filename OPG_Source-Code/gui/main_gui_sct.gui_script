@@ -60,7 +60,7 @@ local function Screen_Decision_Initialize(self, enabled_status)
 			basename.."/group_option_2",
 			basename.."/group_option_3"
 		},
-		node_option_lable_basename = "/gui_radio_label",
+		node_option_label_basename = "/gui_radio_label",
 		node_submit_name = basename.."/group_button_submit",
 		node_submit_box_name = basename.."/group_button_submit/gui_button_core",
 		node_submit_text_name = basename.."/group_button_submit/gui_button_label",
@@ -75,6 +75,11 @@ end
 local function Screen_Decision_Input(self, action_id, action)
 
 	-- runs 'On Input' for Decision screen on HUD
+
+	-- early out if not allowed to use
+	if not self.hud_decision_dynamic.screen_isactive then
+		return
+	end
 
 	local Info = self.hud_decision_constant
 
@@ -101,9 +106,9 @@ local function Screen_Decision_Input(self, action_id, action)
 			end
 
 			-- note that trying to use the bright white makes text darker actually
-			gui.set_color(gui.get_node(Info.node_option_names[index]..Info.node_option_lable_basename), MY_GOO.COLOR_WHITE_DEFAULT)
+			gui.set_color(gui.get_node(Info.node_option_names[index]..Info.node_option_label_basename), MY_GOO.COLOR_WHITE_DEFAULT)
 			for _,v_otherindex in ipairs(other_nodes) do
-				gui.set_color(gui.get_node(Info.node_option_names[v_otherindex]..Info.node_option_lable_basename), MY_GOO.COLOR_GREY_MEDIUM)
+				gui.set_color(gui.get_node(Info.node_option_names[v_otherindex]..Info.node_option_label_basename), MY_GOO.COLOR_GREY_MEDIUM)
 			end
 
 			print("radio "..index.." selected")
@@ -128,6 +133,16 @@ local function Screen_Decision_Input(self, action_id, action)
 	local function func_button(button)
 
 		-- handle all the button functionality
+
+		local function func_disable(self, controller_node)
+			gui.set_enabled(controller_node, false)
+		end
+
+		-- set that this screen is no longer interactive
+		self.hud_decision_dynamic.screen_isactive = false
+
+		--shrink everything and disable
+		gui.animate(gui.get_node(Info.gui_controller), "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.5, 0, func_disable)
 
 		print("Button was pressed")
 

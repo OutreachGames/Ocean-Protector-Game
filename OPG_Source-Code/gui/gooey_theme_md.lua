@@ -47,6 +47,8 @@ MYG.COLOR_WHITE_BRIGHT = vmath.vector4(1.15, 1.15, 1.15, 1)
 MYG.COLOR_WHITE_DEFAULT = vmath.vector4(1)
 MYG.COLOR_GREYED_OUT = vmath.vector4(0.30, 0.30, 0.30, 1)
 
+MYG.MINIMIZE = vmath.vector3(0.1)
+MYG.MAXIMIZE = vmath.vector3(1)
 
 -- functions 
 
