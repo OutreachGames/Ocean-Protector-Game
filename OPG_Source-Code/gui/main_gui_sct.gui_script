@@ -89,6 +89,8 @@ local function Screen_Decision_Input(self, action_id, action)
 
 		local function radio_base(index)
 
+			-- run the logic when radio selected
+
 			-- set the selected index and allow the submit button
 			self.hud_decision_dynamic.node_option_selected = index
 			self.hud_decision_dynamic.node_sumbit_isactive = true
