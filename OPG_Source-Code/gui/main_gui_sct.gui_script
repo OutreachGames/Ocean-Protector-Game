@@ -24,7 +24,7 @@ local function Screen_Decision_Reset(self, enabled_setting)
 	-- if setting to disabled
 		-- currently enabled -> disable
 		-- not enabled -> do nothing
-	gui.set_enabled(gui.get_node(constant.gui_basename), enabled_setting)
+	gui.set_enabled(gui.get_node("hud_data/group_frame"), enabled_setting)
 
 	-- reset tracking table
 	self.hud_decision_dynamic.is_active = enabled_setting
@@ -39,6 +39,8 @@ local function Screen_Decision_Reset(self, enabled_setting)
 end
 
 local function Screen_Decision_Initialize(self)
+
+	-- set contants and setup dynamic values and components
 
 	local basename = "hud_decision"
 
@@ -64,7 +66,7 @@ end
 
 local function Screen_Decision_Input(self, action_id, action)
 
-	-- runs On Input for Decision screen on HUD
+	-- runs 'On Input' for Decision screen on HUD
 
 	local Info = self.hud_decision_constant
 
