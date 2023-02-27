@@ -40,6 +40,7 @@ local CV_UP_Vector = vmath.vector3(0, 1, 0)
 local CV_AnimBlend_Time = 0.5
 local CV_Buffer_Time = 0.05
 local CV_Deadzone_Radius = 5
+local CV_ZERO_VEC4 = vmath.vector4(0)
 
 local CV_Timer_Keys = {
 	start_key = "start_key",
@@ -296,11 +297,10 @@ local function On_Death(self)
 	go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, float_down_x, GetRandomEasing(2), float_down_time*0.5, float_down_delay)
 
 	-- while starting to sink, begin fade out
-	local fadeout_alpha = 0
 	local fadeout_delay = float_down_delay + (float_down_time*0.4)
 	local fadeout_time = 0.5
 	local fadeout_easing = go.EASING_LINEAR
-	go.animate("#spinemodel", "tint.w", go.PLAYBACK_ONCE_FORWARD, fadeout_alpha, fadeout_easing, fadeout_time, fadeout_delay)
+	go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, fadeout_easing, fadeout_time, fadeout_delay)
 
 	-- once fade out mostly done then play decomposition particles
 	-- save function to fade, trigger decomposition, and GO deletion

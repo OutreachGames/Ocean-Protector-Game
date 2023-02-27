@@ -5,6 +5,41 @@
 local HSH = require ("modules.hashes_md")
 local MY_GOO = require ("gui.gooey_theme_md")
 
+-- constants
+
+local CV_item_groups = {
+	item_ph = {
+		group_name = "/group_item_ph",
+		plot_y_range = {7.5, 8.2},
+		plot_y_label = "Ocean pH"
+	},
+	item_plankton = {
+		group_name = "/group_item_plankton",
+		plot_y_range = {0.0, 1.0},
+		plot_y_label = "Plankton Health"
+	},
+	item_coral = {
+		group_name = "/group_item_coral",
+		plot_y_range = {0.0, 1.0},
+		plot_y_label = "Coral Health"
+	},
+	item_fish = {
+		group_name = "/group_item_fish",
+		plot_y_range = {0.0, 1.0},
+		plot_y_label = "Fish Health"
+	},
+	item_mollusks = {
+		group_name = "/group_item_mollusks",
+		plot_y_range = {0.0, 1.0},
+		plot_y_label = "Mollusk Health"
+	},
+	item_crustaceans = {
+		group_name = "/group_item_crustaceans",
+		plot_y_range = {0.0, 1.0},
+		plot_y_label = "Crustacean Health"
+	}
+}
+
 
 -- functions
 
@@ -155,6 +190,9 @@ local function Screen_Decision_Input(self, action_id, action)
 end
 
 
+-- Graph Plot Screen
+
+
 -- Data HUD Screen
 local function Screen_Data_Reset(self, enabled_setting)
 
@@ -191,15 +229,6 @@ local function Screen_Data_Initialize(self, enabled_status)
 	self.hud_data_constant = nil
 	self.hud_data_dynamic = nil
 
-	local item_groups = {
-		item_ph = basename .. "/group_item_ph",
-		item_plankton = basename .. "/group_item_plankton",
-		item_coral = basename .. "/group_item_coral",
-		item_fish = basename .. "/group_item_fish",
-		item_mollusks = basename .. "/group_item_mollusks",
-		item_crustaceans = basename .. "/group_item_crustaceans"
-	}
-
 	-- set constants
 	self.hud_data_constant = {
 		gui_basename = basename,
@@ -215,9 +244,10 @@ local function Screen_Data_Initialize(self, enabled_status)
 	}
 
 	-- add button strings contcatenated
-	for k,v in pairs(item_groups) do
-		self.hud_data_constant.node_group_names[k] = v
-		self.hud_data_constant.node_group_gotograph_buttons[k] = v .. self.hud_data_constant.node_item_gotograph
+	for k,v in pairs(CV_item_groups) do
+		local name = basename .. v.group_name
+		self.hud_data_constant.node_group_names[k] = name
+		self.hud_data_constant.node_group_gotograph_buttons[k] = name .. self.hud_data_constant.node_item_gotograph
 	end
 
 	-- set dynamics
