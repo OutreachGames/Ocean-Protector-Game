@@ -60,7 +60,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  layer: "gui_layer_black"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -117,7 +117,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  layer: "gui_layer_black"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -175,7 +175,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "gnode_boundary_blocks"
-  layer: "gui_layer_black"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -233,7 +233,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "gnode_boundary_blocks"
-  layer: "gui_layer_black"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -291,7 +291,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "gnode_boundary_blocks"
-  layer: "gui_layer_black"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -349,7 +349,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "gnode_boundary_blocks"
-  layer: "gui_layer_black"
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -9141,9 +9141,6 @@ layers {
 }
 layers {
   name: "gui_layer_text"
-}
-layers {
-  name: "gui_layer_black"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

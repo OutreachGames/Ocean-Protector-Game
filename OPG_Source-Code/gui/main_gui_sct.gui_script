@@ -407,7 +407,7 @@ local function Screen_Data_Input(self, action_id, action)
 	MY_GOO.checkbox_sizer(Info.goo_minimizer, action_id, action, func_button_sizer)
 
 
-	-- goto button for each item
+	-- goto buttons
 	local function func_button_core(table_key)
 
 		-- handle all functionality for the goto graph buttons
@@ -419,7 +419,9 @@ local function Screen_Data_Input(self, action_id, action)
 		-- if active then just overwrite 
 		-- if not active then expand
 		local needs_expanding = not self.hud_plot_dynamic.screen_isactive
+
 		Screen_Plot_Reset(self, true)
+
 		if needs_expanding then
 			local controller_node = gui.get_node(self.hud_plot_constant.node_controller)
 			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0, func_expand)
@@ -461,6 +463,7 @@ local function Screen_Data_Input(self, action_id, action)
 end
 
 
+-- Screen Fader
 local function Run_Fader(self, fade_out, time)
 
 	-- run either fade in or fade out
