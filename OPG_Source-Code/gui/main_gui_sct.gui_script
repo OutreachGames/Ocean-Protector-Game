@@ -205,7 +205,7 @@ local function Screen_Plot_Reset(self, enabled_setting)
 	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
 
 	-- reset tracking table
-	self.hud_data_dynamic.screen_isactive = enabled_setting
+	self.hud_plot_dynamic.screen_isactive = enabled_setting
 
 end
 
@@ -316,14 +316,14 @@ local function Screen_Data_Initialize(self, enabled_status)
 		goo_minimizer = basename .. "/group_button_sizer",
 		goo_item_gotograph = "/group_button_goto",
 		goo_group_names = {},
-		goo_group_gotograph_buttons = {},
+		goo_group_goto_buttons = {},
 	}
 
 	-- add button strings contcatenated
 	for k,v in pairs(CV_item_groups) do
 		local name = basename .. v.group_name
 		self.hud_data_constant.goo_group_names[k] = name
-		self.hud_data_constant.goo_group_gotograph_buttons[k] = name .. self.hud_data_constant.goo_item_gotograph
+		self.hud_data_constant.goo_group_goto_buttons[k] = name .. self.hud_data_constant.goo_item_gotograph
 	end
 
 	-- set dynamics
@@ -415,7 +415,7 @@ local function Screen_Data_Input(self, action_id, action)
 	end
 
 	if self.hud_data_dynamic.goo_items_areactive then
-		local gotos = Info.goo_group_gotograph_buttons
+		local gotos = Info.goo_group_goto_buttons
 		MY_GOO.button_goto(gotos.item_ph, action_id, action, func_button_ph)
 		MY_GOO.button_goto(gotos.item_plankton, action_id, action, func_button_plankton)
 		MY_GOO.button_goto(gotos.item_coral, action_id, action, func_button_coral)
