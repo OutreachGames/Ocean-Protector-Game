@@ -37,9 +37,9 @@ function on_input(self, action_id, action)
 			end)
 		end)
 
-		MY_GUI.scrollbar("scrollbar", action_id, action, function(scrollbar)
+		MY_GUI.scrollbar_vertical("scrollbar", action_id, action, function(scrollbar)
 			if scrollbar.pressed then
-				MY_GUI.scrollbar_updatebar("scrollbar", scrollbar.scroll.y)
+				MY_GUI.scrollbar_vertical_updatebar("scrollbar", scrollbar.scroll.y)
 			end
 			print("scrolled", scrollbar.scroll.y)
 		end)

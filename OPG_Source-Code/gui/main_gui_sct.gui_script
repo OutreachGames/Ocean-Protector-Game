@@ -200,8 +200,11 @@ local function Screen_Data_Initialize(self, enabled_status)
 	-- set constants
 	self.hud_data_constant = {
 		gui_basename = basename,
+		gui_frame_core = basename .. "/group_frame/gui_frame_core",
 		gui_controller = basename .. "/gnode_controller",
 		gui_subcontroller = basename .. "/gnode_subcontroller",
+		gui_max_length = basename .. "/tracker_max_length",
+		gui_min_length = basename .. "/tracker_min_length",
 		node_minimizer = basename .. "/group_button_sizer",
 		node_group_names = {
 			item_ph = basename .. "/group_item_ph",
@@ -249,9 +252,12 @@ local function Screen_Data_Input(self, action_id, action)
 		local is_now_maximized
 		local subcontroller_node = gui.get_node(Info.gui_subcontroller)
 
+		local frame_node = gui.get_node(Info.gui_frame_core)
+
 		if self.hud_data_dynamic.is_maximized then
 			-- run shrink and disable
 			is_now_maximized = false
+			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.gui_min_length)).y, gui.EASING_INBACK, 0.4)
 			gui.animate(subcontroller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.35, 0, func_shrink)
 		else
 			-- run expand and enable
@@ -259,6 +265,7 @@ local function Screen_Data_Input(self, action_id, action)
 			-- needs to be enabled to have size change, 
 			-- but since default is large, will already be set small when disabled
 			gui.set_enabled(subcontroller_node, true)
+			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.gui_max_length)).y, gui.EASING_OUTBACK, 0.4)
 			gui.animate(subcontroller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.35, 0, func_expand)
 		end
 

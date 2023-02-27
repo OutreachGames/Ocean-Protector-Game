@@ -529,7 +529,7 @@ nodes {
   }
   size {
     x: 320.0
-    y: 776.0
+    y: 782.0
     z: 0.0
     w: 1.0
   }
@@ -3640,7 +3640,7 @@ nodes {
   template: "/gui/components/frame_line.gui"
   template_node_child: true
   custom_type: 0
-  enabled: true
+  enabled: false
 }
 nodes {
   position {
@@ -4303,7 +4303,7 @@ nodes {
   }
   size {
     x: 1.0
-    y: 776.0
+    y: 782.0
     z: 0.0
     w: 1.0
   }
