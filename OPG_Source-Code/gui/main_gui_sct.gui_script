@@ -44,13 +44,16 @@ local CV_item_groups = {
 -- functions
 
 -- HUD Screen: Decision
-local function Screen_Decision_Reset(self, enabled_setting)
+local function Screen_Decision_Reset(self, enabled_setting, do_not_change_answer_options)
 
 	-- reset Decision screen of HUD
 
 	-- default args
 	if enabled_setting == nil then
 		enabled_setting = false
+	end
+	if do_not_change_answer_options == nil then
+		do_not_change_answer_options = false
 	end
 
 	-- set enabled status
@@ -63,19 +66,21 @@ local function Screen_Decision_Reset(self, enabled_setting)
 		-- not enabled -> do nothing
 	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
 
+	if do_not_change_answer_options then return end
+
 	-- reset tracking table
 	self.hud_decision_dynamic.screen_isactive = enabled_setting
 	self.hud_decision_dynamic.goo_option_selected = 0
 	self.hud_decision_dynamic.goo_sumbit_isactive = false
 
-	-- set tint on button to dark
-	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_GREYED_OUT)
-	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_GREYED_OUT)
-
 	-- actually reset radio nodes
 	for _,v_nodeid in ipairs(constant.goo_option_names) do
 		MY_GOO.radio(v_nodeid).set_selected(false)
 	end
+
+	-- set tint on button to dark
+	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_GREYED_OUT)
+	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_GREYED_OUT)
 
 end
 
@@ -213,11 +218,11 @@ local function Screen_Plot_Reset(self, enabled_setting)
 		-- if decision tracker is active then enable decision node
 	if enabled_setting then
 		if self.hud_decision_dynamic.screen_isactive then
-			gui.set_enabled(gui.get_node(self.hud_decision_constant.node_controller), false)
+			Screen_Decision_Reset(self, false, true)
 		end
 	else
 		if self.hud_decision_dynamic.screen_isactive then
-			gui.set_enabled(gui.get_node(self.hud_decision_constant.node_controller), true)
+			Screen_Decision_Reset(self, true, true)
 		end
 	end
 
