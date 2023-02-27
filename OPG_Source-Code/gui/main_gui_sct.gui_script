@@ -196,7 +196,7 @@ end
 
 
 -- HUD Screen: Graph Plot 
-local function Screen_Plot_Reset(self, enabled_setting)
+local function Screen_Plot_Reset(self, enabled_setting, item_group_key)
 
 	-- reset Graph Plot screen of HUD
 
@@ -226,6 +226,32 @@ local function Screen_Plot_Reset(self, enabled_setting)
 		end
 	end
 
+	-- set the axis and labels depending on the specified item group
+	if item_group_key == nil then return end
+	local item_info = CV_item_groups[item_group_key]
+	if item_info == nil then
+		print("Error, the following key does not exist in the item groups list: "..item_group_key.."\n")
+		return
+	end
+
+	-- set title
+	local title = item_info.plot_y_label .. " through Time"
+	title = string.gsub(title, " ", "   ")
+	gui.set_text(gui.get_node(constant.node_title_name), title)
+
+	-- set y axis label and ticks
+	local y_label = string.gsub(item_info.plot_y_label, " ", "   ")
+	gui.set_text(gui.get_node(constant.node_y_label), y_label)
+
+	-- set plot height and toggle
+	local ytick_start = item_info.plot_y_range[1]
+	local ytick_step = (item_info.plot_y_range[2] - ytick_start) / (constant.number_y_ticks - 1)
+
+	for i,v_node_y_tickname in ipairs(constant.node_y_ticks) do
+		local tick_label = string.format("%.2f", ytick_start + (ytick_step*(i-1)))
+		gui.set_text(gui.get_node(v_node_y_tickname), tick_label)
+	end
+
 end
 
 local function Screen_Plot_Initialize(self, enabled_status)
@@ -234,6 +260,7 @@ local function Screen_Plot_Initialize(self, enabled_status)
 
 	local basename = "hud_timeplot"
 	local plot_base = "/group_plot"
+	local num_y_ticks = 6
 
 	self.hud_plot_constant = nil
 	self.hud_plot_dynamic = nil
@@ -243,15 +270,16 @@ local function Screen_Plot_Initialize(self, enabled_status)
 		hud_basename = basename,
 		node_controller = basename .. "/gnode_controller",
 		goo_exit_name = basename .. "/group_button_submit",
-		node_title_name = basename .. "/gui_text_title",
+		node_title_name = basename .. plot_base .. "/gui_text_title",
 		node_y_label = basename .. plot_base .. "/gui_text_label_yaxis",
-		node_y_range = {}
+		node_y_ticks = {},
+		number_y_ticks = num_y_ticks
 	}
 
 	-- add ytick labels
-	local ytick_base = "gui_text_label_ytick_" -- save this for 'Find All' searches: "gui_text_label_ytick_0"
-	for i=0,5 do
-		self.hud_plot_constant.node_y_range[i] = ytick_base..i
+	local ytick_base = basename .. plot_base .. "/gui_text_label_ytick_" -- save this for 'Find All' searches: "gui_text_label_ytick_0"
+	for i=1,num_y_ticks do
+		self.hud_plot_constant.node_y_ticks[i] = ytick_base..tostring(i-1)
 	end
 
 	-- set dynamics
@@ -420,7 +448,7 @@ local function Screen_Data_Input(self, action_id, action)
 		-- if not active then expand
 		local needs_expanding = not self.hud_plot_dynamic.screen_isactive
 
-		Screen_Plot_Reset(self, true)
+		Screen_Plot_Reset(self, true, table_key)
 
 		if needs_expanding then
 			local controller_node = gui.get_node(self.hud_plot_constant.node_controller)
@@ -432,22 +460,22 @@ local function Screen_Data_Input(self, action_id, action)
 	end
 
 	local function func_button_ph(button)
-		func_button_core(Info.goo_group_names.item_ph)
+		func_button_core("item_ph")
 	end
 	local function func_button_plankton(button)
-		func_button_core(Info.goo_group_names.item_plankton)
+		func_button_core("item_plankton")
 	end
 	local function func_button_coral(button)
-		func_button_core(Info.goo_group_names.item_coral)
+		func_button_core("item_coral")
 	end
 	local function func_button_fish(button)
-		func_button_core(Info.goo_group_names.item_fish)
+		func_button_core("item_fish")
 	end
 	local function func_button_mollusks(button)
-		func_button_core(Info.goo_group_names.item_mollusks)
+		func_button_core("item_mollusks")
 	end
 	local function func_button_crustaceans(button)
-		func_button_core(Info.goo_group_names.item_crustaceans)
+		func_button_core("item_crustaceans")
 	end
 
 	if self.hud_data_dynamic.goo_items_areactive then

@@ -6457,7 +6457,7 @@ nodes {
 }
 nodes {
   position {
-    x: 65.0
+    x: 78.0
     y: 14.0
     z: 0.0
     w: 1.0
@@ -6557,7 +6557,7 @@ nodes {
 }
 nodes {
   position {
-    x: -50.0
+    x: -95.0
     y: -30.0
     z: 0.0
     w: 1.0
@@ -6616,7 +6616,7 @@ nodes {
 nodes {
   position {
     x: 0.0
-    y: 221.0
+    y: 230.0
     z: 0.0
     w: 1.0
   }
@@ -6855,8 +6855,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: -285.0
+    x: -8.0
+    y: -284.0
     z: 0.0
     w: 1.0
   }
@@ -6873,7 +6873,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 600.0
+    x: 684.0
     y: 60.0
     z: 0.0
     w: 1.0
@@ -6886,7 +6886,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "X-axis label"
+  text: "Time Interval"
   font: "font_body_bold"
   id: "hud_timeplot/group_plot/gui_text_label_xaxis"
   xanchor: XANCHOR_NONE
@@ -7697,7 +7697,7 @@ nodes {
 }
 nodes {
   position {
-    x: -470.0
+    x: -481.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -7763,7 +7763,7 @@ nodes {
 }
 nodes {
   position {
-    x: -398.0
+    x: -412.0
     y: -188.0
     z: 0.0
     w: 1.0
@@ -7781,7 +7781,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 60.0
+    x: 80.0
     y: 30.0
     z: 0.0
     w: 1.0
@@ -7829,7 +7829,7 @@ nodes {
 }
 nodes {
   position {
-    x: -398.0
+    x: -412.0
     y: -114.0
     z: 0.0
     w: 1.0
@@ -7847,7 +7847,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 60.0
+    x: 80.0
     y: 30.0
     z: 0.0
     w: 1.0
@@ -7895,7 +7895,7 @@ nodes {
 }
 nodes {
   position {
-    x: -398.0
+    x: -412.0
     y: -37.0
     z: 0.0
     w: 1.0
@@ -7913,7 +7913,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 60.0
+    x: 80.0
     y: 30.0
     z: 0.0
     w: 1.0
@@ -7961,7 +7961,7 @@ nodes {
 }
 nodes {
   position {
-    x: -398.0
+    x: -412.0
     y: 38.0
     z: 0.0
     w: 1.0
@@ -7979,7 +7979,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 60.0
+    x: 80.0
     y: 30.0
     z: 0.0
     w: 1.0
@@ -8027,7 +8027,7 @@ nodes {
 }
 nodes {
   position {
-    x: -398.0
+    x: -412.0
     y: 112.0
     z: 0.0
     w: 1.0
@@ -8045,7 +8045,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 60.0
+    x: 80.0
     y: 30.0
     z: 0.0
     w: 1.0
@@ -8093,7 +8093,7 @@ nodes {
 }
 nodes {
   position {
-    x: -398.0
+    x: -412.0
     y: 188.0
     z: 0.0
     w: 1.0
@@ -8111,7 +8111,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 60.0
+    x: 80.0
     y: 30.0
     z: 0.0
     w: 1.0
