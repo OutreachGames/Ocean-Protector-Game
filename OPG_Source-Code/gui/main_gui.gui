@@ -554,7 +554,7 @@ nodes {
     x: 52.0
     y: 104.0
     z: 52.0
-    w: 52.0
+    w: 54.0
   }
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
@@ -4361,7 +4361,7 @@ nodes {
   }
   size {
     x: 1.0
-    y: 160.0
+    y: 158.0
     z: 0.0
     w: 1.0
   }
@@ -4585,7 +4585,7 @@ nodes {
     x: 52.0
     y: 104.0
     z: 52.0
-    w: 52.0
+    w: 54.0
   }
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
