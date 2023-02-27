@@ -43,7 +43,7 @@ local CV_item_groups = {
 
 -- functions
 
--- Decision HUD Screen
+-- HUD Screen: Decision
 local function Screen_Decision_Reset(self, enabled_setting)
 
 	-- reset Decision screen of HUD
@@ -61,19 +61,19 @@ local function Screen_Decision_Reset(self, enabled_setting)
 	-- if setting to disabled
 		-- currently enabled -> disable
 		-- not enabled -> do nothing
-	gui.set_enabled(gui.get_node(constant.gui_controller), enabled_setting)
+	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
 
 	-- reset tracking table
 	self.hud_decision_dynamic.screen_isactive = enabled_setting
-	self.hud_decision_dynamic.node_option_selected = 0
-	self.hud_decision_dynamic.node_sumbit_isactive = false
+	self.hud_decision_dynamic.goo_option_selected = 0
+	self.hud_decision_dynamic.goo_sumbit_isactive = false
 
 	-- set tint on button to dark
 	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_GREYED_OUT)
 	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_GREYED_OUT)
 
 	-- actually reset radio nodes
-	for _,v_nodeid in ipairs(constant.node_option_names) do
+	for _,v_nodeid in ipairs(constant.goo_option_names) do
 		MY_GOO.radio(v_nodeid).set_selected(false)
 	end
 
@@ -90,15 +90,15 @@ local function Screen_Decision_Initialize(self, enabled_status)
 
 	-- set constants
 	self.hud_decision_constant = {
-		gui_basename = basename,
-		gui_controller = basename .. "/gnode_controller",
-		node_option_names = {
+		hud_basename = basename,
+		node_controller = basename .. "/gnode_controller",
+		goo_option_names = {
 			basename.."/group_option_1",
 			basename.."/group_option_2",
 			basename.."/group_option_3"
 		},
-		node_option_label_basename = "/gui_radio_label",
-		node_submit_name = basename.."/group_button_submit",
+		goo_option_label_basename = "/gui_radio_label",
+		goo_submit_name = basename.."/group_button_submit",
 		node_submit_box_name = basename.."/group_button_submit/gui_button_core",
 		node_submit_text_name = basename.."/group_button_submit/gui_button_label",
 	}
@@ -109,7 +109,7 @@ local function Screen_Decision_Initialize(self, enabled_status)
 
 end
 
-local function Screen_Decision_Input(self, action_id, action)
+local function Screen_Plot_Input(self, action_id, action)
 
 	-- runs 'On Input' for Decision screen on HUD
 
@@ -129,8 +129,8 @@ local function Screen_Decision_Input(self, action_id, action)
 			-- run the logic when radio selected
 
 			-- set the selected index and allow the submit button
-			self.hud_decision_dynamic.node_option_selected = index
-			self.hud_decision_dynamic.node_sumbit_isactive = true
+			self.hud_decision_dynamic.goo_option_selected = index
+			self.hud_decision_dynamic.goo_sumbit_isactive = true
 			gui.set_color(gui.get_node(Info.node_submit_box_name), MY_GOO.COLOR_GREY_LIGHT)
 			gui.set_color(gui.get_node(Info.node_submit_text_name), MY_GOO.COLOR_WHITE_DEFAULT)
 
@@ -139,9 +139,9 @@ local function Screen_Decision_Input(self, action_id, action)
 			other_nodes[index] = nil
 
 			-- note that trying to use the bright white makes text darker actually
-			gui.set_color(gui.get_node(Info.node_option_names[index]..Info.node_option_label_basename), MY_GOO.COLOR_WHITE_DEFAULT)
+			gui.set_color(gui.get_node(Info.goo_option_names[index]..Info.goo_option_label_basename), MY_GOO.COLOR_WHITE_DEFAULT)
 			for _,v_otherindex in pairs(other_nodes) do
-				gui.set_color(gui.get_node(Info.node_option_names[v_otherindex]..Info.node_option_label_basename), MY_GOO.COLOR_GREY_MEDIUM)
+				gui.set_color(gui.get_node(Info.goo_option_names[v_otherindex]..Info.goo_option_label_basename), MY_GOO.COLOR_GREY_MEDIUM)
 			end
 
 			print("radio "..index.." selected")
@@ -157,9 +157,9 @@ local function Screen_Decision_Input(self, action_id, action)
 			radio_base(3)
 		end
 
-		MY_GOO.radio(Info.node_option_names[1], local_group_id, local_action_id, local_action, func_radio_1)
-		MY_GOO.radio(Info.node_option_names[2], local_group_id, local_action_id, local_action, func_radio_2)
-		MY_GOO.radio(Info.node_option_names[3], local_group_id, local_action_id, local_action, func_radio_3)
+		MY_GOO.radio(Info.goo_option_names[1], local_group_id, local_action_id, local_action, func_radio_1)
+		MY_GOO.radio(Info.goo_option_names[2], local_group_id, local_action_id, local_action, func_radio_2)
+		MY_GOO.radio(Info.goo_option_names[3], local_group_id, local_action_id, local_action, func_radio_3)
 
 	end
 
@@ -175,7 +175,7 @@ local function Screen_Decision_Input(self, action_id, action)
 		self.hud_decision_dynamic.screen_isactive = false
 
 		--shrink everything and disable
-		gui.animate(gui.get_node(Info.gui_controller), "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.5, 0, func_disable)
+		gui.animate(gui.get_node(Info.node_controller), "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.5, 0, func_disable)
 
 		print("Button was pressed")
 
@@ -183,17 +183,99 @@ local function Screen_Decision_Input(self, action_id, action)
 
 	MY_GOO.radiogroup("radiogroup_answer_options", action_id, action, func_radiogroup)
 
-	if self.hud_decision_dynamic.node_sumbit_isactive then
-		MY_GOO.button_simple(Info.node_submit_name, action_id, action, func_button)
+	if self.hud_decision_dynamic.goo_sumbit_isactive then
+		MY_GOO.button_simple(Info.goo_submit_name, action_id, action, func_button)
 	end
 
 end
 
 
--- Graph Plot Screen
+-- HUD Screen: Graph Plot 
+local function Screen_Plot_Reset(self, enabled_setting)
+
+	-- reset Graph Plot screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	-- set enabled status
+	local constant = self.hud_plot_constant
+	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
+
+	-- reset tracking table
+	self.hud_data_dynamic.screen_isactive = enabled_setting
+
+end
+
+local function Screen_Plot_Initialize(self, enabled_status)
+
+	-- set contants and setup dynamic values and components
+
+	local basename = "hud_timeplot"
+	local plot_base = "/group_plot"
+
+	self.hud_plot_constant = nil
+	self.hud_plot_dynamic = nil
+
+	-- set constants
+	self.hud_plot_constant = {
+		hud_basename = basename,
+		node_controller = basename .. "/gnode_controller",
+		goo_exit_name = basename .. "/group_button_submit",
+		node_title_name = basename .. "/gui_text_title",
+		node_y_label = basename .. plot_base .. "/gui_text_label_yaxis",
+		node_y_range = {}
+	}
+
+	-- add ytick labels
+	local ytick_base = "gui_text_label_ytick_" -- save this for 'Find All' searches: "gui_text_label_ytick_0"
+	for i=0,5 do
+		self.hud_plot_constant.node_y_range[i] = ytick_base..i
+	end
+
+	-- set dynamics
+	self.hud_plot_dynamic = {}
+	Screen_Plot_Reset(self, enabled_status)
+
+end
+
+local function Screen_Decision_Input(self, action_id, action)
+
+	-- runs 'On Input' for Decision screen on HUD
+
+	-- early out if not allowed to use
+	if not self.hud_plot_dynamic.screen_isactive then
+		return
+	end
+
+	local Info = self.hud_plot_constant
+
+	local function func_button(button)
+
+		-- handle all the button functionality
+
+		local function func_disable(self, controller_node)
+			gui.set_enabled(controller_node, false)
+		end
+
+		-- set that this screen is no longer interactive
+		self.hud_decision_dynamic.screen_isactive = false
+
+		--shrink everything and disable
+		gui.animate(gui.get_node(Info.node_controller), "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.5, 0, func_disable)
+
+		print("Exit Button was pressed")
+
+	end
+
+	MY_GOO.button_simple(Info.goo_exit_name, action_id, action, func_button)
+
+end
 
 
--- Data HUD Screen
+-- HUD Screen: Data
 local function Screen_Data_Reset(self, enabled_setting)
 
 	-- reset Data screen of HUD
@@ -205,18 +287,12 @@ local function Screen_Data_Reset(self, enabled_setting)
 
 	-- set enabled status
 	local constant = self.hud_data_constant
-	-- if setting to enabled
-		-- currently enabled -> do nothing
-		-- not enabled -> enable
-	-- if setting to disabled
-		-- currently enabled -> disable
-		-- not enabled -> do nothing
-	gui.set_enabled(gui.get_node(constant.gui_controller), enabled_setting)
+	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
 
 	-- reset tracking table
 	self.hud_data_dynamic.screen_isactive = enabled_setting
 	self.hud_data_dynamic.is_maximized = true
-	self.hud_data_dynamic.node_items_areactive = true
+	self.hud_data_dynamic.goo_items_areactive = true
 
 end
 
@@ -231,23 +307,23 @@ local function Screen_Data_Initialize(self, enabled_status)
 
 	-- set constants
 	self.hud_data_constant = {
-		gui_basename = basename,
-		gui_frame_core = basename .. "/group_frame/gui_frame_core",
-		gui_controller = basename .. "/gnode_controller",
-		gui_subcontroller = basename .. "/gnode_subcontroller",
-		gui_max_length = basename .. "/tracker_max_length",
-		gui_min_length = basename .. "/tracker_min_length",
-		node_minimizer = basename .. "/group_button_sizer",
-		node_item_gotograph = "/group_button_goto",
-		node_group_names = {},
-		node_group_gotograph_buttons = {},
+		hud_basename = basename,
+		node_frame_core = basename .. "/group_frame/gui_frame_core",
+		node_controller = basename .. "/gnode_controller",
+		node_subcontroller = basename .. "/gnode_subcontroller",
+		node_max_length = basename .. "/tracker_max_length",
+		node_min_length = basename .. "/tracker_min_length",
+		goo_minimizer = basename .. "/group_button_sizer",
+		goo_item_gotograph = "/group_button_goto",
+		goo_group_names = {},
+		goo_group_gotograph_buttons = {},
 	}
 
 	-- add button strings contcatenated
 	for k,v in pairs(CV_item_groups) do
 		local name = basename .. v.group_name
-		self.hud_data_constant.node_group_names[k] = name
-		self.hud_data_constant.node_group_gotograph_buttons[k] = name .. self.hud_data_constant.node_item_gotograph
+		self.hud_data_constant.goo_group_names[k] = name
+		self.hud_data_constant.goo_group_gotograph_buttons[k] = name .. self.hud_data_constant.goo_item_gotograph
 	end
 
 	-- set dynamics
@@ -267,6 +343,7 @@ local function Screen_Data_Input(self, action_id, action)
 
 	local Info = self.hud_data_constant
 
+	-- sizer button
 	local function func_button_sizer(button)
 
 		-- handle all the button functionality
@@ -283,14 +360,14 @@ local function Screen_Data_Input(self, action_id, action)
 		-- if is not currently maximized then expand
 
 		local is_now_maximized
-		local subcontroller_node = gui.get_node(Info.gui_subcontroller)
+		local subcontroller_node = gui.get_node(Info.node_subcontroller)
 
-		local frame_node = gui.get_node(Info.gui_frame_core)
+		local frame_node = gui.get_node(Info.node_frame_core)
 
 		if self.hud_data_dynamic.is_maximized then
 			-- run shrink and disable
 			is_now_maximized = false
-			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.gui_min_length)).y, gui.EASING_INBACK, 0.4)
+			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.node_min_length)).y, gui.EASING_INBACK, 0.4)
 			gui.animate(subcontroller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.35, 0, func_shrink)
 		else
 			-- run expand and enable
@@ -298,45 +375,47 @@ local function Screen_Data_Input(self, action_id, action)
 			-- needs to be enabled to have size change, 
 			-- but since default is large, will already be set small when disabled
 			gui.set_enabled(subcontroller_node, true)
-			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.gui_max_length)).y, gui.EASING_OUTBACK, 0.4)
+			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.node_max_length)).y, gui.EASING_OUTBACK, 0.4)
 			gui.animate(subcontroller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.35, 0, func_expand)
 		end
 
 		-- update booleans
-		self.hud_data_dynamic.node_items_areactive = is_now_maximized
+		self.hud_data_dynamic.goo_items_areactive = is_now_maximized
 		self.hud_data_dynamic.is_maximized = is_now_maximized
 
 		print("Sizer was toggled. Is now maximized is "..tostring(is_now_maximized))
 
 	end
 
-	MY_GOO.checkbox_sizer(Info.node_minimizer, action_id, action, func_button_sizer)
+	MY_GOO.checkbox_sizer(Info.goo_minimizer, action_id, action, func_button_sizer)
 
+
+	-- goto button for each item
 	local function func_button_core(table_key)
 		print("Goto button was pressed for "..table_key)
 	end
 
 	local function func_button_ph(button)
-		func_button_core(Info.node_group_names.item_ph)
+		func_button_core(Info.goo_group_names.item_ph)
 	end
 	local function func_button_plankton(button)
-		func_button_core(Info.node_group_names.item_plankton)
+		func_button_core(Info.goo_group_names.item_plankton)
 	end
 	local function func_button_coral(button)
-		func_button_core(Info.node_group_names.item_coral)
+		func_button_core(Info.goo_group_names.item_coral)
 	end
 	local function func_button_fish(button)
-		func_button_core(Info.node_group_names.item_fish)
+		func_button_core(Info.goo_group_names.item_fish)
 	end
 	local function func_button_mollusks(button)
-		func_button_core(Info.node_group_names.item_mollusks)
+		func_button_core(Info.goo_group_names.item_mollusks)
 	end
 	local function func_button_crustaceans(button)
-		func_button_core(Info.node_group_names.item_crustaceans)
+		func_button_core(Info.goo_group_names.item_crustaceans)
 	end
 
-	if self.hud_data_dynamic.node_items_areactive then
-		local gotos = Info.node_group_gotograph_buttons
+	if self.hud_data_dynamic.goo_items_areactive then
+		local gotos = Info.goo_group_gotograph_buttons
 		MY_GOO.button_goto(gotos.item_ph, action_id, action, func_button_ph)
 		MY_GOO.button_goto(gotos.item_plankton, action_id, action, func_button_plankton)
 		MY_GOO.button_goto(gotos.item_coral, action_id, action, func_button_coral)
@@ -388,6 +467,7 @@ function init(self)
 	MY_GOO.acquire_input()
 	Screen_Decision_Initialize(self, true)
 	Screen_Data_Initialize(self, true)
+	Screen_Plot_Initialize(self, false)
 
 end
 
@@ -403,5 +483,6 @@ function on_input(self, action_id, action)
 
 	Screen_Decision_Input(self, action_id, action)
 	Screen_Data_Input(self, action_id, action)
+	Screen_Plot_Input(self, action_id, action)
 
 end
