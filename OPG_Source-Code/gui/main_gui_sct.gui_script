@@ -196,7 +196,7 @@ end
 
 
 -- HUD Screen: Graph Plot 
-local function Screen_Plot_Reset(self, enabled_setting, item_group_key)
+local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizing)
 
 	-- reset Graph Plot screen of HUD
 
@@ -207,23 +207,42 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key)
 
 	-- set enabled status
 	local constant = self.hud_plot_constant
-	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
+	local controller_node = gui.get_node(constant.node_controller)
 
 	-- reset tracking table
 	self.hud_plot_dynamic.screen_isactive = enabled_setting
 
-	-- if enabling 
-		-- if decision tracker is active then disable decision node
-	-- if disabling
-		-- if decision tracker is active then enable decision node
-	if enabled_setting then
-		if self.hud_decision_dynamic.screen_isactive then
-			Screen_Decision_Reset(self, false, true)
+	local function func_done(self, node)
+
+		gui.set_enabled(node, enabled_setting)
+
+		-- if enabling 
+			-- if decision tracker is active then disable decision node
+		-- if disabling
+			-- if decision tracker is active then enable decision node
+		if enabled_setting then
+			if self.hud_decision_dynamic.screen_isactive then
+				Screen_Decision_Reset(self, false, true)
+			end
+		else
+			if self.hud_decision_dynamic.screen_isactive then
+				Screen_Decision_Reset(self, true, true)
+			end
+		end
+
+	end
+
+	if run_sizing then
+		if enabled_setting then
+			func_done(self, controller_node)
+			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+		else
+			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
 		end
 	else
-		if self.hud_decision_dynamic.screen_isactive then
-			Screen_Decision_Reset(self, true, true)
-		end
+		func_done(self, controller_node)
 	end
 
 	-- set the axis and labels depending on the specified item group
@@ -304,12 +323,7 @@ local function Screen_Plot_Input(self, action_id, action)
 		-- handle all the button functionality
 
 		-- set that this screen is no longer interactive
-		local function func_disable(self, controller_node)
-			Screen_Plot_Reset(self, false)
-		end
-
-		--shrink everything and disable
-		gui.animate(gui.get_node(Info.node_controller), "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.5, 0, func_disable)
+		Screen_Plot_Reset(self, false, nil, true)
 
 		print("Exit Button was pressed")
 
@@ -321,7 +335,7 @@ end
 
 
 -- HUD Screen: Data
-local function Screen_Data_Reset(self, enabled_setting, on_goto_button)
+local function Screen_Data_Reset(self, enabled_setting)
 
 	-- reset Data screen of HUD
 
@@ -436,56 +450,47 @@ local function Screen_Data_Input(self, action_id, action)
 
 
 	-- goto buttons
-	local function func_button_core(table_key)
+	local function func_goto_core(table_key)
 
 		-- handle all functionality for the goto graph buttons
-
-		local function func_expand(self, subcontroller_node)
-			gui.set_enabled(subcontroller_node, true)
-		end
 
 		-- if active then just overwrite 
 		-- if not active then expand
 		local needs_expanding = not self.hud_plot_dynamic.screen_isactive
 
-		Screen_Plot_Reset(self, true, table_key)
-
-		if needs_expanding then
-			local controller_node = gui.get_node(self.hud_plot_constant.node_controller)
-			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0, func_expand)
-		end
+		Screen_Plot_Reset(self, true, table_key, needs_expanding)
 
 		print("Goto button was pressed for "..table_key)
 
 	end
 
-	local function func_button_ph(button)
-		func_button_core("item_ph")
+	local function func_goto_ph(button)
+		func_goto_core("item_ph")
 	end
-	local function func_button_plankton(button)
-		func_button_core("item_plankton")
+	local function func_goto_plankton(button)
+		func_goto_core("item_plankton")
 	end
-	local function func_button_coral(button)
-		func_button_core("item_coral")
+	local function func_goto_coral(button)
+		func_goto_core("item_coral")
 	end
-	local function func_button_fish(button)
-		func_button_core("item_fish")
+	local function func_goto_fish(button)
+		func_goto_core("item_fish")
 	end
-	local function func_button_mollusks(button)
-		func_button_core("item_mollusks")
+	local function func_goto_mollusks(button)
+		func_goto_core("item_mollusks")
 	end
-	local function func_button_crustaceans(button)
-		func_button_core("item_crustaceans")
+	local function func_goto_crustaceans(button)
+		func_goto_core("item_crustaceans")
 	end
 
 	if self.hud_data_dynamic.goo_items_areactive then
 		local gotos = Info.goo_group_goto_buttons
-		MY_GOO.button_goto(gotos.item_ph, action_id, action, func_button_ph)
-		MY_GOO.button_goto(gotos.item_plankton, action_id, action, func_button_plankton)
-		MY_GOO.button_goto(gotos.item_coral, action_id, action, func_button_coral)
-		MY_GOO.button_goto(gotos.item_fish, action_id, action, func_button_fish)
-		MY_GOO.button_goto(gotos.item_mollusks, action_id, action, func_button_mollusks)
-		MY_GOO.button_goto(gotos.item_crustaceans, action_id, action, func_button_crustaceans)
+		MY_GOO.button_goto(gotos.item_ph, action_id, action, func_goto_ph)
+		MY_GOO.button_goto(gotos.item_plankton, action_id, action, func_goto_plankton)
+		MY_GOO.button_goto(gotos.item_coral, action_id, action, func_goto_coral)
+		MY_GOO.button_goto(gotos.item_fish, action_id, action, func_goto_fish)
+		MY_GOO.button_goto(gotos.item_mollusks, action_id, action, func_goto_mollusks)
+		MY_GOO.button_goto(gotos.item_crustaceans, action_id, action, func_goto_crustaceans)
 	end
 
 end
