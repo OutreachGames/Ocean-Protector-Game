@@ -114,7 +114,7 @@ local function Screen_Decision_Input(self, action_id, action)
 	-- runs 'On Input' for Decision screen on HUD
 
 	-- early out if not allowed to use
-	if not self.hud_decision_dynamic.screen_isactive then
+	if not self.hud_decision_dynamic.screen_isactive or self.hud_plot_dynamic.screen_isactive then
 		return
 	end
 
@@ -392,7 +392,24 @@ local function Screen_Data_Input(self, action_id, action)
 
 	-- goto button for each item
 	local function func_button_core(table_key)
+
+		-- handle all functionality for the goto graph buttons
+
+		local function func_expand(self, subcontroller_node)
+			gui.set_enabled(subcontroller_node, true)
+		end
+
+		-- if active then just overwrite 
+		-- if not active then expand
+		local needs_expanding = not self.hud_plot_dynamic.screen_isactive
+		Screen_Plot_Reset(self, true)
+		if needs_expanding then
+			local controller_node = gui.get_node(self.hud_plot_constant.node_controller)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0, func_expand)
+		end
+
 		print("Goto button was pressed for "..table_key)
+
 	end
 
 	local function func_button_ph(button)
