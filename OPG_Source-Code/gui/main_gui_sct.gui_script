@@ -184,7 +184,7 @@ local function Screen_Data_Reset(self, enabled_setting)
 	-- reset tracking table
 	self.hud_data_dynamic.screen_isactive = enabled_setting
 	self.hud_data_dynamic.is_maximized = true
-	self.hud_data_dynamic.node_item_isactive = true
+	self.hud_data_dynamic.node_items_areactive = true
 
 end
 
@@ -214,7 +214,7 @@ local function Screen_Data_Initialize(self, enabled_status)
 			item_mollusks = basename .. "/group_item_mollusks",
 			item_crustaceans = basename .. "/group_item_crustaceans"
 		},
-		node_item_graph = basename .. "/group_button_goto",
+		node_item_graph = "/group_button_goto",
 	}
 
 	-- set dynamics
@@ -270,7 +270,7 @@ local function Screen_Data_Input(self, action_id, action)
 		end
 
 		-- update booleans
-		self.hud_data_dynamic.node_item_isactive = is_now_maximized
+		self.hud_data_dynamic.node_items_areactive = is_now_maximized
 		self.hud_data_dynamic.is_maximized = is_now_maximized
 
 		print("Sizer was toggled. Is now maximized is "..tostring(is_now_maximized))
@@ -278,6 +278,18 @@ local function Screen_Data_Input(self, action_id, action)
 	end
 
 	MY_GOO.checkbox_sizer(Info.node_minimizer, action_id, action, func_button_sizer)
+
+	local function func_button_ph(button)
+
+		-- handle all the button functionality
+
+		print("Goto button was pressed for pH")
+
+	end
+
+	if self.hud_data_dynamic.node_items_areactive then
+		MY_GOO.button_goto(Info.node_group_names.item_ph..Info.node_item_graph, action_id, action, func_button_ph)
+	end
 
 end
 
