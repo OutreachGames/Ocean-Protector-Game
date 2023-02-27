@@ -60,7 +60,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -112,7 +112,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_body"
   parent: "gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_body.gui"
@@ -280,7 +280,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_line_divider"
   parent: "gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_line.gui"
@@ -381,7 +381,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_option_1"
   parent: "gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/radio.gui"
@@ -548,7 +548,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_option_2"
   parent: "gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/radio.gui"
@@ -715,7 +715,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_option_3"
   parent: "gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/radio.gui"
@@ -882,7 +882,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_header"
   parent: "gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_header.gui"
@@ -1050,7 +1050,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_button_submit"
   parent: "gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/button_simple.gui"

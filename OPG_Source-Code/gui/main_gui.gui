@@ -500,7 +500,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_data/group_frame"
   parent: "hud_data/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_side.gui"
@@ -600,7 +600,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_data/group_button_sizer"
   parent: "hud_data/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/checkbox_sizer.gui"
@@ -4322,7 +4322,7 @@ nodes {
   pivot: PIVOT_NE
   adjust_mode: ADJUST_MODE_FIT
   parent: "hud_data/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -4380,7 +4380,7 @@ nodes {
   pivot: PIVOT_NE
   adjust_mode: ADJUST_MODE_FIT
   parent: "hud_data/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -4479,7 +4479,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "hud_goals"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -4531,7 +4531,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_goals/group_frame"
   parent: "hud_goals/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_side.gui"
@@ -4810,7 +4810,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "hud_decision"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -4862,7 +4862,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_decision/group_body"
   parent: "hud_decision/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_body.gui"
@@ -5028,7 +5028,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_decision/group_line_divider"
   parent: "hud_decision/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_line.gui"
@@ -5128,7 +5128,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_decision/group_option_1"
   parent: "hud_decision/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/radio.gui"
@@ -5294,7 +5294,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_decision/group_option_2"
   parent: "hud_decision/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/radio.gui"
@@ -5460,7 +5460,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_decision/group_option_3"
   parent: "hud_decision/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/radio.gui"
@@ -5626,7 +5626,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_decision/group_header"
   parent: "hud_decision/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_header.gui"
@@ -5792,7 +5792,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_decision/group_button_submit"
   parent: "hud_decision/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/button_simple.gui"
@@ -6005,7 +6005,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "hud_timeplot"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -6057,7 +6057,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_timeplot/group_body"
   parent: "hud_timeplot/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_body.gui"
@@ -6157,7 +6157,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_timeplot/group_header"
   parent: "hud_timeplot/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_header.gui"
@@ -6323,7 +6323,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_timeplot/group_button_submit"
   parent: "hud_timeplot/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/button_simple.gui"
@@ -6489,7 +6489,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_timeplot/group_plot"
   parent: "hud_timeplot/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_timeplot_graph.gui"
@@ -8620,7 +8620,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "hud_newinfo"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -8672,7 +8672,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_newinfo/group_body"
   parent: "hud_newinfo/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_body.gui"
@@ -8838,7 +8838,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_newinfo/group_header"
   parent: "hud_newinfo/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_header.gui"
@@ -9004,7 +9004,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "hud_newinfo/group_button_submit"
   parent: "hud_newinfo/gnode_controller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/button_simple.gui"
