@@ -100,18 +100,12 @@ local function Screen_Decision_Input(self, action_id, action)
 			gui.set_color(gui.get_node(Info.node_submit_text_name), MY_GOO.COLOR_WHITE_DEFAULT)
 
 			-- visually highlight which choice was selected
-			local other_nodes
-			if index == 1 then
-				other_nodes = {2, 3}
-			elseif index == 2 then
-				other_nodes = {1, 3}
-			elseif index == 3 then
-				other_nodes = {1, 2}
-			end
+			local other_nodes = {1, 2, 3}
+			other_nodes[index] = nil
 
 			-- note that trying to use the bright white makes text darker actually
 			gui.set_color(gui.get_node(Info.node_option_names[index]..Info.node_option_label_basename), MY_GOO.COLOR_WHITE_DEFAULT)
-			for _,v_otherindex in ipairs(other_nodes) do
+			for _,v_otherindex in pairs(other_nodes) do
 				gui.set_color(gui.get_node(Info.node_option_names[v_otherindex]..Info.node_option_label_basename), MY_GOO.COLOR_GREY_MEDIUM)
 			end
 
@@ -197,6 +191,15 @@ local function Screen_Data_Initialize(self, enabled_status)
 	self.hud_data_constant = nil
 	self.hud_data_dynamic = nil
 
+	local item_groups = {
+		item_ph = basename .. "/group_item_ph",
+		item_plankton = basename .. "/group_item_plankton",
+		item_coral = basename .. "/group_item_coral",
+		item_fish = basename .. "/group_item_fish",
+		item_mollusks = basename .. "/group_item_mollusks",
+		item_crustaceans = basename .. "/group_item_crustaceans"
+	}
+
 	-- set constants
 	self.hud_data_constant = {
 		gui_basename = basename,
@@ -206,16 +209,16 @@ local function Screen_Data_Initialize(self, enabled_status)
 		gui_max_length = basename .. "/tracker_max_length",
 		gui_min_length = basename .. "/tracker_min_length",
 		node_minimizer = basename .. "/group_button_sizer",
-		node_group_names = {
-			item_ph = basename .. "/group_item_ph",
-			item_coral = basename .. "/group_item_coral",
-			item_plankton = basename .. "/group_item_plankton",
-			item_fish = basename .. "/group_item_fish",
-			item_mollusks = basename .. "/group_item_mollusks",
-			item_crustaceans = basename .. "/group_item_crustaceans"
-		},
-		node_item_graph = "/group_button_goto",
+		node_item_gotograph = "/group_button_goto",
+		node_group_names = {},
+		node_group_gotograph_buttons = {},
 	}
+
+	-- add button strings contcatenated
+	for k,v in pairs(item_groups) do
+		self.hud_data_constant.node_group_names[k] = v
+		self.hud_data_constant.node_group_gotograph_buttons[k] = v .. self.hud_data_constant.node_item_gotograph
+	end
 
 	-- set dynamics
 	self.hud_data_dynamic = {}
@@ -279,16 +282,37 @@ local function Screen_Data_Input(self, action_id, action)
 
 	MY_GOO.checkbox_sizer(Info.node_minimizer, action_id, action, func_button_sizer)
 
+	local function func_button_core(table_key)
+		print("Goto button was pressed for "..table_key)
+	end
+
 	local function func_button_ph(button)
-
-		-- handle all the button functionality
-
-		print("Goto button was pressed for pH")
-
+		func_button_core(Info.node_group_names.item_ph)
+	end
+	local function func_button_plankton(button)
+		func_button_core(Info.node_group_names.item_plankton)
+	end
+	local function func_button_coral(button)
+		func_button_core(Info.node_group_names.item_coral)
+	end
+	local function func_button_fish(button)
+		func_button_core(Info.node_group_names.item_fish)
+	end
+	local function func_button_mollusks(button)
+		func_button_core(Info.node_group_names.item_mollusks)
+	end
+	local function func_button_crustaceans(button)
+		func_button_core(Info.node_group_names.item_crustaceans)
 	end
 
 	if self.hud_data_dynamic.node_items_areactive then
-		MY_GOO.button_goto(Info.node_group_names.item_ph..Info.node_item_graph, action_id, action, func_button_ph)
+		local gotos = Info.node_group_gotograph_buttons
+		MY_GOO.button_goto(gotos.item_ph, action_id, action, func_button_ph)
+		MY_GOO.button_goto(gotos.item_plankton, action_id, action, func_button_plankton)
+		MY_GOO.button_goto(gotos.item_coral, action_id, action, func_button_coral)
+		MY_GOO.button_goto(gotos.item_fish, action_id, action, func_button_fish)
+		MY_GOO.button_goto(gotos.item_mollusks, action_id, action, func_button_mollusks)
+		MY_GOO.button_goto(gotos.item_crustaceans, action_id, action, func_button_crustaceans)
 	end
 
 end
