@@ -46,7 +46,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_plot"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_healthbar_vertical.gui"

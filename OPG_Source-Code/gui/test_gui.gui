@@ -924,7 +924,7 @@ nodes {
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
   parent: "scrollbar"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 16.0
@@ -982,7 +982,7 @@ nodes {
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
   parent: "scrollbar"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 16.0
@@ -1040,7 +1040,7 @@ nodes {
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
   parent: "scrollbar"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 32.0
@@ -1098,7 +1098,7 @@ nodes {
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
   parent: "scrollbar"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0

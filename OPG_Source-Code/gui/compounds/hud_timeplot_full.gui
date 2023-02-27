@@ -656,7 +656,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "group_plot"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -782,7 +782,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "group_plot"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -1682,7 +1682,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "group_plot"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -2260,7 +2260,7 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
   parent: "group_plot"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
     x: 0.0
@@ -2312,7 +2312,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_plot/group_plot_1"
   parent: "group_plot/group_plots"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_timeplot_bar.gui"
@@ -2354,7 +2354,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_plot/group_plot_1/group_plot"
   parent: "group_plot/group_plot_1"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/frame_healthbar_vertical.gui"
