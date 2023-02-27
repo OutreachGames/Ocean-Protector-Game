@@ -109,7 +109,7 @@ local function Screen_Decision_Initialize(self, enabled_status)
 
 end
 
-local function Screen_Plot_Input(self, action_id, action)
+local function Screen_Decision_Input(self, action_id, action)
 
 	-- runs 'On Input' for Decision screen on HUD
 
@@ -241,7 +241,7 @@ local function Screen_Plot_Initialize(self, enabled_status)
 
 end
 
-local function Screen_Decision_Input(self, action_id, action)
+local function Screen_Plot_Input(self, action_id, action)
 
 	-- runs 'On Input' for Decision screen on HUD
 
@@ -261,7 +261,7 @@ local function Screen_Decision_Input(self, action_id, action)
 		end
 
 		-- set that this screen is no longer interactive
-		self.hud_decision_dynamic.screen_isactive = false
+		self.hud_plot_dynamic.screen_isactive = false
 
 		--shrink everything and disable
 		gui.animate(gui.get_node(Info.node_controller), "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.5, 0, func_disable)
