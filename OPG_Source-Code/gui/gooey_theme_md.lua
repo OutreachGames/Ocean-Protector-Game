@@ -41,10 +41,11 @@ local SOUND_ID_BUTTON_3 = "sound_controller#sound_button_3"
 
 local VEC3_1 = vmath.vector3(1)
 
-MYG.COLOR_GREY_LIGHT = vmath.vector4(0.90, 0.90, 0.90, 1)
-MYG.COLOR_GREY_MEDIUM = vmath.vector4(0.75, 0.75, 0.75, 1)
 MYG.COLOR_WHITE_BRIGHT = vmath.vector4(1.15, 1.15, 1.15, 1)
 MYG.COLOR_WHITE_DEFAULT = vmath.vector4(1)
+MYG.COLOR_GREY_LIGHT = vmath.vector4(0.90, 0.90, 0.90, 1)
+
+MYG.COLOR_GREY_MEDIUM = vmath.vector4(0.75, 0.75, 0.75, 1)
 MYG.COLOR_GREYED_OUT = vmath.vector4(0.30, 0.30, 0.30, 1)
 
 MYG.MINIMIZE = vmath.vector3(0.1)
