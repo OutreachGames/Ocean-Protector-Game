@@ -2,13 +2,32 @@
 
 local STR = {}
 
+STR.CV = {
+
+    outcome_variables = {
+        option_good_default = { -- (+)
+            item_default = {},
+            --item_pH = {}, item_coral = {}, --...
+        },
+        option_fair_default = { -- (0)
+            item_default = {},
+            --item_pH = {}, item_coral = {}, --...
+        },
+        option_bad_default = { -- (-)
+            item_default = {},
+            --item_pH = {}, item_coral = {}, --...
+        }
+    },
+
+}
+
 STR.newinformation = {
 
     goal_text = {
         "Follow information prompts."
     },
 
-    lesson_1 = {}
+    user_lesson_1 = {}
 
 }
 
@@ -36,64 +55,28 @@ STR.decisions = {
         },
 
         answer_options = {
-            choice_good = {
-                role_default = {
-                    ""
+            user_choice_1 = {
+                text_display = {
+                    role_default = {
+                        ""
+                    },
+                    --role_captain = {}, role_ranger = {}, role_guide = {},
                 },
-                role_captain = {
-    
+                text_debrief = {
+                    role_default = {
+                        ""
+                    },
+                    --role_captain = {}, role_ranger = {}, role_guide = {},
                 },
-                role_ranger = {
-    
-                },
-                role_guide = {
-    
-                },
+                outcome_result = STR.CV.outcome_variables.option_good_default
             },
-            choice_neutral = {
-                role_default = {
-                    ""
-                },
-                role_captain = {
-    
-                },
-                role_ranger = {
-    
-                },
-                role_guide = {
-    
-                },
-            },
-            choice_bad = {
-                role_default = {
-                    ""
-                },
-                role_captain = {
-    
-                },
-                role_ranger = {
-    
-                },
-                role_guide = {
-    
-                },
-            }
-        },
-
-        outcome_options = {
-            choice_good = {
+            user_choice_2 = {
 
             },
-            choice_neutral = {
-
-            },
-            choice_bad = {
+            user_choice_3 = {
 
             }
         },
-        extra_settings = {
-
-        }
     }
 
 }
