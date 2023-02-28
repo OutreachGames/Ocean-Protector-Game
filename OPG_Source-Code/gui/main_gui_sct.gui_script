@@ -98,6 +98,8 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_LOCKED)
 	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_LOCKED)
 
+	--#TODO enable and set text accordingly
+
 end
 
 local function Screen_Decision_Initialize(self, enabled_status)
@@ -290,6 +292,8 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizi
 		gui.set_text(gui.get_node(v_node_y_tickname), tick_label)
 	end
 
+	--#TODO enable and set graph bars accordingly
+
 end
 
 local function Screen_Plot_Initialize(self, enabled_status)
@@ -371,6 +375,8 @@ local function Screen_Data_Reset(self, enabled_setting)
 	self.hud_data_dynamic.screen_isactive = enabled_setting
 	self.hud_data_dynamic.is_maximized = true
 	self.hud_data_dynamic.goo_items_areactive = true
+
+	--#TODO enable and set bars accordingly
 
 end
 
