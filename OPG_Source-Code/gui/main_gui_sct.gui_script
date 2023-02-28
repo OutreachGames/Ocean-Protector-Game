@@ -88,12 +88,13 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	self.hud_decision_dynamic.goo_option_selected = 0
 	self.hud_decision_dynamic.goo_sumbit_isactive = false
 
-	-- actually reset radio nodes
+	-- actually reset radio nodes, including resetting text color
 	for _,v_nodeid in ipairs(constant.goo_option_names) do
+		gui.set_color(gui.get_node(v_nodeid..constant.goo_option_label_basename), MY_GOO.COLOR_TEXT_DEFAULT)
 		MY_GOO.radio(v_nodeid).set_selected(false)
 	end
 
-	-- set tint on button to dark
+	-- set tint on button to dark/locked
 	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_LOCKED)
 	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_LOCKED)
 
@@ -154,16 +155,16 @@ local function Screen_Decision_Input(self, action_id, action)
 			self.hud_decision_dynamic.goo_option_selected = index
 			self.hud_decision_dynamic.goo_sumbit_isactive = true
 			gui.set_color(gui.get_node(Info.node_submit_box_name), MY_GOO.COLOR_DEFAULT)
-			gui.set_color(gui.get_node(Info.node_submit_text_name), MY_GOO.COLOR_OUTPRESSED)
+			gui.set_color(gui.get_node(Info.node_submit_text_name), MY_GOO.COLOR_TEXT_DEFAULT)
 
 			-- visually highlight which choice was selected
 			local other_nodes = {1, 2, 3}
 			other_nodes[index] = nil
 
 			-- note that trying to use the bright white makes text darker actually
-			gui.set_color(gui.get_node(Info.goo_option_names[index]..Info.goo_option_label_basename), MY_GOO.COLOR_OUTPRESSED)
+			gui.set_color(gui.get_node(Info.goo_option_names[index]..Info.goo_option_label_basename), MY_GOO.COLOR_TEXT_DEFAULT)
 			for _,v_otherindex in pairs(other_nodes) do
-				gui.set_color(gui.get_node(Info.goo_option_names[v_otherindex]..Info.goo_option_label_basename), MY_GOO.COLOR_UNSELECTED)
+				gui.set_color(gui.get_node(Info.goo_option_names[v_otherindex]..Info.goo_option_label_basename), MY_GOO.COLOR_TEXT_UNSELECTED)
 			end
 
 			print("radio "..index.." selected")

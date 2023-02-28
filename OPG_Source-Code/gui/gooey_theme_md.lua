@@ -45,7 +45,9 @@ MYG.COLOR_HOVER = vmath.vector4(1.15, 1.15, 1.15, 1)
 MYG.COLOR_OUTPRESSED = vmath.vector4(1)
 MYG.COLOR_DEFAULT = vmath.vector4(0.90, 0.90, 0.90, 1)
 
-MYG.COLOR_UNSELECTED = vmath.vector4(0.75, 0.75, 0.75, 1)
+MYG.COLOR_TEXT_DEFAULT = vmath.vector4(1)
+MYG.COLOR_TEXT_UNSELECTED = vmath.vector4(0.75, 0.75, 0.75, 1)
+
 MYG.COLOR_LOCKED = vmath.vector4(0.30, 0.30, 0.30, 1)
 
 MYG.COLOR_LIGHT_BLUE = vmath.vector4(0.45, 0.8, 1, 1)
