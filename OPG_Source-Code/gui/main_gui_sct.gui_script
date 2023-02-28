@@ -57,15 +57,13 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_an
 	end
 
 	-- set enabled status
+	self.hud_decision_dynamic.screen_isactive = enabled_setting
+
+	-- get and affect controller node
 	local constant = self.hud_decision_constant
-	-- if setting to enabled
-		-- currently enabled -> do nothing
-		-- not enabled -> enable
-	-- if setting to disabled
-		-- currently enabled -> disable
-		-- not enabled -> do nothing
 	local controller_node = gui.get_node(constant.node_controller)
 
+	-- run enabling status and possibly sizing
 	local function func_done(self, node)
 
 		gui.set_enabled(node, enabled_setting)
@@ -85,10 +83,10 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_an
 		func_done(self, controller_node)
 	end
 
+	-- exit if not resetting answer option tracker variables
 	if not reset_answer_options then return end
 
 	-- reset tracking table
-	self.hud_decision_dynamic.screen_isactive = enabled_setting
 	self.hud_decision_dynamic.goo_option_selected = 0
 	self.hud_decision_dynamic.goo_sumbit_isactive = false
 
@@ -220,12 +218,13 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizi
 	end
 
 	-- set enabled status
+	self.hud_plot_dynamic.screen_isactive = enabled_setting
+
+	-- get and affect controller node
 	local constant = self.hud_plot_constant
 	local controller_node = gui.get_node(constant.node_controller)
 
-	-- reset tracking table
-	self.hud_plot_dynamic.screen_isactive = enabled_setting
-
+	-- run enabling status and possibly sizing
 	local function func_done(self, node)
 
 		gui.set_enabled(node, enabled_setting)
@@ -361,11 +360,13 @@ local function Screen_Data_Reset(self, enabled_setting)
 	end
 
 	-- set enabled status
+	self.hud_data_dynamic.screen_isactive = enabled_setting
+
+	-- get and affect controller node
 	local constant = self.hud_data_constant
 	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
 
 	-- reset tracking table
-	self.hud_data_dynamic.screen_isactive = enabled_setting
 	self.hud_data_dynamic.is_maximized = true
 	self.hud_data_dynamic.goo_items_areactive = true
 
