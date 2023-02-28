@@ -96,8 +96,8 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_an
 	end
 
 	-- set tint on button to dark
-	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_GREYED_OUT)
-	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_GREYED_OUT)
+	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_LOCKED)
+	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_LOCKED)
 
 end
 
@@ -155,17 +155,17 @@ local function Screen_Decision_Input(self, action_id, action)
 			-- set the selected index and allow the submit button
 			self.hud_decision_dynamic.goo_option_selected = index
 			self.hud_decision_dynamic.goo_sumbit_isactive = true
-			gui.set_color(gui.get_node(Info.node_submit_box_name), MY_GOO.COLOR_GREY_LIGHT)
-			gui.set_color(gui.get_node(Info.node_submit_text_name), MY_GOO.COLOR_WHITE_DEFAULT)
+			gui.set_color(gui.get_node(Info.node_submit_box_name), MY_GOO.COLOR_DEFAULT)
+			gui.set_color(gui.get_node(Info.node_submit_text_name), MY_GOO.COLOR_OUTPRESSED)
 
 			-- visually highlight which choice was selected
 			local other_nodes = {1, 2, 3}
 			other_nodes[index] = nil
 
 			-- note that trying to use the bright white makes text darker actually
-			gui.set_color(gui.get_node(Info.goo_option_names[index]..Info.goo_option_label_basename), MY_GOO.COLOR_WHITE_DEFAULT)
+			gui.set_color(gui.get_node(Info.goo_option_names[index]..Info.goo_option_label_basename), MY_GOO.COLOR_OUTPRESSED)
 			for _,v_otherindex in pairs(other_nodes) do
-				gui.set_color(gui.get_node(Info.goo_option_names[v_otherindex]..Info.goo_option_label_basename), MY_GOO.COLOR_GREY_MEDIUM)
+				gui.set_color(gui.get_node(Info.goo_option_names[v_otherindex]..Info.goo_option_label_basename), MY_GOO.COLOR_UNSELECTED)
 			end
 
 			print("radio "..index.." selected")

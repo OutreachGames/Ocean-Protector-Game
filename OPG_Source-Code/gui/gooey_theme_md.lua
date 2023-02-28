@@ -41,12 +41,14 @@ local SOUND_ID_BUTTON_3 = "sound_controller#sound_button_3"
 
 local VEC3_1 = vmath.vector3(1)
 
-MYG.COLOR_WHITE_BRIGHT = vmath.vector4(1.15, 1.15, 1.15, 1)
-MYG.COLOR_WHITE_DEFAULT = vmath.vector4(1)
-MYG.COLOR_GREY_LIGHT = vmath.vector4(0.90, 0.90, 0.90, 1)
+MYG.COLOR_HOVER = vmath.vector4(1.15, 1.15, 1.15, 1)
+MYG.COLOR_OUTPRESSED = vmath.vector4(1)
+MYG.COLOR_DEFAULT = vmath.vector4(0.90, 0.90, 0.90, 1)
 
-MYG.COLOR_GREY_MEDIUM = vmath.vector4(0.75, 0.75, 0.75, 1)
-MYG.COLOR_GREYED_OUT = vmath.vector4(0.30, 0.30, 0.30, 1)
+MYG.COLOR_UNSELECTED = vmath.vector4(0.75, 0.75, 0.75, 1)
+MYG.COLOR_LOCKED = vmath.vector4(0.30, 0.30, 0.30, 1)
+
+MYG.COLOR_LIGHT_BLUE = vmath.vector4(0.45, 0.8, 1, 1)
 
 MYG.MINIMIZE = vmath.vector3(0.1)
 MYG.MAXIMIZE = vmath.vector3(1)
@@ -109,12 +111,12 @@ local function check_run_juice(node, always_triggers, do_shake)
 
 	-- hover effect check and run
 	if node.over_now then
-		gui.set_color(node.node, MYG.COLOR_WHITE_BRIGHT)
+		gui.set_color(node.node, MYG.COLOR_HOVER)
 	elseif node.out_now then
 		if node.pressed then
-			gui.set_color(node.node, MYG.COLOR_WHITE_DEFAULT)
+			gui.set_color(node.node, MYG.COLOR_OUTPRESSED)
 		else
-			gui.set_color(node.node, MYG.COLOR_GREY_LIGHT)
+			gui.set_color(node.node, MYG.COLOR_DEFAULT)
 		end
 	end
 
