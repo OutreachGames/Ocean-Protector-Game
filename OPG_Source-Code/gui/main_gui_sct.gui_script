@@ -44,7 +44,7 @@ local CV_item_groups = {
 -- functions
 
 -- HUD Screen: Decision
-local function Screen_Decision_Reset(self, enabled_setting, do_not_change_answer_options)
+local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_answer_options)
 
 	-- reset Decision screen of HUD
 
@@ -52,8 +52,8 @@ local function Screen_Decision_Reset(self, enabled_setting, do_not_change_answer
 	if enabled_setting == nil then
 		enabled_setting = false
 	end
-	if do_not_change_answer_options == nil then
-		do_not_change_answer_options = false
+	if reset_answer_options == nil then
+		reset_answer_options = false
 	end
 
 	-- set enabled status
@@ -64,9 +64,28 @@ local function Screen_Decision_Reset(self, enabled_setting, do_not_change_answer
 	-- if setting to disabled
 		-- currently enabled -> disable
 		-- not enabled -> do nothing
-	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
+	local controller_node = gui.get_node(constant.node_controller)
 
-	if do_not_change_answer_options then return end
+	local function func_done(self, node)
+
+		gui.set_enabled(node, enabled_setting)
+
+	end
+
+	if run_sizing then
+		if enabled_setting then
+			func_done(self, controller_node)
+			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+		else
+			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+		end
+	else
+		func_done(self, controller_node)
+	end
+
+	if not reset_answer_options then return end
 
 	-- reset tracking table
 	self.hud_decision_dynamic.screen_isactive = enabled_setting
@@ -110,7 +129,9 @@ local function Screen_Decision_Initialize(self, enabled_status)
 
 	-- set dynamics
 	self.hud_decision_dynamic = {}
-	Screen_Decision_Reset(self, enabled_status)
+	local run_sizer = false
+	local reset_answers = true
+	Screen_Decision_Reset(self, enabled_status, run_sizer, reset_answers)
 
 end
 
@@ -168,28 +189,21 @@ local function Screen_Decision_Input(self, action_id, action)
 
 	end
 
-	local function func_button(button)
+	local function func_submit(button)
 
 		-- handle all the button functionality
+		local run_sizer = true
+		local reset_values = false
+		Screen_Decision_Reset(self, false, run_sizer, reset_values)
 
-		local function func_disable(self, controller_node)
-			gui.set_enabled(controller_node, false)
-		end
-
-		-- set that this screen is no longer interactive
-		self.hud_decision_dynamic.screen_isactive = false
-
-		--shrink everything and disable
-		gui.animate(gui.get_node(Info.node_controller), "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.5, 0, func_disable)
-
-		print("Button was pressed")
+		print("Submit Button was pressed")
 
 	end
 
 	MY_GOO.radiogroup("radiogroup_answer_options", action_id, action, func_radiogroup)
 
 	if self.hud_decision_dynamic.goo_sumbit_isactive then
-		MY_GOO.button_simple(Info.goo_submit_name, action_id, action, func_button)
+		MY_GOO.button_simple(Info.goo_submit_name, action_id, action, func_submit)
 	end
 
 end
@@ -220,13 +234,15 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizi
 			-- if decision tracker is active then disable decision node
 		-- if disabling
 			-- if decision tracker is active then enable decision node
+		local run_decision_sizer = false
+		local reset_values = false
 		if enabled_setting then
 			if self.hud_decision_dynamic.screen_isactive then
-				Screen_Decision_Reset(self, false, true)
+				Screen_Decision_Reset(self, false, run_decision_sizer, reset_values)
 			end
 		else
 			if self.hud_decision_dynamic.screen_isactive then
-				Screen_Decision_Reset(self, true, true)
+				Screen_Decision_Reset(self, true, run_decision_sizer, reset_values)
 			end
 		end
 
