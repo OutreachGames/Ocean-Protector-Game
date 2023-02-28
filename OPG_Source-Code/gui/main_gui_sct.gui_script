@@ -44,7 +44,7 @@ local CV_item_groups = {
 -- functions
 
 -- HUD Screen: Decision
-local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_answer_options)
+local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables)
 
 	-- reset Decision screen of HUD
 
@@ -52,14 +52,11 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_an
 	if enabled_setting == nil then
 		enabled_setting = false
 	end
-	if reset_answer_options == nil then
-		reset_answer_options = false
+	if reset_tracker_variables == nil then
+		reset_tracker_variables = false
 	end
 
 	-- set enabled status
-	self.hud_decision_dynamic.screen_isactive = enabled_setting
-
-	-- get and affect controller node
 	local constant = self.hud_decision_constant
 	local controller_node = gui.get_node(constant.node_controller)
 
@@ -84,9 +81,10 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_an
 	end
 
 	-- exit if not resetting answer option tracker variables
-	if not reset_answer_options then return end
+	if not reset_tracker_variables then return end
 
 	-- reset tracking table
+	self.hud_decision_dynamic.screen_isactive = enabled_setting
 	self.hud_decision_dynamic.goo_option_selected = 0
 	self.hud_decision_dynamic.goo_sumbit_isactive = false
 
@@ -191,7 +189,10 @@ local function Screen_Decision_Input(self, action_id, action)
 
 		-- handle all the button functionality
 		local run_sizer = true
-		local reset_values = false
+		local reset_values = true
+		--^ need to have tracker as off so if plot checks it properly knows what the status is
+		-- if plot thinks decisions is still on it can re-enable decision 
+		--#TODO save the values to master table before clearing them!
 		Screen_Decision_Reset(self, false, run_sizer, reset_values)
 
 		print("Submit Button was pressed")
@@ -218,9 +219,6 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizi
 	end
 
 	-- set enabled status
-	self.hud_plot_dynamic.screen_isactive = enabled_setting
-
-	-- get and affect controller node
 	local constant = self.hud_plot_constant
 	local controller_node = gui.get_node(constant.node_controller)
 
@@ -260,8 +258,13 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizi
 		func_done(self, controller_node)
 	end
 
+	-- reset tracker variables
+	self.hud_plot_dynamic.screen_isactive = enabled_setting
+
+	-- if enabling then update graph
+	if not enabled_setting or item_group_key == nil then return end
+
 	-- set the axis and labels depending on the specified item group
-	if item_group_key == nil then return end
 	local item_info = CV_item_groups[item_group_key]
 	if item_info == nil then
 		print("Error, the following key does not exist in the item groups list: "..item_group_key.."\n")
@@ -333,7 +336,7 @@ local function Screen_Plot_Input(self, action_id, action)
 
 	local Info = self.hud_plot_constant
 
-	local function func_button(button)
+	local function func_exit(button)
 
 		-- handle all the button functionality
 
@@ -344,7 +347,7 @@ local function Screen_Plot_Input(self, action_id, action)
 
 	end
 
-	MY_GOO.button_simple(Info.goo_exit_name, action_id, action, func_button)
+	MY_GOO.button_simple(Info.goo_exit_name, action_id, action, func_exit)
 
 end
 
@@ -360,13 +363,11 @@ local function Screen_Data_Reset(self, enabled_setting)
 	end
 
 	-- set enabled status
-	self.hud_data_dynamic.screen_isactive = enabled_setting
-
-	-- get and affect controller node
 	local constant = self.hud_data_constant
 	gui.set_enabled(gui.get_node(constant.node_controller), enabled_setting)
 
 	-- reset tracking table
+	self.hud_data_dynamic.screen_isactive = enabled_setting
 	self.hud_data_dynamic.is_maximized = true
 	self.hud_data_dynamic.goo_items_areactive = true
 
