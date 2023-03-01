@@ -266,6 +266,8 @@ STR.new_information = {
     -- User clicks on best answer for each question, 
     -- then the game presents the next question.  
 
+    -- Run quiz 
+
     -- Once all questions answered successfully a new message appears. 
 
     user_lesson_20 = {
@@ -274,6 +276,21 @@ STR.new_information = {
         debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening.",
         extra_text = ""
     },
+
+    user_lesson_21 = {
+        goal_text = "Follow information prompts.",
+        display_text = "Let's now choose a specific character role and work to reduce the impacts of ocean acidification.",
+        debrief_text = nil,
+        extra_text = ""
+    },
+
+    -- Character menu selection appears and allows users to select a character. 
+    -- When selecting a character users will be asked to confirm their selection. 
+    -- Upon confirmation the next phase of the game starts, 
+    -- which presets users with questions that 
+    -- show real-time changes based on their answers.  
+
+    -- Run character selection
 
     -- Once users have selected and confirmed a character, 
     -- then the interactive questions stage of the program will begin. 
@@ -292,12 +309,33 @@ STR.new_information = {
     -- Note, the details on learning levels, along with alignment to 
     -- curriculum standards, and lesson-plans are presented in other documents. 
 
-    user_lesson_21 = {
+    -- Run role decisions
+
+    -- After a set number of decisions/turns has completed 
+    -- the students will be presented with a final summary visualization 
+    -- of their decisions, OA outcomes on their character, and recommendations. 
+    -- For example, if the student user selects decisions that are 
+    -- only strong positive actions throughout the game, 
+    -- then the final OA outcomes will be more favorable for their character and marine life. 
+
+    user_lesson_22 = {
         goal_text = "Follow information prompts.",
-        display_text = "Let's now choose a specific character role and work to reduce the impacts of ocean acidification",
+        display_text = "You have completed your work as a <insert character name>! This completion is saved so you can examine it again later. Let's examine the final resulting health of each group of life in our ocean scene. Once you are completed with this stage you may also restart the game and try to improve your score or use a different character.",
         debrief_text = nil,
         extra_text = ""
     },
+
+    -- Users will examine the final summary and graphs of each group of 
+    -- life to evaluate how each has changed due to their cumulative decisions and outcomes. 
+
+    user_lesson_23 = {
+        goal_text = "Follow information prompts.",
+        display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use.  If we all do our part, then together we can help protect our oceans! ",
+        debrief_text = nil,
+        extra_text = "For more information on ocean acidification check out these resources from NOAA. "
+    },
+
+    -- Run game end
 
 }
 
@@ -531,6 +569,36 @@ STR.decisions_quiz = {
         },
     }
 
+}
+
+STR.character_selection = {
+    question_prompt = {
+        ""
+    },
+    answer_options = {
+        user_choice_1 = {
+            text_display = {
+                "Fishing Boat Captain"..n.."Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
+                
+            },
+            text_debrief = nil,
+            outcome_result = 0 --"role_captain"
+        },
+        user_choice_2 = {
+            text_display = {
+                "Marine Park Ranger"..n.."Choose to be a marine park ranger. This character makes a living by watching over a marine park. "..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
+            },
+            text_debrief = nil,
+            outcome_result = 0 --"role_ranger"
+        },
+        user_choice_3 = {
+            text_display = {
+                "Ocean Tour Guide"..n.."Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and make steady money. "..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
+            },
+            text_debrief = nil,
+            outcome_result = 0 --"role_guide"
+        },
+    },
 }
 
 STR.decisions_character = {
