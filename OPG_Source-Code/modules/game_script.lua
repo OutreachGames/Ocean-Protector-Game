@@ -618,6 +618,46 @@ STR.decisions_character = {
         "Evaluate and submit decision."
     },
 
+    decision_role_default = { --default framework
+        question_prompt = {
+            role_default = {
+                ""
+            },
+            role_captain = {
+
+            },
+            role_ranger = {
+
+            },
+            role_guide = {
+
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    role_default = {
+                        ""
+                    },
+                    --role_captain = {}, role_ranger = {}, role_guide = {},
+                },
+                text_debrief = {
+                    role_default = {
+                        ""
+                    },
+                    --role_captain = {}, role_ranger = {}, role_guide = {},
+                },
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+
+            },
+            user_choice_3 = {
+
+            }
+        },
+    },
+
     decision_role_1 = { --personal CO2 reduction
         question_prompt = {
             role_default = {
