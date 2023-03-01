@@ -341,6 +341,10 @@ STR.new_information = {
 
 STR.decisions_quiz = {
 
+    goal_text = {
+        "Work through review questions."
+    },
+
     decision_quiz_1 = {
         question_prompt = { 
             "Burning fossil fuels reduces large amounts of a gas called ____."
@@ -572,33 +576,40 @@ STR.decisions_quiz = {
 }
 
 STR.character_selection = {
-    question_prompt = {
-        ""
+
+    goal_text = {
+        "Evaluate and choose character."
     },
-    answer_options = {
-        user_choice_1 = {
-            text_display = {
-                "Fishing Boat Captain"..n.."Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
-                
-            },
-            text_debrief = nil,
-            outcome_result = 0 --"role_captain"
+
+    decision_character_1 = {
+        question_prompt = {
+            "Please choose a character. Each character has specific goals and does a different job."
         },
-        user_choice_2 = {
-            text_display = {
-                "Marine Park Ranger"..n.."Choose to be a marine park ranger. This character makes a living by watching over a marine park. "..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "Fishing Boat Captain"..n.."Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
+                    
+                },
+                text_debrief = nil,
+                outcome_result = 0 --"role_captain"
             },
-            text_debrief = nil,
-            outcome_result = 0 --"role_ranger"
-        },
-        user_choice_3 = {
-            text_display = {
-                "Ocean Tour Guide"..n.."Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and make steady money. "..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
+            user_choice_2 = {
+                text_display = {
+                    "Marine Park Ranger"..n.."Choose to be a marine park ranger. This character makes a living by watching over a marine park. "..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
+                },
+                text_debrief = nil,
+                outcome_result = 0 --"role_ranger"
             },
-            text_debrief = nil,
-            outcome_result = 0 --"role_guide"
-        },
-    },
+            user_choice_3 = {
+                text_display = {
+                    "Ocean Tour Guide"..n.."Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and make steady money. "..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
+                },
+                text_debrief = nil,
+                outcome_result = 0 --"role_guide"
+            },
+        }
+    }
 }
 
 STR.decisions_character = {
@@ -608,7 +619,6 @@ STR.decisions_character = {
     },
 
     decision_role_1 = { --personal CO2 reduction
-
         question_prompt = {
             role_default = {
                 ""
@@ -623,7 +633,6 @@ STR.decisions_character = {
 
             },
         },
-
         answer_options = {
             user_choice_1 = {
                 text_display = {
