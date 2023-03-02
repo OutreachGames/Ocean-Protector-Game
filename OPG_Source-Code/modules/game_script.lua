@@ -618,7 +618,7 @@ STR.decisions_character = {
         "Evaluate and submit decision."
     },
 
-    decision_role_default = { --default framework
+    decision_role_default = { -- Default framework
         question_prompt = {
             "",
             role_captain = {
@@ -652,7 +652,7 @@ STR.decisions_character = {
         },
     },
 
-    decision_role_1a = { --personal CO2 reduction, check 1
+    decision_role_1a = { -- Personal CO2 Reduction, check 1
         question_prompt = {
             "",
             role_captain = {
@@ -682,7 +682,7 @@ STR.decisions_character = {
                 text_debrief = {
                     ""
                 },
-                -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points"
+                -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                 --#TODO: make short term points slightly lower here, but overall good
                 outcome_result = STR.CV.outcome_variables.option_good_default
             },
@@ -702,7 +702,7 @@ STR.decisions_character = {
                 text_debrief = {
                     ""
                 },
-                -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points"
+                -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                 --#TODO: make short term points slightly higher here
                 outcome_result = STR.CV.outcome_variables.option_bad_default
             },
@@ -729,7 +729,7 @@ STR.decisions_character = {
         },
     },
 
-    decision_role_1b = { --personal CO2 reduction, check 2
+    decision_role_1b = { -- Personal CO2 Reduction, check 2
         question_prompt = {
             "",
             role_captain = {
@@ -759,7 +759,7 @@ STR.decisions_character = {
                 text_debrief = {
                     ""
                 },
-                -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points"
+                -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                 --#TODO: make short term points slightly lower here, but overall good
                 outcome_result = STR.CV.outcome_variables.option_good_default
             },
@@ -779,7 +779,7 @@ STR.decisions_character = {
                 text_debrief = {
                     ""
                 },
-                -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points"
+                -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                 --#TODO: make short term points slightly higher here
                 outcome_result = STR.CV.outcome_variables.option_bad_default
             },
@@ -806,7 +806,7 @@ STR.decisions_character = {
         },
     },
 
-    decision_role_2a = { --water monitoring, check 1
+    decision_role_2a = { -- Water Monitoring, check 1
         question_prompt = {
             "",
             role_captain = {
@@ -853,7 +853,7 @@ STR.decisions_character = {
         },
     },
 
-    decision_role_2b = { --water monitoring, check 2
+    decision_role_2b = { -- Water Monitoring, check 2
         question_prompt = {
             "You notice your buoy has become damaged beyond repair. You are going to set out a new buoy that again measures ocean pH and are thinking of upgrading it. Select which option you think would work best.",
         },
@@ -891,7 +891,391 @@ STR.decisions_character = {
         },
     },
 
-    
+    decision_role_3 = { -- Biologic Connection I
+        question_prompt = {
+            "",
+            role_captain = {
+                "You have examined how the fish you rely on can be harmed by ocean acidification. You want to support healthy fish populations and are thinking about different options. Which one do you pick?"
+            },
+            role_ranger = {
+                "Your work as a park ranger has shown how ocean life can be hurt by ocean acidification. You want to continue to help protect the ocean life in the park and are thinking about different options. Which one do you pick?"
+            },
+            role_guide = {
+                "You have observed how ocean life that tourists want to see can be impacted by ocean acidification. You want to continue to help maintain a healthy ocean are thinking about different options. Which one do you pick?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Do not fish in or go too close to coral reefs."
+                    },
+                    role_ranger = {
+                        "Create extra protections for the coral in your marine park."
+                    },
+                    role_guide = {
+                        "Do not let tourists or your boat go too close to coral."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Find where the river from the nearby city meets the ocean and add nets to that boundary."
+                    },
+                    role_ranger = {
+                        "Add buoys with floating nets near the shore where any rivers meet the ocean."
+                    },
+                    role_guide = {
+                        "There is a river near the tour docks that goes into the ocean. Place nets where that river meets the ocean."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "This might help catch large plastic waste going into the ocean but overall is expensive, not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
+                --#TODO: only make bad for fish, and not pH
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Manually try and remove excess phytoplankton from the water with fishing nets."
+                    },
+                    role_ranger = {
+                        "Try and remove excess nutrients and phytoplankton from the water with nets and filters."
+                    },
+                    role_guide = {
+                        "Manually try and remove algae from the water."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
+                --#TODO: only make bad for fish, and not pH
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
+
+    decision_role_4 = { -- Biologic Connection II
+        question_prompt = {
+            "",
+            role_captain = {
+                "You are again thinking about ways to reduce the impacts of ocean acidification on the fish you rely on. Which option will you choose to do?"
+            },
+            role_ranger = {
+                "You are again thinking about ways to protect the marine park from ocean acidification. Which option will you choose to do?"
+            },
+            role_guide = {
+                "You are again thinking about ways to reduce the impacts of ocean acidification on the ocean life your tours rely on. Which option will you choose to do?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Catch less fish that help eat excess phytoplankton."
+                    },
+                    role_ranger = {
+                        "Make extra rules to protect fish that consume excess phytoplankton."
+                    },
+                    role_guide = {
+                        "Do not go near fish that eat excess phytoplankton."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Do not change the types or amounts of fish you catch."
+                    },
+                    role_ranger = {
+                        "Do not change the current fish protections."
+                    },
+                    role_guide = {
+                        "Perform no changes and do not alter the places you go on your ocean tours."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
+                outcome_result = STR.CV.outcome_variables.option_fair_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Create large fishing net barriers and try and block off the parts of the ocean where you fish."
+                    },
+                    role_ranger = {
+                        "Create large barriers around the marine park and try and seclude this area."
+                    },
+                    role_guide = {
+                        "Create large barriers and try and block off the part of the ocean that you run tours through."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
+
+    decision_role_5 = { -- Patnerships and Community I
+        question_prompt = {
+            "",
+            role_captain = {
+                "With your fishing business you provide food to many people within the community. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
+            },
+            role_ranger = {
+                "Your work protecting the marine park has helped the environment and businesses that rely on the ocean. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
+            },
+            role_guide = {
+                "With your ocean tour business, you provide jobs and money to local community. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "The money should be spent to add more buses, carpool lanes, and sidewalks throughout the city."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Very useful option which decreases coastal OA. More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "The money should be spent on creating more parking lots throughout the city."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Not useful option which increases runoff and coastal OA. Less OA points and less sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "The money should be spent on building a large convention center in the city."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "By itself this will not make a large change in CO2 emissions but increases runoff and over timer adds more fossil fuel emissions. Unchanged OA points and less sustainability points." 
+                --#TODO make unchanged for short-term, while still being bad for long-term
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
+
+    decision_role_6 = { -- Patnerships and Community II
+        question_prompt = {
+            "",
+            role_captain = {
+                "As someone who helps feed the community, the city council continues to value your advice. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
+            },
+            role_ranger = {
+                "The city council continues to value your advice as someone who helps protect the ocean environment. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
+            },
+            role_guide = {
+                "The city council continues to value your advice as a local business owner that provides local jobs. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "Businesses will be granted money to sell their goods to the local community."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "Businesses will be granted money to sell their products to cities in different states."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "Businesses will be granted money to buy new computers and office equipment."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_fair_default
+            }
+        },
+    },
+
+    decision_role_7 = { -- Patnerships and Community III
+        question_prompt = {
+            "",
+            role_captain = {
+                "You are friends with many famers that live far inland. They are upgrading their farms and ask you for advice because you also help supply food to people. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
+            },
+            role_ranger = {
+                "You have friends who are famers that live far inland. They are upgrading their farms and ask you for advice since you have experience in protecting the environment. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
+            },
+            role_guide = {
+                "Many of your friends are famers that live far inland. They are upgrading their farms and ask you for advice because you also help support local jobs. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "Farmers will install solar panels on their farm and use less fertilizer on their fields."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Very useful option which decreases nutrient runoff and fossil fuel emissions, which reduces OA. More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "Famers will buy additional large tractors so they can harvest their crops more quickly."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Likely will somewhat increase runoff and result in slightly less OA points or sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "Farmers will build more barns on their land to store their crops and tractors."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "By itself this will not make a large change in CO2 emissions and but may result in more nutrient runoff. Will not affect largely affect OA points or sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_fair_default
+            }
+        },
+    },
+
+    decision_role_8 = { -- Community Education I
+        question_prompt = {
+            "",
+            role_captain = {
+                "The community appreciates your work providing local food from the ocean. They want to help improve ocean health and ask you for advice. What do you recommend they do?"
+            },
+            role_ranger = {
+                "The community appreciates the work you have done to help protect the oceans. They ask you for advice about how they can help improve ocean health. What do you recommend they do?"
+            },
+            role_guide = {
+                "The community appreciates the jobs your ocean tours support. They want to help improve ocean health and ask you for advice. What do you recommend they do?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "People should carpool and/or use the bus to go to work and school."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Most useful option, as it reduces CO2 emissions. Also has bonus of saving people money! More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "People should upgrade their car radios and seat cushions to make their cars more comfortable."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_fair_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "People should use more taxis and buy rides to get to work and school."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Least useful option, as it increases CO2 emissions. Also has negative effect of costing people more money. Less OA points and less sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
+
+    decision_role_9 = { -- Community Education II
+        question_prompt = {
+            "",
+            role_captain = {
+                "Folks in community continue to value your input as someone who provides local food from the ocean. They again ask for your advice about how they can further improve ocean health. What do you recommend they do?"
+            },
+            role_ranger = {
+                "Members of the community continue to value your input as someone who helps protect the ocean. They want to further improve ocean health and again ask for your advice. What do you recommend they do?"
+            },
+            role_guide = {
+                "People in community continue to value your input as a local business that provides ocean-based jobs. They again ask for your advice about how they can further improve ocean health. What do you recommend they do?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "People should conserve water and energy when possible, such as not leaving on faucets or appliances if they are not using them."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Most useful option, as it reduces CO2 emissions and overlaps with reducing runoff. Also has bonus of saving people money! More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "People should buy many house plants and place them throughout their homes and workplaces."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability pointss." 
+                outcome_result = STR.CV.outcome_variables.option_fair_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "People should water their lawns and wash their cars more frequently."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Least useful option, as it increases CO2 emissions and runoff. Also has negative effect of costing people money. Less OA points and less sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
 
 }
 
