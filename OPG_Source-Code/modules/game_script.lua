@@ -620,9 +620,7 @@ STR.decisions_character = {
 
     decision_role_default = { --default framework
         question_prompt = {
-            role_default = {
-                ""
-            },
+            "",
             role_captain = {
 
             },
@@ -636,15 +634,11 @@ STR.decisions_character = {
         answer_options = {
             user_choice_1 = {
                 text_display = {
-                    role_default = {
-                        ""
-                    },
+                    ""
                     --role_captain = {}, role_ranger = {}, role_guide = {},
                 },
                 text_debrief = {
-                    role_default = {
-                        ""
-                    },
+                    ""
                     --role_captain = {}, role_ranger = {}, role_guide = {},
                 },
                 outcome_result = STR.CV.outcome_variables.option_good_default
@@ -660,9 +654,7 @@ STR.decisions_character = {
 
     decision_role_1 = { --personal CO2 reduction
         question_prompt = {
-            role_default = {
-                ""
-            },
+            "",
             role_captain = {
 
             },
@@ -676,15 +668,11 @@ STR.decisions_character = {
         answer_options = {
             user_choice_1 = {
                 text_display = {
-                    role_default = {
-                        ""
-                    },
+                    "",
                     --role_captain = {}, role_ranger = {}, role_guide = {},
                 },
                 text_debrief = {
-                    role_default = {
-                        ""
-                    },
+                    ""
                     --role_captain = {}, role_ranger = {}, role_guide = {},
                 },
                 outcome_result = STR.CV.outcome_variables.option_good_default
