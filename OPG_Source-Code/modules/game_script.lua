@@ -652,39 +652,246 @@ STR.decisions_character = {
         },
     },
 
-    decision_role_1 = { --personal CO2 reduction
+    decision_role_1a = { --personal CO2 reduction, check 1
         question_prompt = {
             "",
             role_captain = {
-
+                "Congratulations on your promotion, Captain! Now that you are in charge, how do you want to use your boat?"
             },
             role_ranger = {
-
+                "Congratulations on your promotion to Marine Park Ranger! As a new ranger protecting this marine park, what do you think is the best way to use your boat?"
             },
             role_guide = {
-
+                "Congratulations on your promotion to Ocean Tour Guide! Now that you are in charge of tours, how do want to use your boat?"
             },
         },
         answer_options = {
             user_choice_1 = {
                 text_display = {
                     "",
-                    --role_captain = {}, role_ranger = {}, role_guide = {},
+                    role_captain = {
+                        "Upgrade the engine for your current fishing boat so that is uses less fuel."
+                    },
+                    role_ranger = {
+                        "Purchase a new engine for your current research boat that uses less fuel."
+                    },
+                    role_guide = {
+                        "Buy a new engine for your current tour boat that uses less fuel."
+                    },
                 },
                 text_debrief = {
                     ""
-                    --role_captain = {}, role_ranger = {}, role_guide = {},
                 },
+                -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points"
+                --#TODO: make short term points slightly lower here, but overall good
                 outcome_result = STR.CV.outcome_variables.option_good_default
             },
             user_choice_2 = {
-
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Keep your current fishing boat and go on more fishing trips."
+                    },
+                    role_ranger = {
+                        "Keep your current research boat and go on more boat travels."
+                    },
+                    role_guide = {
+                        "Keep your current tour boat and go on more tours."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points"
+                --#TODO: make short term points slightly higher here
+                outcome_result = STR.CV.outcome_variables.option_bad_default
             },
             user_choice_3 = {
-
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Trade your current fishing boat for two smaller boats and go on more fishing trips."
+                    },
+                    role_ranger = {
+                        "Trade your current research boat for two smaller boats and go on more boat travels."
+                    },
+                    role_guide = {
+                        "Trade your current tour boat for two smaller boats and go on more tours."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "No immediate goal points change, but less OA points plus less sustainability points leading to less OA points."
+                --#TODO: make short term points slightly unchanged here
+                outcome_result = STR.CV.outcome_variables.option_bad_default
             }
         },
-    }
+    },
+
+    decision_role_1b = { --personal CO2 reduction, check 2
+        question_prompt = {
+            "",
+            role_captain = {
+                "Your fishing business is progressing steadily. Would you like to change how you use your boat?"
+            },
+            role_ranger = {
+                "Your work as a Marine Park Ranger is progressing steadily. Would you like to change how you use your boat?"
+            },
+            role_guide = {
+                "Your tour business is progressing steadily. Would you like to change how you use your boat?"
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Upgrade the engine for your current fishing boat so that is uses less fuel."
+                    },
+                    role_ranger = {
+                        "Purchase a new engine for your current research boat that uses less fuel."
+                    },
+                    role_guide = {
+                        "Buy a new engine for your current tour boat that uses less fuel."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points"
+                --#TODO: make short term points slightly lower here, but overall good
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Keep your current fishing boat and go on more fishing trips."
+                    },
+                    role_ranger = {
+                        "Keep your current research boat and go on more boat travels."
+                    },
+                    role_guide = {
+                        "Keep your current tour boat and go on more tours."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points"
+                --#TODO: make short term points slightly higher here
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "",
+                    role_captain = {
+                        "Trade your current fishing boat for two smaller boats and go on more fishing trips."
+                    },
+                    role_ranger = {
+                        "Trade your current research boat for two smaller boats and go on more boat travels."
+                    },
+                    role_guide = {
+                        "Trade your current tour boat for two smaller boats and go on more tours."
+                    },
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "No immediate goal points change, but less OA points plus less sustainability points leading to less OA points."
+                --#TODO: make short term points slightly unchanged here
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
+
+    decision_role_2a = { --water monitoring, check 1
+        question_prompt = {
+            "",
+            role_captain = {
+                "It is important to know if the fish you rely on will be affected by acidification. You already have set out a buoy that measures ocean pH and are thinking of upgrading it. Select which option you think would work best."
+            },
+            role_ranger = {
+                "It is important to know if the marine park you protect will be affected by acidification. You already have set out a buoy that measures ocean pH and are thinking of upgrading it. Select which option you think would work best."
+            },
+            role_guide = {
+                "It is important to know if the ocean life you show on tours will be affected by acidification. You already have set out a buoy that measures ocean pH and are thinking of upgrading it. Select which option you think would work best."
+            },
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "Upgrade your buoy to measure the amount of nutrients coming into the ocean from the coast."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Best option to predict coastal OA. More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "Upgrade your buoy to measure what the salt content is in the ocean."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
+                outcome_result = STR.CV.outcome_variables.option_fair_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "Do not upgrade your buoy at this time."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
+
+    decision_role_2b = { --water monitoring, check 2
+        question_prompt = {
+            "You notice your buoy has become damaged beyond repair. You are going to set out a new buoy that again measures ocean pH and are thinking of upgrading it. Select which option you think would work best.",
+        },
+        answer_options = {
+            user_choice_1 = {
+                text_display = {
+                    "Upgrade your buoy to measure the amount of nutrients coming into the ocean from the coast."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "Best option to predict coastal OA. More OA points and more sustainability points." 
+                outcome_result = STR.CV.outcome_variables.option_good_default
+            },
+            user_choice_2 = {
+                text_display = {
+                    "Upgrade your buoy to measure what the salt content is in the ocean."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
+                outcome_result = STR.CV.outcome_variables.option_fair_default
+            },
+            user_choice_3 = {
+                text_display = {
+                    "Do not upgrade your buoy at this time."
+                },
+                text_debrief = {
+                    ""
+                },
+                -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
+                outcome_result = STR.CV.outcome_variables.option_bad_default
+            }
+        },
+    },
+
+    
 
 }
 
