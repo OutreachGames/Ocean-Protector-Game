@@ -575,7 +575,7 @@ STR.decisions_quiz = {
 
 }
 
-STR.character_selection = {
+STR.decisions_character = {
 
     goal_text = {
         "Evaluate and choose character."
