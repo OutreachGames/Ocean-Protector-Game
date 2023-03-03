@@ -571,30 +571,29 @@ STR.decisions_character = {
 
     decision_character_1 = {
         question_prompt = {
-            "Please choose a character. Each character has specific goals and does a different job."
+            "Please choose a character. Each character has specific goals and does a different job. You can view this information by clicking on each character button. "
         },
         answer_options = {
             user_choice_1 = {
                 text_display = {
                     "Fishing Boat Captain"..n.."Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
-                    
                 },
                 text_debrief = nil,
-                outcome_result = 0 --"role_captain"
+                outcome_result = "role_captain"
             },
             user_choice_2 = {
                 text_display = {
                     "Marine Park Ranger"..n.."Choose to be a marine park ranger. This character makes a living by watching over a marine park. "..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
                 },
                 text_debrief = nil,
-                outcome_result = 0 --"role_ranger"
+                outcome_result = "role_ranger"
             },
             user_choice_3 = {
                 text_display = {
-                    "Ocean Tour Guide"..n.."Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and make steady money. "..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
+                    "Ocean Tour Guide"..n.."Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and earn steady money. "..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
                 },
                 text_debrief = nil,
-                outcome_result = 0 --"role_guide"
+                outcome_result = "role_guide"
             },
         }
     }
