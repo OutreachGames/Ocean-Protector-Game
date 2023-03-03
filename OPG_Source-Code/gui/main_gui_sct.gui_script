@@ -37,6 +37,11 @@ local CV_item_groups = {
 		group_name = "/group_item_crustaceans",
 		plot_y_range = {0.0, 1.0},
 		plot_y_label = "Crustacean Health"
+	},
+	item_humans = {
+		group_name = "/group_item_humans",
+		plot_y_range = {0.0, 1.0},
+		plot_y_label = "Human Health"
 	}
 }
 
@@ -507,6 +512,9 @@ local function Screen_Data_Input(self, action_id, action)
 	local function func_goto_crustaceans(button)
 		func_goto_core("item_crustaceans")
 	end
+	local function func_goto_humans(button)
+		func_goto_core("item_humans")
+	end
 
 	if self.hud_data_dynamic.goo_items_areactive then
 		local gotos = Info.goo_group_goto_buttons
@@ -516,6 +524,7 @@ local function Screen_Data_Input(self, action_id, action)
 		MY_GOO.button_goto(gotos.item_fish, action_id, action, func_goto_fish)
 		MY_GOO.button_goto(gotos.item_mollusks, action_id, action, func_goto_mollusks)
 		MY_GOO.button_goto(gotos.item_crustaceans, action_id, action, func_goto_crustaceans)
+		MY_GOO.button_goto(gotos.item_humans, action_id, action, func_goto_humans)
 	end
 
 end
