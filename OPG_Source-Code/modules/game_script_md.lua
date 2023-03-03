@@ -57,32 +57,33 @@ STR.new_information = {
         extra_text = ""
     },
 
-    user_lesson_3_item_coral = {
+    user_lesson_3 = {
         goal_text = "Find and document consumers in our ocean food-web.",
         display_text = "Identify another component of the food-web in this scene by clicking.",
-        debrief_text = "Coral"..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet",
-        extra_text = "Did you know?"..n.."Many corals get most of their energy from very small separate organisms that live within the coral. These organisms are producers that get their energy from sunlight."
-    },
-
-    user_lesson_3_item_fish = {
-        goal_text = "Follow information prompts.",
-        display_text =  "Identify another component of the food-web in this scene by clicking.",
-        debrief_text = "Fish"..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the small parrot fish and angel fish and the large tuna and grouper. All fish have some form of internal skeleton . Fish are important food for many different animals, including larger fish and humans.",
-        extra_text = "Did you know?"..n.." Sharks have a skeleton make of cartilage, not bone! "
-    },
-
-    user_lesson_3_item_mollusks = {
-        goal_text = "Follow information prompts.",
-        display_text =  "Identify another component of the food-web in this scene by clicking.",
-        debrief_text = "Mollusks"..n.."Mollusks include oysters, snails, sea slugs, and even squid and octopi. Almost all mollusks have some kind of shell material somewhere around or in their body. Mollusks help cycle nutrients and are food for many animals, including humans.",
-        extra_text = ""
-    },
-
-    user_lesson_3_item_crustaceans = {
-        goal_text = "Follow information prompts.",
-        display_text = "Identify another component of the food-web in this scene by clicking.",
-        debrief_text = "Crustaceans"..n.."Crustaceans include crabs, lobsters, crayfish, shrimp, and krill. Almost all crustaceans have some form of external skeleton. Crustaceans are food for many animals, including humans, and help cycle nutrients.",
-        extra_text = ""
+        debrief_text = {
+            "",
+            item_coral = {
+                "Coral"..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet",
+            },
+            item_fish = {
+                "Fish"..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the small parrot fish and angel fish and the large tuna and grouper. All fish have some form of internal skeleton . Fish are important food for many different animals, including larger fish and humans."
+            },
+            item_mollusks = {
+                "Mollusks"..n.."Mollusks include oysters, snails, sea slugs, and even squid and octopi. Almost all mollusks have some kind of shell material somewhere around or in their body. Mollusks help cycle nutrients and are food for many animals, including humans."
+            },
+            item_crustaceans = {
+                "Crustaceans"..n.."Crustaceans include crabs, lobsters, crayfish, shrimp, and krill. Almost all crustaceans have some form of external skeleton. Crustaceans are food for many animals, including humans, and help cycle nutrients."
+            }
+        },
+        extra_text = {
+            "",
+            item_coral = {
+                "Did you know?"..n.."Many corals get most of their energy from very small separate organisms that live within the coral. These organisms are producers that get their energy from sunlight."
+            },
+            item_fish = {
+                "Did you know?"..n.." Sharks have a skeleton make of cartilage, not bone! 
+            },
+        }
     },
 
     -- Once all life has been identified the program will progress with this next message. 
@@ -213,46 +214,33 @@ STR.new_information = {
     -- (though the sign and magnitude of the changes will depend on the user answers). 
     -- Also show text explanations listed below. 
 
-    user_lesson_18_item_plankton = {
+    user_lesson_18 = {
         goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
         display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
-        debrief_text = "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to get as nutrients or build their protective shells as easily, and less will survive. Plankton are the food base for many animals, so unhealthy plankton populations can hurt the entire food-web.",
-        extra_text = ""
-    },
-
-    user_lesson_18_item_coral = {
-        goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
-        display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
-        debrief_text = "Coral"..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons. Also, unhealthy corals are more likely to become diseased and die. Many reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web.",
-        extra_text = ""
-    },
-
-    user_lesson_18_item_mollusks = {
-        goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
-        display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
-        debrief_text = "Mollusks"..n.."As ocean water increases in acidity, mollusks may have a much more difficult time building their protective shells, and less will survive. A decrease in mollusk populations can upset nutrient cycling in the ocean and provide less food to animals that rely on them, including humans.",
-        extra_text = ""
-    },
-
-    user_lesson_18_item_crustaceans = {
-        goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
-        display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
-        debrief_text = "Crusteaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. Lower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected.",
-        extra_text = ""
-    },
-
-    user_lesson_18_item_fish = {
-        goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
-        display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
-        debrief_text = "Fish"..n.."Increased ocean acidity reduces fish size and populations. Some fish grow slower while others have more difficulty avoiding predators, and less will survive. Lower fish populations negatively affect many animals that rely on them for food, including humans.",
-        extra_text = ""
-    },
-
-    user_lesson_18_item_humans = {
-        goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
-        display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
-        debrief_text = "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. Also, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered.",
-        extra_text = ""
+        debrief_text = {
+            "",
+            item_plankton = {
+                "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to get as nutrients or build their protective shells as easily, and less will survive. Plankton are the food base for many animals, so unhealthy plankton populations can hurt the entire food-web.",
+            },
+            item_coral = {
+                "Coral"..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons. Also, unhealthy corals are more likely to become diseased and die. Many reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web."
+            },
+            item_mollusks = {
+                "Mollusks"..n.."As ocean water increases in acidity, mollusks may have a much more difficult time building their protective shells, and less will survive. A decrease in mollusk populations can upset nutrient cycling in the ocean and provide less food to animals that rely on them, including humans."
+            },
+            item_fish = {
+                "Fish"..n.."Increased ocean acidity reduces fish size and populations. Some fish grow slower while others have more difficulty avoiding predators, and less will survive. Lower fish populations negatively affect many animals that rely on them for food, including humans."
+            },
+            item_humans = {
+                "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. Also, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered."
+            },
+            item_crustaceans = {
+                "Crusteaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. Lower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected."
+            }
+        },
+        extra_text = {
+            ""
+        }
     },
 
     user_lesson_19 = {
@@ -1280,7 +1268,7 @@ STR.decisions_character = {
 }
 
 STR.game_order_logic = {
-    
+
 }
 
 return STR
