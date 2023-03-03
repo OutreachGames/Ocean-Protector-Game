@@ -1279,6 +1279,8 @@ STR.decisions_character = {
 
 }
 
-
+STR.game_order_logic = {
+    
+}
 
 return STR

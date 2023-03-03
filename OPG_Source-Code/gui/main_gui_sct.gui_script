@@ -530,6 +530,10 @@ local function Screen_Data_Input(self, action_id, action)
 end
 
 
+-- HUD Process: Observe Items
+-- #TODO add process to click on and save data on items
+
+
 -- Screen Fader
 local function Run_Fader(self, fade_out, time)
 
@@ -573,6 +577,8 @@ function init(self)
 	Screen_Data_Initialize(self, true)
 	Screen_Plot_Initialize(self, false)
 
+	self.input_possible_full = true
+
 end
 
 function on_message(self, message_id, message, sender)
@@ -584,6 +590,8 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+
+	if not self.input_possible_full then return end
 
 	Screen_Decision_Input(self, action_id, action)
 	Screen_Data_Input(self, action_id, action)

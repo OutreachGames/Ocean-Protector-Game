@@ -37,6 +37,7 @@ local CV_Spawn_Keys = {
 	group_fish = {
 		subgroup_tuna = {
 			spawn_list_key = "fish_tuna",
+			item_family = "item_fish",
 			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
 			spawn_z_base = CV_Base_Z_Fish,
 			spawn_y_range = {-20, 140},
@@ -1033,7 +1034,7 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 
 	-- compile into properties table
 	local props = {
-		[HSH.STR_go] = { 
+		[HSH.STR_go] = {
 			Obj_Translation_Speed_Max = move_speed_multi * obj_translate_speed_base,
 			Obj_Rotation_Speed_Max = move_speed_multi * obj_rot_speed_base,
 			Obj_On_Force_Stop_Slowdown_Distance = slowdown_distance,
@@ -1074,9 +1075,10 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 		minfo_is_on_init = true
 	}
 
-	-- send message to start swim to with these coordinates
+	-- send message to start 'swim to' with these coordinates
 	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, start_swimming_info)
 
+	-- #TODO remove when done testing
 	if i_position_in_grid < 4 then
 	timer.delay(2, false, function(self)
 		Remove_Fish(self, fish_subgroup_name, new_collection[HSH.STR_go])
