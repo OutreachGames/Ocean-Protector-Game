@@ -48,6 +48,40 @@ local CV_item_groups = {
 
 -- functions
 
+local function GO_Item_Clicking_Reset(self, enabled_setting)
+
+	-- enables or disables boolean in ocean_setup_sct
+
+	go.set("level_controller", "Obj_Items_Clickable", enabled_setting)
+
+end
+
+local function Items_Click_Status_Reset(self, items_to_click)
+
+	-- update tracker lists of what items need to be clicked and which items have been clicked
+
+	self.items_all_clicked = true
+
+	self.items_that_need_clicked = nil
+	self.items_that_need_clicked = {}
+
+	self.items_that_were_clicked = nil
+	self.items_that_were_clicked = {}
+
+	-- if there are items to add to 'needs click' list then add them
+	-- also save that we have not clicked them all yet
+	if type(items_to_click) == "table" then
+		for _,v_itemname in pairs(items_to_click) do
+			self.items_that_need_clicked[v_itemname] = true
+		end
+		if #items_to_click > 0 then
+			self.items_all_clicked = false
+		end
+	end
+
+end
+
+
 -- HUD Screen: Decision
 local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables)
 
@@ -532,9 +566,28 @@ end
 
 -- HUD Process: Observe Items
 -- #TODO add process to click on and save data on items
+local function On_GO_Item_Clicked(self, clicked_tbl)
+
+	-- runs process when player clicks on go item(s)
+
+	-- in form 
+	-- {{selected_go_url = k_goid, selected_go_subitem = k_subitem_name}, {}}
+
+	-- early exits
+	if type(clicked_tbl) ~= "table" then return end
+	if #clicked_tbl == 0 then return end
+
+	-- get which groups are already on clicked list
+
+	-- find first group that is not on 'is clicked list' but is on 'needs to be clicked' list
+
+	-- popup that group and add to 'is clicked list'
 
 
--- Screen Fader
+end
+
+
+-- HUD Process: Screen Fader
 local function Run_Fader(self, fade_out, time)
 
 	-- run either fade in or fade out
@@ -572,6 +625,7 @@ end
 
 function init(self)
 
+	Items_Click_Status_Reset(self)
 	MY_GOO.acquire_input()
 	Screen_Decision_Initialize(self, true)
 	Screen_Data_Initialize(self, true)
@@ -586,8 +640,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == HSH.msg_fade_out or message_id == HSH.msg_fade_in then
 		Run_Fader(self, message_id == HSH.msg_fade_out, message.minfo_fade_duration)
 	elseif message_id == HSH.msg_report_go_clicked then
-		--#TODO add get go clicked acceptance
-		
+		On_GO_Item_Clicked(self, message)
 	end
 
 end
