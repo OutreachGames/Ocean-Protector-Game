@@ -620,6 +620,16 @@ local function On_GO_Item_Clicked(self, clicked_info)
 	if type(clicked_info) ~= "table" then return end
 	if clicked_info.minfo_match_tbl == nil then return end
 	if clicked_info.minfo_match_count == nil then return end
+	if clicked_info.minfo_match_count <= 0 then return end
+
+	-- if data window is open do not register click if it was within the data bounds
+	-- otherwise player may accidentally click on item if item is behind one of the buttons on the data screen
+	local screen_pos = clicked_info.minfo_screen_position
+	if screen_pos == nil then return end
+	if gui.pick_node(gui.get_node(self.hud_data_constant.node_frame_core), screen_pos.x, screen_pos.y) then
+		--print("Clicked within data frame, not checking rest...\n")
+		return
+	end
 
 	-- failsafe for do not run if we are looking at decisions or plots
 	-- the reset function of these should have 
@@ -665,6 +675,7 @@ local function On_GO_Item_Clicked(self, clicked_info)
 	-- also set color in data view for color and bar
 	local graph_item = valid_item_clicked or back_item_clicked
 	if graph_item ~= nil then
+		print("Item clicked and opening graph for <"..graph_item..">. \n ")
 		Screen_Plot_Reset(self, true, graph_item, true)
 		Items_Set_Color_Tracking(self, graph_item, false)
 	end
