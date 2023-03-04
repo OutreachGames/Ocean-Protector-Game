@@ -655,6 +655,98 @@ local function Screen_Data_Input(self, action_id, action)
 end
 
 
+-- HUD Screen: Popup 
+local function Screen_Popup_Reset(self, enabled_setting, run_sizing)
+
+	-- reset Data screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	-- set enabled status
+	local constant = self.hud_popup_constant
+	local controller_node = gui.get_node(constant.node_controller)
+
+	-- run enabling status and possibly sizing
+	local function func_done(self, node)
+
+		gui.set_enabled(node, enabled_setting)
+
+	end
+
+	if run_sizing then
+		if enabled_setting then
+			func_done(self, controller_node)
+			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+		else
+			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+		end
+	else
+		func_done(self, controller_node)
+	end
+
+	-- reset tracking table
+	self.hud_popup_dynamic.screen_isactive = enabled_setting
+	self.hud_popup_dynamic.is_maximized = true
+
+	--#TODO enable and set text
+
+end
+
+local function Screen_Popup_Initialize(self, enabled_status)
+
+	-- set contants and setup dynamic values and components
+
+	local basename = "hud_newinfo"
+
+	self.hud_plot_constant = nil
+	self.hud_plot_dynamic = nil
+
+	-- set constants
+	self.hud_plot_constant = {
+		hud_basename = basename,
+		node_controller = basename .. "/gnode_controller",
+		goo_exit_name = basename .. "/group_button_submit",
+		node_title_name = basename .. "/gnode_info_text",
+	}
+
+	-- set dynamics
+	self.hud_popup_dynamic = {}
+	Screen_Popup_Reset(self, enabled_status)
+
+end
+
+local function Screen_Popup_Input(self, action_id, action)
+
+	-- runs 'On Input' for Decision screen on HUD
+
+	-- early out if not allowed to use
+	if not self.hud_popup_dynamic.screen_isactive then
+		return
+	end
+
+	local Info = self.hud_popup_constant
+
+	local function func_continue(button)
+
+		-- handle all the button functionality
+
+		-- set that this screen is no longer interactive
+		Screen_Popup_Reset(self, false, true)
+
+		print("Continue Button was pressed")
+
+	end
+
+	MY_GOO.button_simple(Info.goo_exit_name, action_id, action, func_continue)
+
+end
+
+
 -- HUD Process: Observe Items
 local function On_GO_Item_Clicked(self, clicked_info)
 
@@ -780,6 +872,7 @@ function init(self)
 	Screen_Data_Initialize(self, true)
 	Screen_Plot_Initialize(self, false)
 	Items_Click_Status_Reset(self, {"item_fish"})
+	Screen_Popup_Initialize(self, false)
 
 	self.input_is_possible = true
 
@@ -802,5 +895,6 @@ function on_input(self, action_id, action)
 	Screen_Decision_Input(self, action_id, action)
 	Screen_Data_Input(self, action_id, action)
 	Screen_Plot_Input(self, action_id, action)
+	Screen_Popup_Input(self, action_id, action)
 
 end
