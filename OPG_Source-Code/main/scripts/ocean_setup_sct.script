@@ -18,19 +18,19 @@ local CV_Spawn_Keys = {
 
 	item_weather = {
 		subitem_clouds = {
-			spawn_list_key = "weather_clouds",
+			spawn_list_key = "item_weather__subitem_clouds",
 			spawn_coll_factory = "spawner_weather_clouds#collectionfactory",
 			spawn_z_base = CV_Base_Z_Weather,
 			spawn_y_range = {280, 380}
 		},
 		subitem_waterlines = {
-			spawn_list_key = "weather_waterlines",
+			spawn_list_key = "item_weather__subitem_waterlines",
 			spawn_coll_factory = "spawner_weather_waterlines#collectionfactory",
 			spawn_z_base = CV_Base_Z_Weather + 0.1,
 			spawn_y_range = {155, 155}
 		},
 		subitem_waves = {
-			spawn_list_key = "weather_waves",
+			spawn_list_key = "item_weather__subitem_waves",
 			spawn_coll_factory = "spawner_weather_waves#collectionfactory",
 			spawn_z_base = CV_Base_Z_Weather,
 			spawn_y_range = {175, 200}
@@ -1187,6 +1187,64 @@ local function Make_Bubbles(self, x_pos)
 
 end
 
+local function Get_Item_Clicked_On(self, pos_x, pos_y)
+
+	-- returns string key for item family that was clicked on, or nil/"" if no item family was clicked
+
+	local current_time = socket.gettime()
+	local interval_check = 0.25
+
+	-- initialize if empty 
+	if self.Obj_Items_Clickable == nil then
+		self.Obj_Items_Clickable = true
+	end
+	if self.previous_click_time == nil then
+		self.previous_click_time = current_time
+	end
+
+	-- exit early if not able to do
+	if not self.Obj_Items_Clickable or current_time < self.previous_click_time + interval_check then
+		return {}
+	end
+
+	-- set status and run checks
+	self.previous_click_time = current_time
+
+	--#TODO
+	-- go through all items of spawn key lists
+	-- get position of each and compare distance to this click postion
+	-- if overlap found break and return that item
+
+	local click_pos = vmath.vector3(pos_x, pos_y, 0)
+	local match_id_tbl = {}
+
+	for k_item_name, v_item_info in pairs(CV_Spawn_Keys) do
+		--for each subitem in item
+		for _, v_subitem_info in pairs(v_item_info) do
+			local object_dimensions = v_subitem_info.object_dimensions
+			if object_dimensions ~= nil then
+				-- go through list and get position and scale and check distance
+				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key] or {}
+				for k_goid, _ in pairs(spawn_tbl) do
+					if match_id_tbl[k_item_name] == nil then
+						local pos = go.get_position(k_goid)
+						local scale = go.get_scale(k_goid)
+						local max_d_go = math.max(scale.x * object_dimensions.x, scale.y * object_dimensions.y)
+						-- if within distance save to list
+						if vmath.length(pos - click_pos) <= max_d_go then
+							match_id_tbl[k_item_name] = true
+							print("Clicked on item "..k_item_name.."\n")
+						end
+					end
+				end
+			end
+		end
+	end
+
+	return match_id_tbl
+
+end
+
 local function SceneStart(self)
 
 	-- setup the scene variables and objects
@@ -1211,40 +1269,6 @@ local function SceneStart(self)
 	-- play sounds 
 	sound.play("sound_controller#sound_underwater", {delay = 0, gain = 0.15, pan = 0, speed = 1.0})
 	sound.play("sound_controller#sound_waves", {delay = 0, gain = 0.08, pan = 0, speed = 1.0})
-
-end
-
-local function Get_Item_Clicked_On(self, pos_x, pos_y)
-
-	-- returns string key for item family that was clicked on, or nil/"" if no item family was clicked
-
-	local current_time = socket.gettime()
-	local interval_check = 0.25
-
-	-- initialize if empty 
-	if self.Obj_Items_Clickable == nil then
-		self.Obj_Items_Clickable = true
-	end
-	if self.previous_click_time == nil then
-		self.previous_click_time = current_time
-	end
-
-	-- exit early if not able to do
-	if not self.Obj_Items_Clickable or current_time < self.previous_click_time + interval_check then
-		return ""
-	end
-
-	-- set status and run checks
-	self.previous_click_time = current_time
-
-	--#TODO
-	-- go through all items of spawn key lists
-	-- get position of each and compare distance to this click postion
-	-- if overlap found break and return that item
-	print("Clicked on item ...?")
-
-
-	return ""
 
 end
 
