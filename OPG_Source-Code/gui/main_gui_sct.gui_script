@@ -710,8 +710,9 @@ local function Screen_Popup_Initialize(self, enabled_status)
 	self.hud_plot_constant = {
 		hud_basename = basename,
 		node_controller = basename .. "/gnode_controller",
-		goo_exit_name = basename .. "/group_button_submit",
-		node_title_name = basename .. "/gnode_info_text",
+		goo_continue_name = basename .. "/group_button_submit",
+		node_text_title = basename .. "/group_header/gui_frame_text",
+		node_text_body = basename .. "/gnode_info_text",
 	}
 
 	-- set dynamics
@@ -742,7 +743,7 @@ local function Screen_Popup_Input(self, action_id, action)
 
 	end
 
-	MY_GOO.button_simple(Info.goo_exit_name, action_id, action, func_continue)
+	MY_GOO.button_simple(Info.goo_continue_name, action_id, action, func_continue)
 
 end
 
