@@ -10,15 +10,15 @@ STR.CV = {
 
     outcome_variables = {
         option_good_default = { -- (+)
-            item_default = {},
+            0.05,
             --item_pH = {}, item_coral = {}, --...
         },
         option_fair_default = { -- (0)
-            item_default = {},
+            0.0,
             --item_pH = {}, item_coral = {}, --...
         },
         option_bad_default = { -- (-)
-            item_default = {},
+            -0.05,
             --item_pH = {}, item_coral = {}, --...
         }
     },

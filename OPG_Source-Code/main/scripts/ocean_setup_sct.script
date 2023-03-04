@@ -34,6 +34,9 @@ local CV_Spawn_Keys = {
 		},
 	},
 
+	-- reminders:
+	--   spawn_position_grid is dynamically created
+	--   spawn_x_max is dynamcially created base on max count of spawn needed
 	group_fish = {
 		subgroup_tuna = {
 			spawn_list_key = "fish_tuna",
@@ -42,7 +45,6 @@ local CV_Spawn_Keys = {
 			spawn_z_base = CV_Base_Z_Fish,
 			spawn_y_range = {-20, 140},
 			spawn_x_min = -10,
-			--spawn_x_max is based on max count of spawn needed
 			spawn_max_count = 10,
 			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
 			object_scale_base = 0.4,
@@ -1184,7 +1186,9 @@ local function SceneStart(self)
 	self.weather_is_raining = false
 	self.reload_time = 0.25
 	self.no_wind_default = 1
+	self.spawned_objects_list = nil
 	self.spawned_objects_list = {}
+	self.spawned_objects_sum = nil
 	self.spawned_objects_sum = {}
 	Make_Bubbles(self)
 
