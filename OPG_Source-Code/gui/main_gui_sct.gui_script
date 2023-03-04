@@ -59,6 +59,33 @@ local function GO_Item_Clicking_Reset(self, enabled_setting)
 
 end
 
+local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
+
+	-- set color in data view for color and bar
+
+	--"hud_data/group_item_ph/gnode_controller"
+	local data_info = self.hud_data_constant
+	local item_base_groupname = data_info.goo_group_names[item_name]
+	if item_base_groupname == nil then
+		print("Error item name of <"..tostring(item_name).."> is not present in HUD Data Constant table ...\n")
+		return
+	end
+
+	local color_text, color_bar
+
+	if needs_to_be_clicked then
+		color_text = MY_GOO.COLOR_NEEDS_SELECTED
+		color_bar = MY_GOO.COLOR_NEEDS_SELECTED
+	else
+		color_text = MY_GOO.COLOR_TEXT_DEFAULT
+		color_bar = MY_GOO.COLOR_DEFAULT
+	end
+
+	gui.set_color(gui.get_node(item_base_groupname..data_info.item_health_bar_basename), color_bar)
+	gui.set_color(gui.get_node(item_base_groupname..data_info.item_text_basename), color_text)
+
+end
+
 local function Items_Click_Status_Reset(self, items_to_click)
 
 	-- update tracker lists of what items need to be clicked and which items have been clicked
@@ -80,6 +107,7 @@ local function Items_Click_Status_Reset(self, items_to_click)
 		for _,v_itemname in ipairs(items_to_click) do
 			sum_to_click = sum_to_click + 1
 			self.items_that_need_clicked_list[v_itemname] = true
+			Items_Set_Color_Tracking(self, v_itemname, true)
 		end
 		if sum_to_click > 0 then
 			self.items_all_clicked = false
@@ -452,6 +480,8 @@ local function Screen_Data_Initialize(self, enabled_status)
 		node_min_length = basename .. "/tracker_min_length",
 		goo_minimizer = basename .. "/group_button_sizer",
 		goo_item_gotograph = "/group_button_goto",
+		item_health_bar_basename = "/group_healthbar/gui_frame_progress",
+		item_text_basename = "/gnode_body_text",
 		goo_group_names = {},
 		goo_group_goto_buttons = {},
 	}
@@ -632,9 +662,11 @@ local function On_GO_Item_Clicked(self, clicked_info)
 
 	-- finish process to click on and save data on items
 	-- popup graph, which will also disable ocean script clicking
+	-- also set color in data view for color and bar
 	local graph_item = valid_item_clicked or back_item_clicked
 	if graph_item ~= nil then
 		Screen_Plot_Reset(self, true, graph_item, true)
+		Items_Set_Color_Tracking(self, graph_item, false)
 	end
 
 	-- if this was last on list then set variable that all are done
@@ -686,10 +718,10 @@ function init(self)
 
 	MY_GOO.acquire_input()
 
-	Items_Click_Status_Reset(self, {"item_fish"})
 	Screen_Decision_Initialize(self, true)
 	Screen_Data_Initialize(self, true)
 	Screen_Plot_Initialize(self, false)
+	Items_Click_Status_Reset(self, {"item_fish"})
 
 	self.input_is_possible = true
 
