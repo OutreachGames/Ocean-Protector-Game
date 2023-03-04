@@ -141,7 +141,7 @@ nodes {
   }
   size {
     x: 940.0
-    y: 740.0
+    y: 868.0
     z: 0.0
     w: 1.0
   }
@@ -242,6 +242,174 @@ nodes {
   template_node_child: false
   text_leading: 1.0
   text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 327.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEMPLATE
+  id: "group_header"
+  parent: "gnode_controller"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  alpha: 1.0
+  template: "/gui/components/frame_header.gui"
+  template_node_child: false
+  custom_type: 0
+  enabled: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 100.0
+    y: 60.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "Decision"
+  font: "font_header_bold"
+  id: "group_header/gui_frame_text"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  parent: "group_header"
+  layer: "gui_layer_text"
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  overridden_fields: 8
+  template_node_child: true
+  text_leading: 1.0
+  text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 340.0
+    y: 110.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "textures/gui_frame_header_dark"
+  id: "group_header/gui_frame_core"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "group_header"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 55.0
+    y: 55.0
+    z: 55.0
+    w: 55.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  overridden_fields: 4
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
   visible: true
@@ -517,7 +685,7 @@ nodes {
 nodes {
   position {
     x: -370.0
-    y: -114.0
+    y: -110.0
     z: 0.0
     w: 1.0
   }
@@ -684,7 +852,7 @@ nodes {
 nodes {
   position {
     x: -370.0
-    y: -253.0
+    y: -245.0
     z: 0.0
     w: 1.0
   }
@@ -850,8 +1018,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 327.0
+    x: -370.0
+    y: -380.0
     z: 0.0
     w: 1.0
   }
@@ -880,12 +1048,12 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "group_header"
+  id: "group_option_4"
   parent: "gnode_controller"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
-  template: "/gui/components/frame_header.gui"
+  template: "/gui/components/radio.gui"
   template_node_child: false
   custom_type: 0
   enabled: true
@@ -910,8 +1078,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 100.0
-    y: 60.0
+    x: 91.0
+    y: 91.0
     z: 0.0
     w: 1.0
   }
@@ -921,45 +1089,36 @@ nodes {
     z: 1.0
     w: 1.0
   }
-  type: TYPE_TEXT
+  type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  text: "Decision"
-  font: "font_header_bold"
-  id: "group_header/gui_frame_text"
+  texture: "textures/gui_radio_open_default"
+  id: "group_option_4/gui_radio_core"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
-  outline {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
   adjust_mode: ADJUST_MODE_FIT
-  line_break: false
-  parent: "group_header"
-  layer: "gui_layer_text"
+  parent: "group_option_4"
+  layer: "gui_layer_below"
   inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
   alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 1.0
-  overridden_fields: 8
   template_node_child: true
-  text_leading: 1.0
-  text_tracking: 0.0
+  size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
   visible: true
 }
 nodes {
   position {
-    x: 0.0
+    x: 60.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -977,8 +1136,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 340.0
-    y: 110.0
+    x: 725.0
+    y: 120.0
     z: 0.0
     w: 1.0
   }
@@ -988,30 +1147,38 @@ nodes {
     z: 1.0
     w: 1.0
   }
-  type: TYPE_BOX
+  type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  texture: "textures/gui_frame_header_dark"
-  id: "group_header/gui_frame_core"
+  text: "The money should be spent to add more buses, carpool lanes, and sidewalks throughout the city."
+  font: "font_body_regular"
+  id: "group_option_4/gui_radio_label"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "group_header"
-  layer: "gui_layer_below"
-  inherit_alpha: true
-  slice9 {
-    x: 55.0
-    y: 55.0
-    z: 55.0
-    w: 55.0
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
   }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: true
+  parent: "group_option_4"
+  layer: "gui_layer_text"
+  inherit_alpha: true
   alpha: 1.0
-  overridden_fields: 4
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  overridden_fields: 8
   template_node_child: true
-  size_mode: SIZE_MODE_MANUAL
+  text_leading: 1.0
+  text_tracking: 0.0
   custom_type: 0
   enabled: true
   visible: true
@@ -1019,7 +1186,7 @@ nodes {
 nodes {
   position {
     x: 293.0
-    y: -368.0
+    y: -495.0
     z: 0.0
     w: 1.0
   }

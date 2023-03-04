@@ -117,7 +117,7 @@ end
 
 
 -- HUD Screen: Decision
-local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables)
+local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables, num_options)
 
 	-- reset Decision screen of HUD
 
@@ -127,6 +127,9 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	end
 	if reset_tracker_variables == nil then
 		reset_tracker_variables = false
+	end
+	if num_options == nil then
+		num_options = 3
 	end
 
 	-- set enabled status
@@ -140,6 +143,31 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	local function func_done(self, node)
 
 		gui.set_enabled(node, enabled_setting)
+
+		-- get which buttons to enable/disable when starting up/enabling
+		-- disable all buttons to start except for those that will be used
+		if enabled_setting then
+			for i_node_num,v_node_id in ipairs(constant.goo_option_names) do
+				local status = false
+				if i_node_num <= num_options then
+					status = true
+				end
+				gui.set_enabled(gui.get_node(v_node_id..constant.goo_option_core_basename), status)
+				gui.set_enabled(gui.get_node(v_node_id..constant.goo_option_label_basename), status)
+			end
+
+			-- set base position and height of frame and submit button depending on number of options
+			local pos_update = constant.goo_option_placement[num_options]
+			gui.set_position(node, vmath.vector3(gui.get_position(node).x, pos_update.frame_position_y, 0))
+
+			local frame_node = gui.get_node(constant.node_frame)
+			gui.set_size(frame_node, vmath.vector3(gui.get_size(frame_node).x, pos_update.frame_ylength, 0))
+
+			local button_node = gui.get_node(constant.node_submit_box_name)
+			local current_pos_button = gui.get_position(button_node)
+			gui.set_position(button_node, vmath.vector3(current_pos_button.x, pos_update.submit_position_y, 0))
+
+		end
 
 	end
 
@@ -163,6 +191,7 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	self.hud_decision_dynamic.screen_isactive = enabled_setting
 	self.hud_decision_dynamic.goo_option_selected = 0
 	self.hud_decision_dynamic.goo_sumbit_isactive = false
+	self.hud_decision_dynamic.number_answer_options = num_options
 
 	-- actually reset radio nodes, including resetting text color
 	for _,v_nodeid in ipairs(constant.goo_option_names) do
@@ -173,8 +202,6 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	-- set tint on button to dark/locked
 	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_LOCKED)
 	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_LOCKED)
-
-	--#TODO enable and set text accordingly
 
 end
 
@@ -191,12 +218,21 @@ local function Screen_Decision_Initialize(self, enabled_status)
 	self.hud_decision_constant = {
 		hud_basename = basename,
 		node_controller = basename .. "/gnode_controller",
+		node_frame = basename .. "/group_body/gui_frame_core",
+		goo_option_placement = {
+			{frame_ylength = 740, frame_position_y = 450, submit_position_y = -368},
+			{frame_ylength = 740, frame_position_y = 450, submit_position_y = -368},
+			{frame_ylength = 740, frame_position_y = 450, submit_position_y = -368},
+			{frame_ylength = 868, frame_position_y = 536, submit_position_y = -495}
+		},
 		goo_option_names = {
 			basename.."/group_option_1",
 			basename.."/group_option_2",
-			basename.."/group_option_3"
+			basename.."/group_option_3",
+			basename.."/group_option_4"
 		},
 		goo_option_label_basename = "/gui_radio_label",
+		goo_option_core_basename = "/gui_radio_core",
 		goo_submit_name = basename.."/group_button_submit",
 		node_submit_box_name = basename.."/group_button_submit/gui_button_core",
 		node_submit_text_name = basename.."/group_button_submit/gui_button_label",
@@ -220,6 +256,7 @@ local function Screen_Decision_Input(self, action_id, action)
 	end
 
 	local Info = self.hud_decision_constant
+	local num_options = self.hud_decision_dynamic.number_answer_options
 
 	local function func_radiogroup(local_group_id, local_action_id, local_action)
 
@@ -257,10 +294,22 @@ local function Screen_Decision_Input(self, action_id, action)
 		local function func_radio_3(radio)
 			radio_base(3)
 		end
+		local function func_radio_4(radio)
+			radio_base(4)
+		end
 
-		MY_GOO.radio(Info.goo_option_names[1], local_group_id, local_action_id, local_action, func_radio_1)
-		MY_GOO.radio(Info.goo_option_names[2], local_group_id, local_action_id, local_action, func_radio_2)
-		MY_GOO.radio(Info.goo_option_names[3], local_group_id, local_action_id, local_action, func_radio_3)
+		if num_options >= 1 then
+			MY_GOO.radio(Info.goo_option_names[1], local_group_id, local_action_id, local_action, func_radio_1)
+		end
+		if num_options >= 2 then
+			MY_GOO.radio(Info.goo_option_names[2], local_group_id, local_action_id, local_action, func_radio_2)
+		end
+		if num_options >= 3 then
+			MY_GOO.radio(Info.goo_option_names[3], local_group_id, local_action_id, local_action, func_radio_3)
+		end
+		if num_options >= 4 then
+			MY_GOO.radio(Info.goo_option_names[4], local_group_id, local_action_id, local_action, func_radio_4)
+		end
 
 	end
 
