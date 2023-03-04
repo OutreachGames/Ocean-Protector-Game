@@ -968,17 +968,17 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction)
 
 end
 
-local function Remove_Fish(self, fish_subgroup_name, go_id)
+local function Remove_Fish(self, fish_subitem_name, go_id)
 
-	local subgroup_tbl = CV_Spawn_Keys.item_fish[fish_subgroup_name]
+	local subitem_tbl = CV_Spawn_Keys.item_fish[fish_subitem_name]
 
 	-- validity
-	if subgroup_tbl == nil then
+	if subitem_tbl == nil then
 		print("Warning: Remove fish provided with nil info, will not complete...\n")
 		return
 	end
 
-	local fish_name = subgroup_tbl.spawn_list_key
+	local fish_name = subitem_tbl.spawn_list_key
 	local delete_go = false
 	Spawned_RemoveObject(self, fish_name, go_id, delete_go)
 
@@ -989,13 +989,13 @@ local function Remove_Fish(self, fish_subgroup_name, go_id)
 
 end
 
-local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_offscreen)
+local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_offscreen)
 
 	-- spawn an individual fish
-	local subgroup_tbl = CV_Spawn_Keys.item_fish[fish_subgroup_name]
+	local subitem_tbl = CV_Spawn_Keys.item_fish[fish_subitem_name]
 
 	-- validity
-	if subgroup_tbl == nil then
+	if subitem_tbl == nil then
 		print("Warning: Spawn fish provided with nil info, will not complete...\n")
 		return
 	end
@@ -1006,13 +1006,13 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 	end
 
 	-- setup
-	local fish_name = subgroup_tbl.spawn_list_key
-	local collfact_name = subgroup_tbl.spawn_coll_factory
-	local obj_dimensions = subgroup_tbl.object_dimensions
-	local obj_scale_base = subgroup_tbl.object_scale_base
-	local obj_rot_speed_base = subgroup_tbl.object_rotation_speed_base
-	local obj_translate_speed_base = subgroup_tbl.object_translation_speed_base
-	local pos_tbl = subgroup_tbl.spawn_position_grid[i_position_in_grid]
+	local fish_name = subitem_tbl.spawn_list_key
+	local collfact_name = subitem_tbl.spawn_coll_factory
+	local obj_dimensions = subitem_tbl.object_dimensions
+	local obj_scale_base = subitem_tbl.object_scale_base
+	local obj_rot_speed_base = subitem_tbl.object_rotation_speed_base
+	local obj_translate_speed_base = subitem_tbl.object_translation_speed_base
+	local pos_tbl = subitem_tbl.spawn_position_grid[i_position_in_grid]
 
 	-- prepare properties
 	-- smaller blurrier ones be in back? size range represents age, not really distance from camera..
@@ -1082,7 +1082,7 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 		minfo_swim_to_x = swimto_x,
 		minfo_swim_to_y = swimto_y,
 		-- also set subgroup list name with this message for convenience
-		minfo_spawn_keys_subgroup_list_key = fish_name,
+		minfo_spawn_keys_subitem_list_key = fish_name,
 		minfo_stop_is_instant = false,
 		minfo_is_on_init = true
 	}
@@ -1093,7 +1093,7 @@ local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_of
 	-- #TODO remove when done testing
 	if i_position_in_grid < 4 then
 	timer.delay(2, false, function(self)
-		Remove_Fish(self, fish_subgroup_name, new_collection[HSH.STR_go])
+		Remove_Fish(self, fish_subitem_name, new_collection[HSH.STR_go])
 	end)
 	end
 
@@ -1232,7 +1232,7 @@ local function Get_Item_Clicked_On(self, pos_x, pos_y)
 						-- if within distance save to list
 						if vmath.length(pos - click_pos) <= max_d_go then
 							match_id_tbl[k_item_name] = {selected_go_url = k_goid, selected_go_subitem = k_subitem_name}
-							print("Clicked on item "..k_item_name.."\n")
+							--print("Clicked on item "..k_item_name.."\n")
 						end
 					end
 				end
@@ -1294,6 +1294,12 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_report_swim_run_completed then
 	elseif message_id == HSH.msg_make_bubbles then
 		Make_Bubbles(self, message.minfo_make_bubbles_x)
+	elseif message_id == HSH.minfo_item_click_disable then
+		self.Obj_Items_Clickable = false
+		print("Item clicking in ocean is now disabled \n")
+	elseif message_id == HSH.minfo_item_click_enable then
+		self.Obj_Items_Clickable = true
+		print("Item clicking in ocean is now enabled \n")
 	end
 
 end
