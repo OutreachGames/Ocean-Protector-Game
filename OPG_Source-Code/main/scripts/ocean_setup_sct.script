@@ -366,7 +366,7 @@ local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
 	end
 
 	-- remove from list and update list sum
-	self.spawned_objects_list[spawn_list_key] = nil
+	self.spawned_objects_list[spawn_list_key][go_id] = nil
 	self.spawned_objects_sum[spawn_list_key] = self.spawned_objects_sum[spawn_list_key] - 1
 
 end
@@ -1210,7 +1210,6 @@ local function Get_Item_Clicked_On(self, pos_x, pos_y)
 	-- set status and run checks
 	self.previous_click_time = current_time
 
-	--#TODO
 	-- go through all items of spawn key lists
 	-- get position of each and compare distance to this click postion
 	-- if overlap found break and return that item
