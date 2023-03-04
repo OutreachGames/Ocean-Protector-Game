@@ -579,7 +579,7 @@ end
 
 
 -- HUD Process: Observe Items
-local function On_GO_Item_Clicked(self, clicked_tbl)
+local function On_GO_Item_Clicked(self, clicked_info)
 
 	-- runs process when player clicks on go item(s)
 
@@ -587,9 +587,9 @@ local function On_GO_Item_Clicked(self, clicked_tbl)
 	-- match_id_tbl[k_item_name] = {selected_go_url = k_goid, selected_go_subitem = k_subitem_name}
 
 	-- early exits
-	if self.items_all_clicked then return end
-	if type(clicked_tbl) ~= "table" then return end
-	if #clicked_tbl == 0 then return end
+	if type(clicked_info) ~= "table" then return end
+	if clicked_info.minfo_match_tbl == nil then return end
+	if clicked_info.minfo_match_count == nil then return end
 
 	-- failsafe for do not run if we are looking at decisions or plots
 	-- the reset function of these should have 
@@ -601,29 +601,46 @@ local function On_GO_Item_Clicked(self, clicked_tbl)
 	local needs_clicked = self.items_that_need_clicked_list
 	if self.items_that_need_clicked_sum == 0 then return end
 
+	-- might have clicked on more then one item if they were overlapping so
 	-- find first group that is on 'needs to be clicked' list but not on 'is clicked list'
 	local valid_item_clicked
-	for k_itemname, _ in pairs(clicked_tbl) do
-		if valid_item_clicked == nil then
-			-- on 'needs clicked list'
-			if needs_clicked[k_itemname] ~= nil then
+	local back_item_clicked
+	for k_itemname, _ in pairs(clicked_info.minfo_match_tbl) do
+		-- on 'needs clicked list'
+		if needs_clicked[k_itemname] ~= nil then
+			-- checked if it has been clicked or not, 
+			-- items not clicked take priority so the list can actually be doable
+
+			if self.items_that_were_clicked_list[k_itemname] == nil then
 				-- has not yet been clicked, so add it
-				if self.items_that_were_clicked_list[k_itemname] == nil then
-					valid_item_clicked = k_itemname
-					self.items_that_were_clicked_list[k_itemname] = true
+				valid_item_clicked = k_itemname
+
+				self.items_that_were_clicked_list[k_itemname] = true
+
+				if self.items_that_were_clicked_sum < self.items_that_need_clicked_sum then
 					self.items_that_were_clicked_sum = self.items_that_were_clicked_sum + 1
 				end
+
+				break
+			else
+				-- has been clicked, but maybe player wants to view graph again
+				back_item_clicked = k_itemname
 			end
+
 		end
 	end
 
 	-- finish process to click on and save data on items
 	-- popup graph, which will also disable ocean script clicking
-	Screen_Plot_Reset(self, true, valid_item_clicked, true)
+	local graph_item = valid_item_clicked or back_item_clicked
+	if graph_item ~= nil then
+		Screen_Plot_Reset(self, true, graph_item, true)
+	end
 
 	-- if this was last on list then set variable that all are done
-	if self.items_that_were_clicked_sum == self.items_that_need_clicked_sum then
+	if self.items_that_were_clicked_sum >= self.items_that_need_clicked_sum then
 		self.items_all_clicked = true
+		print("All items that need to be clicked were clicked. \n")
 	end
 
 end
