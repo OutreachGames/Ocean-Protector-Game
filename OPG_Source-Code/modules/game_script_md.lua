@@ -81,7 +81,7 @@ STR.new_information = {
                 "Did you know?"..n.."Many corals get most of their energy from very small separate organisms that live within the coral. These organisms are producers that get their energy from sunlight."
             },
             item_fish = {
-                "Did you know?"..n.." Sharks have a skeleton make of cartilage, not bone! 
+                "Did you know?"..n.." Sharks have a skeleton make of cartilage, not bone!"
             },
         }
     },

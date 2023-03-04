@@ -577,7 +577,7 @@ function init(self)
 	Screen_Data_Initialize(self, true)
 	Screen_Plot_Initialize(self, false)
 
-	self.input_possible_full = true
+	self.input_is_possible = true
 
 end
 
@@ -591,7 +591,7 @@ end
 
 function on_input(self, action_id, action)
 
-	if not self.input_possible_full then return end
+	if not self.input_is_possible then return end
 
 	Screen_Decision_Input(self, action_id, action)
 	Screen_Data_Input(self, action_id, action)
