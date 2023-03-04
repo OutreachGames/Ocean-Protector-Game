@@ -843,7 +843,7 @@ function on_message(self, message_id, message, sender)
 		-- cease swimming with gradual stop
 		On_Message_StopMovement(self, message.minfo_stop_is_instant)
 
-	elseif message_id == HSH.msg_set_subgroup_list_key then
+	elseif message_id == HSH.msg_set_subitem_list_key then
 		-- set which group this object belongs to
 		self.spawn_keys_subgroup_list_key = message.minfo_spawn_keys_subgroup_list_key
 

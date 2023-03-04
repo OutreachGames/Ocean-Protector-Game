@@ -1219,7 +1219,7 @@ local function Get_Item_Clicked_On(self, pos_x, pos_y)
 
 	for k_item_name, v_item_info in pairs(CV_Spawn_Keys) do
 		--for each subitem in item
-		for _, v_subitem_info in pairs(v_item_info) do
+		for k_subitem_name, v_subitem_info in pairs(v_item_info) do
 			local object_dimensions = v_subitem_info.object_dimensions
 			if object_dimensions ~= nil then
 				-- go through list and get position and scale and check distance
@@ -1231,7 +1231,7 @@ local function Get_Item_Clicked_On(self, pos_x, pos_y)
 						local max_d_go = math.max(scale.x * object_dimensions.x, scale.y * object_dimensions.y)
 						-- if within distance save to list
 						if vmath.length(pos - click_pos) <= max_d_go then
-							match_id_tbl[k_item_name] = true
+							match_id_tbl[k_item_name] = {selected_go_url = k_goid, selected_go_subitem = k_subitem_name}
 							print("Clicked on item "..k_item_name.."\n")
 						end
 					end
@@ -1239,6 +1239,9 @@ local function Get_Item_Clicked_On(self, pos_x, pos_y)
 			end
 		end
 	end
+
+	--send message to gui saying we clicked this
+	msg.post("hud#gui", HSH.msg_report_go_clicked, match_id_tbl)
 
 	return match_id_tbl
 

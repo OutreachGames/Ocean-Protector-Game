@@ -16,7 +16,8 @@ local HASH = {
     msg_order_expire = hash("msg_order_expire"),
     msg_report_swim_run_started = hash("msg_report_swim_run_started"),
     msg_report_swim_run_completed = hash("msg_report_swim_run_completed"),
-    msg_set_subgroup_list_key = hash("msg_set_subgroup_list_key"),
+    msg_set_subitem_list_key = hash("msg_set_subitem_list_key"),
+    msg_report_go_clicked = hash("msg_report_go_clicked"),
 
     -- controls
     control_touch = hash("touch"),
