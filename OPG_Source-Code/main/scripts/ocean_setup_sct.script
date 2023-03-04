@@ -7,26 +7,29 @@ local RES = require ("modules.screen_res_md")
 local HSH = require ("modules.hashes_md")
 local EXT = require ("modules.extend_md")
 
+-- properties
+go.property("Obj_Items_Clickable", true)
+
 -- constants for easy tuning
 local CV_Base_Z_Weather = 0.1
 local CV_Base_Z_Fish = -0.2
 
 local CV_Spawn_Keys = {
 
-	group_weather = {
-		subgroup_clouds = {
+	item_weather = {
+		subitem_clouds = {
 			spawn_list_key = "weather_clouds",
 			spawn_coll_factory = "spawner_weather_clouds#collectionfactory",
 			spawn_z_base = CV_Base_Z_Weather,
 			spawn_y_range = {280, 380}
 		},
-		subgroup_waterlines = {
+		subitem_waterlines = {
 			spawn_list_key = "weather_waterlines",
 			spawn_coll_factory = "spawner_weather_waterlines#collectionfactory",
 			spawn_z_base = CV_Base_Z_Weather + 0.1,
 			spawn_y_range = {155, 155}
 		},
-		subgroup_waves = {
+		subitem_waves = {
 			spawn_list_key = "weather_waves",
 			spawn_coll_factory = "spawner_weather_waves#collectionfactory",
 			spawn_z_base = CV_Base_Z_Weather,
@@ -35,12 +38,11 @@ local CV_Spawn_Keys = {
 	},
 
 	-- reminders:
-	--   spawn_position_grid is dynamically created
-	--   spawn_x_max is dynamcially created base on max count of spawn needed
-	group_fish = {
-		subgroup_tuna = {
-			spawn_list_key = "fish_tuna",
-			item_family = "item_fish",
+	--   'spawn_position_grid' is dynamically created
+	--   'spawn_x_max' is dynamically created base on max count of spawn needed
+	item_fish = {
+		subitem_tuna = {
+			spawn_list_key = "item_fish__subitem_tuna",
 			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
 			spawn_z_base = CV_Base_Z_Fish,
 			spawn_y_range = {-20, 140},
@@ -454,7 +456,7 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 	local scaling_y = RES.Scaling_Y
 	local screen_width = RES.Internal_X
 
-	local sgroup = CV_Spawn_Keys.group_weather.subgroup_waterlines
+	local sgroup = CV_Spawn_Keys.item_weather.subitem_waterlines
 
 	local tint
 	if is_raining then
@@ -527,7 +529,7 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 	local scaling_y = RES.Scaling_Y
 	local screen_width = RES.Internal_X
 
-	local sgroup = CV_Spawn_Keys.group_weather.subgroup_clouds
+	local sgroup = CV_Spawn_Keys.item_weather.subitem_clouds
 
 	local tint
 	if is_raining then
@@ -649,7 +651,7 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 	local scaling_y = RES.Scaling_Y
 	local screen_width = RES.Internal_X
 
-	local sgroup = CV_Spawn_Keys.group_weather.subgroup_waves
+	local sgroup = CV_Spawn_Keys.item_weather.subitem_waves
 
 	local tint
 	if is_raining then
@@ -839,7 +841,7 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 	-- clear anything that was around previously
 	-- note, cannot delete objects then spawn more in same frame, 
 	-- as that overrides buffer and makes other bugs
-	for _, v_groupkey in pairs(CV_Spawn_Keys.group_weather) do
+	for _, v_groupkey in pairs(CV_Spawn_Keys.item_weather) do
 		Spawned_ResetAll(self, v_groupkey.spawn_list_key)
 	end
 
@@ -960,7 +962,7 @@ end
 
 local function Remove_Fish(self, fish_subgroup_name, go_id)
 
-	local subgroup_tbl = CV_Spawn_Keys.group_fish[fish_subgroup_name]
+	local subgroup_tbl = CV_Spawn_Keys.item_fish[fish_subgroup_name]
 
 	-- validity
 	if subgroup_tbl == nil then
@@ -982,7 +984,7 @@ end
 local function Spawn_Fish(self, fish_subgroup_name, i_position_in_grid, spawn_offscreen)
 
 	-- spawn an individual fish
-	local subgroup_tbl = CV_Spawn_Keys.group_fish[fish_subgroup_name]
+	local subgroup_tbl = CV_Spawn_Keys.item_fish[fish_subgroup_name]
 
 	-- validity
 	if subgroup_tbl == nil then
@@ -1116,7 +1118,7 @@ local function SetupAnimals(self)
 
 	end
 
-	for k_subgroup, v_subgroup in pairs(CV_Spawn_Keys.group_fish) do
+	for k_subgroup, v_subgroup in pairs(CV_Spawn_Keys.item_fish) do
 
 		-- reset all in this group 
 		Spawned_ResetAll(self, v_subgroup.spawn_list_key)
@@ -1125,8 +1127,8 @@ local function SetupAnimals(self)
 		local number_to_spawn = v_subgroup.spawn_max_count
 		if number_to_spawn > 0 then
 			-- first initialize formation grid
-			CV_Spawn_Keys.group_fish[k_subgroup].spawn_position_grid = nil
-			CV_Spawn_Keys.group_fish[k_subgroup].spawn_position_grid = func_easy_grid(v_subgroup)
+			CV_Spawn_Keys.item_fish[k_subgroup].spawn_position_grid = nil
+			CV_Spawn_Keys.item_fish[k_subgroup].spawn_position_grid = func_easy_grid(v_subgroup)
 
 			-- then spawn fish
 			for i=1,number_to_spawn do
@@ -1148,32 +1150,32 @@ local function Make_Bubbles(self, x_pos)
 		self.bubbles_playable = true
 	end
 
-	-- run bubbles if able to
-	if self.bubbles_playable then
-		-- set scale and status
-		self.bubbles_playable = false
-		local scale = math.random(75, 115)/100
-		go.set_scale(scale, "spawner_bubbles")
+	-- exit early if not able to do
+	if not self.bubbles_playable then return end
 
-		-- set x position, default is random
-		local x_bounds = RES.Boundary_X
-		local x = x_pos or math.random(x_bounds[1], x_bounds[2])
-		go.set("spawner_bubbles", "position.x", x)
+	-- set scale and status
+	self.bubbles_playable = false
+	local scale = math.random(75, 115)/100
+	go.set_scale(scale, "spawner_bubbles")
 
-		-- play bubbles
-		particlefx.play("spawner_bubbles#particlefx")
+	-- set x position, default is random
+	local x_bounds = RES.Boundary_X
+	local x = x_pos or math.random(x_bounds[1], x_bounds[2])
+	go.set("spawner_bubbles", "position.x", x)
 
-		-- play sound
-		sound.play("sound_controller#sound_bubbles", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
+	-- play bubbles
+	particlefx.play("spawner_bubbles#particlefx")
 
-		-- declare callback for readability and thought of optimization
-		local function func_reset_playable()
-			self.bubbles_playable = true
-		end
+	-- play sound
+	sound.play("sound_controller#sound_bubbles", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
 
-		-- wait duration of bubble time them allow to play again 
-		timer.delay(3.0, false, func_reset_playable)
+	-- declare callback for readability and thought of optimization
+	local function func_reset_playable(self)
+		self.bubbles_playable = true
 	end
+
+	-- wait duration of bubble time them allow to play again 
+	timer.delay(3.0, false, func_reset_playable)
 
 end
 
@@ -1201,6 +1203,40 @@ local function SceneStart(self)
 	-- play sounds 
 	sound.play("sound_controller#sound_underwater", {delay = 0, gain = 0.15, pan = 0, speed = 1.0})
 	sound.play("sound_controller#sound_waves", {delay = 0, gain = 0.08, pan = 0, speed = 1.0})
+
+end
+
+local function Get_Item_Clicked_On(self, pos_x, pos_y)
+
+	-- returns string key for item family that was clicked on, or nil/"" if no item family was clicked
+
+	local current_time = socket.gettime()
+	local interval_check = 0.25
+
+	-- initialize if empty 
+	if self.Obj_Items_Clickable == nil then
+		self.Obj_Items_Clickable = true
+	end
+	if self.previous_click_time == nil then
+		self.previous_click_time = current_time
+	end
+
+	-- exit early if not able to do
+	if not self.Obj_Items_Clickable or current_time < self.previous_click_time + interval_check then
+		return ""
+	end
+
+	-- set status and run checks
+	self.previous_click_time = current_time
+
+	--#TODO
+	-- go through all items of spawn key lists
+	-- get position of each and compare distance to this click postion
+	-- if overlap found break and return that item
+	print("Clicked on item ...?")
+
+
+	return ""
 
 end
 
@@ -1234,6 +1270,7 @@ function on_input(self, action_id, action)
 	if action_id == HSH.control_touch and action.pressed then
 		local screen_pos = CAM.screen_to_world(nil, vmath.vector3(action.x, action.y, 0))
 		Make_Bubbles(self, screen_pos.x)
+		Get_Item_Clicked_On(self, screen_pos.x, screen_pos.y)
 	end
 
 	--#TODO remove eventually
