@@ -4,6 +4,7 @@
 -- dependencies
 local HSH = require ("modules.hashes_md")
 local MY_GOO = require ("gui.gooey_theme_md")
+local EXT = require ("modules.extend_md")
 
 -- constants
 
@@ -70,11 +71,13 @@ local function Items_Click_Status_Reset(self, items_to_click)
 
 	-- if there are items to add to 'needs click' list then add them
 	-- also save that we have not clicked them all yet
+	local i = 0
 	if type(items_to_click) == "table" then
-		for _,v_itemname in pairs(items_to_click) do
-			self.items_that_need_clicked[v_itemname] = true
+		for _,v_itemname in ipairs(items_to_click) do
+			i = 1
+			self.items_that_need_clicked[i] = v_itemname
 		end
-		if #items_to_click > 0 then
+		if i > 0 then
 			self.items_all_clicked = false
 		end
 	end
@@ -98,6 +101,9 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	-- set enabled status
 	local constant = self.hud_decision_constant
 	local controller_node = gui.get_node(constant.node_controller)
+
+	-- set ocean script scene clickable status
+	GO_Item_Clicking_Reset(self, not enabled_setting)
 
 	-- run enabling status and possibly sizing
 	local function func_done(self, node)
@@ -263,6 +269,9 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizi
 	-- set enabled status
 	local constant = self.hud_plot_constant
 	local controller_node = gui.get_node(constant.node_controller)
+
+	-- set ocean script scene clickable status
+	GO_Item_Clicking_Reset(self, not enabled_setting)
 
 	-- run enabling status and possibly sizing
 	local function func_done(self, node)
@@ -565,24 +574,49 @@ end
 
 
 -- HUD Process: Observe Items
--- #TODO add process to click on and save data on items
 local function On_GO_Item_Clicked(self, clicked_tbl)
 
 	-- runs process when player clicks on go item(s)
 
 	-- in form 
-	-- {{selected_go_url = k_goid, selected_go_subitem = k_subitem_name}, {}}
+	-- match_id_tbl[k_item_name] = {selected_go_url = k_goid, selected_go_subitem = k_subitem_name}
 
 	-- early exits
+	if self.items_all_clicked then return end
 	if type(clicked_tbl) ~= "table" then return end
 	if #clicked_tbl == 0 then return end
 
-	-- get which groups are already on clicked list
+	-- failsafe for do not run if we are looking at decisions or plots
+	-- the reset function of these should have 
+	-- already set the clickable boolean, but this is a failsafe
+	if self.hud_decision_dynamic.screen_isactive then return end
+	if self.hud_plot_dynamic.screen_isactive then return end
 
-	-- find first group that is not on 'is clicked list' but is on 'needs to be clicked' list
+	-- get which groups we are checking clicks for
+	local needs_clicked = self.items_that_need_clicked
+	if #needs_clicked == 0 then return end
 
+	-- get items that were clicked
+	local were_clicked = self.items_that_were_clicked
+
+	-- find first group that is on 'needs to be clicked' list but not on 'is clicked list'
+	local valid_item_clicked
+	for k_itemname, _ in pairs(clicked_tbl) do
+		if valid_item_clicked == nil then
+			if EXT:string_equalAny(k_itemname, needs_clicked) then
+				if not EXT:string_equalAny(k_itemname, were_clicked) then
+					valid_item_clicked = k_itemname
+				end
+			end
+		end
+	end
+
+	-- #TODO finish process to click on and save data on items
 	-- popup that group and add to 'is clicked list'
+	-- disable ocean script clicking
+	-- popup graph
 
+	-- if this was last on list then set variable that all are done
 
 end
 
