@@ -1,5 +1,4 @@
     --#TODOs Master List- 
-	-- update to kill fish and add fish
 	-- way to load in table of fish group health
 	-- way to save table of fish group health 
     -- for saves and level transitions, save position, size, tint, and any other properties of each go (static vs moving)
