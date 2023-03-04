@@ -305,13 +305,18 @@ local function Set_Sea_Particles(self, toggle_on, clear_instant)
 	if toggle_on then
 		-- tell bubbler to start, and it is only ever triggered once
 		if not self.bubble_retimer_started then
+
 			self.bubble_retimer_started = true
+
 			msg.post("spawner_bubbles", "msg_make_bubbles")
-			timer.delay(6, true, function(self)
+
+			local function func_start_bubbler(self)
 				if self.weather_changeable and math.random(0, 1) == 1 then
 					msg.post("spawner_bubbles", "msg_make_bubbles")
 				end
-			end)
+			end
+
+			timer.delay(6, true, func_start_bubbler)
 		end
 		-- sea dust particle effect is set to loop already in the effect file
 		particlefx.play("spawner_sea_dust#particlefx")
@@ -778,9 +783,12 @@ local function Run_CoastalOA(self, percentage_to_hide)
 
 	-- wait until particle effects are done before being able to do again
 	local anim_duration = 30
-	timer.delay(anim_duration, false, function(self)
+
+	local function func_set_oa(self)
 		self.coastal_oa_playing = false
-	end)
+	end
+
+	timer.delay(anim_duration, false, func_set_oa)
 
 end
 
