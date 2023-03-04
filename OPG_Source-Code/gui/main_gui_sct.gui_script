@@ -726,7 +726,7 @@ local function Screen_Popup_Input(self, action_id, action)
 	-- runs 'On Input' for Decision screen on HUD
 
 	-- early out if not allowed to use
-	if not self.hud_popup_dynamic.screen_isactive then
+	if not self.hud_popup_dynamic.screen_isactive or self.hud_decision_dynamic.screen_isactive or self.hud_plot_dynamic.screen_isactive then
 		return
 	end
 
@@ -862,7 +862,6 @@ local function Run_Fader(self, fade_out, time)
 	gui.animate(fader_node, "color.w", alpha, go.EASING_LINEAR, time, 0, func_set_status)
 
 end
-
 
 
 function init(self)
