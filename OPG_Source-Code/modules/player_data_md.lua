@@ -13,6 +13,7 @@ function PLY:ResetFull()
     self.player_data = {
         network_id = 0,
         firebase_id = 0,
+        user_pin = 0,
         stage_current = {},
         stage_history = {}
     }

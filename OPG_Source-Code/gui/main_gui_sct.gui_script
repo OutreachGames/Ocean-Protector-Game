@@ -6,7 +6,6 @@ local HSH = require ("modules.hashes_md")
 local MY_GOO = require ("gui.gooey_theme_md")
 
 -- constants
-
 local CV_item_groups = {
 	item_ph = {
 		group_name = "/group_item_ph",
@@ -47,7 +46,6 @@ local CV_item_groups = {
 
 
 -- functions
-
 local function GO_Item_Clicking_Reset(self, enabled_setting)
 
 	-- enables or disables boolean in ocean_setup_sct
