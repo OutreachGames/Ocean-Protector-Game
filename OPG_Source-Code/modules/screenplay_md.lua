@@ -358,7 +358,7 @@ STR.decisions_quiz = {
             },
             user_choice_3 = {
                 text_display = {
-                    "argon"
+                    "ozone"
                 },
                 text_debrief = {
                     "Unfortunately that is not correct, but try again!"
@@ -367,7 +367,7 @@ STR.decisions_quiz = {
             },
             user_choice_4 = {
                 text_display = {
-                    "ozone"
+                    "helium"
                 },
                 text_debrief = {
                     "Unfortunately that is not correct, but try again!"
@@ -525,7 +525,7 @@ STR.decisions_quiz = {
             },
             user_choice_4 = {
                 text_display = {
-                    "All of the gruops listed here."
+                    "All of the groups listed here."
                 },
                 text_debrief = {
                     "Correct! Ocean acidification harms plant and animal life throughout the ocean, including humans. As humans we rely on our oceans for food, ways to make a living, and even medicines."
