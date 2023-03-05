@@ -117,6 +117,23 @@ local function On_GO_Items_Clicked_Reset(self, enabled_setting)
 
 end
 
+local function On_GO_Items_Clicked_Basic_Valid(self)
+
+	-- failsafe for do not run if we are looking at decisions or plots
+	-- the reset function of these should have 
+	-- already set the clickable boolean, but this is a failsafe
+	if self.hud_decision_dynamic.screen_isactive or self.hud_plot_dynamic.screen_isactive or self.hud_popup_dynamic.screen_isactive then
+		return false
+	end
+
+	if self.hud_can_select_go_items then
+		return true
+	else
+		return false
+	end
+
+end
+
 
 -- HUD Screen: Decision
 local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables, num_options)
@@ -842,19 +859,6 @@ end
 
 
 -- HUD Process: Observe Items (Section 2)
-local function On_GO_Items_Clicked_Basic_Valid(self)
-
-	-- failsafe for do not run if we are looking at decisions or plots
-	-- the reset function of these should have 
-	-- already set the clickable boolean, but this is a failsafe
-	if self.hud_can_select_go_items and not self.hud_decision_dynamic.screen_isactive and not self.hud_plot_dynamic.screen_isactive then
-		return true
-	else
-		return false
-	end
-
-end
-
 local function On_GO_Item_Clicked_Requested(self, action_id, action)
 
 	-- send request to get object items clicked on
