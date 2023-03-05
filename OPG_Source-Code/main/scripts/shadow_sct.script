@@ -111,7 +111,7 @@ function on_message(self, message_id, message, sender)
 
 		ShadowUpdate(self, shadow_level, message.enter)
 
-	elseif message_id == HSH.msg_reset_shadows then
+	elseif message_id == HSH.msg_request_reset_shadows then
 
 		ResetShadows(self)
 

@@ -68,6 +68,13 @@ function MYG.acquire_input()
 
 end
 
+function MYG.release_input()
+
+	-- Convenience function to acquire input focus
+	msg.post(".", "release_input_focus")
+
+end
+
 local function shake_me(node, initial_scale)
 
 	-- shake a node

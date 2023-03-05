@@ -822,7 +822,7 @@ local function SetStatic_Weather(self, is_raining)
 	msg.post("background_water_light#shade_middle", str_set)
 	msg.post("background_water_light#shade_outer", str_set)
 
-	msg.post("background_water_light", "msg_reset_shadows")
+	msg.post("background_water_light", "msg_request_reset_shadows")
 
 end
 
@@ -939,7 +939,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction)
 	-- fade out, then run Setup Scene with weather arguments
 	-- recall particles are above GO sprites, so use GUI fader
 	local fader_time = 0.75
-	msg.post("hud#gui", HSH.msg_fade_out, {minfo_fade_duration = fader_time})
+	msg.post("hud#gui", HSH.msg_request_fade_out, {minfo_fade_duration = fader_time})
 
 	-- once fadeout done and fully black and hiding view, then update scene
 	timer.delay(fader_time + 0.25 , false, function(self)
@@ -953,7 +953,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction)
 		timer.delay(self.reload_time*2, false, function(self)
 
 			-- fade back in
-			msg.post("hud#gui", HSH.msg_fade_in, {minfo_fade_duration = fader_time})
+			msg.post("hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
 
 			-- once fully visible again allow weather to be changed again
 			timer.delay(1.0, false, function(self)
@@ -1271,7 +1271,7 @@ end
 
 function on_message(self, message_id, message, sender)
 
-	if message_id == HSH.msg_change_weather then
+	if message_id == HSH.msg_request_change_weather then
 		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction)
 	elseif message_id == HSH.msg_report_swim_run_started then
 	elseif message_id == HSH.msg_report_swim_run_completed then
@@ -1293,7 +1293,7 @@ function on_input(self, action_id, action)
 		-- if it is raining and we want it to rain then do nothing
 		-- if it is not raining and we do not want it to rain then do nothing
 		local wave_direction = math.random(0,1)
-		msg.post("level_controller", HSH.msg_change_weather, {minfo_is_raining=is_supposed_to_rain, minfo_wave_direction=wave_direction})
+		msg.post("level_controller", HSH.msg_request_change_weather, {minfo_is_raining=is_supposed_to_rain, minfo_wave_direction=wave_direction})
 	end
 
 	--trigger nutrient influx

@@ -1025,8 +1025,8 @@ end
 
 function on_message(self, message_id, message, sender)
 
-	if message_id == HSH.msg_fade_out or message_id == HSH.msg_fade_in then
-		Run_Fader(self, message_id == HSH.msg_fade_out, message.minfo_fade_duration)
+	if message_id == HSH.msg_request_fade_out or message_id == HSH.msg_request_fade_in then
+		Run_Fader(self, message_id == HSH.msg_request_fade_out, message.minfo_fade_duration)
 	elseif message_id == HSH.msg_report_go_clicked then
 		On_GO_Item_Clicked_Received(self, message)
 	end

@@ -7,10 +7,10 @@ local HASH = {
 
     -- messages
     msg_request_make_bubbles = hash("msg_request_make_bubbles"),
-    msg_change_weather = hash("msg_change_weather"),
-    msg_reset_shadows = hash("msg_reset_shadows"),
-    msg_fade_out = hash("msg_fade_out"),
-    msg_fade_in = hash("msg_fade_in"),
+    msg_request_change_weather = hash("msg_request_change_weather"),
+    msg_request_reset_shadows = hash("msg_request_reset_shadows"),
+    msg_request_fade_out = hash("msg_request_fade_out"),
+    msg_request_fade_in = hash("msg_request_fade_in"),
     msg_order_swim_to_pos = hash("msg_order_swim_to_pos"),
     msg_order_stop_swim = hash("msg_order_stop_swim"),
     msg_order_expire = hash("msg_order_expire"),
