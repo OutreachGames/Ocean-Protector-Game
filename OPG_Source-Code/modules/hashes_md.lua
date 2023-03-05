@@ -6,19 +6,18 @@ local HASH = {
     -- using fully written names to aid in `Find All`
 
     -- messages
-    msg_make_bubbles = hash("msg_make_bubbles"),
+    msg_request_make_bubbles = hash("msg_request_make_bubbles"),
     msg_change_weather = hash("msg_change_weather"),
     msg_reset_shadows = hash("msg_reset_shadows"),
     msg_fade_out = hash("msg_fade_out"),
     msg_fade_in = hash("msg_fade_in"),
-    minfo_item_click_disable = hash("minfo_item_click_disable"),
-    minfo_item_click_enable = hash("minfo_item_click_enable"),
     msg_order_swim_to_pos = hash("msg_order_swim_to_pos"),
     msg_order_stop_swim = hash("msg_order_stop_swim"),
     msg_order_expire = hash("msg_order_expire"),
     msg_report_swim_run_started = hash("msg_report_swim_run_started"),
     msg_report_swim_run_completed = hash("msg_report_swim_run_completed"),
     msg_set_subitem_list_key = hash("msg_set_subitem_list_key"),
+    msg_request_go_clicked = hash("msg_request_go_clicked"),
     msg_report_go_clicked = hash("msg_report_go_clicked"),
 
     -- controls
