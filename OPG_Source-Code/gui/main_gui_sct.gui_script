@@ -865,25 +865,9 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 
 	-- if data window is open do not register click if it was within the data bounds
 	-- otherwise player may accidentally click on item if item is behind one of the buttons on the data screen
-	if action == nil then return end
-	if not action.pressed then return end
+	if action_id ==nil or action == nil then return end
 	if action_id ~= HSH.control_touch then return end
-
-	local current_time = socket.gettime()
-	local interval_check = 0.25
-
-	-- initialize if empty 
-	if self.screen_click_is_possible == nil then
-		self.screen_click_is_possible = true
-	end
-	if self.screen_click_previous_time == nil then
-		self.screen_click_previous_time = current_time
-	end
-
-	-- exit early if not able to do
-	if not self.screen_click_is_possible or current_time < self.screen_click_previous_time + interval_check then
-		return
-	end
+	if not action.pressed then return end
 
 	if gui.pick_node(gui.get_node(self.hud_data_constant.node_frame_core), action.x, action.y) then
 		--print("Clicked within data frame, not checking rest...\n")
@@ -894,7 +878,6 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 	end
 
 	-- if valid ocean click then check if for item selecting or just something simple like bubbles
-	self.screen_click_previous_time = current_time
 
 	if On_GO_Items_Clicked_Basic_Valid(self) then
 		msg.post("level_controller", HSH.msg_request_go_clicked, {minfo_action = action})
