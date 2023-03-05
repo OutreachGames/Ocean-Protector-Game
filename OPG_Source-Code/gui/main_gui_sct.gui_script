@@ -155,9 +155,6 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	local constant = self.hud_decision_constant
 	local controller_node = gui.get_node(constant.node_controller)
 
-	-- set ocean script scene clickable status
-	On_GO_Items_Clicked_Reset(self, not enabled_setting)
-
 	-- run enabling status and possibly sizing
 	local function func_done(self, node)
 
@@ -368,9 +365,6 @@ local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizi
 	-- set enabled status
 	local constant = self.hud_plot_constant
 	local controller_node = gui.get_node(constant.node_controller)
-
-	-- set ocean script scene clickable status
-	On_GO_Items_Clicked_Reset(self, not enabled_setting)
 
 	-- run enabling status and possibly sizing
 	local function func_done(self, node)
@@ -865,10 +859,11 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 
 	-- if data window is open do not register click if it was within the data bounds
 	-- otherwise player may accidentally click on item if item is behind one of the buttons on the data screen
-	if action_id ==nil or action == nil then return end
+	if action_id == nil or action == nil then return end
 	if action_id ~= HSH.control_touch then return end
 	if not action.pressed then return end
 
+	-- also check side bars, and return if we clicked in those
 	if gui.pick_node(gui.get_node(self.hud_data_constant.node_frame_core), action.x, action.y) then
 		--print("Clicked within data frame, not checking rest...\n")
 		return
