@@ -45,6 +45,12 @@ local CV_item_groups = {
 	}
 }
 
+local CV_gameplay_loop = {
+	status_started = 1,
+	status_finished = 2,
+	status_unknown = 3
+}
+
 
 -- functions
 
@@ -1000,9 +1006,15 @@ local function GameLogic_Progress(self)
 	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> \n")
 
 	-- get and update goal text
-	local goalt_text = STR:GetGoal_Text(stage_key, substage_key)
+	local goalt_text = STR:Get_Goal_Text(stage_key, substage_key)
 	local run_goal_sizing = not self.hud_goals_dynamic.screen_isactive
 	Screen_Goals_Reset(self, true, run_goal_sizing, goalt_text)
+
+	-- run other logic
+	self.gameplay_loop_status = CV_gameplay_loop.status_started
+
+	-- get type of event and start associated screens
+	if stage_key == ""
 
 end
 
@@ -1023,6 +1035,7 @@ local function GameLogic_Start(self)
 	self.input_is_possible = true
 
 	-- get stage and substage list in order
+	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
 	-- kick off first action
