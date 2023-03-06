@@ -763,7 +763,7 @@ end
 
 
 -- HUD Screen: Goals
-local function Screen_Goals_Reset(self, enabled_setting, run_sizing)
+local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
 
 	-- reset Goals screen of HUD
 
@@ -800,7 +800,10 @@ local function Screen_Goals_Reset(self, enabled_setting, run_sizing)
 	self.hud_goals_dynamic.screen_isactive = enabled_setting
 	self.hud_goals_dynamic.is_maximized = true
 
-	--#TODO enable and set text
+	-- enable and set text
+	if text ~= nil then
+		gui.set_text(gui.get_node(constant.node_text_body), text)
+	end
 
 end
 
@@ -991,9 +994,15 @@ local function GameLogic_Progress(self)
 
 	local event_info = self.gameplay_loop_order[1]
 
-	print("Running stage <"..event_info.stage_name_key.."> with substage <"..event_info.substage_name_key.."> \n")
+	local stage_key = event_info.stage_name_key
+	local substage_key = event_info.substage_name_key
 
-	
+	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> \n")
+
+	-- get and update goal text
+	local goalt_text = STR:GetGoal_Text(stage_key, substage_key)
+	local run_goal_sizing = not self.hud_goals_dynamic.screen_isactive
+	Screen_Goals_Reset(self, true, run_goal_sizing, goalt_text)
 
 end
 

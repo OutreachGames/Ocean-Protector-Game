@@ -1319,6 +1319,36 @@ STR.Screenplay = {
     },
 }
 
+function STR:GetTable_or_String(tbl_or_str)
+
+    if type(tbl_or_str) == "table" then
+        return tbl_or_str[1]
+    else
+        return tbl_or_str
+    end
+
+end
+
+function STR:GetGoal_Text(stage_key, substage_key)
+
+    -- gets the goal text to display
+
+    local stage_info = self.Screenplay[stage_key]
+    if stage_info == nil then
+        print("Error function Get Goal Text provided with invalid stage key <"..tostring(stage_key).."> \n")
+        return nil
+    end
+
+    local substage_info = stage_info[substage_key]
+    if substage_info == nil then
+        print("Error function Get Goal Text provided with invalid substage_info key <"..tostring(substage_info).."> \n")
+        return nil
+    end
+
+    return STR:GetTable_or_String(substage_info.goal_text) or STR:GetTable_or_String(substage_info.goal_text_default[1])
+
+end
+
 function STR:GameOrder_CreateTable()
 
     -- get table with form {{stage_name_key = v_stagename, substage_name_key = v_substageame}, {}}
