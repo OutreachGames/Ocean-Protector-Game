@@ -1,6 +1,7 @@
 -- Module with the game story/dialogue lines
 
 local EXT = require ("modules.extend_md")
+local HSH = require ("modules.hashes_md")
 
 local STR = {}
 
@@ -10,19 +11,31 @@ local ntab = n .. tab
 
 STR.CV = {
 
-    outcome_variables = {
-        option_good_default = { -- (+)
-            0.05,
+    outcome_functions = {
+        option_empty = function()
+            return nil
+        end,
+        option_good_default = function() -- (+)
+            return 0.05
             --item_pH = {}, item_coral = {}, --...
-        },
-        option_fair_default = { -- (0)
-            0.0,
+        end,
+        option_fair_default = function() -- (+)
+            return 0.0
             --item_pH = {}, item_coral = {}, --...
-        },
-        option_bad_default = { -- (-)
-            -0.05,
+        end,
+        option_bad_default = function() -- (+)
+            return -0.05
             --item_pH = {}, item_coral = {}, --...
-        }
+        end,
+        set_role_ranger = function()
+            msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = "role_ranger"})
+        end,
+        set_role_captian = function()
+            msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = "role_captain"})
+        end,
+        set_role_guide = function()
+            msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = "role_guide"})
+        end,
     },
 
     goal_completed_types = {
@@ -308,7 +321,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
                     text_display = {
@@ -317,7 +330,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Correct! Burning fossil fuels releases very high amounts of carbon dioxide gas into the atmosphere."
                     },
-                    outcome_result = 1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
                     text_display = {
@@ -327,7 +340,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
                     text_display = {
@@ -337,7 +350,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
             },
         },
@@ -354,7 +367,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "This is true. Burning fossil fuels releases carbon dioxide gas. Much of this gas is absorbed by our oceans, which triggers chemical changes that make the water more acidic."
                     },
-                    outcome_result = 1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
                     text_display = {
@@ -364,7 +377,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
             },
         },
@@ -382,7 +395,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
                     text_display = {
@@ -391,7 +404,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Correct! Nutrient pollution can be caused by using too much fertilizer, dumping wastewater, and other sources. If this polluted water makes its way to the ocean and can cause a chain reaction that makes the ocean water near our coasts more acidic."
                     },
-                    outcome_result = 1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
                     text_display = {
@@ -401,7 +414,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
                     text_display = {
@@ -411,7 +424,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
             },
         },
@@ -429,7 +442,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
                     text_display = {
@@ -438,7 +451,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Correct! If pH of water decreases that shows the acidity of the water has increased."
                     },
-                    outcome_result = 1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
                     text_display = {
@@ -448,7 +461,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
                     text_display = {
@@ -458,7 +471,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
             },
         },
@@ -476,7 +489,7 @@ STR.Screenplay = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
                     text_display = {
@@ -486,7 +499,7 @@ STR.Screenplay = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
                     text_display = {
@@ -496,7 +509,7 @@ STR.Screenplay = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
                     text_display = {
@@ -505,7 +518,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Correct! Ocean acidification harms plant and animal life throughout the ocean, including humans. As humans we rely on our oceans for food, ways to make a living, and even medicines."
                     },
-                    outcome_result = 1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
             },
         },
@@ -522,7 +535,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "True! There are many steps each of us can take to help reduce ocean acidification. Continue with this program to make some of those decisions yourself!"
                     },
-                    outcome_result = 1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
                     text_display = {
@@ -532,7 +545,7 @@ STR.Screenplay = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
-                    outcome_result = -1
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
             },
         }
@@ -612,7 +625,7 @@ STR.Screenplay = {
                         "Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "--..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "--..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
                     },
                     text_debrief = nil,
-                    outcome_result = "role_captain"
+                    outcome_result_func = STR.CV.outcome_functions.set_role_captian
                 },
                 user_choice_2 = {
                     text_display = {
@@ -620,7 +633,7 @@ STR.Screenplay = {
                         "Choose to be a marine park ranger. This character makes a living by watching over a marine park. "--..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "--..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
                     },
                     text_debrief = nil,
-                    outcome_result = "role_ranger"
+                    outcome_result_func = STR.CV.outcome_functions.set_role_ranger
                 },
                 user_choice_3 = {
                     text_display = {
@@ -628,7 +641,7 @@ STR.Screenplay = {
                         "Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "--..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and earn steady money. "--..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
                     },
                     text_debrief = nil,
-                    outcome_result = "role_guide"
+                    outcome_result_func = STR.CV.outcome_functions.set_role_guide
                 },
             }
         }
@@ -689,7 +702,7 @@ STR.Screenplay = {
                         ""
                         --role_captain = {}, role_ranger = {}, role_guide = {},
                     },
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
     
@@ -733,7 +746,7 @@ STR.Screenplay = {
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                     --#TODO: make short term points slightly lower here, but overall good
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -753,7 +766,7 @@ STR.Screenplay = {
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                     --#TODO: make short term points slightly higher here
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -773,7 +786,7 @@ STR.Screenplay = {
                     },
                     -- "No immediate goal points change, but less OA points plus less sustainability points leading to less OA points."
                     --#TODO: make short term points slightly unchanged here
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -810,7 +823,7 @@ STR.Screenplay = {
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                     --#TODO: make short term points slightly lower here, but overall good
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -830,7 +843,7 @@ STR.Screenplay = {
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                     --#TODO: make short term points slightly higher here
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -850,7 +863,7 @@ STR.Screenplay = {
                     },
                     -- "No immediate goal points change, but less OA points plus less sustainability points leading to less OA points."
                     --#TODO: make short term points slightly unchanged here
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -877,7 +890,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Best option to predict coastal OA. More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -887,7 +900,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
-                    outcome_result = STR.CV.outcome_variables.option_fair_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -897,7 +910,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -915,7 +928,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Best option to predict coastal OA. More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -925,7 +938,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
-                    outcome_result = STR.CV.outcome_variables.option_fair_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -935,7 +948,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -971,7 +984,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -991,7 +1004,7 @@ STR.Screenplay = {
                     },
                     -- "This might help catch large plastic waste going into the ocean but overall is expensive, not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     --#TODO: only make bad for fish, and not pH
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -1011,7 +1024,7 @@ STR.Screenplay = {
                     },
                     -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     --#TODO: only make bad for fish, and not pH
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -1047,7 +1060,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -1066,7 +1079,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
-                    outcome_result = STR.CV.outcome_variables.option_fair_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -1085,7 +1098,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -1112,7 +1125,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Very useful option which decreases coastal OA. More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -1122,7 +1135,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Not useful option which increases runoff and coastal OA. Less OA points and less sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -1133,7 +1146,7 @@ STR.Screenplay = {
                     },
                     -- "By itself this will not make a large change in CO2 emissions but increases runoff and over timer adds more fossil fuel emissions. Unchanged OA points and less sustainability points." 
                     --#TODO make unchanged for short-term, while still being bad for long-term
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -1160,7 +1173,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -1170,7 +1183,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -1180,7 +1193,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_fair_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 }
             },
         },
@@ -1207,7 +1220,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Very useful option which decreases nutrient runoff and fossil fuel emissions, which reduces OA. More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -1217,7 +1230,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Likely will somewhat increase runoff and result in slightly less OA points or sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -1227,7 +1240,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "By itself this will not make a large change in CO2 emissions and but may result in more nutrient runoff. Will not affect largely affect OA points or sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_fair_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 }
             },
         },
@@ -1254,7 +1267,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Most useful option, as it reduces CO2 emissions. Also has bonus of saving people money! More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -1264,7 +1277,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_fair_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -1274,7 +1287,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Least useful option, as it increases CO2 emissions. Also has negative effect of costing people more money. Less OA points and less sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -1301,7 +1314,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Most useful option, as it reduces CO2 emissions and overlaps with reducing runoff. Also has bonus of saving people money! More OA points and more sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_good_default
+                    outcome_result_func = STR.CV.outcome_functions.option_good_default
                 },
                 user_choice_2 = {
                     text_display = {
@@ -1311,7 +1324,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability pointss." 
-                    outcome_result = STR.CV.outcome_variables.option_fair_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 },
                 user_choice_3 = {
                     text_display = {
@@ -1321,7 +1334,7 @@ STR.Screenplay = {
                         ""
                     },
                     -- "Least useful option, as it increases CO2 emissions and runoff. Also has negative effect of costing people money. Less OA points and less sustainability points." 
-                    outcome_result = STR.CV.outcome_variables.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
                 }
             },
         },
@@ -1456,6 +1469,25 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 
 end
 
+function STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+
+    -- gets body text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local outcome_func = self.Screenplay[stage_key][substage_key].outcome_result_func
+
+    if outcome_func ~= nil then
+        outcome_func()
+        return true
+    else
+        return false
+    end
+
+end
+
 
 function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
 
@@ -1475,7 +1507,7 @@ end
 
 function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
 
-    -- gets the decision question text to display
+    -- gets a table of decision answer options to use
 
     if not self:ValidCheck(stage_key, substage_key) then
         return nil
@@ -1504,7 +1536,7 @@ end
 
 function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_role, choice_key)
 
-    -- gets the decision question text to display
+    -- gets the decision answer option debrief text to display
 
     if not self:ValidCheck(stage_key, substage_key) then
         return nil
@@ -1529,7 +1561,7 @@ end
 
 function STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, character_role, choice_key)
 
-    -- gets the decision question text to display
+    -- gets whether or not this question should repeat given this answer
 
     if not self:ValidCheck(stage_key, substage_key) then
         return nil
@@ -1545,6 +1577,34 @@ function STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, character_role
     end
 
     return a_info_i.repeat_question_decision
+
+end
+
+function STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, character_role, choice_key)
+
+    -- gets and runs the outcome function
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local a_info_i = decision_info.answer_options[choice_key]
+
+    if a_info_i == nil then
+        print("Error decision text function was unable to find debrief text for key <"..choice_key.."> \n")
+        return nil
+    end
+
+    -- run the function
+    local outcome_func = a_info_i.outcome_result_func
+    if outcome_func ~= nil then
+        outcome_func()
+        return true
+    else
+        return false
+    end
 
 end
 

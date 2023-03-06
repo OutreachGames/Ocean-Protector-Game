@@ -252,6 +252,11 @@ local function Screen_Popup_Input(self, action_id, action)
 
 		if self.gameplay_loop_status == CV_gameplay_loop.status_started then
 			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_new_information_only then
+
+				-- run outcome function
+				local stage_key, substage_key = Get_Current_Stage_Substage(self)
+				STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+
 				msg.post(".", HSH.msg_request_game_progress)
 			end
 		end
@@ -495,6 +500,9 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- this consists of opening popup window and setting goal type
 				local stage_key, substage_key = Get_Current_Stage_Substage(self)
 				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
+
+				-- run outcome function
+				STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, self.character_role_key, answer_string_key)
 
 				if debrief_text ~= nil and debrief_text ~= "" then
 					self.gameplay_loop_completion_type = STR.CV.goal_completed_types.class_new_information_only
@@ -1188,6 +1196,8 @@ function on_message(self, message_id, message, sender)
 		GameLogic_Progress(self, 1)
 	elseif message_id == HSH.msg_request_game_repeat then
 		GameLogic_Progress(self, 0)
+	elseif message_id == HSH.msg_set_player_character_role then
+		self.character_role_key = message.minfo_role_name
 	end
 
 end
