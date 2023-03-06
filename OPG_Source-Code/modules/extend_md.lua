@@ -279,6 +279,23 @@ function EXT:Random_Magnitude(low, high)
 
 end
 
+---Takes an i-based table and returns a new table with the contents in random order.
+---@param t table I-based table to shuffle 
+---@return table new table with shuffled contents 
+function EXT:Table_Shuffle(t)
+
+	local tbl = {}
+	for i = 1, #t do
+		tbl[i] = t[i]
+	end
+	for i = #tbl, 2, -1 do
+		local j = math.random(i)
+		tbl[i], tbl[j] = tbl[j], tbl[i]
+	end
+	return tbl
+
+end
+
 
 return EXT
 

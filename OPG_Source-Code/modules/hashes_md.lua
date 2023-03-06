@@ -20,6 +20,7 @@ local HASH = {
     msg_request_go_clicked = hash("msg_request_go_clicked"),
     msg_report_go_clicked = hash("msg_report_go_clicked"),
     msg_request_game_progress = hash("msg_request_game_progress"),
+    msg_request_game_repeat = hash("msg_request_game_repeat"),
     msg_report_game_progressed = hash("msg_report_game_progressed"),
 
     -- controls

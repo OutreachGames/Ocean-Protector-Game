@@ -1,5 +1,7 @@
 -- Module with the game story/dialogue lines
 
+local EXT = require ("modules.extend_md")
+
 local STR = {}
 
 local n = '\n'
@@ -645,6 +647,7 @@ STR.Screenplay = {
 
         key_basename_default = "decision_role_",
 
+        --[[
         decision_role_default = { -- Default framework
             question_prompt = {
                 "",
@@ -678,6 +681,7 @@ STR.Screenplay = {
                 }
             },
         },
+        --]]
 
         decision_role_01a = { -- Personal CO2 Reduction, check 1
             question_prompt = {
@@ -1354,7 +1358,7 @@ STR.Screenplay = {
     },
 }
 
-function STR:GetTable_or_String(tbl_or_str)
+function STR:GetTable_or_Value(tbl_or_str)
 
     if type(tbl_or_str) == "table" then
         return tbl_or_str[1]
@@ -1384,39 +1388,122 @@ function STR:ValidCheck(stage_key, substage_key)
 
 end
 
-function STR:Get_NewInfo_Text(stage_key, substage_key, text_type_key)
+function STR:Get_Completion_Type(stage_key, substage_key)
 
     -- gets the goal text to display
 
-    if not STR:ValidCheck(stage_key, substage_key) then
+    if not self:ValidCheck(stage_key, substage_key) then
         return nil
     end
 
-    return STR:GetTable_or_String(self.Screenplay[stage_key][substage_key][text_type_key])
+    return self:GetTable_or_Value(self.Screenplay[stage_key].goal_completed_default) or self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_completed)
 
 end
+
 
 function STR:Get_Goal_Text(stage_key, substage_key)
 
     -- gets the goal text to display
 
-    if not STR:ValidCheck(stage_key, substage_key) then
+    if not self:ValidCheck(stage_key, substage_key) then
         return nil
     end
 
-    return STR:GetTable_or_String(self.Screenplay[stage_key].goal_text_default) or STR:GetTable_or_String(self.Screenplay[stage_key][substage_key].goal_text)
+    return self:GetTable_or_Value(self.Screenplay[stage_key].goal_text_default) or self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_text)
 
 end
 
-function STR:Get_Completion_Type(stage_key, substage_key)
 
-    -- gets the goal text to display
+function STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 
-    if not STR:ValidCheck(stage_key, substage_key) then
+    -- gets body text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
         return nil
     end
 
-    return STR:GetTable_or_String(self.Screenplay[stage_key].goal_completed_default) or STR:GetTable_or_String(self.Screenplay[stage_key][substage_key].goal_completed)
+    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].display_text)
+
+end
+
+function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
+
+    -- gets body text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].text_debrief)
+
+end
+
+
+function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
+
+    -- gets the decision question text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local q_info = decision_info.question_prompt
+
+    return self:GetTable_or_Value(q_info[character_role]) or self:GetTable_or_Value(q_info[1])
+
+end
+
+function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
+
+    -- gets the decision question text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local a_info = decision_info.answer_options
+
+    -- get user choice options in i table
+    local a_tbl = {}
+    local a_i = 0
+    for k_userchoie_name, v_info in pairs(a_info) do
+
+        local text_tbl = v_info.text_display
+        local answer_text = self:GetTable_or_Value(v_info[character_role]) or self:GetTable_or_Value(text_tbl[1])
+
+        a_i = a_i + 1
+        a_tbl[a_i] = {user_choice_key = k_userchoie_name, choice_text_answer = answer_text}
+    end
+
+    -- randomize table
+    return EXT:Table_Shuffle(a_tbl)
+
+end
+
+function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_role, choice_ikey)
+
+    -- gets the decision question text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local a_info_i = decision_info.answer_options[choice_ikey]
+
+    if a_info_i == nil then
+        print("Error decision text function was unable to find debrief text for key <"..choice_ikey.."> \n")
+        return nil
+    end
+
+    local a_info_i_debrief = a_info_i.text_debrief
+
+    return self:GetTable_or_Value(a_info_i_debrief[character_role]) or self:GetTable_or_Value(a_info_i_debrief[1])
 
 end
 
@@ -1453,7 +1540,7 @@ function STR:GameOrder_CreateTable()
         -- then add them
         for _,v_substageame in ipairs(substage_tbl) do
             full_order_i = full_order_i + 1
-            print("Adding "..v_stagename..": "..v_substageame)
+            --print("Adding "..v_stagename..": "..v_substageame)
             full_order_tbl[full_order_i] = {stage_name_key = v_stagename, substage_name_key = v_substageame}
         end
     end

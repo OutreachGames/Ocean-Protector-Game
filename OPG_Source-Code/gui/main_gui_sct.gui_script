@@ -112,6 +112,19 @@ local function Items_Click_Status_Reset(self, items_to_click)
 
 end
 
+local function Get_Current_Stage_Substage(self)
+
+	-- returns two string values for current stage and substage
+
+	local event_info = self.gameplay_loop_order[self.gameplay_loop_i_key]
+
+	local stage_key = event_info.stage_name_key
+	local substage_key = event_info.substage_name_key
+
+	return stage_key, substage_key
+
+end
+
 
 -- HUD Process: Observe Items (Section 1)
 local function On_GO_Items_Clicked_Reset(self, enabled_setting)
@@ -142,8 +155,114 @@ local function On_GO_Items_Clicked_Basic_Valid(self)
 end
 
 
+-- HUD Screen: Popup 
+local function Screen_Popup_Reset(self, enabled_setting, run_sizing, body_text, title_text)
+
+	-- reset Popup screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	-- set enabled status
+	local constant = self.hud_popup_constant
+	local controller_node = gui.get_node(constant.node_controller)
+
+	-- run enabling status and possibly sizing
+	local function func_done(self, node)
+
+		gui.set_enabled(node, enabled_setting)
+
+	end
+
+	if run_sizing then
+		if enabled_setting then
+			func_done(self, controller_node)
+			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+		else
+			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+		end
+	else
+		func_done(self, controller_node)
+	end
+
+	-- reset tracking table
+	self.hud_popup_dynamic.screen_isactive = enabled_setting
+	self.hud_popup_dynamic.is_maximized = true
+
+	-- enable and set text
+	if body_text ~= nil then
+		gui.set_text(gui.get_node(constant.node_text_body), body_text)
+	end
+	title_text = title_text or "New Information"
+	if title_text ~= nil then
+		gui.set_text(gui.get_node(constant.node_text_title), title_text)
+	end
+
+end
+
+local function Screen_Popup_Initialize(self, enabled_status)
+
+	-- set contants and setup dynamic values and components
+
+	local basename = "hud_newinfo"
+
+	self.hud_popup_constant = nil
+	self.hud_popup_dynamic = nil
+
+	-- set constants
+	self.hud_popup_constant = {
+		hud_basename = basename,
+		node_controller = basename .. "/gnode_controller",
+		goo_continue_name = basename .. "/group_button_submit",
+		node_text_title = basename .. "/group_header/gui_frame_text",
+		node_text_body = basename .. "/gnode_info_text",
+	}
+
+	-- set dynamics
+	self.hud_popup_dynamic = {}
+	Screen_Popup_Reset(self, enabled_status)
+
+end
+
+local function Screen_Popup_Input(self, action_id, action)
+
+	-- runs 'On Input' for Decision screen on HUD
+
+	-- early out if not allowed to use
+	if not self.hud_popup_dynamic.screen_isactive or self.hud_decision_dynamic.screen_isactive or self.hud_plot_dynamic.screen_isactive then
+		return
+	end
+
+	local Info = self.hud_popup_constant
+
+	local function func_continue(button)
+
+		-- handle all the button functionality
+
+		-- set that this screen is no longer interactive
+		Screen_Popup_Reset(self, false, true)
+
+		print("Continue Button was pressed")
+
+		if self.gameplay_loop_status == CV_gameplay_loop.status_started then
+			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_new_information_only then
+				msg.post(".", HSH.msg_request_game_progress)
+			end
+		end
+
+	end
+
+	MY_GOO.button_simple(Info.goo_continue_name, action_id, action, func_continue)
+
+end
+
+
 -- HUD Screen: Decision
-local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables, num_options)
+local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables, num_options, question_text, answer_text_tbl)
 
 	-- reset Decision screen of HUD
 
@@ -226,6 +345,22 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_LOCKED)
 	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_LOCKED)
 
+	-- set text 
+	if question_text ~= nil then
+		gui.set_text(gui.get_node(constant.node_question_text), question_text)
+	end
+
+	-- update answer option text and save keys in same order
+	self.hud_decision_dynamic.answer_choice_keys = nil
+	self.hud_decision_dynamic.answer_choice_keys = {}
+	if type(answer_text_tbl) == "table" then
+		for i,v_info in ipairs(answer_text_tbl) do
+			local q_node_name = constant.goo_option_names[i]..constant.goo_option_label_basename
+			gui.set_text(gui.get_node(q_node_name), v_info.choice_text_answer)
+			self.hud_decision_dynamic.answer_choice_keys[i] = v_info.user_choice_key
+		end
+	end
+
 end
 
 local function Screen_Decision_Initialize(self, enabled_status)
@@ -242,6 +377,7 @@ local function Screen_Decision_Initialize(self, enabled_status)
 		hud_basename = basename,
 		node_controller = basename .. "/gnode_controller",
 		node_frame = basename .. "/group_body/gui_frame_core",
+		node_question_text = basename .. "/gnode_question_text",
 		goo_option_placement = {
 			{frame_ylength = 740, frame_position_y = 450, submit_position_y = -368},
 			{frame_ylength = 740, frame_position_y = 450, submit_position_y = -368},
@@ -347,6 +483,23 @@ local function Screen_Decision_Input(self, action_id, action)
 		Screen_Decision_Reset(self, false, run_sizer, reset_values)
 
 		print("Submit Button was pressed")
+
+		if self.gameplay_loop_status == CV_gameplay_loop.status_started then
+			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_decisison_only then
+				-- do debrief text if present
+				-- this consists of opening popup window and setting goal type
+				local i = self.hud_decision_dynamic.goo_option_selected
+				local stage_key, substage_key = Get_Current_Stage_Substage(self)
+				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, i)
+
+				if debrief_text ~= nil and debrief_text ~= "" then
+					self.gameplay_loop_completion_type = STR.CV.goal_completed_types.class_click_items_only
+					Screen_Popup_Reset(self, true, true, debrief_text, "Update")
+				else
+					msg.post(".", HSH.msg_request_game_progress)
+				end
+			end
+		end
 
 	end
 
@@ -675,99 +828,6 @@ local function Screen_Data_Input(self, action_id, action)
 end
 
 
--- HUD Screen: Popup 
-local function Screen_Popup_Reset(self, enabled_setting, run_sizing)
-
-	-- reset Popup screen of HUD
-
-	-- default args
-	if enabled_setting == nil then
-		enabled_setting = false
-	end
-
-	-- set enabled status
-	local constant = self.hud_popup_constant
-	local controller_node = gui.get_node(constant.node_controller)
-
-	-- run enabling status and possibly sizing
-	local function func_done(self, node)
-
-		gui.set_enabled(node, enabled_setting)
-
-	end
-
-	if run_sizing then
-		if enabled_setting then
-			func_done(self, controller_node)
-			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
-			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
-		else
-			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
-			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
-		end
-	else
-		func_done(self, controller_node)
-	end
-
-	-- reset tracking table
-	self.hud_popup_dynamic.screen_isactive = enabled_setting
-	self.hud_popup_dynamic.is_maximized = true
-
-	--#TODO enable and set text
-
-end
-
-local function Screen_Popup_Initialize(self, enabled_status)
-
-	-- set contants and setup dynamic values and components
-
-	local basename = "hud_newinfo"
-
-	self.hud_popup_constant = nil
-	self.hud_popup_dynamic = nil
-
-	-- set constants
-	self.hud_popup_constant = {
-		hud_basename = basename,
-		node_controller = basename .. "/gnode_controller",
-		goo_continue_name = basename .. "/group_button_submit",
-		node_text_title = basename .. "/group_header/gui_frame_text",
-		node_text_body = basename .. "/gnode_info_text",
-	}
-
-	-- set dynamics
-	self.hud_popup_dynamic = {}
-	Screen_Popup_Reset(self, enabled_status)
-
-end
-
-local function Screen_Popup_Input(self, action_id, action)
-
-	-- runs 'On Input' for Decision screen on HUD
-
-	-- early out if not allowed to use
-	if not self.hud_popup_dynamic.screen_isactive or self.hud_decision_dynamic.screen_isactive or self.hud_plot_dynamic.screen_isactive then
-		return
-	end
-
-	local Info = self.hud_popup_constant
-
-	local function func_continue(button)
-
-		-- handle all the button functionality
-
-		-- set that this screen is no longer interactive
-		Screen_Popup_Reset(self, false, true)
-
-		print("Continue Button was pressed")
-
-	end
-
-	MY_GOO.button_simple(Info.goo_continue_name, action_id, action, func_continue)
-
-end
-
-
 -- HUD Screen: Goals
 local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
 
@@ -995,26 +1055,78 @@ local function Run_Fader(self, fade_out, time)
 end
 
 
+local function Close_All_Center_Screens(self)
+
+	-- close any open screens in center window
+
+	local run_sizing = true
+	local enabled_status = false
+
+	-- popup/new info
+	if self.hud_popup_dynamic.screen_isactive then
+		Screen_Popup_Reset(self, enabled_status, run_sizing)
+	end
+
+	-- decision
+	if self.hud_decision_dynamic.screen_isactive then
+		Screen_Decision_Reset(self, enabled_status, run_sizing)
+	end
+
+	-- plot
+	if self.hud_plot_dynamic.screen_isactive then
+		Screen_Plot_Reset(self, enabled_status, run_sizing)
+	end
+
+end
+
 -- HUD Process: Game Loop
-local function GameLogic_Progress(self)
+local function GameLogic_Progress(self, i_stage_addition)
 
-	local event_info = self.gameplay_loop_order[1]
+	-- setups and runs next gameplay event
 
-	local stage_key = event_info.stage_name_key
-	local substage_key = event_info.substage_name_key
+	if i_stage_addition == nil then
+		i_stage_addition = 1
+	end
 
-	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> \n")
+	self.gameplay_loop_i_key = self.gameplay_loop_i_key + i_stage_addition
+
+	local stage_key, substage_key = Get_Current_Stage_Substage(self)
 
 	-- get and update goal text
-	local goalt_text = STR:Get_Goal_Text(stage_key, substage_key)
+	local goal_text = STR:Get_Goal_Text(stage_key, substage_key)
 	local run_goal_sizing = not self.hud_goals_dynamic.screen_isactive
-	Screen_Goals_Reset(self, true, run_goal_sizing, goalt_text)
+	Screen_Goals_Reset(self, true, run_goal_sizing, goal_text)
 
 	-- run other logic
 	self.gameplay_loop_status = CV_gameplay_loop.status_started
 
+	-- close any other plots or popups or decisions
+	Close_All_Center_Screens(self)
+
 	-- get type of event and start associated screens
-	if stage_key == ""
+	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
+	local st = STR.CV.goal_completed_types
+	self.gameplay_loop_completion_type = stage_type
+
+	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
+
+	if stage_type == st.class_click_items_only then
+		--
+
+	elseif stage_type == st.class_decisison_only then
+		local q_text = STR:Get_Decision_Text_Question(stage_key, substage_key, self.character_role_key)
+		local a_tbl = STR:Get_Decision_Text_Options(stage_key, substage_key, self.character_role_key)
+		Screen_Decision_Reset(self, true, true, true, #a_tbl, q_text, a_tbl)
+
+	elseif stage_type == st.class_new_information_only then
+		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
+		Screen_Popup_Reset(self, true, true, popup_text_body)
+
+	elseif stage_type == st.class_new_information_and_click_items then
+		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
+		Screen_Popup_Reset(self, true, true, popup_text_body)
+
+	end
 
 end
 
@@ -1033,6 +1145,10 @@ local function GameLogic_Start(self)
 	Screen_Popup_Initialize(self, set_enabled)
 
 	self.input_is_possible = true
+
+	self.character_role_key = "none"
+	self.gameplay_loop_completion_type = 0
+	self.gameplay_loop_i_key = 0
 
 	-- get stage and substage list in order
 	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
@@ -1057,7 +1173,9 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_report_go_clicked then
 		On_GO_Item_Clicked_Received(self, message)
 	elseif message_id == HSH.msg_request_game_progress then
-		GameLogic_Progress(self)
+		GameLogic_Progress(self, 1)
+	elseif message_id == HSH.msg_request_game_repeat then
+		GameLogic_Progress(self, 0)
 	end
 
 end
