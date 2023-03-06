@@ -364,6 +364,7 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 		for i,v_info in ipairs(answer_text_tbl) do
 			local q_node_name = constant.goo_option_names[i]..constant.goo_option_label_basename
 			gui.set_text(gui.get_node(q_node_name), v_info.choice_text_answer)
+			print("Setting node <"..q_node_name.."> to text <"..v_info.choice_text_answer.."> \n")
 			self.hud_decision_dynamic.answer_choice_keys[i] = v_info.user_choice_key
 		end
 	end
@@ -1110,6 +1111,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 	if stage_key == nil or substage_key == nil then
 		print("Game loop is completed! \n")
+		return
 	end
 
 	-- get and update goal text

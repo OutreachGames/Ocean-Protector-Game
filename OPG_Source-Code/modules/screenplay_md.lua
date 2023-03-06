@@ -48,7 +48,7 @@ STR.CV = {
 }
 
 STR.Screenplay = {
-
+--[[
     s01_new_information_start = {
 
         --user_lesson_default = {
@@ -590,7 +590,7 @@ STR.Screenplay = {
         -- Setup character selection
 
     },
-
+--]]
     s04_decisions_character_choose = {
 
         -- Run character selection
@@ -1523,7 +1523,7 @@ function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
     for k_userchoie_name, v_info in pairs(a_info) do
 
         local text_tbl = v_info.text_display
-        local answer_text = self:GetTable_or_Value(v_info[character_role]) or self:GetTable_or_Value(text_tbl[1])
+        local answer_text = self:GetTable_or_Value(text_tbl[character_role]) or self:GetTable_or_Value(text_tbl[1])
 
         a_i = a_i + 1
         a_tbl[a_i] = {user_choice_key = k_userchoie_name, choice_text_answer = answer_text}
