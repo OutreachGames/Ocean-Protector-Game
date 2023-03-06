@@ -5,6 +5,7 @@
 local HSH = require ("modules.hashes_md")
 local MY_GOO = require ("gui.gooey_theme_md")
 local STR = require ("modules.screenplay_md")
+local EXT = require ("modules.extend_md")
 
 -- constants
 local CV_item_groups = {
@@ -46,8 +47,8 @@ local CV_item_groups = {
 }
 
 local CV_gameplay_loop = {
-	status_started = 1,
-	status_finished = 2,
+	status_running_main = 1,
+	status_running_debrief = 2,
 	status_unknown = 3
 }
 
@@ -124,6 +125,12 @@ local function Get_Current_Stage_Substage(self)
 	local substage_key = event_info.substage_name_key
 
 	return stage_key, substage_key
+
+end
+
+local function Running_Main_or_Debrief(self)
+
+	return EXT.equalAny(self.gameplay_loop_status, {CV_gameplay_loop.status_running_main, CV_gameplay_loop.status_running_debrief})
 
 end
 
@@ -250,14 +257,22 @@ local function Screen_Popup_Input(self, action_id, action)
 
 		print("Continue Button was pressed")
 
-		if self.gameplay_loop_status == CV_gameplay_loop.status_started then
+		if Running_Main_or_Debrief(self) then
 			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_new_information_only then
 
-				-- run outcome function
+				-- check for debrief text and run outcome function
 				local stage_key, substage_key = Get_Current_Stage_Substage(self)
-				STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+				local debrief_text = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 
-				msg.post(".", HSH.msg_request_game_progress)
+				-- check and run main or debrief status accordingly
+				if self.gameplay_loop_status == CV_gameplay_loop.status_running_main and debrief_text ~= nil and debrief_text ~= "" then
+					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
+					Screen_Popup_Reset(self, true, true, debrief_text)
+				else
+					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+					msg.post(".", HSH.msg_request_game_progress)
+				end
+
 			end
 		end
 
@@ -495,7 +510,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 		print("Submit Button was pressed")
 
-		if self.gameplay_loop_status == CV_gameplay_loop.status_started then
+		if Running_Main_or_Debrief(self) then
 			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_decisison_only then
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
@@ -505,8 +520,11 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- run outcome function
 				STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, self.character_role_key, answer_string_key)
 
-				if debrief_text ~= nil and debrief_text ~= "" then
+				if self.gameplay_loop_status == CV_gameplay_loop.status_running_main and debrief_text ~= nil and debrief_text ~= "" then
+
 					self.gameplay_loop_completion_type = STR.CV.goal_completed_types.class_new_information_only
+					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
+
 					-- also subtract one from current progress if incorrect so we go back to it in the next submit
 					if STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, self.character_role_key, answer_string_key) then
 						self.gameplay_loop_i_key = self.gameplay_loop_i_key - 1
@@ -1120,7 +1138,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	Screen_Goals_Reset(self, true, run_goal_sizing, goal_text)
 
 	-- run other logic
-	self.gameplay_loop_status = CV_gameplay_loop.status_started
+	self.gameplay_loop_status = CV_gameplay_loop.status_running_main
 
 	-- close any other plots or popups or decisions
 	Close_All_Center_Screens(self)
