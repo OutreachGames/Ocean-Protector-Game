@@ -307,6 +307,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_2 = {
@@ -325,6 +326,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_4 = {
@@ -334,6 +336,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
             },
@@ -360,6 +363,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
             },
@@ -377,6 +381,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_2 = {
@@ -395,6 +400,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_4 = {
@@ -404,6 +410,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
             },
@@ -421,6 +428,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_2 = {
@@ -439,6 +447,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_4 = {
@@ -448,6 +457,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
             },
@@ -465,6 +475,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_2 = {
@@ -474,6 +485,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_3 = {
@@ -483,6 +495,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
                 user_choice_4 = {
@@ -518,6 +531,7 @@ STR.Screenplay = {
                     text_debrief = {
                         "Unfortunately that is not correct, but try again!"
                     },
+                    repeat_question_decision = true,
                     outcome_result = -1
                 },
             },
@@ -591,23 +605,27 @@ STR.Screenplay = {
                 "Please choose a character. Each character has specific goals and does a different job. You can view this information by clicking on each character button. "
             },
             answer_options = {
+                --#TODO update character selection screen so more info can be shown
                 user_choice_1 = {
                     text_display = {
-                        "Fishing Boat Captain"..n.."Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
+                        --"Fishing Boat Captain"..n..
+                        "Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "--..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "--..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
                     },
                     text_debrief = nil,
                     outcome_result = "role_captain"
                 },
                 user_choice_2 = {
                     text_display = {
-                        "Marine Park Ranger"..n.."Choose to be a marine park ranger. This character makes a living by watching over a marine park. "..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
+                        --"Marine Park Ranger"..n..
+                        "Choose to be a marine park ranger. This character makes a living by watching over a marine park. "--..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "--..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
                     },
                     text_debrief = nil,
                     outcome_result = "role_ranger"
                 },
                 user_choice_3 = {
                     text_display = {
-                        "Ocean Tour Guide"..n.."Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and earn steady money. "..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
+                        --"Ocean Tour Guide"..n..
+                        "Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "--..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and earn steady money. "--..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
                     },
                     text_debrief = nil,
                     outcome_result = "role_guide"
@@ -1484,7 +1502,7 @@ function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
 
 end
 
-function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_role, choice_ikey)
+function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_role, choice_key)
 
     -- gets the decision question text to display
 
@@ -1494,16 +1512,39 @@ function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_
 
     local decision_info = self.Screenplay[stage_key][substage_key]
 
-    local a_info_i = decision_info.answer_options[choice_ikey]
+    local a_info_i = decision_info.answer_options[choice_key]
 
     if a_info_i == nil then
-        print("Error decision text function was unable to find debrief text for key <"..choice_ikey.."> \n")
+        print("Error decision text function was unable to find debrief text for key <"..choice_key.."> \n")
         return nil
     end
 
     local a_info_i_debrief = a_info_i.text_debrief
 
+    if a_info_i_debrief == nil then return nil end
+
     return self:GetTable_or_Value(a_info_i_debrief[character_role]) or self:GetTable_or_Value(a_info_i_debrief[1])
+
+end
+
+function STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, character_role, choice_key)
+
+    -- gets the decision question text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local a_info_i = decision_info.answer_options[choice_key]
+
+    if a_info_i == nil then
+        print("Error decision text function was unable to find debrief text for key <"..choice_key.."> \n")
+        return nil
+    end
+
+    return a_info_i.repeat_question_decision
 
 end
 

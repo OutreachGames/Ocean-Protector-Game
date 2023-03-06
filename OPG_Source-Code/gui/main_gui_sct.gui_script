@@ -118,6 +118,8 @@ local function Get_Current_Stage_Substage(self)
 
 	local event_info = self.gameplay_loop_order[self.gameplay_loop_i_key]
 
+	if event_info == nil then return nil, nil end
+
 	local stage_key = event_info.stage_name_key
 	local substage_key = event_info.substage_name_key
 
@@ -480,6 +482,9 @@ local function Screen_Decision_Input(self, action_id, action)
 		--^ need to have tracker as off so if plot checks it properly knows what the status is
 		-- if plot thinks decisions is still on it can re-enable decision 
 		--#TODO save the values to master table before clearing them!
+		local i = self.hud_decision_dynamic.goo_option_selected
+		local answer_string_key = self.hud_decision_dynamic.answer_choice_keys[i]
+
 		Screen_Decision_Reset(self, false, run_sizer, reset_values)
 
 		print("Submit Button was pressed")
@@ -488,12 +493,15 @@ local function Screen_Decision_Input(self, action_id, action)
 			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_decisison_only then
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
-				local i = self.hud_decision_dynamic.goo_option_selected
 				local stage_key, substage_key = Get_Current_Stage_Substage(self)
-				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, i)
+				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
 
 				if debrief_text ~= nil and debrief_text ~= "" then
-					self.gameplay_loop_completion_type = STR.CV.goal_completed_types.class_click_items_only
+					self.gameplay_loop_completion_type = STR.CV.goal_completed_types.class_new_information_only
+					-- also subtract one from current progress if incorrect so we go back to it in the next submit
+					if STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, self.character_role_key, answer_string_key) then
+						self.gameplay_loop_i_key = self.gameplay_loop_i_key - 1
+					end
 					Screen_Popup_Reset(self, true, true, debrief_text, "Update")
 				else
 					msg.post(".", HSH.msg_request_game_progress)
@@ -1091,6 +1099,10 @@ local function GameLogic_Progress(self, i_stage_addition)
 	self.gameplay_loop_i_key = self.gameplay_loop_i_key + i_stage_addition
 
 	local stage_key, substage_key = Get_Current_Stage_Substage(self)
+
+	if stage_key == nil or substage_key == nil then
+		print("Game loop is completed! \n")
+	end
 
 	-- get and update goal text
 	local goal_text = STR:Get_Goal_Text(stage_key, substage_key)
