@@ -985,19 +985,35 @@ local function Run_Fader(self, fade_out, time)
 end
 
 
-function init(self)
+-- HUD Process: Game Loop
+local function GameLogic_StageProgress()
+
+	
+
+end
+
+local function GameLogic_Start(self)
 
 	MY_GOO.acquire_input()
 
-	On_GO_Items_Clicked_Reset(self, false)
-	Screen_Goals_Initialize(self, true)
-	Screen_Decision_Initialize(self, true)
-	Screen_Data_Initialize(self, true)
-	Screen_Plot_Initialize(self, false)
-	Items_Click_Status_Reset(self, {"item_fish"})
-	Screen_Popup_Initialize(self, false)
+	local set_enabled = false
+
+	On_GO_Items_Clicked_Reset(self, set_enabled)
+	Screen_Goals_Initialize(self, set_enabled)
+	Screen_Decision_Initialize(self, set_enabled)
+	Screen_Data_Initialize(self, set_enabled)
+	Screen_Plot_Initialize(self, set_enabled)
+	--Items_Click_Status_Reset(self, {"item_fish"})
+	Screen_Popup_Initialize(self, set_enabled)
 
 	self.input_is_possible = true
+
+end
+
+
+function init(self)
+
+	GameLogic_Start(self)
 
 end
 
