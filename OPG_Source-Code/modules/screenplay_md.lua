@@ -35,32 +35,32 @@ STR.Screenplay = {
             debrief_text = "",
             extra_text = ""
         },
-    
+
         key_basename_default = "user_lesson_",
-    
+
         -- Ocean Introduction
-    
+
         user_lesson_01 = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans.",
             debrief_text = "Let's observe all the life in this specific scene, starting with the base of the food-web.",
             extra_text = ""
         },
-    
+
         -- Students will examine and explore the scene by clicking on objects. 
         -- When clicking on an object a popup will appear with the information. 
         -- Once the students read the popup, they will close it and continue to the next group. 
         -- Students will be allowed click on anything, 
         -- but only clicking on the correct region will complete the goal. 
         -- New popup box appears in the top header after each goal is completed. 
-    
+
         user_lesson_02 = {
             goal_text = "Find and document the base of our ocean food-web.",
             display_text = "Identify the base of the food-web in this scene by clicking.",
             debrief_text = "Plankton "..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..ntab.."Phytoplankton are producers that use sunlight to get energy."..ntab.."Zooplankton are consumers that eat other plankton to get energy.",
             extra_text = ""
         },
-    
+
         user_lesson_03 = {
             goal_text = "Find and document consumers in our ocean food-web.",
             display_text = "Identify another component of the food-web in this scene by clicking.",
@@ -89,126 +89,126 @@ STR.Screenplay = {
                 },
             }
         },
-    
+
         -- Once all life has been identified the program will progress with this next message. 
-    
+
         user_lesson_04 = {
             goal_text = "Follow information prompts.",
             display_text = "Excellent work, we have identified the groups of life in this scene. Throughout our oceans there are thousands of types of plants and animals, far too many to all show in just this scene!",
             debrief_text = "For our example we are going to add just one more animal group, which is the overall highest-level consumer in the ocean.",
             extra_text = ""
         },
-    
+
         -- Boat slides onto screen.
-    
+
         user_lesson_05 = {
             goal_text = "Find and document the highest-level consumer in our ocean food-web.",
             display_text = "Identify the highest-level component in the ocean food-web by clicking.",
             debrief_text = "Humans"..n.."Though humans do not live in the water we rely heavily on our oceans!",
             extra_text = ""
         },
-    
+
         user_lesson_06 = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans affect us all—even those of us who live far away from the coast. Billions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. In addition, our oceans help cycle nutrients and are even a source of new medicines.",
             debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
             extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer."
         },
-    
+
         -- Acidification Introduction
-    
+
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
             display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. This threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. ",
             debrief_text = "Why is this happening? Let's find out.",
             extra_text = ""
         },
-    
+
         -- Switch to land scene showing CO2 gas being given off by factories, cars, etc. 
-    
+
         user_lesson_08 = {
             goal_text = "Follow information prompts.",
             display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories.",
             debrief_text = nil,
             extra_text = ""
         },
-    
+
         --Switch to animation showing gas being absorbed by ocean surface water.
-    
+
         user_lesson_09 = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans absorb much of this excess carbon dioxide gas, which mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.",
             debrief_text = nil,
             extra_text = ""
         },
-    
+
         user_lesson_10 = {
             goal_text = "Follow information prompts.",
             display_text = "Acidification from too much carbon dioxide gas can also occur due to nutrient pollution.",
             debrief_text = nil,
             extra_text = ""
         },
-    
+
         -- Switch back to terrestrial setting.
-    
+
         user_lesson_11 = {
             goal_text = "Follow information prompts.",
             display_text = "The excess nutrients come from human sources such as fertilizers, soaps, and industrial waste.",
             debrief_text = nil,
             extra_text = ""
         },
-    
+
         -- Show animation of nutrients building up in lawns, fields, and drains. 
-    
+
         user_lesson_12 = {
             goal_text = "Follow information prompts.",
             display_text = "When it rains runoff water carries these excess nutrients to the coast and provide unnatural amounts of food to phytoplankton. ",
             debrief_text = nil,
             extra_text = ""
         },
-    
+
         -- Show animation of nutrients running off from rainwater into ocean.
-    
+
         user_lesson_13 = {
             goal_text = "Follow information prompts.",
             display_text = "These phytoplankton populations grow extremely quickly then run out of food and decompose, which gives off large amounts of carbon dioxide gas into the water that triggers acidification.",
             debrief_text = nil,
             extra_text = ""
         },
-    
+
         -- Show animation of large amounts of phytoplankton, 
         -- then sinking and turning black and lower pH.
-    
+
         user_lesson_14 = {
             goal_text = "Follow information prompts.",
             display_text = "Overall, acidification caused by burning of fossil fuels affects our oceans globally, while acidification caused by nutrient pollution affects our oceans in specific locations.",
             debrief_text = "How do we do we know the oceans have become more acidic?",
             extra_text = ""
         },
-    
+
         -- Switch to animation showing gas being absorbed by ocean surface water?
-    
+
         user_lesson_15 = {
             goal_text = "Follow information prompts.",
             display_text = "We use the pH scale to measure how acidic or basic something is. The pH scale runs from 0 to 14, with 7 being a neutral pH. Values above 7 are basic, or alkaline. Values below 7 are acidic.",
             debrief_text = nil,
             extra_text = "Did you know?"..n.."pH is measured on a logarithmic scale, where small changes have increasingly greater eﬀects."..n.." For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic a pH of 7."
         },
-    
+
         user_lesson_16 = {
             goal_text = "Follow information prompts.",
             display_text = "We have measured the pH of our oceans for over 150 years and found that the water has become more acidic by about 30% during that time.",
             debrief_text = "This increase in acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels.",
             extra_text = ""
         },
-    
+
         user_lesson_17 = {
             goal_text = "Follow information prompts.",
             display_text = "Ocean acidification hurts life throughout our oceans, including us.",
             debrief_text = "Let's observe how this increase in ocean acidity has hurt each animal group in our ocean scene.",
             extra_text = "Did you know?"..n.."Many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes. "
         },
-    
+
         -- Show animation of determinantal effects 
         -- to each actor group as user clicks on the actor group. 
         -- This includes decreases in number, decreases in average size, 
@@ -217,7 +217,7 @@ STR.Screenplay = {
         -- be shown after each interactive decision in the character question section 
         -- (though the sign and magnitude of the changes will depend on the user answers). 
         -- Also show text explanations listed below. 
-    
+
         user_lesson_18 = {
             goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
             display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
@@ -246,20 +246,20 @@ STR.Screenplay = {
                 ""
             }
         },
-    
+
         user_lesson_19 = {
             goal_text = "Review your knowledge on ocean acidification.",
             display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we'll move onto the next stage,",
             debrief_text = nil,
             extra_text = ""
         },
-    
+
         -- Game presents list of review questions to confirm user knowledge. 
         -- User clicks on best answer for each question, 
         -- then the game presents the next question.  
-    
+
         -- Run quiz 
-    
+
     },
 
     s02_decisions_quiz = {

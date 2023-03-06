@@ -19,6 +19,8 @@ local HASH = {
     msg_set_subitem_list_key = hash("msg_set_subitem_list_key"),
     msg_request_go_clicked = hash("msg_request_go_clicked"),
     msg_report_go_clicked = hash("msg_report_go_clicked"),
+    msg_request_game_progress = hash("msg_request_game_progress"),
+    msg_report_game_progressed = hash("msg_report_game_progressed"),
 
     -- controls
     control_touch = hash("touch"),

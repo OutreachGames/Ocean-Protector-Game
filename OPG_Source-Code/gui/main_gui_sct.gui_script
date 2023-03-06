@@ -987,9 +987,13 @@ end
 
 
 -- HUD Process: Game Loop
-local function GameLogic_StageProgress()
+local function GameLogic_Progress(self)
 
+	local event_info = self.gameplay_loop_order[1]
 
+	print("Running stage <"..event_info.stage_name_key.."> with substage <"..event_info.substage_name_key.."> \n")
+
+	
 
 end
 
@@ -1009,7 +1013,11 @@ local function GameLogic_Start(self)
 
 	self.input_is_possible = true
 
+	-- get stage and substage list in order
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
+
+	-- kick off first action
+	GameLogic_Progress(self)
 
 end
 
@@ -1026,6 +1034,8 @@ function on_message(self, message_id, message, sender)
 		Run_Fader(self, message_id == HSH.msg_request_fade_out, message.minfo_fade_duration)
 	elseif message_id == HSH.msg_report_go_clicked then
 		On_GO_Item_Clicked_Received(self, message)
+	elseif message_id == HSH.msg_request_game_progress then
+		GameLogic_Progress(self)
 	end
 
 end
