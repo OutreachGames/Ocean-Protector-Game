@@ -4,6 +4,7 @@
 -- dependencies
 local HSH = require ("modules.hashes_md")
 local MY_GOO = require ("gui.gooey_theme_md")
+local STR = require ("modules.screenplay_md")
 
 -- constants
 local CV_item_groups = {
@@ -988,7 +989,7 @@ end
 -- HUD Process: Game Loop
 local function GameLogic_StageProgress()
 
-	
+
 
 end
 
@@ -1007,6 +1008,8 @@ local function GameLogic_Start(self)
 	Screen_Popup_Initialize(self, set_enabled)
 
 	self.input_is_possible = true
+
+	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
 end
 

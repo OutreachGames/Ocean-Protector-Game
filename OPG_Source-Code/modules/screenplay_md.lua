@@ -27,7 +27,7 @@ STR.CV = {
 
 STR.Screenplay = {
 
-    s1_new_information_start = {
+    s01_new_information_start = {
 
         user_lesson_default = {
             goal_text = "Follow information prompts.",
@@ -262,7 +262,7 @@ STR.Screenplay = {
     
     },
 
-    s2_decisions_quiz = {
+    s02_decisions_quiz = {
 
         goal_text_default = {
             "Work through review questions."
@@ -500,7 +500,7 @@ STR.Screenplay = {
 
     },
 
-    s3_new_information_middle = {
+    s03_new_information_middle = {
 
         user_lesson_default = {
             goal_text = "Follow information prompts.",
@@ -531,7 +531,7 @@ STR.Screenplay = {
 
     },
 
-    s4_decisions_character_choose = {
+    s04_decisions_character_choose = {
 
         -- Run character selection
 
@@ -579,7 +579,7 @@ STR.Screenplay = {
         }
     },
 
-    s5_decisions_character_role = {
+    s05_decisions_character_role = {
 
         -- Run role decisions
 
@@ -1267,7 +1267,7 @@ STR.Screenplay = {
 
     },
 
-    s6_new_information_end = {
+    s06_new_information_end = {
 
         -- After a set number of decisions/turns has completed 
         -- the students will be presented with a final summary visualization 
@@ -1309,11 +1309,7 @@ STR.Screenplay = {
 
 function STR:GameOrder_CreateTable()
 
-    -- disable all gui's first, but still initialize
-    -- start first popup and goal screens
-    -- go through popups and goals
-
-    -- new_information_start; quiz 1-6; new_information 20-21; decisions_character_choose; decisions_character_journey; new_information 22-23
+    -- get table with form {{stage_name_key = v_stagename, substage_name_key = v_substageame}, {}}
 
     local full_order_tbl = {}
     local full_order_i = 0
