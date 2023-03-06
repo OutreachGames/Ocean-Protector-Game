@@ -29,11 +29,15 @@ STR.Screenplay = {
 
     s01_new_information_start = {
 
-        user_lesson_default = {
-            goal_text = "Follow information prompts.",
-            display_text = "",
-            debrief_text = "",
-            extra_text = ""
+        --user_lesson_default = {
+            --goal_text = "Follow information prompts.",
+            --display_text = "",
+            --debrief_text = "",
+            --extra_text = ""
+        --},
+
+        goal_text_default = {
+            "Follow information prompts."
         },
 
         key_basename_default = "user_lesson_",
@@ -502,11 +506,15 @@ STR.Screenplay = {
 
     s03_new_information_middle = {
 
-        user_lesson_default = {
-            goal_text = "Follow information prompts.",
-            display_text = "",
-            debrief_text = "",
-            extra_text = ""
+        --user_lesson_default = {
+            --goal_text = "Follow information prompts.",
+            --display_text = "",
+            --debrief_text = "",
+            --extra_text = ""
+        --},
+
+        goal_text_default = {
+            "Follow information prompts."
         },
 
         key_basename_default = "user_lesson_",
@@ -1276,11 +1284,15 @@ STR.Screenplay = {
         -- only strong positive actions throughout the game, 
         -- then the final OA outcomes will be more favorable for their character and marine life. 
 
-        user_lesson_default = {
-            goal_text = "Follow information prompts.",
-            display_text = "",
-            debrief_text = "",
-            extra_text = ""
+        --user_lesson_default = {
+            --goal_text = "Follow information prompts.",
+            --display_text = "",
+            --debrief_text = "",
+            --extra_text = ""
+        --},
+
+        goal_text_default = {
+            "Follow information prompts."
         },
 
         key_basename_default = "user_lesson_",
