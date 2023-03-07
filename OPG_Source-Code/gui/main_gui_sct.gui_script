@@ -296,13 +296,16 @@ end
 
 
 -- HUD Screen: Popup 
-local function Screen_Popup_Reset(self, enabled_setting, run_sizing, body_text, title_text)
+local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text)
 
 	-- reset Popup screen of HUD
 
 	-- default args
 	if enabled_setting == nil then
 		enabled_setting = false
+	end
+	if reset_values == nil then
+		reset_values = false
 	end
 
 	-- set enabled status
@@ -328,6 +331,9 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, body_text, 
 	else
 		func_done(self, controller_node)
 	end
+
+	-- exit if not resetting answer option tracker variables
+	if not reset_values then return end
 
 	-- reset tracking table
 	self.hud_popup_dynamic.screen_isactive = enabled_setting
@@ -366,7 +372,9 @@ local function Screen_Popup_Initialize(self, enabled_status)
 
 	-- set dynamics
 	self.hud_popup_dynamic = {}
-	Screen_Popup_Reset(self, enabled_status)
+	local run_sizing = false
+	local reset_values = true
+	Screen_Popup_Reset(self, enabled_status, run_sizing, reset_values)
 
 end
 
@@ -386,7 +394,9 @@ local function Screen_Popup_Input(self, action_id, action)
 		-- handle all the button functionality
 
 		-- set that this screen is no longer interactive
-		Screen_Popup_Reset(self, false, false)
+		local run_sizing = false
+		local reset_values = true
+		Screen_Popup_Reset(self, false, run_sizing, reset_values)
 
 		print("Continue Button was pressed")
 
@@ -408,7 +418,9 @@ local function Screen_Popup_Input(self, action_id, action)
 				-- otherwise finish up 
 				if debrief_text ~= nil and debrief_text ~= "" then
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
-					Screen_Popup_Reset(self, true, true, debrief_text)
+					local run_sizing_debrief = true
+					local update_values_to_debrief = true
+					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
 				else
 					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
@@ -687,8 +699,11 @@ local function Screen_Decision_Input(self, action_id, action)
 					end
 
 					-- add debrief screen and also update goals
-					Screen_Goals_Reset(self, true, false, "Evaluate outcome of choice")
-					Screen_Popup_Reset(self, true, true, debrief_text, "Update")
+					local run_sizing_goals = false
+					Screen_Goals_Reset(self, true, run_sizing_goals, "Evaluate outcome of choice")
+					local run_sizing_popup = true
+					local reset_values_popup = true
+					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, "Update")
 
 				else
 					msg.post(".", HSH.msg_request_game_progress)
@@ -730,15 +745,22 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 			-- if decision tracker is active then disable decision node
 		-- if disabling
 			-- if decision tracker is active then enable decision node
-		local run_decision_sizer = false
 		local reset_values = false
 		if enabled_setting then
+			local run_decision_sizer = false
 			if self.hud_decision_dynamic.screen_isactive then
 				Screen_Decision_Reset(self, false, run_decision_sizer, reset_values)
 			end
+			if self.hud_popup_dynamic.screen_isactive then
+				Screen_Popup_Reset(self, false, run_decision_sizer, reset_values)
+			end
 		else
+			local run_decision_sizer = true
 			if self.hud_decision_dynamic.screen_isactive then
 				Screen_Decision_Reset(self, true, run_decision_sizer, reset_values)
+			end
+			if self.hud_popup_dynamic.screen_isactive then
+				Screen_Popup_Reset(self, true, run_decision_sizer, reset_values)
 			end
 		end
 
@@ -1163,15 +1185,16 @@ local function Close_All_Center_Screens(self)
 
 	local run_sizing = false
 	local enabled_status = false
+	local reset_values = false
 
 	-- popup/new info
 	if self.hud_popup_dynamic.screen_isactive then
-		Screen_Popup_Reset(self, enabled_status, run_sizing)
+		Screen_Popup_Reset(self, enabled_status, run_sizing, reset_values)
 	end
 
 	-- decision
 	if self.hud_decision_dynamic.screen_isactive then
-		Screen_Decision_Reset(self, enabled_status, run_sizing)
+		Screen_Decision_Reset(self, enabled_status, run_sizing, reset_values)
 	end
 
 	-- plot
@@ -1223,15 +1246,21 @@ local function GameLogic_Progress(self, i_stage_addition)
 	elseif stage_type == st.class_decisison then
 		local q_text = STR:Get_Decision_Text_Question(stage_key, substage_key, self.character_role_key)
 		local a_tbl = STR:Get_Decision_Text_Options(stage_key, substage_key, self.character_role_key)
-		Screen_Decision_Reset(self, true, true, true, #a_tbl, q_text, a_tbl)
+		local reset_values = true
+		Screen_Decision_Reset(self, true, true, reset_values, #a_tbl, q_text, a_tbl)
 
 	elseif stage_type == st.class_new_information then
 		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
-		Screen_Popup_Reset(self, true, true, popup_text_body)
+		local run_sizer = true
+		local reset_values = true
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
 
 	elseif stage_type == st.class_new_information_and_click_items then
+		--#TODO change this eventually
 		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
-		Screen_Popup_Reset(self, true, true, popup_text_body)
+		local run_sizer = true
+		local reset_values = true
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
 
 	end
 
@@ -1246,10 +1275,10 @@ local function GameLogic_Start(self)
 	On_GO_Items_Clicked_Reset(self, set_enabled)
 	Screen_Goals_Initialize(self, set_enabled)
 	Screen_Decision_Initialize(self, set_enabled)
-	Screen_Data_Initialize(self, set_enabled)
+	Screen_Popup_Initialize(self, set_enabled)
+	Screen_Data_Initialize(self, true)
 	Screen_Plot_Initialize(self, set_enabled)
 	--Items_Click_Status_Reset(self, {"item_fish"})
-	Screen_Popup_Initialize(self, set_enabled)
 
 	self.input_is_possible = true
 
