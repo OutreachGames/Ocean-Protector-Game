@@ -195,6 +195,117 @@ local function On_GO_Items_Clicked_Basic_Valid(self)
 end
 
 
+-- HUD Screen: Goals
+local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
+
+	-- reset Goals screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	-- set enabled status
+	local constant = self.hud_goals_constant
+	local controller_node = gui.get_node(constant.node_controller)
+
+	-- run enabling status and possibly sizing
+	local function func_done(self, node)
+
+		gui.set_enabled(node, enabled_setting)
+
+		-- enable and set text if new
+		local text_node = gui.get_node(constant.node_text_body)
+		if text ~= nil then
+			gui.set_text(text_node, text)
+		end
+
+		-- try to resize hud screen so text fits
+		local shown_text = gui.get_text(text_node)
+		local str_length = #shown_text
+
+		-- 240 is base with 2 lines and 340 is with 5 lines, 100/3
+		local line_per_extra_y = 30
+		local min_frame_y = 240
+		local str_length_per_line = 15
+		local base_num_lines = 2
+
+		local num_extra_lines = math.max((str_length/str_length_per_line) - base_num_lines, 0)
+		local new_y_frame = math.max(min_frame_y + (num_extra_lines*line_per_extra_y), min_frame_y)
+
+		local frame_node = gui.get_node(constant.node_frame_core)
+		gui.set_size(frame_node, vmath.vector3(gui.get_size(frame_node).x, new_y_frame, 0))
+
+	end
+
+	if run_sizing then
+		if enabled_setting then
+			func_done(self, controller_node)
+			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+		else
+			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+		end
+	else
+		func_done(self, controller_node)
+	end
+
+	-- reset tracking table
+	self.hud_goals_dynamic.screen_isactive = enabled_setting
+	self.hud_goals_dynamic.is_maximized = true
+
+end
+
+local function Screen_Goals_Initialize(self, enabled_status)
+
+	-- set contants and setup dynamic values and components
+
+	local basename = "hud_goals"
+
+	self.hud_goals_constant = nil
+	self.hud_goals_dynamic = nil
+
+	-- set constants
+	self.hud_goals_constant = {
+		hud_basename = basename,
+		node_controller = basename .. "/gnode_controller",
+		node_text_title = basename .. "/gnode_header_text",
+		node_text_body = basename .. "/gnode_body_text",
+		node_frame_core = basename .. "/group_frame/gui_frame_core"
+	}
+
+	-- set dynamics
+	self.hud_goals_dynamic = {}
+	Screen_Goals_Reset(self, enabled_status)
+
+end
+
+local function Screen_Goals_Input(self, action_id, action)
+
+	-- runs 'On Input' for Goals screen on HUD
+
+	-- early out if not allowed to use
+	if not self.hud_goals_dynamic.screen_isactive then
+		return
+	end
+
+	local Info = self.hud_goals_constant
+
+	local function func_continue(button)
+
+		-- handle all the button functionality
+
+		-- set that this screen is no longer interactive
+		Screen_Goals_Reset(self, false, true)
+
+		print("Continue Button was pressed")
+
+	end
+
+end
+
+
 -- HUD Screen: Popup 
 local function Screen_Popup_Reset(self, enabled_setting, run_sizing, body_text, title_text)
 
@@ -584,7 +695,11 @@ local function Screen_Decision_Input(self, action_id, action)
 					if STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, self.character_role_key, answer_string_key) then
 						self.gameplay_loop_i_key = self.gameplay_loop_i_key - 1
 					end
+
+					-- add debrief screen and also update goals
+					Screen_Goals_Reset(self, true, false, "Evaluate outcome of choice")
 					Screen_Popup_Reset(self, true, true, debrief_text, "Update")
+
 				else
 					msg.post(".", HSH.msg_request_game_progress)
 				end
@@ -913,100 +1028,6 @@ local function Screen_Data_Input(self, action_id, action)
 		MY_GOO.button_goto(gotos.item_mollusks, action_id, action, func_goto_mollusks)
 		MY_GOO.button_goto(gotos.item_crustaceans, action_id, action, func_goto_crustaceans)
 		MY_GOO.button_goto(gotos.item_humans, action_id, action, func_goto_humans)
-	end
-
-end
-
-
--- HUD Screen: Goals
-local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
-
-	-- reset Goals screen of HUD
-
-	-- default args
-	if enabled_setting == nil then
-		enabled_setting = false
-	end
-
-	-- set enabled status
-	local constant = self.hud_goals_constant
-	local controller_node = gui.get_node(constant.node_controller)
-
-	-- run enabling status and possibly sizing
-	local function func_done(self, node)
-
-		gui.set_enabled(node, enabled_setting)
-
-	end
-
-	if run_sizing then
-		if enabled_setting then
-			func_done(self, controller_node)
-			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
-			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
-		else
-			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
-			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
-		end
-	else
-		func_done(self, controller_node)
-	end
-
-	-- reset tracking table
-	self.hud_goals_dynamic.screen_isactive = enabled_setting
-	self.hud_goals_dynamic.is_maximized = true
-
-	-- enable and set text
-	if text ~= nil then
-		gui.set_text(gui.get_node(constant.node_text_body), text)
-	end
-
-end
-
-local function Screen_Goals_Initialize(self, enabled_status)
-
-	-- set contants and setup dynamic values and components
-
-	local basename = "hud_goals"
-
-	self.hud_goals_constant = nil
-	self.hud_goals_dynamic = nil
-
-	-- set constants
-	self.hud_goals_constant = {
-		hud_basename = basename,
-		node_controller = basename .. "/gnode_controller",
-		node_text_title = basename .. "/gnode_header_text",
-		node_text_body = basename .. "/gnode_body_text",
-		node_frame_core = basename .. "/group_frame/gui_frame_core"
-	}
-
-	-- set dynamics
-	self.hud_goals_dynamic = {}
-	Screen_Goals_Reset(self, enabled_status)
-
-end
-
-local function Screen_Goals_Input(self, action_id, action)
-
-	-- runs 'On Input' for Goals screen on HUD
-
-	-- early out if not allowed to use
-	if not self.hud_goals_dynamic.screen_isactive then
-		return
-	end
-
-	local Info = self.hud_goals_constant
-
-	local function func_continue(button)
-
-		-- handle all the button functionality
-
-		-- set that this screen is no longer interactive
-		Screen_Goals_Reset(self, false, true)
-
-		print("Continue Button was pressed")
-
 	end
 
 end
