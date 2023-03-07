@@ -283,7 +283,7 @@ STR.Screenplay = {
 
         user_lesson_19 = {
             goal_text = "Review your knowledge on ocean acidification.",
-            display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we'll move onto the next stage,",
+            display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we will move onto the next stage.",
             debrief_text = nil,
             extra_text = ""
         },
@@ -575,7 +575,7 @@ STR.Screenplay = {
 
         user_lesson_20 = {
             goal_text = "Follow information prompts.",
-            display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans",
+            display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans. ",
             debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening.",
             extra_text = ""
         },

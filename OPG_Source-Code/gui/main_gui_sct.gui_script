@@ -157,9 +157,9 @@ end
 
 local function Valid_Event_Check_Full(self, match_loop_type)
 
-	local status_valid = Loop_StatusType_is_Main(self) and Loop_StatusType_is_Debrief(self)
+	local status_valid = Loop_StatusType_is_Main(self) or Loop_StatusType_is_Debrief(self)
 
-	local primary_or_secondary_valid = Loop_CompletionType_is_Primary(self, match_loop_type) and Loop_CompletionType_is_Secondary(self, match_loop_type)
+	local primary_or_secondary_valid = Loop_CompletionType_is_Primary(self, match_loop_type) or Loop_CompletionType_is_Secondary(self, match_loop_type)
 
 	return (status_valid and primary_or_secondary_valid)
 
