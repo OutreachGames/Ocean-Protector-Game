@@ -113,13 +113,16 @@ local function Items_Click_Status_Reset(self, items_to_click)
 
 end
 
-local function Get_Current_Stage_Substage(self)
+local function Get_Current_Stage_and_Substage(self)
 
 	-- returns two string values for current stage and substage
 
 	local event_info = self.gameplay_loop_order[self.gameplay_loop_i_key]
 
-	if event_info == nil then return nil, nil end
+	if event_info == nil then
+		print("Note: no valid event info exists for game loop key <"..tostring(self.gameplay_loop_i_key).."> \n")
+		return nil, nil
+	end
 
 	local stage_key = event_info.stage_name_key
 	local substage_key = event_info.substage_name_key
@@ -128,9 +131,37 @@ local function Get_Current_Stage_Substage(self)
 
 end
 
-local function Running_Main_or_Debrief(self)
+local function Loop_StatusType_is_Main(self)
 
-	return EXT.equalAny(self.gameplay_loop_status, {CV_gameplay_loop.status_running_main, CV_gameplay_loop.status_running_debrief})
+	return self.gameplay_loop_status == CV_gameplay_loop.status_running_main
+
+end
+
+local function Loop_StatusType_is_Debrief(self)
+
+	return self.gameplay_loop_status == CV_gameplay_loop.status_running_debrief
+
+end
+
+local function Loop_CompletionType_is_Primary(self, match_type)
+
+	return match_type == self.gameplay_loop_completion_type_primary
+
+end
+
+local function Loop_CompletionType_is_Secondary(self, match_type)
+
+	return match_type == self.gameplay_loop_completion_type_secondary
+
+end
+
+local function Valid_Event_Check_Full(self, match_loop_type)
+
+	local status_valid = Loop_StatusType_is_Main(self) and Loop_StatusType_is_Debrief(self)
+
+	local primary_or_secondary_valid = Loop_CompletionType_is_Primary(self, match_loop_type) and Loop_CompletionType_is_Secondary(self, match_loop_type)
+
+	return (status_valid and primary_or_secondary_valid)
 
 end
 
@@ -257,15 +288,23 @@ local function Screen_Popup_Input(self, action_id, action)
 
 		print("Continue Button was pressed")
 
-		if Running_Main_or_Debrief(self) then
-			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_new_information_only then
+		local loop_type = STR.CV.goal_completed_types.class_new_information
 
-				-- check for debrief text and run outcome function
-				local stage_key, substage_key = Get_Current_Stage_Substage(self)
+		if Valid_Event_Check_Full(self, loop_type) then
+
+			-- if primary loop type is new_info and not in debrief then run debrief check
+			-- if that is not the case, then it means we got to this new_info via
+			-- some kind of debrief, whether it is a debrief of a new_info, decision, or item_click
+			if Loop_CompletionType_is_Primary(self, loop_type) and Loop_StatusType_is_Main(self) then
+
+				self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
+
+				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				local debrief_text = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 
-				-- check and run main or debrief status accordingly
-				if self.gameplay_loop_status == CV_gameplay_loop.status_running_main and debrief_text ~= nil and debrief_text ~= "" then
+				-- if there is debrief for this new_info screen then run it, 
+				-- otherwise finish up 
+				if debrief_text ~= nil and debrief_text ~= "" then
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
 					Screen_Popup_Reset(self, true, true, debrief_text)
 				else
@@ -273,7 +312,19 @@ local function Screen_Popup_Input(self, action_id, action)
 					msg.post(".", HSH.msg_request_game_progress)
 				end
 
+			else
+				-- in some form of debrief 
+				-- if debrief of new_info then run new_info completion function if any exists before just progressing. 
+				-- this is b/c the event type we came from to this stage 
+				-- is not a new_info and already had it's outcome func ran 
+				if Loop_CompletionType_is_Primary(self, loop_type) then
+					local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
+					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+				end
+				--#TODO update here with additional types, might not always want to run progress
+				msg.post(".", HSH.msg_request_game_progress)
 			end
+
 		end
 
 	end
@@ -510,19 +561,21 @@ local function Screen_Decision_Input(self, action_id, action)
 
 		print("Submit Button was pressed")
 
-		if Running_Main_or_Debrief(self) then
-			if self.gameplay_loop_completion_type == STR.CV.goal_completed_types.class_decisison_only then
-				-- do debrief text if present
-				-- this consists of opening popup window and setting goal type
-				local stage_key, substage_key = Get_Current_Stage_Substage(self)
-				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
+		local loop_type = STR.CV.goal_completed_types.class_decisison
+
+		if Valid_Event_Check_Full(self, loop_type) then
+			if Loop_CompletionType_is_Primary(self, loop_type) then
 
 				-- run outcome function
+				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, self.character_role_key, answer_string_key)
 
-				if self.gameplay_loop_status == CV_gameplay_loop.status_running_main and debrief_text ~= nil and debrief_text ~= "" then
+				-- do debrief text if present
+				-- this consists of opening popup window and setting goal type
+				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
+				if Loop_StatusType_is_Main(self) and debrief_text ~= nil and debrief_text ~= "" then
 
-					self.gameplay_loop_completion_type = STR.CV.goal_completed_types.class_new_information_only
+					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
 
 					-- also subtract one from current progress if incorrect so we go back to it in the next submit
@@ -1125,7 +1178,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 	self.gameplay_loop_i_key = self.gameplay_loop_i_key + i_stage_addition
 
-	local stage_key, substage_key = Get_Current_Stage_Substage(self)
+	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 
 	if stage_key == nil or substage_key == nil then
 		print("Game loop is completed! \n")
@@ -1146,19 +1199,19 @@ local function GameLogic_Progress(self, i_stage_addition)
 	-- get type of event and start associated screens
 	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
 	local st = STR.CV.goal_completed_types
-	self.gameplay_loop_completion_type = stage_type
+	self.gameplay_loop_completion_type_primary = stage_type
 
 	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
 
-	if stage_type == st.class_click_items_only then
+	if stage_type == st.class_click_items then
 		--
 
-	elseif stage_type == st.class_decisison_only then
+	elseif stage_type == st.class_decisison then
 		local q_text = STR:Get_Decision_Text_Question(stage_key, substage_key, self.character_role_key)
 		local a_tbl = STR:Get_Decision_Text_Options(stage_key, substage_key, self.character_role_key)
 		Screen_Decision_Reset(self, true, true, true, #a_tbl, q_text, a_tbl)
 
-	elseif stage_type == st.class_new_information_only then
+	elseif stage_type == st.class_new_information then
 		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 		Screen_Popup_Reset(self, true, true, popup_text_body)
 
@@ -1187,7 +1240,8 @@ local function GameLogic_Start(self)
 	self.input_is_possible = true
 
 	self.character_role_key = "none"
-	self.gameplay_loop_completion_type = 0
+	self.gameplay_loop_completion_type_primary = 0
+	self.gameplay_loop_completion_type_secondary = 0
 	self.gameplay_loop_i_key = 0
 
 	-- get stage and substage list in order

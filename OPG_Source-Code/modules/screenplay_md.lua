@@ -39,16 +39,16 @@ STR.CV = {
     },
 
     goal_completed_types = {
-        class_new_information_only = 1,
-        class_decisison_only = 2,
-        class_click_items_only = 3,
-        class_new_information_and_click_items = 4,
+        class_new_information = 1,
+        class_decisison = 2,
+        class_click_items = 3,
+        class_view_items = 4
     }
 
 }
 
 STR.Screenplay = {
---[[
+
     s01_new_information_start = {
 
         --user_lesson_default = {
@@ -63,7 +63,7 @@ STR.Screenplay = {
         },
 
         goal_completed_default = {
-            STR.CV.goal_completed_types.class_new_information_only
+            STR.CV.goal_completed_types.class_new_information
         },
 
         key_basename_default = "user_lesson_",
@@ -85,7 +85,7 @@ STR.Screenplay = {
         -- New popup box appears in the top header after each goal is completed. 
 
         user_lesson_02 = {
-            goal_completed = STR.CV.goal_completed_types.class_new_information_and_click_items,
+            goal_completed = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
             display_text = "Identify the base of the food-web in this scene by clicking.",
             debrief_text = "Plankton "..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..ntab.."Phytoplankton are producers that use sunlight to get energy."..ntab.."Zooplankton are consumers that eat other plankton to get energy.",
@@ -93,7 +93,7 @@ STR.Screenplay = {
         },
 
         user_lesson_03 = {
-            goal_completed = STR.CV.goal_completed_types.class_new_information_and_click_items,
+            goal_completed = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document consumers in our ocean food-web.",
             display_text = "Identify another component of the food-web in this scene by clicking.",
             debrief_text = {
@@ -134,7 +134,7 @@ STR.Screenplay = {
         -- Boat slides onto screen.
 
         user_lesson_05 = {
-            goal_completed = STR.CV.goal_completed_types.class_new_information_and_click_items,
+            goal_completed = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the highest-level consumer in our ocean food-web.",
             display_text = "Identify the highest-level component in the ocean food-web by clicking.",
             debrief_text = "Humans"..n.."Though humans do not live in the water we rely heavily on our oceans!",
@@ -252,7 +252,7 @@ STR.Screenplay = {
         -- Also show text explanations listed below. 
 
         user_lesson_18 = {
-            goal_completed = STR.CV.goal_completed_types.class_new_information_and_click_items,
+            goal_completed = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
             display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
             debrief_text = {
@@ -303,7 +303,7 @@ STR.Screenplay = {
         },
 
         goal_completed_default = {
-            STR.CV.goal_completed_types.class_decisison_only
+            STR.CV.goal_completed_types.class_decisison
         },
 
         key_basename_default = "decision_quiz_",
@@ -566,7 +566,7 @@ STR.Screenplay = {
         },
 
         goal_completed_default = {
-            STR.CV.goal_completed_types.class_new_information_only
+            STR.CV.goal_completed_types.class_new_information
         },
 
         key_basename_default = "user_lesson_",
@@ -590,7 +590,7 @@ STR.Screenplay = {
         -- Setup character selection
 
     },
---]]
+
     s04_decisions_character_choose = {
 
         -- Run character selection
@@ -608,7 +608,7 @@ STR.Screenplay = {
         },
 
         goal_completed_default = {
-            STR.CV.goal_completed_types.class_decisison_only
+            STR.CV.goal_completed_types.class_decisison
         },
 
         key_basename_default = "decision_character_",
@@ -673,7 +673,7 @@ STR.Screenplay = {
         },
 
         goal_completed_default = {
-            STR.CV.goal_completed_types.class_decisison_only
+            STR.CV.goal_completed_types.class_decisison
         },
 
         key_basename_default = "decision_role_",
@@ -1362,7 +1362,7 @@ STR.Screenplay = {
         },
 
         goal_completed_default = {
-            STR.CV.goal_completed_types.class_new_information_only
+            STR.CV.goal_completed_types.class_new_information
         },
 
         key_basename_default = "user_lesson_",
