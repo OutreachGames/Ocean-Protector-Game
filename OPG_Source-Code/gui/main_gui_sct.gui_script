@@ -233,13 +233,15 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, body_text, 
 	self.hud_popup_dynamic.screen_isactive = enabled_setting
 	self.hud_popup_dynamic.is_maximized = true
 
-	-- enable and set text
-	if body_text ~= nil then
-		gui.set_text(gui.get_node(constant.node_text_body), body_text)
-	end
-	title_text = title_text or "New Information"
-	if title_text ~= nil then
-		gui.set_text(gui.get_node(constant.node_text_title), title_text)
+	-- enable and set text, but only if enabling
+	if enabled_setting then
+		if body_text ~= nil then
+			gui.set_text(gui.get_node(constant.node_text_body), body_text)
+		end
+		title_text = title_text or "New Information"
+		if title_text ~= nil then
+			gui.set_text(gui.get_node(constant.node_text_title), title_text)
+		end
 	end
 
 end
@@ -1269,6 +1271,8 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_request_game_progress then
 		GameLogic_Progress(self, 1)
 	elseif message_id == HSH.msg_request_game_repeat then
+		local go_back_to_i = message.minfo_go_to_event_i or 0
+		self.gameplay_loop_i_key = go_back_to_i
 		GameLogic_Progress(self, 0)
 	elseif message_id == HSH.msg_set_player_character_role then
 		self.character_role_key = message.minfo_role_name

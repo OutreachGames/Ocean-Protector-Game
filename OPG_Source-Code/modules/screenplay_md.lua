@@ -36,6 +36,9 @@ STR.CV = {
         set_role_guide = function()
             msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = "role_guide"})
         end,
+        set_game_repeat_full = function()
+            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_go_to_event_i = 0})
+        end
     },
 
     goal_completed_types = {
@@ -82,7 +85,7 @@ STR.Screenplay = {
             "Follow information prompts."
         },
 
-        goal_completed_default = {
+        goal_completed_type_default = {
             STR.CV.goal_completed_types.class_new_information
         },
 
@@ -105,7 +108,7 @@ STR.Screenplay = {
         -- New popup box appears in the top header after each goal is completed. 
 
         user_lesson_02 = {
-            goal_completed = STR.CV.goal_completed_types.class_click_items,
+            goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
             display_text = "Identify the base of the food-web in this scene by clicking.",
             debrief_text = "Plankton "..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..ntab.."Phytoplankton are producers that use sunlight to get energy."..ntab.."Zooplankton are consumers that eat other plankton to get energy.",
@@ -113,7 +116,7 @@ STR.Screenplay = {
         },
 
         user_lesson_03 = {
-            goal_completed = STR.CV.goal_completed_types.class_click_items,
+            goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document consumers in our ocean food-web.",
             display_text = "Identify another component of the food-web in this scene by clicking.",
             debrief_text = {
@@ -154,7 +157,7 @@ STR.Screenplay = {
         -- Boat slides onto screen.
 
         user_lesson_05 = {
-            goal_completed = STR.CV.goal_completed_types.class_click_items,
+            goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the highest-level consumer in our ocean food-web.",
             display_text = "Identify the highest-level component in the ocean food-web by clicking.",
             debrief_text = "Humans"..n.."Though humans do not live in the water we rely heavily on our oceans!",
@@ -272,7 +275,7 @@ STR.Screenplay = {
         -- Also show text explanations listed below. 
 
         user_lesson_18 = {
-            goal_completed = STR.CV.goal_completed_types.class_click_items,
+            goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
             display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
             debrief_text = {
@@ -322,7 +325,7 @@ STR.Screenplay = {
             "Work through review questions."
         },
 
-        goal_completed_default = {
+        goal_completed_type_default = {
             STR.CV.goal_completed_types.class_decisison
         },
 
@@ -585,7 +588,7 @@ STR.Screenplay = {
             "Follow information prompts."
         },
 
-        goal_completed_default = {
+        goal_completed_type_default = {
             STR.CV.goal_completed_types.class_new_information
         },
 
@@ -627,7 +630,7 @@ STR.Screenplay = {
             "Evaluate and choose character."
         },
 
-        goal_completed_default = {
+        goal_completed_type_default = {
             STR.CV.goal_completed_types.class_decisison
         },
 
@@ -692,7 +695,7 @@ STR.Screenplay = {
             "Evaluate and submit decision."
         },
 
-        goal_completed_default = {
+        goal_completed_type_default = {
             STR.CV.goal_completed_types.class_decisison
         },
 
@@ -1379,17 +1382,43 @@ STR.Screenplay = {
             "Follow information prompts."
         },
 
-        goal_completed_default = {
+        goal_completed_type_default = {
             STR.CV.goal_completed_types.class_new_information
         },
 
         key_basename_default = "user_lesson_",
 
-        user_lesson_22 = {
+        user_lesson_22a = {
             goal_text = "Follow information prompts.",
-            display_text = "You have completed your work as a <insert character name>! This completion is saved so you can examine it again later. Let's examine the final resulting health of each group of life in our ocean scene. Once you are completed with this stage you may also restart the game and try to improve your score or use a different character.",
+            --#TODO: add the following after the first sentence: "This completion is saved so you can examine it again later."
+            display_text = "You have completed your work! Let's analyze the final health of each group of life in our ocean scene. ",
             debrief_text = nil,
             extra_text = ""
+        },
+
+        user_lesson_22b = {
+            goal_completed_type = STR.CV.goal_completed_types.class_decisison,
+            goal_text = "Select which option you would prefer.",
+            question_prompt = {
+                "You have now completed the game! You now have the choice to restart the game and try to improve your score and choose a different character."
+            },
+            answer_options = {
+                user_choice_1 = {
+                    text_display = {
+                        "Restart and redo the entire game. "
+                    },
+                    text_debrief = nil,
+                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                },
+                user_choice_2 = {
+                    text_display = {
+                        "Complete the game and view the last screen. "
+                    },
+                    text_debrief = nil,
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
         },
 
         -- Users will examine the final summary and graphs of each group of 
@@ -1397,7 +1426,7 @@ STR.Screenplay = {
 
         user_lesson_23 = {
             goal_text = "Follow information prompts.",
-            display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use.  If we all do our part, then together we can help protect our oceans! ",
+            display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part, then together we can help protect our oceans! ",
             debrief_text = nil,
             extra_text = "For more information on ocean acidification check out these resources from NOAA. "
         },
@@ -1436,7 +1465,7 @@ function STR:Get_Completion_Type(stage_key, substage_key)
         return nil
     end
 
-    return self:GetTable_or_Value(self.Screenplay[stage_key].goal_completed_default) or self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_completed)
+    return self:GetTable_or_Value(self.Screenplay[stage_key].goal_completed_type_default) or self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type)
 
 end
 
