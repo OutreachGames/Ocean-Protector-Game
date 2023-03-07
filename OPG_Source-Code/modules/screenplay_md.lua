@@ -1465,7 +1465,7 @@ function STR:Get_Completion_Type(stage_key, substage_key)
         return nil
     end
 
-    return self:GetTable_or_Value(self.Screenplay[stage_key].goal_completed_type_default) or self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type)
+    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type) or self:GetTable_or_Value(self.Screenplay[stage_key].goal_completed_type_default)
 
 end
 
@@ -1478,7 +1478,7 @@ function STR:Get_Goal_Text(stage_key, substage_key)
         return nil
     end
 
-    return self:GetTable_or_Value(self.Screenplay[stage_key].goal_text_default) or self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_text)
+    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_text) or self:GetTable_or_Value(self.Screenplay[stage_key].goal_text_default)
 
 end
 
