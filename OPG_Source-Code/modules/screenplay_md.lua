@@ -143,7 +143,7 @@ STR.Screenplay = {
 
         user_lesson_06 = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans affect us all—even those of us who live far away from the coast. Billions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. In addition, our oceans help cycle nutrients and are even a source of new medicines.",
+            display_text = "Our oceans affect us all, even those of us who live far away from the coast. Billions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. In addition, our oceans help cycle nutrients and are even a source of new medicines.",
             debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
             extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer."
         },
