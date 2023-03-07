@@ -292,17 +292,6 @@ local function Screen_Goals_Input(self, action_id, action)
 
 	local Info = self.hud_goals_constant
 
-	local function func_continue(button)
-
-		-- handle all the button functionality
-
-		-- set that this screen is no longer interactive
-		Screen_Goals_Reset(self, false, true)
-
-		print("Continue Button was pressed")
-
-	end
-
 end
 
 
@@ -397,7 +386,7 @@ local function Screen_Popup_Input(self, action_id, action)
 		-- handle all the button functionality
 
 		-- set that this screen is no longer interactive
-		Screen_Popup_Reset(self, false, true)
+		Screen_Popup_Reset(self, false, false)
 
 		print("Continue Button was pressed")
 
@@ -662,14 +651,15 @@ local function Screen_Decision_Input(self, action_id, action)
 	local function func_submit(button)
 
 		-- handle all the button functionality
-		local run_sizer = true
-		local reset_values = true
+
 		--^ need to have tracker as off so if plot checks it properly knows what the status is
 		-- if plot thinks decisions is still on it can re-enable decision 
 		--#TODO save the values to master table before clearing them!
 		local i = self.hud_decision_dynamic.goo_option_selected
 		local answer_string_key = self.hud_decision_dynamic.answer_choice_keys[i]
 
+		local run_sizer = false
+		local reset_values = true
 		Screen_Decision_Reset(self, false, run_sizer, reset_values)
 
 		print("Submit Button was pressed")
@@ -718,7 +708,7 @@ end
 
 
 -- HUD Screen: Graph Plot 
-local function Screen_Plot_Reset(self, enabled_setting, item_group_key, run_sizing)
+local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_key)
 
 	-- reset Graph Plot screen of HUD
 
@@ -852,7 +842,8 @@ local function Screen_Plot_Input(self, action_id, action)
 		-- handle all the button functionality
 
 		-- set that this screen is no longer interactive
-		Screen_Plot_Reset(self, false, nil, true)
+		local run_sizer = false
+		Screen_Plot_Reset(self, false, run_sizer)
 
 		print("Exit Button was pressed")
 
@@ -991,7 +982,7 @@ local function Screen_Data_Input(self, action_id, action)
 		-- if not active then expand
 		local needs_expanding = not self.hud_plot_dynamic.screen_isactive
 
-		Screen_Plot_Reset(self, true, table_key, needs_expanding)
+		Screen_Plot_Reset(self, true, needs_expanding, table_key)
 
 		print("Goto button was pressed for "..table_key)
 
@@ -1118,7 +1109,7 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 	local graph_item = valid_item_clicked or back_item_clicked
 	if graph_item ~= nil then
 		print("Item clicked and opening graph for <"..graph_item..">. \n ")
-		Screen_Plot_Reset(self, true, graph_item, true)
+		Screen_Plot_Reset(self, true, true, graph_item)
 		Items_Set_Color_Tracking(self, graph_item, false)
 	end
 
@@ -1170,7 +1161,7 @@ local function Close_All_Center_Screens(self)
 
 	-- close any open screens in center window
 
-	local run_sizing = true
+	local run_sizing = false
 	local enabled_status = false
 
 	-- popup/new info
