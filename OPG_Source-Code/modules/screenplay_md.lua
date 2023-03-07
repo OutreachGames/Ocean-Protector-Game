@@ -43,6 +43,16 @@ STR.CV = {
         class_decisison = 2,
         class_click_items = 3,
         class_view_items = 4
+    },
+
+    debrief_decision_view = {
+        --"Your decision has happened ..." 
+        "Let's observe how that decision affects the ocean. ",
+    },
+
+    debrief_decision_click = {
+        --"The effects of our decision are underway ..." 
+        "Now let's measure and record the status of each group in our data tracker. Click on a member of each group to measure it. ",
     }
 
 }
@@ -742,7 +752,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You've upgraded your engine to use less fuel. This upgrade cost money, but you have saved a lot money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR.CV.debrief_decision_view
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                     --#TODO: make short term points slightly lower here, but overall good
@@ -762,7 +772,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You've increased the number of trips you take on your boat. This has made you slightly earn more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR.CV.debrief_decision_view
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                     --#TODO: make short term points slightly higher here
@@ -772,21 +782,20 @@ STR.Screenplay = {
                     text_display = {
                         "",
                         role_captain = {
-                            "Trade your current fishing boat for two smaller boats and go on more fishing trips."
+                            "Keep your current fishing boat and do not change the number of fishing trips you take."
                         },
                         role_ranger = {
-                            "Trade your current research boat for two smaller boats and go on more boat travels."
+                            "Keep your current research boat and do not change the number of research trips you take."
                         },
                         role_guide = {
-                            "Trade your current tour boat for two smaller boats and go on more tours."
+                            "Keep your current tour boat and do not change the number of tours you do."
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You've chosen to keep your boat and the number of trips the same as before. The amount of money you spend and earn remains the same.  The amount of carbon dioxide that your boat emits also remains the same. "..STR.CV.debrief_decision_view
                     },
-                    -- "No immediate goal points change, but less OA points plus less sustainability points leading to less OA points."
-                    --#TODO: make short term points slightly unchanged here
-                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
+                    -- "No change to OA points or sustainability points."
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 }
             },
         },
@@ -819,7 +828,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You've upgraded your engine to use less fuel. This upgrade cost money, but you have saved a lot money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR.CV.debrief_decision_view
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                     --#TODO: make short term points slightly lower here, but overall good
@@ -839,7 +848,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You've increased the number of trips you take on your boat. This has made you slightly earn more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR.CV.debrief_decision_view
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                     --#TODO: make short term points slightly higher here
@@ -849,21 +858,20 @@ STR.Screenplay = {
                     text_display = {
                         "",
                         role_captain = {
-                            "Trade your current fishing boat for two smaller boats and go on more fishing trips."
+                            "Keep your current fishing boat and do not change the number of fishing trips you take."
                         },
                         role_ranger = {
-                            "Trade your current research boat for two smaller boats and go on more boat travels."
+                            "Keep your current research boat and do not change the number of research trips you take."
                         },
                         role_guide = {
-                            "Trade your current tour boat for two smaller boats and go on more tours."
+                            "Keep your current tour boat and do not change the number of tours you do."
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You've chosen to keep your boat and the number of trips the same as before. The amount of money you spend and earn remains the same.  The amount of carbon dioxide that your boat emits also remains the same. "..STR.CV.debrief_decision_view
                     },
-                    -- "No immediate goal points change, but less OA points plus less sustainability points leading to less OA points."
-                    --#TODO: make short term points slightly unchanged here
-                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
+                    -- "No change to OA points or sustainability points."
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 }
             },
         },
@@ -887,7 +895,7 @@ STR.Screenplay = {
                         "Upgrade your buoy to measure the amount of nutrients coming into the ocean from the coast."
                     },
                     text_debrief = {
-                        ""
+                        "You've upgraded the buoy to measure excess nutrients. Now you are more prepared for acidification events that are caused by too many nutrients. "..STR.CV.debrief_decision_view
                     },
                     -- "Best option to predict coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -897,7 +905,7 @@ STR.Screenplay = {
                         "Upgrade your buoy to measure what the salt content is in the ocean."
                     },
                     text_debrief = {
-                        ""
+                        "You've upgraded the buoy to measure ocean salt content. This gives you some information about the ocean but it does not help you predict acidification events that are caused by too many nutrients. "..STR.CV.debrief_decision_view
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -907,10 +915,10 @@ STR.Screenplay = {
                         "Do not upgrade your buoy at this time."
                     },
                     text_debrief = {
-                        ""
+                        "You've chosen to not upgrade your buoy. This has saved you a small amount of money but it does not help you predict acidification events that are caused by too many nutrients. "..STR.CV.debrief_decision_view
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
-                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 }
             },
         },
@@ -925,7 +933,7 @@ STR.Screenplay = {
                         "Upgrade your buoy to measure the amount of nutrients coming into the ocean from the coast."
                     },
                     text_debrief = {
-                        ""
+                        "You've upgraded the buoy to measure excess nutrients. Now you are more prepared for acidification events that are caused by too many nutrients. "..STR.CV.debrief_decision_view
                     },
                     -- "Best option to predict coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -935,7 +943,7 @@ STR.Screenplay = {
                         "Upgrade your buoy to measure what the salt content is in the ocean."
                     },
                     text_debrief = {
-                        ""
+                        "You've upgraded the buoy to measure ocean salt content. This gives you some information about the ocean but it does not help you predict acidification events that are caused by too many nutrients. "..STR.CV.debrief_decision_view
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -945,10 +953,10 @@ STR.Screenplay = {
                         "Do not upgrade your buoy at this time."
                     },
                     text_debrief = {
-                        ""
+                        "You've chosen to not upgrade your buoy. This has saved you a small amount of money but it does not help you predict acidification events that are caused by too many nutrients. "..STR.CV.debrief_decision_view
                     },
                     -- "This is not a very helpful option for predicting coastal OA. OA points and sustainability points remain unchanged." 
-                    outcome_result_func = STR.CV.outcome_functions.option_bad_default
+                    outcome_result_func = STR.CV.outcome_functions.option_fair_default
                 }
             },
         },
@@ -981,7 +989,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You have chosen to help the coral be more protected. "..STR.CV.debrief_decision_view
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -993,14 +1001,14 @@ STR.Screenplay = {
                             "Find where the river from the nearby city meets the ocean and add nets to that boundary."
                         },
                         role_ranger = {
-                            "Add buoys with floating nets near the shore where any rivers meet the ocean."
+                            "Add buoys with floating nets near the shore where nearby rivers meet the ocean."
                         },
                         role_guide = {
                             "There is a river near the tour docks that goes into the ocean. Place nets where that river meets the ocean."
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You have chosen to add nets around where nearby rivers meet the ocean. It turns out that adding these nets disrupted movement of river life. "..STR.CV.debrief_decision_view
                     },
                     -- "This might help catch large plastic waste going into the ocean but overall is expensive, not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     --#TODO: only make bad for fish, and not pH
@@ -1020,7 +1028,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, it turns out there is far too much plankton for anyone to remove. "..STR.CV.debrief_decision_view
                     },
                     -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     --#TODO: only make bad for fish, and not pH
@@ -1057,7 +1065,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped reduce the amount of excess phytoplankton. "..STR.CV.debrief_decision_view
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1076,7 +1084,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You have chosen to keep things the same. "..STR.CV.debrief_decision_view
                     },
                     -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -1095,7 +1103,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        ""
+                        "You have chosen to try and block off parts of the ocean. Unfortunately, that does not work and has caused disruptions to the ocean and cost you money. "..STR.CV.debrief_decision_view
                     },
                     -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1122,7 +1130,7 @@ STR.Screenplay = {
                         "The money should be spent to add more buses, carpool lanes, and sidewalks throughout the city."
                     },
                     text_debrief = {
-                        ""
+                        "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "..STR.CV.debrief_decision_view
                     },
                     -- "Very useful option which decreases coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1132,7 +1140,7 @@ STR.Screenplay = {
                         "The money should be spent on creating more parking lots throughout the city."
                     },
                     text_debrief = {
-                        ""
+                        "The council has followed your advice to build more parking lots. This has increased excess nutrient pollution. "..STR.CV.debrief_decision_view
                     },
                     -- "Not useful option which increases runoff and coastal OA. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1142,7 +1150,7 @@ STR.Screenplay = {
                         "The money should be spent on building a large convention center in the city."
                     },
                     text_debrief = {
-                        ""
+                        "The council has followed your advice to build a large convention center. This has increased excess nutrient pollution. "..STR.CV.debrief_decision_view
                     },
                     -- "By itself this will not make a large change in CO2 emissions but increases runoff and over timer adds more fossil fuel emissions. Unchanged OA points and less sustainability points." 
                     --#TODO make unchanged for short-term, while still being bad for long-term
@@ -1170,7 +1178,7 @@ STR.Screenplay = {
                         "Businesses will be granted money to sell their goods to the local community."
                     },
                     text_debrief = {
-                        ""
+                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "..STR.CV.debrief_decision_view
                     },
                     -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1180,7 +1188,7 @@ STR.Screenplay = {
                         "Businesses will be granted money to sell their products to cities in different states."
                     },
                     text_debrief = {
-                        ""
+                        "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR.CV.debrief_decision_view
                     },
                     -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1190,7 +1198,7 @@ STR.Screenplay = {
                         "Businesses will be granted money to buy new computers and office equipment."
                     },
                     text_debrief = {
-                        ""
+                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "..STR.CV.debrief_decision_view
                     },
                     -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
