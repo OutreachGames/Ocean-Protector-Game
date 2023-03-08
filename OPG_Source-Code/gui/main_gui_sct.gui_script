@@ -175,6 +175,8 @@ local function Player_Data_Table_AddEntry(self, item_key, new_value)
 
 	self.player_data_tbl.item_data_tbl[item_key][num_items + 1] = {item_tracker_score = new_value}
 
+	print("Adding new player data entry for item key <"..item_key.."> with new value <"..tostring(new_value).."> \n")
+
 end
 
 local function Player_Data_Table_GetEntry(self, item_key, i_key)
@@ -248,14 +250,18 @@ local function Screen_Data_TrackerUpdate(self)
 	for k_itemname,v_gui_groupname in pairs(constant.goo_group_names) do
 
 		--#TODO enable controller if key exists and has data, otherwise disable
-		--# Check if updating works on disabled node
+		--# recall that updating works on disabled node
 
+		-- get nodes
 		local max_length_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_max_x)
 		local max_size = gui.get_size(max_length_node)
+		-- get health percent
 		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
+		local new_health_value = EXT:math_clamp(entry_health_data.item_tracker_score, 0, 1)
+		-- set as new size
 		local progress_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_progress)
 		local new_size = gui.get_size(progress_node)
-		new_size.x = EXT:math_round(max_size.x * entry_health_data.item_tracker_score, 0)
+		new_size.x = EXT:math_round(max_size.x * new_health_value, 0)
 		gui.set_size(progress_node, new_size)
 
 	end
@@ -281,10 +287,14 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 		-- if there is an i-match then make visible text and bar progress, otherwise hide visibility
 		local entry_health_data = Player_Data_Table_GetEntry(self, item_key, i)
 		if entry_health_data ~= nil then
+			-- get node sizes 
 			local max_y_length_node = gui.get_node(plot_id..constant.basename_individual_bar_max_y)
 			local max_size = gui.get_size(max_y_length_node)
 			local new_size = gui.get_size(progress_node)
-			new_size.y = EXT:math_round(max_size.y * entry_health_data.item_tracker_score, 0)
+			-- get health percent
+			local new_health_value = EXT:math_clamp(entry_health_data.item_tracker_score, 0, 1)
+			new_size.y = EXT:math_round(max_size.y * new_health_value, 0)
+			-- set as new size and enable visibility
 			gui.set_size(progress_node, new_size)
 			gui.set_text(label_node, tostring(i) or "1")
 			set_visible = true
