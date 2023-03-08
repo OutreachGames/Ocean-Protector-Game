@@ -308,7 +308,8 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl)
 	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
 		local previous_entry = Player_Data_Table_GetEntry(self, k_itemname) or {}
 		local previous_score = previous_entry.item_tracker_score or 0
-		local new_value = previous_score + score_tbl[k_itemname] or score_tbl[1] or 0
+		local update_score = score_tbl[k_itemname] or score_tbl[1] or 0
+		local new_value = previous_score + update_score
 		Player_Data_Table_AddEntry(self, k_itemname, previous_score + new_value)
 
 		-- #TODO update where this goes, since usually won't seen updates until clicking on item
