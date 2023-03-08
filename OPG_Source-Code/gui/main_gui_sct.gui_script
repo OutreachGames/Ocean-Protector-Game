@@ -157,6 +157,8 @@ end
 
 local function Valid_Event_Check_Full(self, match_loop_type)
 
+	-- returns true if loop status type is main or debrief and if given completion type is primary or secondary, false otherwise 
+
 	local status_valid = Loop_StatusType_is_Main(self) or Loop_StatusType_is_Debrief(self)
 
 	local primary_or_secondary_valid = Loop_CompletionType_is_Primary(self, match_loop_type) or Loop_CompletionType_is_Secondary(self, match_loop_type)
@@ -170,6 +172,7 @@ local function Player_Data_Table_AddEntry(self, item_key, new_value)
 	-- adds an i-based entry to player save table for given item key 
 
 	local num_items = #self.player_data_tbl.item_data_tbl[item_key]
+
 	self.player_data_tbl.item_data_tbl[item_key][num_items + 1] = {item_tracker_score = new_value}
 
 end
@@ -177,7 +180,10 @@ end
 local function Player_Data_Table_GetEntry(self, item_key, i_key)
 
 	-- gets an i-based entry from player save table for given item key and i-key
+
+	-- default i-key is last in list
 	i_key = i_key or #self.player_data_tbl.item_data_tbl[item_key]
+
 	return self.player_data_tbl.item_data_tbl[item_key][i_key]
 
 end
@@ -194,6 +200,17 @@ local function Player_Data_Table_Reset(self)
 	for k_itemname,_ in pairs(CV_item_groups) do
 		self.player_data_tbl.item_data_tbl[k_itemname] = {}
 		Player_Data_Table_AddEntry(self, k_itemname, 1.0)
+	end
+
+end
+
+local function Player_Data_Table_RunScoreInput(self, score_tbl)
+
+	-- takes a table and updates scores accordingly
+	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
+		local previous_score = Player_Data_Table_GetEntry(self, k_itemname) or 0
+		local new_value = previous_score + score_tbl[k_itemname] or score_tbl[1] or 0
+		Player_Data_Table_AddEntry(self, k_itemname, previous_score + new_value)
 	end
 
 end
@@ -717,6 +734,8 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- run outcome function
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, self.character_role_key, answer_string_key)
+
+				-- #TODO reset data view but do not change size
 
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
@@ -1409,6 +1428,8 @@ function on_message(self, message_id, message, sender)
 
 	elseif message_id == HSH.msg_set_player_character_role then
 		self.character_role_key = message.minfo_role_name
+	elseif message_id == HSH.msg_set_new_item_value then
+		Player_Data_Table_RunScoreInput(self, message.minfo_item_score_update_tbl)
 	end
 
 end

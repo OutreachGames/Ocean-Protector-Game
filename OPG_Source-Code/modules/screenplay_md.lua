@@ -16,15 +16,18 @@ STR.CV = {
             return nil
         end,
         option_good_default = function() -- (+)
-            return 0.05
+            msg.post("hud#gui", HSH.msg_set_new_item_value, {minfo_item_score_update_tbl = {0.05}})
+            --return 0.05
             --item_pH = {}, item_coral = {}, --...
         end,
-        option_fair_default = function() -- (+)
-            return 0.0
+        option_fair_default = function() -- (0)
+            msg.post("hud#gui", HSH.msg_set_new_item_value, {minfo_item_score_update_tbl = {0.0}})
+            --return 0.0
             --item_pH = {}, item_coral = {}, --...
         end,
-        option_bad_default = function() -- (+)
-            return -0.05
+        option_bad_default = function() -- (-)
+            msg.post("hud#gui", HSH.msg_set_new_item_value, {minfo_item_score_update_tbl = {-0.05}})
+            --return -0.05
             --item_pH = {}, item_coral = {}, --...
         end,
         set_role_ranger = function()
