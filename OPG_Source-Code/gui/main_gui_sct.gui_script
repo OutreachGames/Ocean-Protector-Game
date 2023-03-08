@@ -244,6 +244,29 @@ local function On_GO_Items_Clicked_Basic_Valid(self)
 
 end
 
+-- HUD Screen: Data (Section 1)
+local function Screen_Data_TrackerUpdate(self)
+
+	-- update progress bars
+
+	local constant = self.hud_data_constant
+	for k_itemname,v_gui_groupname in pairs(constant.goo_group_names) do
+
+		--#TODO enable controller if key exists and has data, otherwise disable
+		--# Check if updating works on disabled node
+
+		local max_length_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_max_x)
+		local max_size = gui.get_size(max_length_node)
+		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
+		local progress_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_progress)
+		local new_size = gui.get_size(progress_node)
+		new_size.x = EXT:math_round(max_size.x * entry_health_data.item_tracker_score, 0)
+		gui.set_size(progress_node, new_size)
+
+	end
+
+end
+
 
 -- HUD Screen: Goals
 local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
@@ -963,7 +986,7 @@ local function Screen_Plot_Input(self, action_id, action)
 end
 
 
--- HUD Screen: Data
+-- HUD Screen: Data (Section 2)
 local function Screen_Data_Reset(self, enabled_setting)
 
 	-- reset Data screen of HUD
@@ -983,19 +1006,7 @@ local function Screen_Data_Reset(self, enabled_setting)
 	self.hud_data_dynamic.goo_items_areactive = true
 
 	-- enable and set bars accordingly
-	for k_itemname,v_gui_groupname in pairs(constant.goo_group_names) do
-
-		--#TODO enable controller if key exists and has data, otherwise disable
-
-		local max_length_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_max_x)
-		local max_size = gui.get_size(max_length_node)
-		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
-		local progress_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_progress)
-		local new_size = gui.get_size(progress_node)
-		new_size.x = EXT:math_round(max_size.x * entry_health_data.item_tracker_score, 0)
-		gui.set_size(progress_node, new_size)
-
-	end
+	Screen_Data_TrackerUpdate(self)
 
 end
 
