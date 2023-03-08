@@ -45,7 +45,7 @@ nodes {
     w: 1.0
   }
   type: TYPE_TEMPLATE
-  id: "group_plot"
+  id: "group_bar_element"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -88,12 +88,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "textures/gui_bar_core"
-  id: "group_plot/gui_frame_core"
+  id: "group_bar_element/gui_frame_core"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot"
+  parent: "group_bar_element"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -148,12 +148,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: "textures/gui_bar_progress"
-  id: "group_plot/gui_frame_progress"
+  id: "group_bar_element/gui_frame_progress"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot"
+  parent: "group_bar_element"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -207,12 +207,12 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "group_plot/tracker_max_length"
+  id: "group_bar_element/tracker_max_length"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_FIT
-  parent: "group_plot"
+  parent: "group_bar_element"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {

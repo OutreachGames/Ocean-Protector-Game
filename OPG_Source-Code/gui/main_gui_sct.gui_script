@@ -77,8 +77,8 @@ local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
 		color_bar = MY_GOO.COLOR_DEFAULT
 	end
 
-	gui.set_color(gui.get_node(item_base_groupname..data_info.item_health_bar_basename), color_bar)
-	gui.set_color(gui.get_node(item_base_groupname..data_info.item_text_basename), color_text)
+	gui.set_color(gui.get_node(item_base_groupname..data_info.basename_item_bar_progress), color_bar)
+	gui.set_color(gui.get_node(item_base_groupname..data_info.basename_item_bar_label), color_text)
 
 end
 
@@ -174,11 +174,20 @@ local function Player_Data_Table_AddEntry(self, item_key, new_value)
 
 end
 
+local function Player_Data_Table_GetEntry(self, item_key, i_key)
+
+	-- gets an i-based entry from player save table for given item key and i-key
+	i_key = i_key or #self.player_data_tbl.item_data_tbl[item_key]
+	return self.player_data_tbl.item_data_tbl[item_key][i_key]
+
+end
+
 local function Player_Data_Table_Reset(self)
 
 	-- resets player data
 
 	self.player_data_tbl = nil
+	self.player_data_tbl = {}
 	self.player_data_tbl.item_data_tbl = {}
 
 	-- go through item keys and initialize table and add first entry of fully healthy
@@ -834,7 +843,36 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 		gui.set_text(gui.get_node(v_node_y_tickname), tick_label)
 	end
 
-	--#TODO enable and set graph bars accordingly
+	-- enable and set graph bars accordingly
+	-- get item key, and for each item bar progress and label to visible
+
+	for i=1, constant.max_number_bars do
+
+		-- get nodes to update/show or hide
+		local plot_id = constant.basename_individual_bar_group..i
+		local progress_node = gui.get_node(plot_id..constant.basename_individual_bar_progress)
+		local label_node = gui.get_node(plot_id..constant.basename_individual_bar_label)
+		local set_visible
+
+		-- if there is an i-match then make visible text and bar progress, otherwise hide visibility
+		local entry_health_data = Player_Data_Table_GetEntry(self, item_group_key, i)
+		if entry_health_data ~= nil then
+			local max_y_length_node = gui.get_node(plot_id..constant.basename_individual_bar_max_y)
+			local max_size = gui.get_size(max_y_length_node)
+			local new_size = gui.get_size(progress_node)
+			new_size.y = EXT:math_round(max_size.y * entry_health_data.item_tracker_score, 0)
+			gui.set_size(progress_node, new_size)
+			gui.set_text(label_node, tostring(i) or "1")
+			set_visible = true
+		else
+			set_visible = false
+		end
+
+		-- visibility accordingly
+		gui.set_visible(label_node, set_visible)
+		gui.set_visible(progress_node, set_visible)
+
+	end
 
 end
 
@@ -857,7 +895,13 @@ local function Screen_Plot_Initialize(self, enabled_status)
 		node_title_name = basename .. plot_base .. "/gui_text_title",
 		node_y_label = basename .. plot_base .. "/gui_text_label_yaxis",
 		node_y_ticks = {},
-		number_y_ticks = num_y_ticks
+		number_y_ticks = num_y_ticks,
+		max_number_bars = 15,
+		node_groupplots_controller = basename..plot_base.."/group_plots",
+		basename_individual_bar_group = basename..plot_base.."/group_plot_",
+		basename_individual_bar_label = "/gui_label",
+		basename_individual_bar_max_y = "/group_bar_element/tracker_max_length",
+		basename_individual_bar_progress = "/group_bar_element/gui_frame_progress",
 	}
 
 	-- add ytick labels
@@ -919,7 +963,20 @@ local function Screen_Data_Reset(self, enabled_setting)
 	self.hud_data_dynamic.is_maximized = true
 	self.hud_data_dynamic.goo_items_areactive = true
 
-	--#TODO enable and set bars accordingly
+	-- enable and set bars accordingly
+	for k_itemname,v_gui_groupname in pairs(constant.goo_group_names) do
+
+		--#TODO enable controller if key exists and has data, otherwise disable
+
+		local max_length_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_max_x)
+		local max_size = gui.get_size(max_length_node)
+		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
+		local progress_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_progress)
+		local new_size = gui.get_size(progress_node)
+		new_size.x = EXT:math_round(max_size.x * entry_health_data.item_tracker_score, 0)
+		gui.set_size(progress_node, new_size)
+
+	end
 
 end
 
@@ -942,8 +999,9 @@ local function Screen_Data_Initialize(self, enabled_status)
 		node_min_length = basename .. "/tracker_min_length",
 		goo_minimizer = basename .. "/group_button_sizer",
 		goo_item_gotograph = "/group_button_goto",
-		item_health_bar_basename = "/group_healthbar/gui_frame_progress",
-		item_text_basename = "/gnode_body_text",
+		basename_item_bar_progress = "/group_healthbar/gui_frame_progress",
+		basename_item_bar_max_x = "/group_healthbar/tracker_max_length",
+		basename_item_bar_label = "/gnode_body_text",
 		goo_group_names = {},
 		goo_group_goto_buttons = {},
 	}
@@ -1296,6 +1354,9 @@ local function GameLogic_Start(self)
 
 	local set_enabled = false
 
+	-- reset save table
+	Player_Data_Table_Reset(self)
+
 	On_GO_Items_Clicked_Reset(self, set_enabled)
 	Screen_Goals_Initialize(self, set_enabled)
 	Screen_Decision_Initialize(self, set_enabled)
@@ -1314,9 +1375,6 @@ local function GameLogic_Start(self)
 	-- get stage and substage list in order
 	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
-
-	-- reset save table
-	Player_Data_Table_Reset(self)
 
 	-- kick off first action
 	GameLogic_Progress(self)
