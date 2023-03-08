@@ -23,7 +23,7 @@ local HASH = {
     msg_request_game_repeat = hash("msg_request_game_repeat"),
     msg_report_game_progressed = hash("msg_report_game_progressed"),
     msg_set_player_character_role = hash("msg_set_player_character_role"),
-    --msg_set_new_item_value = hash("msg_set_new_item_value"),
+    msg_set_new_item_value = hash("msg_set_new_item_value"),
 
     -- controls
     control_touch = hash("touch"),

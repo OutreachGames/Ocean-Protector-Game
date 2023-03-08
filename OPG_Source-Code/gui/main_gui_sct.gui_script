@@ -202,6 +202,12 @@ local function Player_Data_Table_Reset(self)
 		Player_Data_Table_AddEntry(self, k_itemname, 1.0)
 	end
 
+	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
+	-- the init function intializes the plot and data screens, 
+	-- and each of this initialization functions run the reset function for each
+	-- which runs the health bar reset to whatever the value in this health tracker table is
+	-- plus hud screens may not have been initialized yet
+
 end
 
 
@@ -300,7 +306,8 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl)
 
 	-- takes a table and updates scores accordingly
 	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
-		local previous_score = Player_Data_Table_GetEntry(self, k_itemname) or 0
+		local previous_entry = Player_Data_Table_GetEntry(self, k_itemname) or {}
+		local previous_score = previous_entry.item_tracker_score or 0
 		local new_value = previous_score + score_tbl[k_itemname] or score_tbl[1] or 0
 		Player_Data_Table_AddEntry(self, k_itemname, previous_score + new_value)
 
