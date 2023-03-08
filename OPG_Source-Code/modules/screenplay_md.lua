@@ -15,6 +15,9 @@ STR.CV = {
         option_empty = function()
             return nil
         end,
+        option_OA_effect_initial = function() -- (+)
+            msg.post("hud#gui", HSH.msg_set_new_item_value, {minfo_item_score_update_tbl = {-0.5}})
+        end,
         option_good_default = function() -- (+)
             msg.post("hud#gui", HSH.msg_set_new_item_value, {minfo_item_score_update_tbl = {0.05}})
             --return 0.05
@@ -284,7 +287,7 @@ STR.Screenplay = {
             --#TODO add this comment back in
             --goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
-            display_text = "Identify how a component of the food-web has changed under more acidic oceans by clicking.",
+            display_text = "Identify each component of the food-web has changed under more acidic oceans by clicking.",
             debrief_text = {
                 "",
                 item_plankton = {
@@ -308,7 +311,8 @@ STR.Screenplay = {
             },
             extra_text = {
                 ""
-            }
+            },
+            outcome_result_func = STR.CV.outcome_functions.option_OA_effect_initial
         },
 
         user_lesson_19 = {

@@ -175,7 +175,7 @@ local function Player_Data_Table_AddEntry(self, item_key, new_value)
 
 	self.player_data_tbl.item_data_tbl[item_key][num_items + 1] = {item_tracker_score = new_value}
 
-	print("Adding new player data entry for item key <"..item_key.."> with new value <"..tostring(new_value).."> \n")
+	--print("Adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> \n")
 
 end
 
@@ -316,11 +316,19 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl)
 
 	-- takes a table and updates scores accordingly
 	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
+		-- get previous entry and new delta 
 		local previous_entry = Player_Data_Table_GetEntry(self, k_itemname) or {}
 		local previous_score = previous_entry.item_tracker_score or 0
 		local update_score = score_tbl[k_itemname] or score_tbl[1] or 0
+		--print("Update score for new entry is <"..tostring(update_score).."> \n")
+
+		-- new value is previous + delta 
 		local new_value = previous_score + update_score
-		Player_Data_Table_AddEntry(self, k_itemname, previous_score + new_value)
+
+		--#TODO testing only, remove when done testing!
+		new_value = math.random(80,120)/100 * new_value
+
+		Player_Data_Table_AddEntry(self, k_itemname, new_value)
 
 		-- #TODO update where this goes, since usually won't seen updates until clicking on item
 		-- update trackers
