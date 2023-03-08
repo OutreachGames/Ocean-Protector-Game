@@ -183,10 +183,20 @@ local function Player_Data_Table_GetEntry(self, item_key, i_key)
 
 	-- gets an i-based entry from player save table for given item key and i-key
 
-	-- default i-key is last in list
-	i_key = i_key or #self.player_data_tbl.item_data_tbl[item_key]
+	if self.player_data_tbl == nil then
+		print("Error: Unable to get entry in player data table because player data table does not exist \n")
+	end
+	if self.player_data_tbl.item_data_tbl == nil then
+		print("Error: Unable to get entry in item data table of player data table because item data table does not exist \n")
+	end
 
-	return self.player_data_tbl.item_data_tbl[item_key][i_key]
+	local item_data = self.player_data_tbl.item_data_tbl[item_key]
+	if item_data == nil then return nil end
+
+	-- default i-key is last in list
+	i_key = i_key or #item_data
+
+	return item_data[i_key]
 
 end
 
