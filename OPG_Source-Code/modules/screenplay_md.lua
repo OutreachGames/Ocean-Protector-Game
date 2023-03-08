@@ -37,7 +37,7 @@ STR.CV = {
             msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = "role_guide"})
         end,
         set_game_repeat_full = function()
-            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_go_to_event_i = 0})
+            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_go_to_event_i = 0, minfo_reset_player_save = true})
         end
     },
 
