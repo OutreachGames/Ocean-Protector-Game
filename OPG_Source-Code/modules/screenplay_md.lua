@@ -827,7 +827,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_02a = { -- Water Monitoring, check 1
+        decision_role_02a = { -- #TODO Personal Nutrient Pollution Reduction, check 1
             question_prompt = {
                 "",
                 role_captain = {
@@ -950,7 +950,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_03b = { -- Personal CO2 Reduction, check 2
+        decision_role_03b = { -- #TODO Personal Nutrient Pollution Reduction, check 2
             question_prompt = {
                 "",
                 role_captain = {
