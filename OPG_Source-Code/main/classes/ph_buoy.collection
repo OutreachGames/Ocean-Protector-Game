@@ -53,7 +53,7 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: 11.0\n"
+  "    x: 10.0\n"
   "    y: 266.0\n"
   "    z: -0.8\n"
   "  }\n"
@@ -93,7 +93,7 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: 5.0\n"
+  "    x: 0.0\n"
   "    y: 71.0\n"
   "    z: 0.15\n"
   "  }\n"
@@ -106,8 +106,28 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -3.0
+    x: 0.0
     y: 535.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "go_clickme"
+  data: ""
+  position {
+    x: 0.0
+    y: 0.0
     z: 0.0
   }
   rotation {

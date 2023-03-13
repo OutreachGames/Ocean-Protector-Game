@@ -1160,7 +1160,7 @@ local function SetupBuoy(self)
 	go.animate("/ph_buoy/go_rope", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTQUAD, 3)
 	go.animate("/ph_buoy/go_body", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -3, go.EASING_INOUTSINE, 3)
 
-	Spawned_AddObject(self, CV_Spawn_Keys.item_ph.subitem_buoy.spawn_list_key, "/ph_buoy/go_body")
+	Spawned_AddObject(self, CV_Spawn_Keys.item_ph.subitem_buoy.spawn_list_key, "/ph_buoy/go_clickme")
 
 end
 
