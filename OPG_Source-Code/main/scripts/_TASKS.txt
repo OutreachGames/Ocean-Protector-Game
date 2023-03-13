@@ -17,6 +17,8 @@
 
     -- NOTES 
     --[[
+    make a few more times as oa decreases, and add hash time break
+
     firebase takes in every decision and coded functions can then be created to extract data for research purposes
     data submitted after each decision includes ip, user specified id, game specified run number, decision question and submitted answer, time decision started, and time decisions submitted 
 

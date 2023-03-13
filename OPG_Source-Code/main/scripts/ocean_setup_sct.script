@@ -34,6 +34,12 @@ local CV_Spawn_Keys = {
 		},
 	},
 
+	item_ph = {
+		subitem_buoy = {
+			spawn_list_key = "item_ph__subitem_buoy",
+		}
+	},
+
 	-- reminders:
 	--   'spawn_position_grid' is dynamically created
 	--   'spawn_x_max' is dynamically created base on max count of spawn needed
@@ -507,7 +513,7 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 		local rot = nil
 
 		local props = {
-			[HSH.STR_go] = { 
+			[HSH.STR_go] = {
 				Obj_Wave_Movment_X_Buffer = false,
 				Obj_Wave_Movment_X_Direction = wave_direction,
 				Obj_Wave_Movment_X_Time = movex_time,
@@ -1146,6 +1152,18 @@ local function SetupAnimals(self)
 
 end
 
+local function SetupBuoy(self)
+
+	-- starts looping buoy movment and adds to tracker table as way to measure pH
+
+	-- set it at left the kick off
+	go.animate("/ph_buoy/go_rope", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTQUAD, 3)
+	go.animate("/ph_buoy/go_body", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -3, go.EASING_INOUTSINE, 3)
+
+	Spawned_AddObject(self, CV_Spawn_Keys.item_ph.subitem_buoy.spawn_list_key, "/ph_buoy/go_body")
+
+end
+
 local function Make_Bubbles(self, x_pos)
 
 	-- trigger some bubbles at given x position
@@ -1250,6 +1268,9 @@ local function SceneStart(self)
 
 	-- setup animals
 	SetupAnimals(self)
+
+	-- setup buoy
+	SetupBuoy(self)
 
 	-- play sounds 
 	sound.play("sound_controller#sound_underwater", {delay = 0, gain = 0.15, pan = 0, speed = 1.0})
