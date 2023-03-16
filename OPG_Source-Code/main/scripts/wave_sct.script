@@ -110,7 +110,9 @@ local function Wave_Setup(self)
 		local scr_width = RES.Internal_X
 		-- get sprite width, but make sure to scale by go scale!!
 		-- assume scale x=y=z
-		self.Sprite_width = go.get(self.Current_sprite_string, "size.x") * go.get(".", "scale.x")
+		-- also take out 1 pixel from each side to fix perfectly aligned scrolling along x-axis 
+		-- (issue was that global position was always 0-1 pixels off from local position, and global position cannot be set)
+		self.Sprite_width = (go.get(self.Current_sprite_string, "size.x") * go.get(".", "scale.x")) - 2
 
 		-- default values are from left to right
 		local buffer = 0
