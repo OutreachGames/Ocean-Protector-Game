@@ -28,7 +28,7 @@ local function Move_Wave_X(self)
 	-- run animations to move waves
 
 	-- declare function for readability and the thought of optimization
-	local function func_reset_position()
+	local function func_reset_position(self)
 		-- move wave back off screen and then move again
 		-- keep it local within this function since it cannot take values and needs a self reference
 			go.set(".", "position.x", self.Distance_offscreen_start)
@@ -40,7 +40,7 @@ local function Move_Wave_X(self)
 		local sway_movement = go.get_position().x + (self.Sprite_width * self.Obj_Wave_Movment_X_Multiplier)
 		local sway_time = self.Obj_Wave_Movment_X_Time
 		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, sway_movement, go.EASING_LINEAR, sway_time, 0)
-	else	
+	else
 		-- move the wave from the start side to finish side, eventually offscreen
 		-- note that the distance should always be the same to ensure the wave velocity is consistent
 		-- if we tried to only move the wave just off screen it might result in a very slow wave 

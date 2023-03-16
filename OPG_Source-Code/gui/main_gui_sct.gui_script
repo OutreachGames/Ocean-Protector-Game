@@ -389,9 +389,9 @@ local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
 		local shown_text = gui.get_text(text_node)
 		local str_length = #shown_text
 
-		-- 240 is base with 2 lines and 340 is with 5 lines, 100/3
-		local line_per_extra_y = 30
-		local min_frame_y = 240
+		-- 220ish is base with 2 lines and 330ish is with 5 lines, 100/3
+		local line_per_extra_y = 28
+		local min_frame_y = 220
 		local str_length_per_line = 15
 		local base_num_lines = 2
 
