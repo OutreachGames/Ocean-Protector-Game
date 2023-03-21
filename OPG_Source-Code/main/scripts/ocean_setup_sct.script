@@ -1286,6 +1286,10 @@ function init(self)
 		-- randomize random generator
 		math.randomseed(socket.gettime())
 
+	go.animate("/boat_fishing/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.1)
+	go.animate("/boat_touring/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.2)
+	go.animate("/boat_ranger/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.3)
+
 	SceneStart(self)
 
 end

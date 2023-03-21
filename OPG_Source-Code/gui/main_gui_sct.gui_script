@@ -1457,7 +1457,7 @@ local function GameLogic_Start(self)
 	Screen_Goals_Initialize(self, set_enabled)
 	Screen_Decision_Initialize(self, set_enabled)
 	Screen_Popup_Initialize(self, set_enabled)
-	Screen_Data_Initialize(self, true)
+	Screen_Data_Initialize(self, set_enabled)
 	Screen_Plot_Initialize(self, set_enabled)
 	--Items_Click_Status_Reset(self, {"item_fish"})
 
@@ -1473,7 +1473,10 @@ local function GameLogic_Start(self)
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
 	-- kick off first action
-	GameLogic_Progress(self)
+	timer.delay(6.0, false, function(self)
+		Screen_Data_Initialize(self, true)
+		GameLogic_Progress(self)
+	end)
 
 end
 
