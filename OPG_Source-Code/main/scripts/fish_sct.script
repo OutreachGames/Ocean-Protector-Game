@@ -49,7 +49,7 @@ local CV_Timer_Keys = {
 
 local CV_Status_Type = {
 	no_run_active = 0, --set on init and when Movement_Stop_Run delay over
-	start_run_active = 1, --started On_Movement_Start after previous run check done, ended when Movement_Stop_Run delay over 
+	start_run_active = 1, --started On_Movement_Start after previous run check done, ended when Movement_Stop_Run delay over
 	stop_run_active = -1, --started when On_Movement_StopForce called, ended when Movement_Stop_Run delay over
 }
 
@@ -57,9 +57,9 @@ local CV_Status_Type = {
 -- functions
 local function GetRandomEasing(list_opt_i)
 
-	-- get a random easing given smooth option 
+	-- get a random easing given smooth option
 
-	-- using varying easing args will given visual movement variation 
+	-- using varying easing args will given visual movement variation
 	-- while ensuring overall time to target is constant
 	-- https://forum.defold.com/t/easing-cheat-sheet/68727
 	local easing_opts = {
@@ -77,7 +77,7 @@ local function GetRandomEasing(list_opt_i)
 			go.EASING_INOUTBACK
 		},
 		{ -- 2. smooth in either direction: smoothest in both directions
-			go.EASING_INOUTCUBIC, 
+			go.EASING_INOUTCUBIC,
 			go.EASING_INOUTQUAD,
 			go.EASING_INOUTSINE,
 		},
@@ -132,18 +132,18 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 
 	blend_time = blend_time or CV_AnimBlend_Time
 
-	-- run swimming 
+	-- run swimming
 	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD,
-		{ blend_duration = CV_AnimBlend_Time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
+		{ blend_duration = blend_time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
 	)
 	-- run eyes looking around
 	spine.play_anim("#spinemodel", CV_Anim_Look_Hash, go.PLAYBACK_LOOP_FORWARD,
-		{ blend_duration = CV_AnimBlend_Time, playback_rate = look_rate, track = CV_Anim_Look_Track}
+		{ blend_duration = blend_time, playback_rate = look_rate, track = CV_Anim_Look_Track}
 	)
 	-- run floating
 	if self.Obj_Use_Float_Animation then
 		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD,
-			{ blend_duration = CV_AnimBlend_Time, playback_rate = float_rate, track = CV_Anim_Float_Track}
+			{ blend_duration = blend_time, playback_rate = float_rate, track = CV_Anim_Float_Track}
 		)
 	end
 
@@ -153,8 +153,8 @@ local function Get_Duration_Translate(max_translate_speed, self_pos, target_pos)
 
 	-- get how long a translation should take given max speed
 
-	if max_translate_speed < 0 then 
-		return 0 
+	if max_translate_speed < 0 then
+		return 0
 	end
 
 	local distance = vmath.length(target_pos - self_pos)
@@ -169,11 +169,11 @@ local function Get_Duration_Rotate(max_rot_speed, self_angle_deg, target_angle_d
 
 	-- get how long a rotation should take given max speed
 
-	if max_rot_speed < 0 then 
-		return 0 
+	if max_rot_speed < 0 then
+		return 0
 	end
 
-	-- max_rot_speed is how many degrees per second 
+	-- max_rot_speed is how many degrees per second
 	-- so get how long it would take to rotate to rotation distance at this speed
 	local angle_dist_deg = math.abs(self_angle_deg - target_angle_deg) % 360
 
@@ -188,7 +188,7 @@ local function Get_Duration_Rotate(max_rot_speed, self_angle_deg, target_angle_d
 	-- no need to add min if rotation super small though
 	min_rot_time = min_rot_time or 0
 	local too_small = 2
-	if min_rot_time < too_small and time_abs < min_rot_time then 
+	if min_rot_time < too_small and time_abs < min_rot_time then
 		time_abs = min_rot_time
 	end
 
@@ -353,7 +353,7 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 			return
 		end
 
-		-- check if ping-pong update needed and run via message 
+		-- check if ping-pong update needed and run via message
 		--   (so we do not have to forward declare functions)
 		if do_pingpong_check and self.Obj_On_Done_Loop_Waypoints and self.is_alive then
 			-- which position are we farthest from? go to that one
@@ -400,8 +400,8 @@ end
 
 local function On_Movement_StopForce(self, is_instant, kill_when_stopped)
 
-	-- prematurely stops any ongoing animation and returns time to when it will be fully stopped 
-	-- tries to do this in a semi-smart way, with 
+	-- prematurely stops any ongoing animation and returns time to when it will be fully stopped
+	-- tries to do this in a semi-smart way, with
 	--   if during flip then end when flip over
 	--   if in initial rotation then end when rotation over
 	--   if near target then let finish
@@ -439,7 +439,7 @@ local function On_Movement_StopForce(self, is_instant, kill_when_stopped)
 			go.set(".", "scale.y", self.goal_scale_y)
 		else
 			-- wait for flip to be done then stop (since we are already stationary)
-			-- this might end up wait a bit longer then flip being done 
+			-- this might end up wait a bit longer then flip being done
 			-- but that's fine since it's still relatively short
 			local l_delay = self.Obj_Flip_Time + CV_Buffer_Time
 			Movement_SetTime_End(self, l_delay)
@@ -453,10 +453,10 @@ local function On_Movement_StopForce(self, is_instant, kill_when_stopped)
 		end
 	end
 
-	-- if this is instant then finish up and return 
+	-- if this is instant then finish up and return
 	if is_instant then
 		-- do not need to set idle rotation, since this is a force instant stop b/c
-		--   it's likely we'll want to chain this with something else, 
+		--   it's likely we'll want to chain this with something else,
 		--   and setting resting euler z will make it look jumpy
 
 		-- recall all animations have already been cancelled
@@ -510,7 +510,7 @@ local function On_Movement_StopForce(self, is_instant, kill_when_stopped)
 	-- make sure to cancel all animations so they do not trigger then override if their timers come in
 	Cancel_Animations_List({"scale", "position", "euler"})
 
-	-- figure out stopping position that is a bit forward of current position 
+	-- figure out stopping position that is a bit forward of current position
 	local ang_to_target = math.rad(self.goal_target_angle_to_degrees)
 	local quat_to_target = vmath.quat_rotation_z(ang_to_target)
 	local direction = vmath.rotate(quat_to_target, CV_UP_Vector)
@@ -549,14 +549,14 @@ end
 
 local function Movement_Start_Run(self, target_pos, on_init)
 
-	-- start an animation, does not check existing, 
+	-- start an animation, does not check existing,
 	-- that should have been done On Movement Start Function
 
 	-- update movement status and animation
 	local self_pos_vector = go.get_position()
 	local target_pos_vector = vmath.vector3(target_pos.x, target_pos.y, self_pos_vector.z)
 	local ang_to_target_deg = math.deg(math.atan2(self_pos_vector.x - target_pos.x, target_pos.y - self_pos_vector.y))
-	local goal_y_scale = go.get(".", "scale.y") -- assumes scale is correct! 
+	local goal_y_scale = go.get(".", "scale.y") -- assumes scale is correct!
 
 	-- check if flip needed:
 	--   if target to right and we are facing left (y+)
@@ -564,8 +564,8 @@ local function Movement_Start_Run(self, target_pos, on_init)
 	local flip_duration, next_anim_delay = 0, 0
 
 	if (ang_to_target_deg < 0 and goal_y_scale > 0) or (ang_to_target_deg > 0 and goal_y_scale < 0) then
-		-- delay subsequent animations so flip has time to complete first 
-		-- but flip instantly if this is at scene start 
+		-- delay subsequent animations so flip has time to complete first
+		-- but flip instantly if this is at scene start
 		if not on_init then
 			flip_duration = self.Obj_Flip_Time
 		end
@@ -587,7 +587,7 @@ local function Movement_Start_Run(self, target_pos, on_init)
 	end
 
 	-- set variables
-	-- fine to have moving status turned on here, 
+	-- fine to have moving status turned on here,
 	--   since it instant it is now moving and if delayed this will run first
 	self.goal_status_moving = true
 	self.goal_self_starting_position = nil
@@ -607,8 +607,8 @@ local function Movement_Start_Run(self, target_pos, on_init)
 	-- rotate to target
 	--   translate to target
 	--     rotate to idle orientation
-	-- use timer delays instead of nested callbacks so animations can have some blended overlap 
-	-- and overlap is okay since they are controlling separate things 
+	-- use timer delays instead of nested callbacks so animations can have some blended overlap
+	-- and overlap is okay since they are controlling separate things
 
 	-- integrate these speeds into durations and add lateral variation with varying easing args
 	-- if negative then durations should be instant

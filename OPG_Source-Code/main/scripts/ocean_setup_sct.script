@@ -55,6 +55,7 @@ local CV_Spawn_Keys = {
 			object_scale_base = 0.4,
 			object_rotation_speed_base = 60,
 			object_translation_speed_base = 40,
+			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
 		}
 	}
 }
