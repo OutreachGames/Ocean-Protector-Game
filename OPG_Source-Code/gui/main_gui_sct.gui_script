@@ -217,6 +217,10 @@ local function Screen_Data_TrackerUpdate(self)
 		local max_size = gui.get_size(max_length_node)
 		-- get health percent
 		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
+		if entry_health_data == nil then
+			print("Error current entry health data for Player Data Table Get Entry is nil, not updating...\n")
+			return
+		end
 		local new_health_value = EXT:math_clamp(entry_health_data.item_tracker_score, 0, 1)
 		-- set as new size
 		local progress_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_progress)

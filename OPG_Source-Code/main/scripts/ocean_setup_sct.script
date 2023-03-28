@@ -43,6 +43,10 @@ local CV_Spawn_Keys = {
 	-- reminders:
 	--   'spawn_position_grid' is dynamically created
 	--   'spawn_x_max' is dynamically created base on max count of spawn needed
+	--item_plankton = {},
+	--item_coral = {},
+	--item_mollusks = {},
+	--item_crustaceans = {},
 	item_fish = {
 		subitem_tuna = {
 			spawn_list_key = "item_fish__subitem_tuna",
