@@ -20,7 +20,6 @@ developer = Alex Zimmerman
 dependencies#0 = https://github.com/britzl/gooey/archive/master.zip
 dependencies#1 = https://github.com/britzl/defold-orthographic/archive/master.zip
 dependencies#2 = https://github.com/defold/extension-spine/archive/master.zip
-dependencies#3 = https://github.com/defold/lua-language-server/releases/download/v0.0.4/release.zip
 
 [native_extension]
 app_manifest = /generated.appmanifest
