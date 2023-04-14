@@ -9,7 +9,7 @@ local EXT = require ("modules.extend_md")
 
 -- constants for easy tuning
 local CV_Base_Z_Weather = 0.1
-local CV_Base_Z_Fish = -0.2
+local CV_Base_Z_Items = -0.2
 
 local CV_Spawn_Keys = {
 
@@ -45,13 +45,12 @@ local CV_Spawn_Keys = {
 	--   'spawn_x_max' is dynamically created base on max count of spawn needed
 	--item_plankton = {},
 	--item_coral = {},
-	--item_mollusks = {},
 	--item_crustaceans = {},
 	item_fish = {
 		subitem_tuna = {
 			spawn_list_key = "item_fish__subitem_tuna",
 			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
-			spawn_z_base = CV_Base_Z_Fish,
+			spawn_z_base = CV_Base_Z_Items,
 			spawn_y_range = {-20, 140},
 			spawn_x_min = -10,
 			spawn_max_count = 10,
@@ -60,6 +59,34 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 60,
 			object_translation_speed_base = 40,
 			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
+		}
+	},
+	item_mollusks = {
+		subitem_oyster = {
+			spawn_list_key = "item_mollusks__subitem_oyster",
+			spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items - 0.2,
+			spawn_y_range = {-20, 140}, --UPDATE
+			spawn_x_min = -10, --UPDATE
+			spawn_max_count = 10, --UPDATE
+			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions --UPDATE
+			object_scale_base = 0.4,
+			object_rotation_speed_base = 0,
+			object_translation_speed_base = 0,
+			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster"
+		},
+		subitem_snail = {
+			spawn_list_key = "item_mollusks__subitem_snail",
+			spawn_coll_factory = "spawner_mollusks_snail#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items - 0.1,
+			spawn_y_range = {-20, 140}, --UPDATE
+			spawn_x_min = -10, --UPDATE
+			spawn_max_count = 10, --UPDATE
+			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions --UPDATE
+			object_scale_base = 0.4,
+			object_rotation_speed_base = 0,
+			object_translation_speed_base = 0,
+			info_url = "https://www.fisheries.noaa.gov/species/queen-conch"
 		}
 	}
 }
