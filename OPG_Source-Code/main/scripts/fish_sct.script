@@ -132,7 +132,7 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 
 	blend_time = blend_time or CV_AnimBlend_Time
 
-	-- run swimming
+	-- run swimming/breathing
 	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD,
 		{ blend_duration = blend_time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
 	)

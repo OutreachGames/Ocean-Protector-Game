@@ -10,6 +10,7 @@ local EXT = require ("modules.extend_md")
 -- constants for easy tuning
 local CV_Base_Z_Weather = 0.1
 local CV_Base_Z_Items = -0.2
+local CV_Default_Base_Scale = 0.9
 
 local CV_Spawn_Keys = {
 
@@ -55,10 +56,36 @@ local CV_Spawn_Keys = {
 			spawn_x_min = -10,
 			spawn_max_count = 10,
 			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
-			object_scale_base = 0.4,
+			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 60,
 			object_translation_speed_base = 40,
 			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
+		},
+		subitem_snapper = {
+			spawn_list_key = "item_fish__subitem_snapper",
+			spawn_coll_factory = "spawner_fish_snapper#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items,
+			spawn_y_range = {-20, 140},
+			spawn_x_min = -10,
+			spawn_max_count = 10,
+			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 40,
+			object_translation_speed_base = 20,
+			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
+		},
+		subitem_bluefish  = {
+			spawn_list_key = "item_fish__subitem_bluefish",
+			spawn_coll_factory = "spawner_fish_bluefish#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items,
+			spawn_y_range = {-20, 140},
+			spawn_x_min = -10,
+			spawn_max_count = 10,
+			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 50,
+			object_translation_speed_base = 30,
+			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
 		}
 	},
 	item_mollusks = {
@@ -70,7 +97,7 @@ local CV_Spawn_Keys = {
 			spawn_x_min = -10, --UPDATE
 			spawn_max_count = 10, --UPDATE
 			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions --UPDATE
-			object_scale_base = 0.4,
+			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 0,
 			object_translation_speed_base = 0,
 			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster"
@@ -83,7 +110,7 @@ local CV_Spawn_Keys = {
 			spawn_x_min = -10, --UPDATE
 			spawn_max_count = 10, --UPDATE
 			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions --UPDATE
-			object_scale_base = 0.4,
+			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 0,
 			object_translation_speed_base = 0,
 			info_url = "https://www.fisheries.noaa.gov/species/queen-conch"
