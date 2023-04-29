@@ -55,12 +55,13 @@ local CV_Spawn_Keys = {
 			spawn_y_range = {-20, 140},
 			spawn_x_min = -10,
 			spawn_max_count = 10,
-			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
+			object_dimensions = { x = 190, y = 88 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 60,
 			object_translation_speed_base = 40,
 			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
 		},
+		--[[
 		subitem_snapper = {
 			spawn_list_key = "item_fish__subitem_snapper",
 			spawn_coll_factory = "spawner_fish_snapper#collectionfactory",
@@ -68,7 +69,7 @@ local CV_Spawn_Keys = {
 			spawn_y_range = {-20, 140},
 			spawn_x_min = -10,
 			spawn_max_count = 10,
-			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
+			object_dimensions = { x = 145, y = 75 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
@@ -81,12 +82,13 @@ local CV_Spawn_Keys = {
 			spawn_y_range = {-20, 140},
 			spawn_x_min = -10,
 			spawn_max_count = 10,
-			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions
+			object_dimensions = { x = 155, y = 55 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 50,
 			object_translation_speed_base = 30,
 			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
 		}
+		--]]
 	},
 	item_mollusks = {
 		subitem_oyster = {
@@ -1080,7 +1082,7 @@ local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_off
 	-- smaller blurrier ones be in back? size range represents age, not really distance from camera..
 	-- but would still visually make more sense to save slightly blurrier/smaller fish be slightly in background?
 	-- could also say they are too much in the foreground and that's why they are blurry, too...
-	local rand_base = (math.random(80,120)/100)
+	local rand_base = (math.random(75,100)/100)
 	local scale = obj_scale_base * rand_base
 	local slowdown_distance = scale * obj_dimensions.x * 1.5 --1.5 fish lengths to slowdown
 
