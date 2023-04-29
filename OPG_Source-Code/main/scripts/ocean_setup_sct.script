@@ -52,22 +52,22 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.2,
 			spawn_y_range = {-20, 140}, --UPDATE
-			spawn_x_min = -10, --UPDATE
-			spawn_max_count = 10, --UPDATE
-			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions --UPDATE
+			spawn_x_min = 0,
+			spawn_max_count = 16,
+			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 0,
 			object_translation_speed_base = 0,
 			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster"
 		},
-		subitem_snail = {
-			spawn_list_key = "item_mollusks__subitem_snail",
-			spawn_coll_factory = "spawner_mollusks_snail#collectionfactory",
+		subitem_conch = {
+			spawn_list_key = "item_mollusks__subitem_conch",
+			spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.1,
 			spawn_y_range = {-20, 140}, --UPDATE
-			spawn_x_min = -10, --UPDATE
-			spawn_max_count = 10, --UPDATE
-			object_dimensions = { x = 310, y = 140 }, --compiled sprite/spine dimensions --UPDATE
+			spawn_x_min = 0,
+			spawn_max_count = 3,
+			object_dimensions = { x = 84, y = 67 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 0,
 			object_translation_speed_base = 0,

@@ -191,19 +191,19 @@ images {
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/asset_files/images/mollusks_clam/clam_base.png"
+  image: "/asset_files/images/mollusks_oyster/oyster_base.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/asset_files/images/mollusks_snail/snail_base.png"
+  image: "/asset_files/images/mollusks_conch/conch_base.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/asset_files/images/mollusks_snail/snail_eye.png"
+  image: "/asset_files/images/mollusks_conch/conch_eye.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/asset_files/images/mollusks_snail/snail_foot.png"
+  image: "/asset_files/images/mollusks_conch/conch_foot.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0
