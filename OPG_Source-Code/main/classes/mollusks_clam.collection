@@ -4,7 +4,7 @@ embedded_instances {
   id: "go"
   data: "components {\n"
   "  id: \"animal_decomposition\"\n"
-  "  component: \"/main/effects/animal_decomposition.particlefx\"\n"
+  "  component: \"/main/effects/animal_decomposition_small.particlefx\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"

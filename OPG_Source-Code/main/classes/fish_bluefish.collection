@@ -21,7 +21,7 @@ embedded_instances {
   "}\n"
   "components {\n"
   "  id: \"particle_decomposition\"\n"
-  "  component: \"/main/effects/animal_decomposition.particlefx\"\n"
+  "  component: \"/main/effects/animal_decomposition_large.particlefx\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
