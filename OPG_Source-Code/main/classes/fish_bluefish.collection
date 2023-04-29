@@ -39,7 +39,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"spinemodel\"\n"
   "  type: \"spinemodel\"\n"
-  "  data: \"spine_scene: \\\"/asset_links/fish_tuna.spinescene\\\"\\n"
+  "  data: \"spine_scene: \\\"/asset_links/fish_bluefish.spinescene\\\"\\n"
   "default_animation: \\\"anim_moving_FacingLeft\\\"\\n"
   "skin: \\\"\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
