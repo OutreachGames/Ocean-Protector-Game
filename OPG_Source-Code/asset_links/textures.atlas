@@ -206,6 +206,10 @@ images {
   image: "/asset_files/images/mollusks_conch/conch_foot.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/asset_files/images/gui/gui_bar_core.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0
