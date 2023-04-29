@@ -46,50 +46,6 @@ local CV_Spawn_Keys = {
 	--   'spawn_x_max' is dynamically created base on max count of spawn needed
 	--item_plankton = {},
 	--item_coral = {},
-	--item_crustaceans = {},
-	item_fish = {
-		subitem_tuna = {
-			spawn_list_key = "item_fish__subitem_tuna",
-			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items,
-			spawn_y_range = {-20, 140},
-			spawn_x_min = -10,
-			spawn_max_count = 10,
-			object_dimensions = { x = 190, y = 88 }, --compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 60,
-			object_translation_speed_base = 40,
-			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
-		},
-		--[[
-		subitem_snapper = {
-			spawn_list_key = "item_fish__subitem_snapper",
-			spawn_coll_factory = "spawner_fish_snapper#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items,
-			spawn_y_range = {-20, 140},
-			spawn_x_min = -10,
-			spawn_max_count = 10,
-			object_dimensions = { x = 145, y = 75 }, --compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 40,
-			object_translation_speed_base = 20,
-			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
-		},
-		subitem_bluefish  = {
-			spawn_list_key = "item_fish__subitem_bluefish",
-			spawn_coll_factory = "spawner_fish_bluefish#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items,
-			spawn_y_range = {-20, 140},
-			spawn_x_min = -10,
-			spawn_max_count = 10,
-			object_dimensions = { x = 155, y = 55 }, --compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 50,
-			object_translation_speed_base = 30,
-			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
-		}
-		--]]
-	},
 	item_mollusks = {
 		subitem_oyster = {
 			spawn_list_key = "item_mollusks__subitem_oyster",
@@ -117,7 +73,49 @@ local CV_Spawn_Keys = {
 			object_translation_speed_base = 0,
 			info_url = "https://www.fisheries.noaa.gov/species/queen-conch"
 		}
-	}
+	},
+	item_fish = {
+		subitem_tuna = {
+			spawn_list_key = "item_fish__subitem_tuna",
+			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items,
+			spawn_y_range = {-25, 135},
+			spawn_x_min = -10,
+			spawn_max_count = 8,
+			object_dimensions = { x = 190, y = 88 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 60,
+			object_translation_speed_base = 40,
+			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
+		},
+		subitem_bluefish  = {
+			spawn_list_key = "item_fish__subitem_bluefish",
+			spawn_coll_factory = "spawner_fish_bluefish#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items,
+			spawn_y_range = {-145, -45},
+			spawn_x_min = 10,
+			spawn_max_count = 10,
+			object_dimensions = { x = 155, y = 55 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 50,
+			object_translation_speed_base = 30,
+			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
+		},
+		subitem_snapper = {
+			spawn_list_key = "item_fish__subitem_snapper",
+			spawn_coll_factory = "spawner_fish_snapper#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items,
+			spawn_y_range = {-270, -170},
+			spawn_x_min = 0,
+			spawn_max_count = 8,
+			object_dimensions = { x = 145, y = 75 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 40,
+			object_translation_speed_base = 20,
+			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
+		},
+	},
+	--item_crustaceans = {},
 }
 
 local CV_Update_Property = {
