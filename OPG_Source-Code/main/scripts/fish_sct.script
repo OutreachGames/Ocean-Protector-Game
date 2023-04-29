@@ -113,7 +113,7 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 
 	local speed_options = {
 		spine_is_moving = EXT:Random_fromTable({1.4, 1.6, 1.8, 2.0}),
-		spine_is_idle = EXT:Random_fromTable({0.8, 1.0, 1.0, 1.2}),
+		spine_is_idle = EXT:Random_fromTable({0.6, 0.8, 1.0, 1.2}),
 		spine_is_dead = 0.001
 	}
 	local swim_rate = speed_options[speed_type_string_key]
