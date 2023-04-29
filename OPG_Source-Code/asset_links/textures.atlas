@@ -126,6 +126,46 @@ images {
   image: "/asset_files/images/background/Asset_seafloor.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/asset_files/images/fish_bluefish/bluefish_base.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_bluefish/bluefish_fin_pectoral.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_bluefish/bluefish_fin_tail.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_bluefish/bluefish_jaw.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_bluefish/bluefish_pupil.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_snapper/snapper_base.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_snapper/snapper_fin_pectoral.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_snapper/snapper_fin_tail.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_snapper/snapper_jaw.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/fish_snapper/snapper_pupil.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0
