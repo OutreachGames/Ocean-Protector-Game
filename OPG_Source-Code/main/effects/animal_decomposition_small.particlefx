@@ -20,7 +20,7 @@ emitters {
   blend_mode: BLEND_MODE_ALPHA
   particle_orientation: PARTICLE_ORIENTATION_DEFAULT
   inherit_velocity: 100.0
-  max_particle_count: 40
+  max_particle_count: 30
   type: EMITTER_TYPE_2DCONE
   start_delay: 0.0
   properties {
@@ -37,7 +37,7 @@ emitters {
     key: EMITTER_KEY_SIZE_X
     points {
       x: 0.0
-      y: 150.0
+      y: 100.0
       t_x: 1.0
       t_y: 0.0
     }
@@ -47,7 +47,7 @@ emitters {
     key: EMITTER_KEY_SIZE_Y
     points {
       x: 0.0
-      y: 60.0
+      y: 40.0
       t_x: 1.0
       t_y: 0.0
     }
