@@ -242,6 +242,10 @@ images {
   image: "/asset_files/images/crustaceans_crab/crab_pincer_top.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_leg_paddle.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0
