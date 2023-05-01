@@ -210,6 +210,38 @@ images {
   image: "/asset_files/images/gui/gui_bar_core.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_base.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_leg_front_base.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_leg_front_mid.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_leg_section_base.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_leg_section_end.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_leg_section_mid.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_pincer_bottom.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/crustaceans_crab/crab_pincer_top.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0
