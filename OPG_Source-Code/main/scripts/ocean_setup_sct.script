@@ -51,7 +51,7 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_mollusks__subitem_oyster",
 			spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.2,
-			spawn_y_range = {-20, 140}, --UPDATE
+			spawn_y_range = {-20, 140}, --#TODO UPDATE
 			spawn_x_min = 0,
 			spawn_max_count = 16,
 			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
@@ -63,8 +63,8 @@ local CV_Spawn_Keys = {
 		subitem_conch = {
 			spawn_list_key = "item_mollusks__subitem_conch",
 			spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items - 0.1,
-			spawn_y_range = {-20, 140}, --UPDATE
+			spawn_z_base = CV_Base_Z_Items - 0.15,
+			spawn_y_range = {-20, 140}, --#TODO UPDATE
 			spawn_x_min = 0,
 			spawn_max_count = 3,
 			object_dimensions = { x = 84, y = 67 }, --compiled sprite/spine dimensions
@@ -115,7 +115,34 @@ local CV_Spawn_Keys = {
 			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
 		},
 	},
-	--item_crustaceans = {},
+	item_crustaceans = {
+		subitem_crab = {
+			spawn_list_key = "item_crustaceans__subitem_crab",
+			spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items - 0.10,
+			spawn_y_range = {-415, -285},
+			spawn_x_min = 10,
+			spawn_max_count = 6,
+			object_dimensions = { x = 84, y = 67 },  --#TODO UPDATE--compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 30,
+			object_translation_speed_base = 30,
+			info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
+		},
+		subitem_shrimp = {
+			spawn_list_key = "item_crustaceans__subitem_shrimp",
+			spawn_coll_factory = "spawner_crustaceans__shrimp#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items - 0.05,
+			spawn_y_range = {-200, -100},
+			spawn_x_min = -10,
+			spawn_max_count = 10,
+			object_dimensions = { x = 84, y = 67 },  --#TODO UPDATE--compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale, --#TODO UPDATE
+			object_rotation_speed_base = 40,
+			object_translation_speed_base = 20,
+			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
+		}
+	},
 }
 
 local CV_Update_Property = {
@@ -1348,6 +1375,21 @@ function init(self)
 	go.animate("/boat_fishing/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.1)
 	go.animate("/boat_touring/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.2)
 	go.animate("/boat_ranger/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.3)
+
+	-- run crawling
+	spine.play_anim("crustaceans_crab/go#spinemodel", hash("anim_moving_FacingLeft"), go.PLAYBACK_LOOP_FORWARD,
+		{ blend_duration = 0.5, playback_rate = 1, track = 1}
+	)
+	-- run claws
+	spine.play_anim("crustaceans_crab/go#spinemodel", hash("anim_clawLeft_eating"), go.PLAYBACK_LOOP_FORWARD,
+		{ blend_duration = 0.5, playback_rate = 1, track = 2}
+	)
+		-- run claws
+		spine.play_anim("crustaceans_crab/go#spinemodel", hash("anim_clawRight_eating"), go.PLAYBACK_LOOP_FORWARD,
+		{ blend_duration = 0.5, playback_rate = 0.5, track = 3}
+	)
+
+
 
 	SceneStart(self)
 
