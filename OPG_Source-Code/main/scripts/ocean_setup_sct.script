@@ -1186,7 +1186,8 @@ local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_off
 			Obj_Waypoint_1_X = waypoint1_pos_x,
 			Obj_Waypoint_1_Y = waypoint1_pos_y,
 			Obj_Waypoint_2_X = waypoint2_pos_x,
-			Obj_Waypoint_2_Y = waypoint2_pos_y
+			Obj_Waypoint_2_Y = waypoint2_pos_y,
+			Obj_Death_Effect_Type = 1
 		}
 	}
 

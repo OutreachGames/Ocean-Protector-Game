@@ -15,12 +15,13 @@ go.property("Obj_Rotation_Speed_Max", 60)
 go.property("Obj_Rotation_Speed_Min", 1.5)
 go.property("Obj_TranslationGo_Easing_Options", 1)
 go.property("Obj_TranslationStop_Easing_Options", 2)
-go.property("Obj_Rotation_Easing_Options", 5)
+go.property("Obj_Rotation_Easing_Options", 6)
 go.property("Obj_Resting_Euler_Z", 90)
 go.property("Obj_On_Force_Stop_Slowdown_Distance", 50)
 go.property("Obj_On_Done_Loop_Waypoints", false)
 go.property("Obj_Flip_Time", 0.4)
 go.property("Obj_Use_Float_Animation", true)
+go.property("Obj_Death_Effect_Type", -1)
 go.property("Obj_Formation_Position_Index", 1)
 go.property("Obj_Waypoint_1_X", 0)
 go.property("Obj_Waypoint_1_Y", 0)
@@ -80,17 +81,26 @@ local function GetRandomEasing(list_opt_i)
 			go.EASING_INOUTQUAD,
 			go.EASING_INOUTSINE,
 		},
-		{ -- 3. smooth in out direction
+		{ -- 3. smooth in either direction plus back (no quart or quint) 
+			--smoothest in both directions
+			go.EASING_INOUTCUBIC,
+			go.EASING_INOUTQUAD,
+			go.EASING_INOUTSINE,
+
+			-- bit of back then forward at start and end
+			go.EASING_INOUTBACK
+		},
+		{ -- 4. smooth in out direction
 			go.EASING_OUTCUBIC,
 			go.EASING_OUTQUAD,
 			go.EASING_OUTSINE,
 		},
-		{ -- 4. only linear
+		{ -- 5. only linear
 			go.EASING_LINEAR
 		},
-		{ -- 5. only back
+		{ -- 6. only back
 			go.EASING_INOUTBACK
-		}
+		},
 	}
 
 	list_opt_i = list_opt_i or 1
@@ -283,20 +293,27 @@ local function On_Death(self)
 
 	Toggle_MovingAnimation(self, "spine_is_dead")
 
-	-- once stopped, flip upside down and start to sink
-	local flip_delay = 0
-	local float_down_delay = flip_delay + self.Obj_Flip_Time
-	local float_down_time = 5
-	local self_pos = go.get_position()
-	local float_down_y = self_pos.y - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.8)
-	local float_down_x = self_pos.x - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.1)
+	-- setup time variables
+	local extra_sink_delay = 0
+	local extra_sink_time = 0
 
-	go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -self.scale_magnitude, go.EASING_INOUTEXPO, self.Obj_Flip_Time, flip_delay)
-	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, float_down_y, GetRandomEasing(2), float_down_time, float_down_delay)
-	go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, float_down_x, GetRandomEasing(2), float_down_time*0.5, float_down_delay)
+	-- extra visual effect if specified
+	if self.Obj_Death_Effect_Type == 1 then
+		-- once stopped, flip upside down and start to sink
+		local extra_flip_delay = 0
+		extra_sink_delay = extra_flip_delay + self.Obj_Flip_Time
+		extra_sink_time = 5
+		local self_pos = go.get_position()
+		local float_down_y = self_pos.y - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.8)
+		local float_down_x = self_pos.x - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.1)
 
-	-- while starting to sink, begin fade out
-	local fadeout_delay = float_down_delay + (float_down_time*0.4)
+		go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -self.scale_magnitude, go.EASING_INOUTEXPO, self.Obj_Flip_Time, extra_flip_delay)
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, float_down_y, GetRandomEasing(2), extra_sink_time, extra_sink_delay)
+		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, float_down_x, GetRandomEasing(2), extra_sink_time*0.5, extra_sink_delay)
+	end
+
+	-- while starting death, begin fade out
+	local fadeout_delay = extra_sink_delay + (extra_sink_time*0.4)
 	local fadeout_time = 0.5
 	local fadeout_easing = go.EASING_LINEAR
 	go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, fadeout_easing, fadeout_time, fadeout_delay)
@@ -631,8 +648,8 @@ local function Movement_Start_Run(self, target_pos, on_init)
 
 	if offscreen_and_init then
 		duration_rotate_start = 0.1
-		rotate_start_easing = GetRandomEasing(3) --3 is smooth in out directions
-		translate_easing = GetRandomEasing(3) --3 is smooth in out directions
+		rotate_start_easing = GetRandomEasing(4) --smooth in out directions
+		translate_easing = GetRandomEasing(4) --smooth in out directions
 	else
 		duration_rotate_start = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, go.get(".", "euler.z"), ang_to_target_deg, self.Obj_Rotation_Speed_Min)
 		rotate_start_easing = GetRandomEasing(self.Obj_Rotation_Easing_Options)
