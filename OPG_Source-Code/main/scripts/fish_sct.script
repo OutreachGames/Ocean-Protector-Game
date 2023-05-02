@@ -1,9 +1,8 @@
 
 -- OVERVIEW:
--- setups and controls an individual fish
+-- setups and controls an individual
 -- Requirements: 
---   fish must be be spine model with specified animations 
---   have game object called waypoint in collection
+--   individual must be be spine model with specified animations 
 
 -- dependencies
 local HSH = require ("modules.hashes_md")
