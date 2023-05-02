@@ -123,7 +123,7 @@ local CV_Spawn_Keys = {
 			spawn_y_range = {-415, -285},
 			spawn_x_min = 10,
 			spawn_max_count = 6,
-			object_dimensions = { x = 84, y = 67 },  --#TODO UPDATE--compiled sprite/spine dimensions
+			object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 30,
 			object_translation_speed_base = 30,
@@ -136,8 +136,8 @@ local CV_Spawn_Keys = {
 			spawn_y_range = {-200, -100},
 			spawn_x_min = -10,
 			spawn_max_count = 10,
-			object_dimensions = { x = 84, y = 67 },  --#TODO UPDATE--compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale, --#TODO UPDATE
+			object_dimensions = { x = 108, y = 35 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
