@@ -45,7 +45,47 @@ local CV_Spawn_Keys = {
 	--   'spawn_position_grid' is dynamically created
 	--   'spawn_x_max' is dynamically created base on max count of spawn needed
 	--item_plankton = {},
-	--item_coral = {},
+	item_coral = {
+		subitem_pillar = {
+			spawn_list_key = "item_coral__subitem_pillar",
+			spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items - 0.3,
+			spawn_y_range = {-20, 140}, --#TODO UPDATE
+			spawn_x_min = 0,
+			spawn_max_count = 3,
+			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 0,
+			object_translation_speed_base = 0,
+			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral"
+		},
+		subitem_horn = {
+			spawn_list_key = "item_coral__subitem_horn",
+			spawn_coll_factory = "spawner_coral_horn#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items - 0.3,
+			spawn_y_range = {-20, 140}, --#TODO UPDATE
+			spawn_x_min = 0,
+			spawn_max_count = 3,
+			object_dimensions = { x = 392, y = 270 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 0,
+			object_translation_speed_base = 0,
+			info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral"
+		},
+		subitem_bulb = {
+			spawn_list_key = "item_coral__subitem_bulb",
+			spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
+			spawn_z_base = CV_Base_Z_Items - 0.3,
+			spawn_y_range = {-20, 140}, --#TODO UPDATE
+			spawn_x_min = 0,
+			spawn_max_count = 3,
+			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 0,
+			object_translation_speed_base = 0,
+			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral"
+		},
+	},
 	item_mollusks = {
 		subitem_oyster = {
 			spawn_list_key = "item_mollusks__subitem_oyster",
