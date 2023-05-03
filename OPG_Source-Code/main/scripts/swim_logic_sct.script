@@ -31,9 +31,9 @@ go.property("Obj_Waypoint_2_Y", 0)
 -- local hashes and constants for easy tuning
 local CV_Anim_Swim_Hash = hash("anim_moving_FacingLeft")
 local CV_Anim_Swim_Track = 1
-local CV_Anim_Look_Hash = hash("anim_eye_FacingLeft")
+local CV_Anim_Look_Hash = hash("anim_extra_FacingLeft")
 local CV_Anim_Look_Track = 2
-local CV_Anim_Float_Hash = hash("anim_float_FacingLeft")
+local CV_Anim_Float_Hash = hash("anim_idle_FacingLeft")
 local CV_Anim_Float_Track = 3
 
 local CV_UP_Vector = vmath.vector3(0, 1, 0)
