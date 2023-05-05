@@ -117,26 +117,6 @@ collection_instances {
     z: 1.0
   }
 }
-collection_instances {
-  id: "_DEV_TEST_crustaceans_crab"
-  collection: "/main/classes/crustaceans_crab.collection"
-  position {
-    x: -591.0
-    y: -206.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
 scale_along_z: 0
 embedded_instances {
   id: "level_controller"
