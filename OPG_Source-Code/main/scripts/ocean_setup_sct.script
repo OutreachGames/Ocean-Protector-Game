@@ -1417,20 +1417,6 @@ function init(self)
 	go.animate("/boat_touring/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.2)
 	go.animate("/boat_ranger/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.3)
 
-	-- run crawling
-	spine.play_anim("_DEV_TEST_crustaceans_crab/go#spinemodel", hash("anim_moving_FacingLeft"), go.PLAYBACK_LOOP_FORWARD,
-		{ blend_duration = 0.5, playback_rate = 1, track = 1}
-	)
-	-- run claws
-	spine.play_anim("_DEV_TEST_crustaceans_crab/go#spinemodel", hash("anim_clawLeft_eating"), go.PLAYBACK_LOOP_FORWARD,
-		{ blend_duration = 0.5, playback_rate = 1, track = 2}
-	)
-		-- run claws
-		spine.play_anim("_DEV_TEST_crustaceans_crab/go#spinemodel", hash("anim_clawRight_eating"), go.PLAYBACK_LOOP_FORWARD,
-		{ blend_duration = 0.5, playback_rate = 0.5, track = 3}
-	)
-
-
 
 	SceneStart(self)
 
