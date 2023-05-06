@@ -110,7 +110,7 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.15,
 			spawn_y_range = {-420, -320},
-			spawn_x_min = -120,
+			spawn_x_min = -180,
 			spawn_max_count = 3,
 			object_dimensions = { x = 84, y = 67 }, --compiled sprite/spine dimensions
 			object_gridsize_multiplier = { x = 4, y = 1 },
@@ -180,16 +180,16 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.10,
 			spawn_y_range = {-415, -300},
-			spawn_x_min = -60,
+			spawn_x_min = 0,
 			spawn_max_count = 6,
 			object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
 			object_gridsize_multiplier = { x = 3, y = 2 },
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 0,
-			object_translation_speed_base = 10,
+			object_translation_speed_base = 8,
 			object_translation_speed_can_vary = true,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 0.4, moving = 0.4}, --recall idle is just claw
+			object_anim_multi = {idle = 0.4, moving = 1.0}, --recall idle is just claw
 			movement_easing_options = {move_go=5, move_stop=5},
 			info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
 		},
@@ -201,12 +201,12 @@ local CV_Spawn_Keys = {
 			spawn_x_min = -10,
 			spawn_max_count = 10,
 			object_dimensions = { x = 108, y = 35 }, --compiled sprite/spine dimensions
-			object_gridsize_multiplier = { x = 0.9, y = 0.9 },
+			object_gridsize_multiplier = { x = 0.8, y = 0.8 },
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 40,
-			object_translation_speed_base = 20,
+			object_translation_speed_base = 15,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 1.0, moving = 1.4}, --recall idle is moving with current
+			object_anim_multi = {idle = 1.0, moving = 1.2}, --recall idle is moving with current
 			movement_easing_options = {move_go=2, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
