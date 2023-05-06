@@ -199,11 +199,12 @@ local CV_Spawn_Keys = {
 			spawn_x_min = -10,
 			spawn_max_count = 10,
 			object_dimensions = { x = 108, y = 35 }, --compiled sprite/spine dimensions
+			object_gridsize_multiplier = { x = 0.9, y = 0.9 },
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 1.0, moving = 1.2}, --recall idle is moving with current
+			object_anim_multi = {idle = 1.0, moving = 1.4}, --recall idle is moving with current
 			movement_easing_options = {move_go=2, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
