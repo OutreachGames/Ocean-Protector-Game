@@ -116,50 +116,6 @@ local function GetRandomEasing(list_opt_i)
 
 end
 
-local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
-
-	-- toggle spine animation to idle or moving
-
-	-- set swim rate depending on movement
-
-	local speed_options = {
-		spine_is_moving = self.Obj_Anim_Multi_Moving,
-		spine_is_idle = self.Obj_Anim_Multi_Idle,
-		spine_is_dead = 0.001
-	}
-	local swim_rate = speed_options[speed_type_string_key]
-	if swim_rate == nil then
-		print("Error, invalid string key passed to function Toggle Moving Animation, assuming 1\n")
-		swim_rate = 1
-	end
-
-	-- set look and float rate regardless of movement status, 
-	-- mainly just using this as a convienent way to randomize so not always the same 
-	-- floating gives sense of floating in water, 
-	-- so want somewhat similar values regardless of movement 
-	-- b/c that will show all objects going through same water current
-	local float_rate = EXT:Random_fromTable({0.20, 0.25, 0.30, 0.35})
-	local look_rate = (math.random(6, 11))/10
-
-	blend_time = blend_time or CV_AnimBlend_Time
-
-	-- run swimming/breathing
-	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD,
-		{ blend_duration = blend_time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
-	)
-	-- run eyes looking around
-	spine.play_anim("#spinemodel", CV_Anim_Look_Hash, go.PLAYBACK_LOOP_FORWARD,
-		{ blend_duration = blend_time, playback_rate = look_rate, track = CV_Anim_Look_Track}
-	)
-	-- run floating
-	if self.Obj_Use_Float_Animation then
-		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD,
-			{ blend_duration = blend_time, playback_rate = float_rate, track = CV_Anim_Float_Track}
-		)
-	end
-
-end
-
 local function Get_Duration_Translate(max_translate_speed, self_pos, target_pos) --returns duration
 
 	-- get how long a translation should take given max speed
@@ -204,6 +160,50 @@ local function Get_Duration_Rotate(max_rot_speed, self_angle_deg, target_angle_d
 	end
 
 	return time_abs
+
+end
+
+local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
+
+	-- toggle spine animation to idle or moving
+
+	-- set swim rate depending on movement
+
+	local speed_options = {
+		spine_is_moving = self.Obj_Anim_Multi_Moving,
+		spine_is_idle = self.Obj_Anim_Multi_Idle,
+		spine_is_dead = 0.001
+	}
+	local swim_rate = speed_options[speed_type_string_key]
+	if swim_rate == nil then
+		print("Error, invalid string key passed to function Toggle Moving Animation, assuming 1\n")
+		swim_rate = 1
+	end
+
+	-- set look and float rate regardless of movement status, 
+	-- mainly just using this as a convienent way to randomize so not always the same 
+	-- floating gives sense of floating in water, 
+	-- so want somewhat similar values regardless of movement 
+	-- b/c that will show all objects going through same water current
+	local float_rate = EXT:Random_fromTable({0.20, 0.25, 0.30, 0.35})
+	local look_rate = (math.random(6, 11))/10
+
+	blend_time = blend_time or CV_AnimBlend_Time
+
+	-- run swimming/breathing
+	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD,
+		{ blend_duration = blend_time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
+	)
+	-- run eyes looking around
+	spine.play_anim("#spinemodel", CV_Anim_Look_Hash, go.PLAYBACK_LOOP_FORWARD,
+		{ blend_duration = blend_time, playback_rate = look_rate, track = CV_Anim_Look_Track}
+	)
+	-- run floating
+	if self.Obj_Use_Float_Animation then
+		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD,
+			{ blend_duration = blend_time, playback_rate = float_rate, track = CV_Anim_Float_Track}
+		)
+	end
 
 end
 
@@ -411,7 +411,7 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 		Timer_Add_Queue(self, CV_Timer_Keys.stop_key, add_timer)
 
 	else
-		func_helper_run()
+		func_helper_run(self)
 	end
 
 end
