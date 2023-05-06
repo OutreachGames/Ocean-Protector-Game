@@ -187,7 +187,7 @@ local CV_Spawn_Keys = {
 			object_translation_speed_base = 10,
 			object_translation_speed_can_vary = true,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 0.4, moving = 0.6}, --recall idle is just claw
+			object_anim_multi = {idle = 0.4, moving = 0.4}, --recall idle is just claw
 			movement_easing_options = {move_go=5, move_stop=5},
 			info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
 		},

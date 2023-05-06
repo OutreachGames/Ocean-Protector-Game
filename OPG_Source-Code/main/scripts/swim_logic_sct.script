@@ -637,7 +637,7 @@ local function Movement_Start_Run(self, target_pos, on_init)
 	--   go.animate(url, property, playback, to, easing, duration, [delay], [complete_function])
 
 	-- if on_init and offscreen then make rotation instant and translation uses out_sin
-	-- fine if maybe nose noticeable but it will likely not be since offscreen spawn is > fish length
+	-- fine if maybe nose noticeable but it will likely not be since offscreen spawn is > swimmer length
 	local offscreen_and_init = false
 	if on_init then
 		if (self_pos_vector.x < RES.Boundary_X[1]) or (self_pos_vector.x > RES.Boundary_X[2]) then
@@ -759,7 +759,7 @@ local function On_Message_StartMovement(self, target_pos, previous_stop_is_insta
 	local check_and_stop_for_previous = false
 
 	if self.currently_active_run_type == CV_Status_Type.start_run_active then
-		if self.goal_status_moving then
+		if self.goal_status_moving and not on_init then
 			check_and_stop_for_previous = true
 		--else
 			--check_and_stop_for_previous = false
@@ -769,7 +769,7 @@ local function On_Message_StartMovement(self, target_pos, previous_stop_is_insta
 		if stop_time_remaining > 0 then
 			extra_delay = stop_time_remaining
 		end
-	--else 
+	--else
 	end
 
 	On_Movement_Start(self, target_pos, previous_stop_is_instant, on_init, extra_delay, check_and_stop_for_previous)
