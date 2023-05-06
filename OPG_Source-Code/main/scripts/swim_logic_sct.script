@@ -120,7 +120,7 @@ local function Get_Duration_Translate(max_translate_speed, self_pos, target_pos)
 
 	-- get how long a translation should take given max speed
 
-	if max_translate_speed < 0 then
+	if max_translate_speed <= 0 then
 		return 0
 	end
 
@@ -136,7 +136,7 @@ local function Get_Duration_Rotate(max_rot_speed, self_angle_deg, target_angle_d
 
 	-- get how long a rotation should take given max speed
 
-	if max_rot_speed < 0 then
+	if max_rot_speed <= 0 then
 		return 0
 	end
 
