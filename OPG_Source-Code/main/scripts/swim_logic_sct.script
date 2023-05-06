@@ -704,7 +704,7 @@ local function On_Movement_Start(self, target_pos, previous_stop_is_instant, on_
 	end
 	extra_delay = extra_delay or 0
 	if run_stop_previous == nil then
-		run_stop_previous = true
+		run_stop_previous = false
 	end
 
 	-- don't move if too close to starting position?
