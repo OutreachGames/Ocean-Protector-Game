@@ -1477,9 +1477,10 @@ local function GameLogic_Start(self)
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
 	-- kick off first action
+	--#TODO update when ready
 	timer.delay(6.0, false, function(self)
-		Screen_Data_Initialize(self, true)
-		GameLogic_Progress(self)
+		--Screen_Data_Initialize(self, true)
+		--GameLogic_Progress(self)
 	end)
 
 end

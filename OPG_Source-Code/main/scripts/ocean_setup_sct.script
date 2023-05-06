@@ -11,8 +11,15 @@ local EXT = require ("modules.extend_md")
 local CV_Base_Z_Weather = 0.1
 local CV_Base_Z_Items = -0.2
 local CV_Default_Base_Scale = 0.9
+local CV_Logic_Type_Swimmer = 1
+local CV_Logic_Type_Static = 2
 
 local CV_Spawn_Keys = {
+
+	-- reminders:
+	--   'object_dimensions' means we can click on it
+	--   'spawn_position_grid_dynamic' is dynamically created, and needs to be manually set for static subitems
+	--   'spawn_x_max' is dynamically created based on max count of spawn needed
 
 	item_weather = {
 		subitem_clouds = {
@@ -38,51 +45,49 @@ local CV_Spawn_Keys = {
 	item_ph = {
 		subitem_buoy = {
 			spawn_list_key = "item_ph__subitem_buoy",
+			object_dimensions = { x = 126, y = 185 }, --compiled sprite/spine dimensions
+			info_url = "https://oceanacidification.noaa.gov/WhatWeDo/Monitoring.aspx"
 		}
 	},
 
-	-- reminders:
-	--   'spawn_position_grid' is dynamically created
-	--   'spawn_x_max' is dynamically created base on max count of spawn needed
-	--item_plankton = {},
+	--[[
+	item_plankton = {
+		spawn_list_key = "item_plankton__subitem_plankton",
+		info_url = "https://oceanservice.noaa.gov/facts/plankton.html"
+	},
+	--]]
 	item_coral = {
 		subitem_pillar = {
 			spawn_list_key = "item_coral__subitem_pillar",
 			spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
-			spawn_y_range = {-20, 140}, --#TODO UPDATE
-			spawn_x_min = 0,
 			spawn_max_count = 3,
+			spawn_position_grid_static = {},
 			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 0,
-			object_translation_speed_base = 0,
+			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral"
 		},
 		subitem_horn = {
 			spawn_list_key = "item_coral__subitem_horn",
 			spawn_coll_factory = "spawner_coral_horn#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
-			spawn_y_range = {-20, 140}, --#TODO UPDATE
-			spawn_x_min = 0,
 			spawn_max_count = 3,
+			spawn_position_grid_static = {},
 			object_dimensions = { x = 392, y = 270 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 0,
-			object_translation_speed_base = 0,
+			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral"
 		},
 		subitem_bulb = {
 			spawn_list_key = "item_coral__subitem_bulb",
 			spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
-			spawn_y_range = {-20, 140}, --#TODO UPDATE
-			spawn_x_min = 0,
 			spawn_max_count = 3,
+			spawn_position_grid_static = {},
 			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 0,
-			object_translation_speed_base = 0,
+			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral"
 		},
 	},
@@ -91,26 +96,29 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_mollusks__subitem_oyster",
 			spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.2,
-			spawn_y_range = {-20, 140}, --#TODO UPDATE
-			spawn_x_min = 0,
 			spawn_max_count = 16,
+			spawn_position_grid_static = {},
 			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 0,
-			object_translation_speed_base = 0,
+			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster"
 		},
 		subitem_conch = {
 			spawn_list_key = "item_mollusks__subitem_conch",
 			spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.15,
-			spawn_y_range = {-20, 140}, --#TODO UPDATE
-			spawn_x_min = 0,
+			spawn_y_range = {-420, -320},
+			spawn_x_min = -120,
 			spawn_max_count = 3,
 			object_dimensions = { x = 84, y = 67 }, --compiled sprite/spine dimensions
+			object_gridsize_multiplier = { x = 4, y = 1 },
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 0,
-			object_translation_speed_base = 0,
+			object_translation_speed_base = 3,
+			object_translation_speed_can_vary = true,
+			object_logic_type = CV_Logic_Type_Swimmer,
+			object_anim_multi = {idle = 0.1, moving = 0.5},
+			movement_easing_options = {move_go=5, move_stop=5},
 			info_url = "https://www.fisheries.noaa.gov/species/queen-conch"
 		}
 	},
@@ -126,6 +134,9 @@ local CV_Spawn_Keys = {
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 60,
 			object_translation_speed_base = 40,
+			object_logic_type = CV_Logic_Type_Swimmer,
+			object_anim_multi = {idle = 0.7, moving = 1.4},
+			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
 		},
 		subitem_bluefish  = {
@@ -139,6 +150,9 @@ local CV_Spawn_Keys = {
 			object_scale_base = CV_Default_Base_Scale - 0.1,
 			object_rotation_speed_base = 50,
 			object_translation_speed_base = 30,
+			object_logic_type = CV_Logic_Type_Swimmer,
+			object_anim_multi = {idle = 0.7, moving = 1.4},
+			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
 		},
 		subitem_snapper = {
@@ -152,6 +166,9 @@ local CV_Spawn_Keys = {
 			object_scale_base = CV_Default_Base_Scale - 0.1,
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
+			object_logic_type = CV_Logic_Type_Swimmer,
+			object_anim_multi = {idle = 0.7, moving = 1.4},
+			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
 		},
 	},
@@ -160,18 +177,23 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_crustaceans__subitem_crab",
 			spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.10,
-			spawn_y_range = {-415, -285},
-			spawn_x_min = 10,
+			spawn_y_range = {-415, -300},
+			spawn_x_min = -60,
 			spawn_max_count = 6,
 			object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
+			object_gridsize_multiplier = { x = 3, y = 2 },
 			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 30,
-			object_translation_speed_base = 30,
+			object_rotation_speed_base = 0,
+			object_translation_speed_base = 10,
+			object_translation_speed_can_vary = true,
+			object_logic_type = CV_Logic_Type_Swimmer,
+			object_anim_multi = {idle = 0.4, moving = 0.6}, --recall idle is just claw
+			movement_easing_options = {move_go=5, move_stop=5},
 			info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
 		},
 		subitem_shrimp = {
 			spawn_list_key = "item_crustaceans__subitem_shrimp",
-			spawn_coll_factory = "spawner_crustaceans__shrimp#collectionfactory",
+			spawn_coll_factory = "spawner_crustaceans_shrimp#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.05,
 			spawn_y_range = {-200, -100},
 			spawn_x_min = -10,
@@ -180,6 +202,9 @@ local CV_Spawn_Keys = {
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
+			object_logic_type = CV_Logic_Type_Swimmer,
+			object_anim_multi = {idle = 1.0, moving = 0.6}, --recall idle is moving with current
+			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
 	},
@@ -632,7 +657,7 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 	end
 
 	local collfact_name = sgroup.spawn_coll_factory
-	local spawn_group = sgroup.spawn_list_key
+	local spawn_listkey = sgroup.spawn_list_key
 
 	for _,v_bin in ipairs(bins) do
 		local pos = vmath.vector3(v_bin[1], v_bin[2], v_bin[3])
@@ -651,7 +676,7 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 		}
 
 		local new_collection = collectionfactory.create(collfact_name, pos, rot, props)
-		Spawned_AddObject(self, spawn_group, new_collection[HSH.STR_go])
+		Spawned_AddObject(self, spawn_listkey, new_collection[HSH.STR_go])
 	end
 
 end
@@ -722,7 +747,7 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 	end
 
 	local collfact_name = sgroup.spawn_coll_factory
-	local spawn_group = sgroup.spawn_list_key
+	local spawn_listkey = sgroup.spawn_list_key
 
 	for _,v_bin in ipairs(bins) do
 		local y = y_override or v_bin[2]
@@ -757,7 +782,7 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 		}
 
 		local new_collection = collectionfactory.create(collfact_name, pos, rot, props, scale)
-		Spawned_AddObject(self, spawn_group, new_collection[HSH.STR_go])
+		Spawned_AddObject(self, spawn_listkey, new_collection[HSH.STR_go])
 
 		if is_raining then
 			-- spawn some new clouds with bit of random x, higher y, lower z
@@ -771,7 +796,7 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 			props[HSH.STR_go].Obj_PlayParticleFX = false
 
 			local extra_collection = collectionfactory.create(collfact_name, vmath.vector3(new_pos[1], new_pos[2], new_pos[3]), rot, props, scale)
-			Spawned_AddObject(self, spawn_group, extra_collection[HSH.STR_go])
+			Spawned_AddObject(self, spawn_listkey, extra_collection[HSH.STR_go])
 		end
 
 	end
@@ -812,7 +837,7 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 	local base_time_x = 30
 
 	local collfact_name = sgroup.spawn_coll_factory
-	local spawn_group = sgroup.spawn_list_key
+	local spawn_listkey = sgroup.spawn_list_key
 
 	for _,v_bin in ipairs(bins) do
 		local pos = vmath.vector3(v_bin[1], v_bin[2], v_bin[3])
@@ -862,7 +887,7 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 		}
 
 		local new_collection = collectionfactory.create(collfact_name, pos, rot, props, scale)
-		Spawned_AddObject(self, spawn_group, new_collection[HSH.STR_go])
+		Spawned_AddObject(self, spawn_listkey, new_collection[HSH.STR_go])
 
 	end
 
@@ -1097,37 +1122,39 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction)
 
 end
 
-local function Remove_Fish(self, fish_subitem_name, go_id)
+local function Remove_Animal_Generic(self, item_name, subitem_name, go_id, delete_go)
 
-	local subitem_tbl = CV_Spawn_Keys.item_fish[fish_subitem_name]
+	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
 
-	-- validity
-	if subitem_tbl == nil then
-		print("Warning: Remove fish provided with nil info, will not complete...\n")
-		return
+	local spawn_list_key_name = subitem_tbl.spawn_list_key
+
+	if delete_go == nil then
+		delete_go = false
 	end
 
-	local fish_name = subitem_tbl.spawn_list_key
-	local delete_go = false
-	Spawned_RemoveObject(self, fish_name, go_id, delete_go)
+	Spawned_RemoveObject(self, spawn_list_key_name, go_id, delete_go)
 
-	-- do not delete go until animation done
-	-- but remove from tracker list so we can add more fish if needed without
-	-- incorrectly hitting max amount
-	msg.post(go_id, HSH.msg_order_expire)
+	-- if not deleting then send expire message
+	if not delete_go then
+		-- do not delete go until animation done
+		-- but remove from tracker list so we 
+		-- can add more swimmers without incorrectly hitting max amount
+		msg.post(go_id, HSH.msg_order_expire)
+	end
 
 end
 
-local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_offscreen)
+local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_grid)
 
-	-- spawn an individual fish
-	local subitem_tbl = CV_Spawn_Keys.item_fish[fish_subitem_name]
+	-- spawn a static individual
+	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
 
-	-- validity
-	if subitem_tbl == nil then
-		print("Warning: Spawn fish provided with nil info, will not complete...\n")
-		return
-	end
+end
+
+local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen)
+
+	-- spawn an individual swimmer
+	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
 
 	-- default arguments
 	if spawn_offscreen == nil then
@@ -1135,13 +1162,25 @@ local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_off
 	end
 
 	-- setup
-	local fish_name = subitem_tbl.spawn_list_key
+	local spawn_list_key_name = subitem_tbl.spawn_list_key
 	local collfact_name = subitem_tbl.spawn_coll_factory
 	local obj_dimensions = subitem_tbl.object_dimensions
 	local obj_scale_base = subitem_tbl.object_scale_base
 	local obj_rot_speed_base = subitem_tbl.object_rotation_speed_base
 	local obj_translate_speed_base = subitem_tbl.object_translation_speed_base
-	local pos_tbl = subitem_tbl.spawn_position_grid[i_position_in_grid]
+	if subitem_tbl.object_translation_speed_can_vary then
+		obj_translate_speed_base = obj_translate_speed_base * (math.random(75,100)/100)
+	end
+	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
+	local anim_multi = subitem_tbl.object_anim_multi or {moving = 1, idle = 0.5}
+	local anim_multi_moving = anim_multi.moving or 1
+	local anim_multi_idle = anim_multi.idle or 0.5
+	anim_multi_moving = anim_multi_moving * (math.random(75,100)/100)
+	anim_multi_idle = anim_multi_idle * (math.random(75,100)/100)
+
+	local easing_opts = subitem_tbl.movement_easing_options or {move_go = 1, move_stop = 2}
+	local easing_move_go = easing_opts.move_go or 1
+	local easing_move_stop = easing_opts.move_stop or 2
 
 	-- prepare properties
 	-- smaller blurrier ones be in back? size range represents age, not really distance from camera..
@@ -1169,7 +1208,7 @@ local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_off
 
 	-- for the pixel based arguments using the scale value, too
 	-- though it may seem we want to keep movements equal so that fish stay together
-	-- if speeds get high or low, over time fish fall behind or be too far ahead
+	-- if speeds get high or low, over time swimmer will fall behind or be too far ahead
 	-- custom easing though allows for internal variation in this speed while keeping overall duration
 	local move_speed_multi = 1
 
@@ -1187,15 +1226,19 @@ local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_off
 			Obj_Waypoint_1_Y = waypoint1_pos_y,
 			Obj_Waypoint_2_X = waypoint2_pos_x,
 			Obj_Waypoint_2_Y = waypoint2_pos_y,
-			Obj_Death_Effect_Type = 1
+			Obj_Death_Effect_Type = 1,
+			Obj_Anim_Multi_Moving = anim_multi_moving,
+			Obj_Anim_Multi_Idle = anim_multi_idle,
+			Obj_TranslationGo_Easing_Options = easing_move_go,
+			Obj_TranslationStop_Easing_Options = easing_move_stop
 		}
 	}
 
-	-- create fish
+	-- create collection with GO
 	local new_collection = collectionfactory.create(collfact_name, spanwn_pos, rot, props, scale)
 
-	-- add fish GO to tracker
-	Spawned_AddObject(self, fish_name, new_collection[HSH.STR_go])
+	-- add GO to tracker
+	Spawned_AddObject(self, spawn_list_key_name, new_collection[HSH.STR_go])
 
 	-- start swimming, go to waypoint 1 if spawned offscreen, otherwise go to waypoint 2
 	local swimto_x, swimto_y
@@ -1212,7 +1255,7 @@ local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_off
 		minfo_swim_to_x = swimto_x,
 		minfo_swim_to_y = swimto_y,
 		-- also set subgroup list name with this message for convenience
-		minfo_spawn_keys_subitem_list_key = fish_name,
+		minfo_spawn_keys_subitem_list_key = spawn_list_key_name,
 		minfo_stop_is_instant = false,
 		minfo_is_on_init = true
 	}
@@ -1223,58 +1266,99 @@ local function Spawn_Fish(self, fish_subitem_name, i_position_in_grid, spawn_off
 	-- #TODO remove when done testing
 	if i_position_in_grid < 4 then
 	timer.delay(2, false, function(self)
-		Remove_Fish(self, fish_subitem_name, new_collection[HSH.STR_go])
+		--Remove_Animal_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
 	end)
 	end
 
 end
 
+
 local function SetupAnimals(self)
 
 	-- spawn in all the animals 
 
-	local function func_easy_grid(spawn_subgroup)
+	-- setup some helper functions
+	-- easy grid for swimmers
+	local function func_grid_swimmers(spawn_subgroup)
 
 		-- get grid points from just a few variables
 
+		local scale = spawn_subgroup.object_scale_base
 		local count = spawn_subgroup.spawn_max_count
 		local obj_size = spawn_subgroup.object_dimensions
-		local scale = spawn_subgroup.object_scale_base
+		local obj_grid_mult = spawn_subgroup.object_gridsize_multiplier or {x=1, y=1}
+		local local_size_x = obj_size.x * scale * obj_grid_mult.x
+		local local_size_y = obj_size.y * scale * obj_grid_mult.y
 
-		local min_x = spawn_subgroup.spawn_x_min
-		local max_x = min_x + (obj_size.x*1.2)
+		local min_x = spawn_subgroup.spawn_x_min or 0
+		local max_x = min_x + (local_size_x*1.2)
 
 		local min_y = spawn_subgroup.spawn_y_range[1]
 		local max_y = spawn_subgroup.spawn_y_range[2]
-		if max_y + obj_size.y < min_y then
-			max_y = min_y + obj_size.y*1.2
+		if max_y + local_size_y < min_y then
+			max_y = min_y + local_size_y*1.2
 		end
 
 		local rand_offset_factor = {x=0.25, y=0.3}
 
-		return GetGridPoints({x={min_x, max_x}, y={min_y, max_y}}, {x = obj_size.x*scale, y = obj_size.y*scale}, count, rand_offset_factor)
+		local range_tbl = {x={min_x, max_x}, y={min_y, max_y}}
+		local cell_size_table = {x = local_size_x, y = local_size_y}
+		return GetGridPoints(range_tbl, cell_size_table, count, rand_offset_factor)
 
 	end
 
-	for k_subgroup, v_subgroup in pairs(CV_Spawn_Keys.item_fish) do
+	local function func_grid_corals()
 
-		-- reset all in this group 
-		Spawned_ResetAll(self, v_subgroup.spawn_list_key)
+		-- manually list coral spots
+		-- go through all corals and assign slots
+		-- #TODO
 
-		-- add fish if there are any
-		local number_to_spawn = v_subgroup.spawn_max_count
-		if number_to_spawn > 0 then
-			-- first initialize formation grid
-			CV_Spawn_Keys.item_fish[k_subgroup].spawn_position_grid = nil
-			CV_Spawn_Keys.item_fish[k_subgroup].spawn_position_grid = func_easy_grid(v_subgroup)
+	end
 
-			-- then spawn fish
-			for i=1,number_to_spawn do
-				Spawn_Fish(self, k_subgroup, i)
+	local function func_grid_bivales()
+
+		-- manually list bivalve spots
+		local local_grid = {
+
+		}
+		return local_grid
+
+	end
+
+
+	-- run compiled spawning
+	for k_item, v_item in pairs(CV_Spawn_Keys) do
+
+		for k_subitem, v_subitem in pairs(v_item) do
+
+			-- reset all in this group 
+			Spawned_ResetAll(self, v_subitem.spawn_list_key)
+
+			-- reset any previous grids
+			CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = nil
+
+			-- get count to spawn
+			local number_to_spawn = v_subitem.spawn_max_count
+
+			-- only continue if spawn count > 0
+			if number_to_spawn ~= nil and number_to_spawn > 0 then
+
+				if v_subitem.object_logic_type == CV_Logic_Type_Swimmer then
+					-- spawn swimmers, intializes grid then spawn
+					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem)
+					for i=1,number_to_spawn do
+						Spawn_Animal_Swimmer(self, k_item, k_subitem, i)
+					end
+
+				elseif v_subitem.object_logic_type == CV_Logic_Type_Static then
+					-- spawn static, #TODO set grid then spawn
+					for i=1,number_to_spawn do
+						Spawn_Animal_Static(self, k_item, k_subitem, i)
+					end
+				end
 			end
-
 		end
-	
+
 	end
 
 end
@@ -1347,6 +1431,7 @@ local function Get_Item_Clicked_On(self, screen_pos)
 		--for each subitem in item
 		for k_subitem_name, v_subitem_info in pairs(v_item_info) do
 			local object_dimensions = v_subitem_info.object_dimensions
+			--only continue if this has object dimensions, which means we can click on it
 			if object_dimensions ~= nil and match_id_tbl[k_item_name] == nil then
 				-- go through list and get position and scale and check distance
 				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key] or {}

@@ -1,3 +1,18 @@
+
+-- OVERVIEW:
+-- setups and controls an individual coral
+-- Requirements: 
+--   individual game object must have two sprites
+
+-- dependencies
+local HSH = require ("modules.hashes_md")
+local EXT = require ("modules.extend_md")
+local RES = require ("modules.screen_res_md")
+
+
+
+-- functions
+
 function init(self)
 	-- Add initialization code here
 	-- Learn more: https://defold.com/manuals/script/
