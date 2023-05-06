@@ -30,3 +30,7 @@ cssfile = /builtins/manifests/web/dark_theme.css
 splash_image = /asset_files/images/background/Asset_logo.png
 show_fullscreen_button = 0
 
+[particle_fx]
+max_count = 128
+max_emitter_count = 128
+

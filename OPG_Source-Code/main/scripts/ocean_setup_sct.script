@@ -556,6 +556,11 @@ local function Spawned_AddObject(self, spawn_list_key, go_id)
 	local new_sum = current_count + 1
 	self.spawned_objects_sum[spawn_list_key] = new_sum
 
+	if self.spawned_objects_list[spawn_list_key] == nil then
+		print("Error, spawn key list of "..tostring(spawn_list_key).." is nil, but this should not be possible! \n")
+		return
+	end
+
 	if self.spawned_objects_list[spawn_list_key][go_id] ~= nil then
 		print("Error, spawn game object id is already present! Overriding old value. \n")
 	end
@@ -1185,14 +1190,14 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	local obj_rot_speed_base = subitem_tbl.object_rotation_speed_base
 	local obj_translate_speed_base = subitem_tbl.object_translation_speed_base
 	if subitem_tbl.object_translation_speed_can_vary then
-		obj_translate_speed_base = obj_translate_speed_base * (math.random(75,100)/100)
+		obj_translate_speed_base = obj_translate_speed_base * (math.random(60,120)/100)
 	end
 	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
 	local anim_multi = subitem_tbl.object_anim_multi or {moving = 1, idle = 0.5}
 	local anim_multi_moving = anim_multi.moving or 1
 	local anim_multi_idle = anim_multi.idle or 0.5
-	anim_multi_moving = anim_multi_moving * (math.random(75,100)/100)
-	anim_multi_idle = anim_multi_idle * (math.random(75,100)/100)
+	anim_multi_moving = anim_multi_moving * (math.random(80,110)/100)
+	anim_multi_idle = anim_multi_idle * (math.random(80,110)/100)
 
 	local easing_opts = subitem_tbl.movement_easing_options or {move_go = 1, move_stop = 2}
 	local easing_move_go = easing_opts.move_go or 1
@@ -1491,11 +1496,11 @@ local function SceneStart(self)
 	self.spawned_objects_sum = {}
 	Make_Bubbles(self)
 
-	-- setup weather
-	Setup_Weather(self, true)
-
 	-- setup animals
 	SetupAnimals(self)
+
+	-- setup weather (after animals for some reason...)
+	Setup_Weather(self, true)
 
 	-- setup buoy
 	SetupBuoy(self)
