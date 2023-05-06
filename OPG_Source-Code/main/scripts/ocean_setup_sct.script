@@ -117,7 +117,7 @@ local CV_Spawn_Keys = {
 			object_translation_speed_base = 3,
 			object_translation_speed_can_vary = true,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 0.1, moving = 0.5},
+			object_anim_multi = {idle = 0.4, moving = 0.8},
 			movement_easing_options = {move_go=5, move_stop=5},
 			info_url = "https://www.fisheries.noaa.gov/species/queen-conch"
 		}
@@ -203,8 +203,8 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 1.0, moving = 0.6}, --recall idle is moving with current
-			movement_easing_options = {move_go=1, move_stop=2},
+			object_anim_multi = {idle = 1.0, moving = 1.2}, --recall idle is moving with current
+			movement_easing_options = {move_go=2, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
 	},
