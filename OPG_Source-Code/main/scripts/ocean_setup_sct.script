@@ -50,10 +50,12 @@ local CV_Spawn_Keys = {
 		}
 	},
 
-	--[[
+	--[[#TODO add plankton
 	item_plankton = {
-		spawn_list_key = "item_plankton__subitem_plankton",
-		info_url = "https://oceanservice.noaa.gov/facts/plankton.html"
+		subitem_plankton = {
+			spawn_list_key = "item_plankton__subitem_plankton",
+			info_url = "https://oceanservice.noaa.gov/facts/plankton.html"
+		}
 	},
 	--]]
 	item_coral = {
@@ -209,6 +211,19 @@ local CV_Spawn_Keys = {
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
 	},
+	--[[#TODO add humans
+	item_humans = {
+		subitem_ranger = {
+			spawn_list_key = "item_human__subitem_ranger",
+		},
+		subitem_captain = {
+			spawn_list_key = "item_human__subitem_captain",
+		},
+		subitem_guide = {
+			spawn_list_key = "item_human__subitem_guide",
+		}
+	},
+	--]]
 }
 
 local CV_Update_Property = {

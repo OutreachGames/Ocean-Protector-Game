@@ -36,7 +36,7 @@ STR.CV = {
         set_role_ranger = function()
             msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = "role_ranger"})
         end,
-        set_role_captian = function()
+        set_role_captain = function()
             msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = "role_captain"})
         end,
         set_role_guide = function()
@@ -659,7 +659,7 @@ STR.Screenplay = {
                         "Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "--..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "--..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
                     },
                     text_debrief = nil,
-                    outcome_result_func = STR.CV.outcome_functions.set_role_captian
+                    outcome_result_func = STR.CV.outcome_functions.set_role_captain
                 },
                 user_choice_2 = {
                     text_display = {
