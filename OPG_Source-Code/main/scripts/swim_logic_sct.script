@@ -824,9 +824,6 @@ function init(self)
 	-- set resting euler z rotation when object spawned in scene
 	go.set(".", "euler.z", self.Obj_Resting_Euler_Z)
 
-	-- remove z fighting
-	go.set(".", "position.z", go.get_position().z + (self.Obj_Formation_Position_Index*0.001))
-
 	Toggle_MovingAnimation(self, "spine_is_idle")
 
 	-- set up some internal tracking variables
