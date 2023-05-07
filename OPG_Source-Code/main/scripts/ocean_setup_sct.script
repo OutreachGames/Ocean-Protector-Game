@@ -140,7 +140,7 @@ local CV_Spawn_Keys = {
 			object_translation_speed_base = 40,
 			object_logic_type = CV_Logic_Type_Swimmer,
 			object_death_type = 1,
-			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.5},
+			object_anim_multi = {idle = 0.25, moving = 1.5, extra = 0.5},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
 		},
@@ -157,7 +157,7 @@ local CV_Spawn_Keys = {
 			object_translation_speed_base = 30,
 			object_logic_type = CV_Logic_Type_Swimmer,
 			object_death_type = 1,
-			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.8},
+			object_anim_multi = {idle = 0.25, moving = 1.5, extra = 0.8},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
 		},
@@ -174,7 +174,7 @@ local CV_Spawn_Keys = {
 			object_translation_speed_base = 20,
 			object_logic_type = CV_Logic_Type_Swimmer,
 			object_death_type = 1,
-			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.7},
+			object_anim_multi = {idle = 0.25, moving = 1.5, extra = 0.7},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
 		},
@@ -190,7 +190,7 @@ local CV_Spawn_Keys = {
 			object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
 			object_gridsize_multiplier = { x = 2.5, y = 1 },
 			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 0,
+			object_rotation_speed_base = 30,
 			object_translation_speed_base = 8,
 			object_translation_speed_can_vary = true,
 			object_logic_type = CV_Logic_Type_Swimmer,
@@ -1257,7 +1257,11 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	-- set spawn position, possibly offscreen
 	local spanwn_pos = vmath.vector3(waypoint1_pos_x, waypoint1_pos_y, pos_tbl.z)
 	if spawn_offscreen then
-		--#TODO find way to deal with swimming in from offscreen to join current direction of school, or stop all school at wp1
+		--#TODO 
+		--  find way to deal with swimming in from offscreen to join current direction of school, 
+		--  or stop all school at wp1
+		--  also find way to get offscreen swimmer caught up with school but then slowed down
+		--  might be easiest to just reset everyone at wp1 and do not order to move?
 		-- also find closest waypoint to offscreen
 		local distance_to_offscreen_left = math.abs(waypoint1_pos_x - RES.Boundary_X[1])
 		local distance_to_offscreen_right = math.abs(waypoint1_pos_x - RES.Boundary_X[2])
