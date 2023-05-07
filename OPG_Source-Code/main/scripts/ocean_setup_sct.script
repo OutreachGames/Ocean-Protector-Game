@@ -19,6 +19,7 @@ local CV_Spawn_Keys = {
 
 	-- reminders:
 	--   'object_dimensions' means we can click on it
+	--   'is_spawn_flipped' is dynamically created
 	--   'spawn_position_grid_dynamic' is dynamically created, and needs to be manually set for static subitems
 	--   'spawn_x_max' is dynamically created based on max count of spawn needed
 
@@ -473,7 +474,7 @@ local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_
 				-- save to table
 				num_cells = num_cells + 1
 				--remove z fighting + some global z based on height (somewhat in-case different groups overlap)
-				local z = z_base + (num_cells*0.001) + Get_Z_from_Y(y, 0.01)
+				local z = z_base + (num_cells*0.001) + Get_Z_from_Y(y, 0.1)
 				cells_tbl[num_cells] = {x = x, y = y, z = z, i_index = num_cells}
 				if print_results then
 					print("x: "..x..",   y: "..y..",   z: "..z.."\n")
@@ -1195,7 +1196,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 
 end
 
-local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen, flip_wp)
+local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen)
 
 	-- spawn an individual swimmer
 	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
@@ -1248,7 +1249,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	local waypoint2_pos_y = waypoint1_pos_y
 
 	--possibly flip ?
-	if flip_wp then
+	if subitem_tbl.is_spawn_flipped then
 		waypoint1_pos_x, waypoint2_pos_x = waypoint2_pos_x, waypoint1_pos_x
 		waypoint1_pos_y, waypoint2_pos_y = waypoint2_pos_y, waypoint1_pos_y
 	end
@@ -1256,7 +1257,17 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	-- set spawn position, possibly offscreen
 	local spanwn_pos = vmath.vector3(waypoint1_pos_x, waypoint1_pos_y, pos_tbl.z)
 	if spawn_offscreen then
-		spanwn_pos.x = RES.Boundary_X[2] + slowdown_distance
+		--#TODO find way to deal with swimming in from offscreen to join current direction of school, or stop all school at wp1
+		-- also find closest waypoint to offscreen
+		local distance_to_offscreen_left = math.abs(waypoint1_pos_x - RES.Boundary_X[1])
+		local distance_to_offscreen_right = math.abs(waypoint1_pos_x - RES.Boundary_X[2])
+		if distance_to_offscreen_left < distance_to_offscreen_right then
+			--wp 1 is closer to left side
+			spanwn_pos.x = RES.Boundary_X[1] - slowdown_distance
+		else
+			--wp 1 is closer to right side
+			spanwn_pos.x = RES.Boundary_X[2] + slowdown_distance
+		end
 	end
 	local rot
 
@@ -1385,9 +1396,9 @@ local function SetupAnimals(self)
 	-- run compiled spawning
 	for k_item, v_item in pairs(CV_Spawn_Keys) do
 
-		local flip_waypoint = math.random(0,1) == 0
-
 		for k_subitem, v_subitem in pairs(v_item) do
+
+			CV_Spawn_Keys[k_item][k_subitem].is_spawn_flipped = math.random(0,1) == 0
 
 			-- reset all in this group 
 			Spawned_ResetAll(self, v_subitem.spawn_list_key)
@@ -1405,7 +1416,7 @@ local function SetupAnimals(self)
 					-- spawn swimmers, intializes grid then spawn
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem)
 					for i=1,number_to_spawn do
-						Spawn_Animal_Swimmer(self, k_item, k_subitem, i, false, flip_waypoint)
+						Spawn_Animal_Swimmer(self, k_item, k_subitem, i, false)
 					end
 
 				elseif v_subitem.object_logic_type == CV_Logic_Type_Static then
