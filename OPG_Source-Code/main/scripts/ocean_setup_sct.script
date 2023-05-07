@@ -138,6 +138,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 60,
 			object_translation_speed_base = 40,
 			object_logic_type = CV_Logic_Type_Swimmer,
+			object_death_type = 1,
 			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.5},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
@@ -154,6 +155,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 50,
 			object_translation_speed_base = 30,
 			object_logic_type = CV_Logic_Type_Swimmer,
+			object_death_type = 1,
 			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.8},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
@@ -170,6 +172,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
 			object_logic_type = CV_Logic_Type_Swimmer,
+			object_death_type = 1,
 			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.7},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
@@ -341,7 +344,9 @@ local function Get_Z_from_Y(pos_y, scale_z)
 	local percent_y = abs_y/RES.Screen_Y
 
 	scale_z = scale_z or 1
-	return -(percent_y * scale_z)
+	local final_z = -(percent_y * scale_z)
+
+	return final_z
 
 end
 
@@ -471,7 +476,7 @@ local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_
 				local z = z_base + (num_cells*0.001) + Get_Z_from_Y(y, 0.01)
 				cells_tbl[num_cells] = {x = x, y = y, z = z, i_index = num_cells}
 				if print_results then
-					print("x: "..x..",   y: "..y.."\n")
+					print("x: "..x..",   y: "..y..",   z: "..z.."\n")
 				end
 			else
 				break
@@ -1190,7 +1195,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 
 end
 
-local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen)
+local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen, flip_wp)
 
 	-- spawn an individual swimmer
 	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
@@ -1223,6 +1228,8 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	local easing_move_go = easing_opts.move_go or 1
 	local easing_move_stop = easing_opts.move_stop or 2
 
+	local death_type = subitem_tbl.object_death_type or -1
+
 	-- prepare properties
 	-- smaller blurrier ones be in back? size range represents age, not really distance from camera..
 	-- but would still visually make more sense to save slightly blurrier/smaller fish be slightly in background?
@@ -1239,6 +1246,13 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	local waypoint1_pos_y = pos_tbl.y
 	local waypoint2_pos_x = waypoint1_pos_x + (-RES.Internal_X/1.5)
 	local waypoint2_pos_y = waypoint1_pos_y
+
+	--possibly flip ?
+	if flip_wp then
+		print("Running flip \n")
+		--waypoint1_pos_x, waypoint2_pos_x = waypoint2_pos_x, waypoint1_pos_x
+		--waypoint1_pos_y, waypoint2_pos_y = waypoint2_pos_y, waypoint1_pos_y
+	end
 
 	-- set spawn position, possibly offscreen
 	local spanwn_pos = vmath.vector3(waypoint1_pos_x, waypoint1_pos_y, pos_tbl.z)
@@ -1267,7 +1281,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 			Obj_Waypoint_1_Y = waypoint1_pos_y,
 			Obj_Waypoint_2_X = waypoint2_pos_x,
 			Obj_Waypoint_2_Y = waypoint2_pos_y,
-			Obj_Death_Effect_Type = 1,
+			Obj_Death_Effect_Type = death_type,
 			Obj_Anim_Multi_Moving = anim_multi_moving,
 			Obj_Anim_Multi_Idle = anim_multi_idle,
 			Obj_Anim_Multi_Extra = anim_multi_extra,
@@ -1344,7 +1358,7 @@ local function SetupAnimals(self)
 		local rand_offset_factor = {x=0.25, y=0.3}
 
 		local range_tbl = {x={min_x, max_x}, y={min_y, max_y}}
-		local cell_size_table = {x = local_size_x, y = local_size_y}
+		local cell_size_table = {x = local_size_x, y = local_size_y, z = spawn_subgroup.spawn_z_base}
 		local grid_points = GetGridPoints(range_tbl, cell_size_table, count, rand_offset_factor)
 		return grid_points
 
@@ -1372,6 +1386,8 @@ local function SetupAnimals(self)
 	-- run compiled spawning
 	for k_item, v_item in pairs(CV_Spawn_Keys) do
 
+		local flip_waypoint = math.random(0,1) == 0
+
 		for k_subitem, v_subitem in pairs(v_item) do
 
 			-- reset all in this group 
@@ -1390,7 +1406,7 @@ local function SetupAnimals(self)
 					-- spawn swimmers, intializes grid then spawn
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem)
 					for i=1,number_to_spawn do
-						Spawn_Animal_Swimmer(self, k_item, k_subitem, i)
+						Spawn_Animal_Swimmer(self, k_item, k_subitem, i, flip_waypoint)
 					end
 
 				elseif v_subitem.object_logic_type == CV_Logic_Type_Static then

@@ -17,6 +17,8 @@ RES.Scaling_Y = internal_game_resolution.y*(1/internal_game_resolution.y)
 
 RES.Correction_X = internal_game_resolution.x/2 --set to 0 if using default Defold render
 RES.Correction_Y = internal_game_resolution.y/2 --set to 0 if using default Defold render
+-- correction is how to transform current back to Defold default
+-- offset would be inverse sign of correction, and is how to transform Defold default to current
 
 RES.Boundary_X = {internal_game_resolution.x/-2, internal_game_resolution.x/2} --set to 0 if using default Defold render
 RES.Boundary_Y = {internal_game_resolution.y/-2, internal_game_resolution.y/2} --set to 0 if using default Defold render
