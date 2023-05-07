@@ -137,7 +137,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 60,
 			object_translation_speed_base = 40,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 0.7, moving = 1.4},
+			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.5},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
 		},
@@ -153,7 +153,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 50,
 			object_translation_speed_base = 30,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 0.7, moving = 1.4},
+			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.8},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/bluefish"
 		},
@@ -169,7 +169,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 20,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 0.7, moving = 1.4},
+			object_anim_multi = {idle = 0.25, moving = 1.4, extra = 0.7},
 			movement_easing_options = {move_go=1, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
 		},
@@ -189,7 +189,7 @@ local CV_Spawn_Keys = {
 			object_translation_speed_base = 8,
 			object_translation_speed_can_vary = true,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 0.4, moving = 1.0}, --recall idle is just claw
+			object_anim_multi = {idle = 0.6, moving = 1.0, extra = 0.6}, --recall idle and extra are just claws
 			movement_easing_options = {move_go=5, move_stop=5},
 			info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
 		},
@@ -206,7 +206,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 40,
 			object_translation_speed_base = 15,
 			object_logic_type = CV_Logic_Type_Swimmer,
-			object_anim_multi = {idle = 1.0, moving = 1.2}, --recall idle is moving with current
+			object_anim_multi = {idle = 0.5, moving = 1.2}, --recall idle is moving with current
 			movement_easing_options = {move_go=2, move_stop=2},
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
@@ -1195,11 +1195,13 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 		obj_translate_speed_base = obj_translate_speed_base * (math.random(60,120)/100)
 	end
 	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
-	local anim_multi = subitem_tbl.object_anim_multi or {moving = 1, idle = 0.5}
+	local anim_multi = subitem_tbl.object_anim_multi or {moving = 1, idle = 0.5, extra = 0.5}
 	local anim_multi_moving = anim_multi.moving or 1
 	local anim_multi_idle = anim_multi.idle or 0.5
+	local anim_multi_extra = anim_multi.extra or 0.5
 	anim_multi_moving = anim_multi_moving * (math.random(80,110)/100)
 	anim_multi_idle = anim_multi_idle * (math.random(80,110)/100)
+	anim_multi_extra = anim_multi_extra * (math.random(80,110)/100)
 
 	local easing_opts = subitem_tbl.movement_easing_options or {move_go = 1, move_stop = 2}
 	local easing_move_go = easing_opts.move_go or 1
@@ -1252,6 +1254,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 			Obj_Death_Effect_Type = 1,
 			Obj_Anim_Multi_Moving = anim_multi_moving,
 			Obj_Anim_Multi_Idle = anim_multi_idle,
+			Obj_Anim_Multi_Extra = anim_multi_extra,
 			Obj_TranslationGo_Easing_Options = easing_move_go,
 			Obj_TranslationStop_Easing_Options = easing_move_stop
 		}
