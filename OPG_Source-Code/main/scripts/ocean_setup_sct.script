@@ -110,7 +110,7 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.15,
 			spawn_y_range = {-420, -320},
-			spawn_x_min = -180,
+			spawn_x_min = 0,
 			spawn_max_count = 3,
 			object_dimensions = { x = 84, y = 67 }, --compiled sprite/spine dimensions
 			object_gridsize_multiplier = { x = 4, y = 1 },
@@ -130,7 +130,7 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items,
 			spawn_y_range = {-25, 135},
-			spawn_x_min = -10,
+			spawn_x_min = 10,
 			spawn_max_count = 8,
 			object_dimensions = { x = 190, y = 88 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
@@ -146,7 +146,7 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_fish_bluefish#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items,
 			spawn_y_range = {-145, -45},
-			spawn_x_min = 10,
+			spawn_x_min = 40,
 			spawn_max_count = 10,
 			object_dimensions = { x = 155, y = 55 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale - 0.1,
@@ -198,7 +198,7 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_crustaceans_shrimp#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.05,
 			spawn_y_range = {-200, -100},
-			spawn_x_min = -10,
+			spawn_x_min = 30,
 			spawn_max_count = 10,
 			object_dimensions = { x = 108, y = 35 }, --compiled sprite/spine dimensions
 			object_gridsize_multiplier = { x = 0.8, y = 0.8 },
@@ -1047,7 +1047,9 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 		-- plus will not always have light rays
 
 		-- start spawning some bubbles and sea dust
-		Set_Sea_Particles(self, true)
+		if at_scene_start then
+			Set_Sea_Particles(self, true)
+		end
 
 		-- set what the weather variable is, also
 		-- stop any raining sound then play if needed sound
