@@ -184,10 +184,10 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*5),
 			spawn_y_range = {-420, -360},
-			spawn_x_min = 0,
-			spawn_max_count = 6,
+			spawn_x_min = -50,
+			spawn_max_count = 4,
 			object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
-			object_gridsize_multiplier = { x = 3, y = 1 },
+			object_gridsize_multiplier = { x = 2.5, y = 1 },
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 0,
 			object_translation_speed_base = 8,
@@ -1249,9 +1249,8 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 
 	--possibly flip ?
 	if flip_wp then
-		print("Running flip \n")
-		--waypoint1_pos_x, waypoint2_pos_x = waypoint2_pos_x, waypoint1_pos_x
-		--waypoint1_pos_y, waypoint2_pos_y = waypoint2_pos_y, waypoint1_pos_y
+		waypoint1_pos_x, waypoint2_pos_x = waypoint2_pos_x, waypoint1_pos_x
+		waypoint1_pos_y, waypoint2_pos_y = waypoint2_pos_y, waypoint1_pos_y
 	end
 
 	-- set spawn position, possibly offscreen
@@ -1406,7 +1405,7 @@ local function SetupAnimals(self)
 					-- spawn swimmers, intializes grid then spawn
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem)
 					for i=1,number_to_spawn do
-						Spawn_Animal_Swimmer(self, k_item, k_subitem, i, flip_waypoint)
+						Spawn_Animal_Swimmer(self, k_item, k_subitem, i, false, flip_waypoint)
 					end
 
 				elseif v_subitem.object_logic_type == CV_Logic_Type_Static then
