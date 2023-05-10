@@ -70,7 +70,12 @@ local CV_Spawn_Keys = {
 			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_logic_type = CV_Logic_Type_Static,
-			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral"
+			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
+			static_spawner_tbl = {
+				{-463, -315},
+				{-92, -394},
+				{351, -395}
+			}
 		},
 		subitem_horn = {
 			spawn_list_key = "item_coral__subitem_horn",
@@ -81,7 +86,12 @@ local CV_Spawn_Keys = {
 			object_dimensions = { x = 392, y = 270 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_logic_type = CV_Logic_Type_Static,
-			info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral"
+			info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral",
+			static_spawner_tbl = {
+				{59, -338},
+				{218, -266},
+				{611, -413}
+			}
 		},
 		subitem_bulb = {
 			spawn_list_key = "item_coral__subitem_bulb",
@@ -92,7 +102,12 @@ local CV_Spawn_Keys = {
 			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_logic_type = CV_Logic_Type_Static,
-			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral"
+			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
+			static_spawner_tbl = {
+				{-684, -291},
+				{661, -285},
+				{-341, -413}
+			}
 		},
 	},
 	item_mollusks = {
@@ -107,8 +122,24 @@ local CV_Spawn_Keys = {
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
 			static_spawner_tbl = {
-				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
-			}
+				{-726, -417},
+				{-709, -409},
+				{-680, -418},
+				{-233, -274},
+				{-191, -284},
+				{-212, -288},
+				{-261, -267},
+				{473, -263},
+				{490, -249},
+				{202, -336},
+				{179, -323},
+				{-753, -356},
+				{-777, -355},
+				{-732, -356},
+				{164, -341},
+				{513, -255}
+			},
+			random_rotation_range = {0,5}
 		},
 		subitem_conch = {
 			spawn_list_key = "item_mollusks__subitem_conch",
@@ -1197,6 +1228,33 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 	-- spawn a static individual
 	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
 
+	-- setup
+	local spawn_list_key_name = subitem_tbl.spawn_list_key
+	local collfact_name = subitem_tbl.spawn_coll_factory
+	--local obj_dimensions = subitem_tbl.object_dimensions
+	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
+
+	local rand_rot_range = subitem_tbl.random_rotation_range
+	local rot = nil
+	if rand_rot_range ~= nil then
+		--#TODO add slight random rotations following +- range
+		local min_range = rand_rot_range[1]
+		local max_range = rand_rot_range[2]
+	end
+
+	local rand_base = (math.random(85,100)/100)
+	local scale = subitem_tbl.object_scale_base * rand_base
+
+	-- compile into properties table
+	local spanwn_pos = vmath.vector3(pos_tbl.x, pos_tbl.y, pos_tbl.z)
+	local props = nil--{ [HSH.STR_go] = {} }
+
+	-- create collection with GO
+	local new_collection = collectionfactory.create(collfact_name, spanwn_pos, rot, props, scale)
+
+	-- add GO to tracker
+	Spawned_AddObject(self, spawn_list_key_name, new_collection[HSH.STR_go])
+
 end
 
 local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen)
@@ -1381,21 +1439,27 @@ local function SetupAnimals(self)
 
 	end
 
-	local function func_grid_corals()
+	local function func_grid_static(spawn_subgroup)
 
-		-- manually list coral spots
-		-- go through all corals and assign slots
-		-- #TODO
+		local max_count_value = spawn_subgroup.spawn_max_count
+		local static_tbl = spawn_subgroup.static_spawner_tbl
+		local max_count_static_tbl = #static_tbl
+		local z_base = spawn_subgroup.spawn_z_base
 
-	end
+		if max_count_value > max_count_static_tbl then
+			print("Error: max_count_value is > max_count_static_tbl, there will not be enough grid slots! Setting max count value to table length max. \n")
+			max_count_value = max_count_static_tbl
+		end
 
-	local function func_grid_bivales()
+		local cells_tbl = {}
+		for i=1,max_count_value do
+			local x = static_tbl[i][1]
+			local y = static_tbl[i][2]
+			local z = z_base + (i*0.001) + Get_Z_from_Y(y, 0.1)
+			cells_tbl[i] = {x = x, y = y, z = z, i_index = i}
+		end
 
-		-- manually list bivalve spots
-		local local_grid = {
-
-		}
-		return local_grid
+		return cells_tbl
 
 	end
 
@@ -1427,7 +1491,8 @@ local function SetupAnimals(self)
 					end
 
 				elseif v_subitem.object_logic_type == CV_Logic_Type_Static then
-					-- spawn static, #TODO set grid then spawn
+					-- spawn static, set grid then spawn
+					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_static(v_subitem)
 					for i=1,number_to_spawn do
 						Spawn_Animal_Static(self, k_item, k_subitem, i)
 					end
