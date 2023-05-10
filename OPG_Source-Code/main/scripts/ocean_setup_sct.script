@@ -75,7 +75,7 @@ local CV_Spawn_Keys = {
 			static_spawner_tbl = {
 				{-687, -306, CV_Base_Z_Items+0.1}, --mid
 				{690, -263, CV_Base_Z_Items-0.15}, --top
-				{-314, -446, CV_Base_Z_Items+0.1} --bottom
+				{-314, -446, CV_Base_Z_Items+0.2} --bottom
 			},
 			object_num_sprite_options = 2
 		},
