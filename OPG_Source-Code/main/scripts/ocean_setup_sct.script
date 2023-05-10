@@ -105,7 +105,10 @@ local CV_Spawn_Keys = {
 			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_logic_type = CV_Logic_Type_Static,
-			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster"
+			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
+			static_spawner_tbl = {
+				{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+			}
 		},
 		subitem_conch = {
 			spawn_list_key = "item_mollusks__subitem_conch",
