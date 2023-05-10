@@ -74,7 +74,7 @@ local CV_Spawn_Keys = {
 			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
 			static_spawner_tbl = {
 				{-687, -306, CV_Base_Z_Items+0.1}, --mid
-				{639, -263, CV_Base_Z_Items-0.15}, --top
+				{690, -263, CV_Base_Z_Items-0.15}, --top
 				{-314, -446, CV_Base_Z_Items+0.1} --bottom
 			},
 			object_num_sprite_options = 2
@@ -119,7 +119,7 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_mollusks__subitem_oyster",
 			spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.2,
-			spawn_max_count = 16,
+			spawn_max_count = 18,
 			spawn_position_grid_static = {},
 			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
@@ -140,8 +140,10 @@ local CV_Spawn_Keys = {
 				{458, -246, CV_Base_Z_Items-0.15}, --12
 				{481, -263, CV_Base_Z_Items-0.15}, --13
 				{502, -243, CV_Base_Z_Items-0.15}, --14
-				{-551, -228, CV_Base_Z_Items-0.15}, --15
-				{-567, -238, CV_Base_Z_Items-0.15} --16
+				{125, -452, CV_Base_Z_Items+0.2}, --15
+				{97, -444, CV_Base_Z_Items+0.2}, --16
+				{153, -445, CV_Base_Z_Items+0.2}, --17
+				{182, -443, CV_Base_Z_Items+0.2} --18
 			},
 			random_rotation_range = {0,5}
 		},
@@ -1247,7 +1249,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 		local max_range = rand_rot_range[2]
 	end
 
-	local rand_base = (math.random(85,100)/100)
+	local rand_base = (math.random(90,100)/100)
 	local scale = subitem_tbl.object_scale_base * rand_base
 
 	-- compile into properties table
