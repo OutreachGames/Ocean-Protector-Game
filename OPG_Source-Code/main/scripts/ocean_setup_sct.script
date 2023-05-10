@@ -73,9 +73,9 @@ local CV_Spawn_Keys = {
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
 			static_spawner_tbl = {
-				{-687, -306, CV_Base_Z_Items+0.1}, --mid
-				{690, -263, CV_Base_Z_Items-0.15}, --top
-				{-314, -446, CV_Base_Z_Items+0.2} --bottom
+				{-687, -314, CV_Base_Z_Items+0.1}, --mid
+				{-337, -459, CV_Base_Z_Items+0.2}, --bottom
+				{686, -266, CV_Base_Z_Items-0.15} --top
 			},
 			object_num_sprite_options = 2
 		},
@@ -107,7 +107,7 @@ local CV_Spawn_Keys = {
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
 			static_spawner_tbl = {
-				{-465, -281, CV_Base_Z_Items+0.1}, --mid
+				{-465, -293, CV_Base_Z_Items+0.1}, --mid
 				{-92, -442, CV_Base_Z_Items+0.2}, --bottom
 				{347, -446, CV_Base_Z_Items+0.2} --bottom
 			},
@@ -1511,15 +1511,21 @@ local function SetupAnimals(self)
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_static(v_subitem)
 
 					--#TODO setup sprite types and flip
-					local sprite_selection = 1
 					local num_opts = v_subitem.object_num_sprite_options or 1
-					if num_opts > 1 then
-						sprite_selection = math.random(1,2)
-					end
-					local flip_h = math.random(0,2) == 0
 
 					--spawn in
 					for i=1,number_to_spawn do
+						local sprite_selection = 1
+						local is_even = (i % 2 == 0)
+						if num_opts > 1 then
+							if is_even then
+								sprite_selection = 2
+							end
+						end
+						local flip_h
+						if is_even then
+							flip_h = math.random(0,1) == 0
+						end
 						Spawn_Animal_Static(self, k_item, k_subitem, i, sprite_selection, flip_h)
 					end
 				end
