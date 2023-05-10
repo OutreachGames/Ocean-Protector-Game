@@ -8,6 +8,7 @@ local HSH = require ("modules.hashes_md")
 local EXT = require ("modules.extend_md")
 
 -- constants for easy tuning
+local CV_Base_Z_Buoy = 0.15
 local CV_Base_Z_Weather = 0.1
 local CV_Base_Z_Items = -0.2
 local CV_Z_Failsafe = 0.0001
@@ -68,13 +69,13 @@ local CV_Spawn_Keys = {
 			spawn_max_count = 3,
 			spawn_position_grid_static = {},
 			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale,
+			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
 			static_spawner_tbl = {
-				{-463, -315},
-				{-92, -394},
-				{351, -395}
+				{-465, -281, CV_Base_Z_Items+0.1}, --mid
+				{-92, -394, CV_Base_Z_Items+0.1}, --bottom
+				{351, -395, CV_Base_Z_Items+0.1} --bottom
 			},
 			object_num_sprite_options = 2
 		},
@@ -85,13 +86,13 @@ local CV_Spawn_Keys = {
 			spawn_max_count = 3,
 			spawn_position_grid_static = {},
 			object_dimensions = { x = 392, y = 270 }, --compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale,
+			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral",
 			static_spawner_tbl = {
-				{59, -338},
-				{218, -266},
-				{611, -413}
+				{52, -320, CV_Base_Z_Items+0.1}, --mid
+				{245, -275, CV_Base_Z_Items-0.15}, --top
+				{611, -413, CV_Base_Z_Items+0.1} --bottom
 			},
 			object_num_sprite_options = 2
 		},
@@ -102,13 +103,13 @@ local CV_Spawn_Keys = {
 			spawn_max_count = 3,
 			spawn_position_grid_static = {},
 			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale,
+			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
 			static_spawner_tbl = {
-				{-684, -291},
-				{661, -285},
-				{-341, -413}
+				{-684, -291, CV_Base_Z_Items+0.1}, --mid
+				{676, -262, CV_Base_Z_Items-0.15}, --top
+				{-341, -413, CV_Base_Z_Items+0.1} --bottom
 			},
 			object_num_sprite_options = 2
 		},
@@ -121,33 +122,33 @@ local CV_Spawn_Keys = {
 			spawn_max_count = 16,
 			spawn_position_grid_static = {},
 			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
-			object_scale_base = CV_Default_Base_Scale,
+			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
 			static_spawner_tbl = {
-				{-726, -417},
-				{-709, -409},
-				{-680, -418},
-				{-233, -274},
-				{-191, -284},
-				{-212, -288},
-				{-261, -267},
-				{473, -263},
-				{490, -249},
-				{202, -336},
-				{179, -323},
-				{-753, -356},
-				{-777, -355},
-				{-732, -356},
-				{164, -341},
-				{513, -255}
+				{-726, -417, CV_Base_Z_Buoy + 0.05},
+				{-709, -409, CV_Base_Z_Buoy + 0.05},
+				{-680, -418, CV_Base_Z_Buoy + 0.05},
+				{-233, -274, CV_Base_Z_Items},
+				{-191, -284, CV_Base_Z_Items},
+				{-212, -288, CV_Base_Z_Items},
+				{-261, -267, CV_Base_Z_Items},
+				{473, -263, CV_Base_Z_Items-0.15},
+				{490, -249, CV_Base_Z_Items-0.15},
+				{202, -336, CV_Base_Z_Items},
+				{179, -323, CV_Base_Z_Items},
+				{-753, -356, CV_Base_Z_Items},
+				{-777, -355, CV_Base_Z_Items},
+				{-732, -356, CV_Base_Z_Items},
+				{164, -341, CV_Base_Z_Items},
+				{513, -255, CV_Base_Z_Items-0.15}
 			},
 			random_rotation_range = {0,5}
 		},
 		subitem_conch = {
 			spawn_list_key = "item_mollusks__subitem_conch",
 			spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*6),
+			spawn_z_base = CV_Base_Z_Items + 0.1 + (CV_Z_Failsafe*6),
 			spawn_y_range = {-350, -288},
 			spawn_x_min = 0,
 			spawn_max_count = 3,
@@ -220,7 +221,7 @@ local CV_Spawn_Keys = {
 		subitem_crab = {
 			spawn_list_key = "item_crustaceans__subitem_crab",
 			spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*5),
+			spawn_z_base = CV_Base_Z_Items +0.11 + (CV_Z_Failsafe*5),
 			spawn_y_range = {-420, -360},
 			spawn_x_min = -50,
 			spawn_max_count = 4,
@@ -849,7 +850,7 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 			[HSH.STR_go] = { 
 				Obj_Wave_Movment_X_Buffer = true,
 				Obj_Wave_Movment_X_Direction = sign,
-				Obj_Wave_Movment_X_Time = movetime, 
+				Obj_Wave_Movment_X_Time = movetime,
 				Obj_Wave_Movment_X_Multiplier = 2.0*sign, -- only valid if x direction == 0
 				Obj_Number_Sprite_Options = num_options,
 				Obj_Selected_Sprite_Option = math.random(1, num_options),
@@ -1236,7 +1237,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 	local collfact_name = subitem_tbl.spawn_coll_factory
 	--local obj_dimensions = subitem_tbl.object_dimensions
 	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
-	local num_sprite_opts = subitem_tbl.object_num_sprite_options
+	local num_sprite_opts = subitem_tbl.object_num_sprite_options or 1
 
 	local rand_rot_range = subitem_tbl.random_rotation_range
 	local rot = nil
@@ -1466,7 +1467,7 @@ local function SetupAnimals(self)
 		for i=1,max_count_value do
 			local x = static_tbl[i][1]
 			local y = static_tbl[i][2]
-			local z = z_base + (i*0.001) + Get_Z_from_Y(y, 0.1)
+			local z = static_tbl[i][3] + (i*0.001) + Get_Z_from_Y(y, 0.1)
 			cells_tbl[i] = {x = x, y = y, z = z, i_index = i}
 		end
 
@@ -1507,9 +1508,13 @@ local function SetupAnimals(self)
 					-- spawn static, set grid then spawn
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_static(v_subitem)
 
-					--setup sprite types and flip
+					--#TODO setup sprite types and flip
 					local sprite_selection = 1
-					local flip_h = false
+					local num_opts = v_subitem.object_num_sprite_options or 1
+					if num_opts > 1 then
+						sprite_selection = math.random(1,2)
+					end
+					local flip_h = math.random(0,2) == 0
 
 					--spawn in
 					for i=1,number_to_spawn do
