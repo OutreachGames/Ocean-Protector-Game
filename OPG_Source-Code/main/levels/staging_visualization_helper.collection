@@ -58,11 +58,11 @@ collection_instances {
   }
 }
 collection_instances {
-  id: "coral_bulb"
+  id: "coral_bulb1"
   collection: "/main/classes/coral_bulb.collection"
   position {
-    x: -684.0
-    y: -291.0
+    x: -687.0
+    y: -306.0
     z: 1.0
   }
   rotation {
@@ -78,11 +78,11 @@ collection_instances {
   }
 }
 collection_instances {
-  id: "coral_horn"
+  id: "coral_horn1"
   collection: "/main/classes/coral_horn.collection"
   position {
-    x: 52.0
-    y: -320.0
+    x: 77.0
+    y: -321.0
     z: 0.5
   }
   rotation {
@@ -98,7 +98,7 @@ collection_instances {
   }
 }
 collection_instances {
-  id: "coral_pillar"
+  id: "coral_pillar1"
   collection: "/main/classes/coral_pillar.collection"
   position {
     x: -456.0
@@ -118,7 +118,7 @@ collection_instances {
   }
 }
 collection_instances {
-  id: "mollusks_oyster"
+  id: "mollusks_oyster1"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
     x: -726.0
@@ -138,7 +138,7 @@ collection_instances {
   }
 }
 collection_instances {
-  id: "mollusks_oyster1"
+  id: "mollusks_oyster2"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
     x: -709.0
@@ -158,7 +158,7 @@ collection_instances {
   }
 }
 collection_instances {
-  id: "mollusks_oyster2"
+  id: "mollusks_oyster3"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
     x: -680.0
@@ -178,31 +178,11 @@ collection_instances {
   }
 }
 collection_instances {
-  id: "mollusks_oyster3"
-  collection: "/main/classes/mollusks_oyster.collection"
-  position {
-    x: -233.0
-    y: -274.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
   id: "mollusks_oyster4"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -191.0
-    y: -284.0
+    x: -274.0
+    y: -274.0
     z: 1.0
   }
   rotation {
@@ -221,8 +201,8 @@ collection_instances {
   id: "mollusks_oyster5"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -212.0
-    y: -288.0
+    x: -249.0
+    y: -278.0
     z: 1.0
   }
   rotation {
@@ -241,8 +221,8 @@ collection_instances {
   id: "mollusks_oyster6"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -261.0
-    y: -267.0
+    x: -222.0
+    y: -285.0
     z: 1.0
   }
   rotation {
@@ -261,8 +241,8 @@ collection_instances {
   id: "mollusks_oyster7"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: 473.0
-    y: -263.0
+    x: -190.0
+    y: -291.0
     z: 1.0
   }
   rotation {
@@ -281,8 +261,8 @@ collection_instances {
   id: "mollusks_oyster8"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: 490.0
-    y: -249.0
+    x: 143.0
+    y: -280.0
     z: 1.0
   }
   rotation {
@@ -301,8 +281,8 @@ collection_instances {
   id: "mollusks_oyster9"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: 202.0
-    y: -336.0
+    x: 171.0
+    y: -281.0
     z: 1.0
   }
   rotation {
@@ -321,8 +301,8 @@ collection_instances {
   id: "mollusks_oyster10"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: 179.0
-    y: -323.0
+    x: 193.0
+    y: -282.0
     z: 1.0
   }
   rotation {
@@ -341,8 +321,8 @@ collection_instances {
   id: "mollusks_oyster11"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -753.0
-    y: -356.0
+    x: 438.0
+    y: -255.0
     z: 1.0
   }
   rotation {
@@ -361,128 +341,8 @@ collection_instances {
   id: "mollusks_oyster12"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -777.0
-    y: -355.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "coral_horn1"
-  collection: "/main/classes/coral_horn.collection"
-  position {
-    x: 245.0
-    y: -274.0
-    z: 0.4
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "coral_pillar1"
-  collection: "/main/classes/coral_pillar.collection"
-  position {
-    x: -92.0
-    y: -394.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "coral_bulb1"
-  collection: "/main/classes/coral_bulb.collection"
-  position {
-    x: 676.0
-    y: -262.0
-    z: 0.5
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "coral_bulb2"
-  collection: "/main/classes/coral_bulb.collection"
-  position {
-    x: -341.0
-    y: -413.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "coral_pillar2"
-  collection: "/main/classes/coral_pillar.collection"
-  position {
-    x: 351.0
-    y: -395.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "coral_horn2"
-  collection: "/main/classes/coral_horn.collection"
-  position {
-    x: 611.0
-    y: -413.0
+    x: 458.0
+    y: -246.0
     z: 1.0
   }
   rotation {
@@ -501,8 +361,128 @@ collection_instances {
   id: "mollusks_oyster13"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -732.0
-    y: -356.0
+    x: 481.0
+    y: -263.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "coral_horn2"
+  collection: "/main/classes/coral_horn.collection"
+  position {
+    x: 286.0
+    y: -267.0
+    z: 0.4
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "coral_pillar2"
+  collection: "/main/classes/coral_pillar.collection"
+  position {
+    x: -92.0
+    y: -442.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "coral_bulb2"
+  collection: "/main/classes/coral_bulb.collection"
+  position {
+    x: 639.0
+    y: -263.0
+    z: 0.5
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "coral_bulb3"
+  collection: "/main/classes/coral_bulb.collection"
+  position {
+    x: -314.0
+    y: -446.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "coral_pillar3"
+  collection: "/main/classes/coral_pillar.collection"
+  position {
+    x: 347.0
+    y: -446.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "coral_horn3"
+  collection: "/main/classes/coral_horn.collection"
+  position {
+    x: 611.0
+    y: -452.0
     z: 1.0
   }
   rotation {
@@ -521,8 +501,8 @@ collection_instances {
   id: "mollusks_oyster14"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: 164.0
-    y: -341.0
+    x: 502.0
+    y: -243.0
     z: 1.0
   }
   rotation {
@@ -541,8 +521,28 @@ collection_instances {
   id: "mollusks_oyster15"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: 513.0
-    y: -255.0
+    x: -551.0
+    y: -228.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "mollusks_oyster16"
+  collection: "/main/classes/mollusks_oyster.collection"
+  position {
+    x: -567.0
+    y: -238.0
     z: 1.0
   }
   rotation {

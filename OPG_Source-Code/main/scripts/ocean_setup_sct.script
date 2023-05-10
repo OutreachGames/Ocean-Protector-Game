@@ -62,20 +62,20 @@ local CV_Spawn_Keys = {
 	},
 	--]]
 	item_coral = {
-		subitem_pillar = {
-			spawn_list_key = "item_coral__subitem_pillar",
-			spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
+		subitem_bulb = {
+			spawn_list_key = "item_coral__subitem_bulb",
+			spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
 			spawn_position_grid_static = {},
-			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
+			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
-			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
+			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
 			static_spawner_tbl = {
-				{-465, -281, CV_Base_Z_Items+0.1}, --mid
-				{-92, -394, CV_Base_Z_Items+0.1}, --bottom
-				{351, -395, CV_Base_Z_Items+0.1} --bottom
+				{-687, -306, CV_Base_Z_Items+0.1}, --mid
+				{639, -263, CV_Base_Z_Items-0.15}, --top
+				{-314, -446, CV_Base_Z_Items+0.1} --bottom
 			},
 			object_num_sprite_options = 2
 		},
@@ -90,26 +90,26 @@ local CV_Spawn_Keys = {
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral",
 			static_spawner_tbl = {
-				{52, -320, CV_Base_Z_Items+0.1}, --mid
-				{245, -275, CV_Base_Z_Items-0.15}, --top
-				{611, -413, CV_Base_Z_Items+0.1} --bottom
+				{77, -321, CV_Base_Z_Items+0.1}, --mid
+				{286, -267, CV_Base_Z_Items-0.15}, --top
+				{611, -452, CV_Base_Z_Items+0.2} --bottom
 			},
 			object_num_sprite_options = 2
 		},
-		subitem_bulb = {
-			spawn_list_key = "item_coral__subitem_bulb",
-			spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
+		subitem_pillar = {
+			spawn_list_key = "item_coral__subitem_pillar",
+			spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
 			spawn_position_grid_static = {},
-			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
+			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
-			info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
+			info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
 			static_spawner_tbl = {
-				{-684, -291, CV_Base_Z_Items+0.1}, --mid
-				{676, -262, CV_Base_Z_Items-0.15}, --top
-				{-341, -413, CV_Base_Z_Items+0.1} --bottom
+				{-465, -281, CV_Base_Z_Items+0.1}, --mid
+				{-92, -442, CV_Base_Z_Items+0.2}, --bottom
+				{347, -446, CV_Base_Z_Items+0.2} --bottom
 			},
 			object_num_sprite_options = 2
 		},
@@ -126,22 +126,22 @@ local CV_Spawn_Keys = {
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
 			static_spawner_tbl = {
-				{-726, -417, CV_Base_Z_Buoy + 0.05},
-				{-709, -409, CV_Base_Z_Buoy + 0.05},
-				{-680, -418, CV_Base_Z_Buoy + 0.05},
-				{-233, -274, CV_Base_Z_Items},
-				{-191, -284, CV_Base_Z_Items},
-				{-212, -288, CV_Base_Z_Items},
-				{-261, -267, CV_Base_Z_Items},
-				{473, -263, CV_Base_Z_Items-0.15},
-				{490, -249, CV_Base_Z_Items-0.15},
-				{202, -336, CV_Base_Z_Items},
-				{179, -323, CV_Base_Z_Items},
-				{-753, -356, CV_Base_Z_Items},
-				{-777, -355, CV_Base_Z_Items},
-				{-732, -356, CV_Base_Z_Items},
-				{164, -341, CV_Base_Z_Items},
-				{513, -255, CV_Base_Z_Items-0.15}
+				{-726, -417, CV_Base_Z_Buoy + 0.05}, --1
+				{-709, -409, CV_Base_Z_Buoy + 0.05}, --2
+				{-680, -418, CV_Base_Z_Buoy + 0.05}, --3
+				{-233, -274, CV_Base_Z_Items-0.15}, --4
+				{-249, -278, CV_Base_Z_Items-0.15}, --5
+				{-222, -285, CV_Base_Z_Items-0.15}, --6
+				{-190, -291, CV_Base_Z_Items-0.15}, --7
+				{143, -280, CV_Base_Z_Items-0.15}, --8
+				{171, -281, CV_Base_Z_Items-0.15}, --9
+				{193, -282, CV_Base_Z_Items-0.15}, --10
+				{438, -256, CV_Base_Z_Items-0.15}, --11
+				{458, -246, CV_Base_Z_Items-0.15}, --12
+				{481, -263, CV_Base_Z_Items-0.15}, --13
+				{502, -243, CV_Base_Z_Items-0.15}, --14
+				{-551, -228, CV_Base_Z_Items-0.15}, --15
+				{-567, -238, CV_Base_Z_Items-0.15} --16
 			},
 			random_rotation_range = {0,5}
 		},
@@ -149,7 +149,7 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_mollusks__subitem_conch",
 			spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items + 0.1 + (CV_Z_Failsafe*6),
-			spawn_y_range = {-350, -288},
+			spawn_y_range = {-360, -295},
 			spawn_x_min = 0,
 			spawn_max_count = 3,
 			object_dimensions = { x = 84, y = 67 }, --compiled sprite/spine dimensions
@@ -169,7 +169,7 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_fish__subitem_tuna",
 			spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*1),
-			spawn_y_range = {-25, 135},
+			spawn_y_range = {-25, 120},
 			spawn_x_min = 10,
 			spawn_max_count = 8,
 			object_dimensions = { x = 190, y = 88 }, --compiled sprite/spine dimensions
@@ -222,7 +222,7 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_crustaceans__subitem_crab",
 			spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items +0.11 + (CV_Z_Failsafe*5),
-			spawn_y_range = {-420, -360},
+			spawn_y_range = {-420, -365},
 			spawn_x_min = -50,
 			spawn_max_count = 4,
 			object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
