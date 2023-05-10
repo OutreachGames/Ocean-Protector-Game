@@ -1,0 +1,60 @@
+
+-- OVERVIEW:
+-- setups and controls an individual coral
+-- Requirements: 
+--   individual game object must have two sprites
+
+-- dependencies
+local HSH = require ("modules.hashes_md")
+local EXT = require ("modules.extend_md")
+local RES = require ("modules.screen_res_md")
+
+-- properties
+go.property("Obj_Number_Sprite_Options", 1)
+go.property("Obj_Selected_Sprite_Option", 1)
+go.property("Obj_Wave_Sprite_FlipH", false)
+go.property("Obj_Tint_R", 1)
+go.property("Obj_Tint_G", 1)
+go.property("Obj_Tint_B", 1)
+
+
+-- functions
+
+function init(self)
+
+	--set selected sprite 
+	-- if multiple options for sprites, then disable all of them and choose 1 to enable
+	-- disable all sprites except for chosen i
+	self.Current_sprite_string = "#sprite1"
+	-- recall, this sprite options need to be here, so that we can get the width
+	-- cannot change sprite after init since width might be different
+	if self.Obj_Number_Sprite_Options > 1 then
+		for i=1,self.Obj_Number_Sprite_Options do
+			if i ~= self.Obj_Selected_Sprite_Option then
+				msg.post("#sprite"..i , "disable")
+			end
+		end
+		self.Current_sprite_string = "#sprite" ..self.Obj_Selected_Sprite_Option
+	end
+
+	-- now tint
+	go.set(self.Current_sprite_string, "tint", vmath.vector4(self.Obj_Tint_R, self.Obj_Tint_G, self.Obj_Tint_B, 1))
+
+	-- flip if specified
+	if self.Obj_Wave_Sprite_FlipH then
+		sprite.set_hflip(self.Current_sprite_string, true)
+	end
+
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end

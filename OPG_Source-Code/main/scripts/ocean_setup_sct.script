@@ -75,7 +75,8 @@ local CV_Spawn_Keys = {
 				{-463, -315},
 				{-92, -394},
 				{351, -395}
-			}
+			},
+			object_num_sprite_options = 2
 		},
 		subitem_horn = {
 			spawn_list_key = "item_coral__subitem_horn",
@@ -91,7 +92,8 @@ local CV_Spawn_Keys = {
 				{59, -338},
 				{218, -266},
 				{611, -413}
-			}
+			},
+			object_num_sprite_options = 2
 		},
 		subitem_bulb = {
 			spawn_list_key = "item_coral__subitem_bulb",
@@ -107,7 +109,8 @@ local CV_Spawn_Keys = {
 				{-684, -291},
 				{661, -285},
 				{-341, -413}
-			}
+			},
+			object_num_sprite_options = 2
 		},
 	},
 	item_mollusks = {
@@ -1223,7 +1226,7 @@ local function Remove_Animal_Generic(self, item_name, subitem_name, go_id, delet
 
 end
 
-local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_grid)
+local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_grid, sprite_selection, flip_h)
 
 	-- spawn a static individual
 	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
@@ -1233,6 +1236,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 	local collfact_name = subitem_tbl.spawn_coll_factory
 	--local obj_dimensions = subitem_tbl.object_dimensions
 	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
+	local num_sprite_opts = subitem_tbl.object_num_sprite_options
 
 	local rand_rot_range = subitem_tbl.random_rotation_range
 	local rot = nil
@@ -1247,7 +1251,14 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 
 	-- compile into properties table
 	local spanwn_pos = vmath.vector3(pos_tbl.x, pos_tbl.y, pos_tbl.z)
-	local props = nil--{ [HSH.STR_go] = {} }
+
+	local props = { 
+		[HSH.STR_go] = {
+			Obj_Number_Sprite_Options = num_sprite_opts,
+			Obj_Wave_Sprite_FlipH = flip_h,
+			Obj_Selected_Sprite_Option = sprite_selection
+		}
+	}
 
 	-- create collection with GO
 	local new_collection = collectionfactory.create(collfact_name, spanwn_pos, rot, props, scale)
@@ -1486,6 +1497,8 @@ local function SetupAnimals(self)
 				if v_subitem.object_logic_type == CV_Logic_Type_Swimmer then
 					-- spawn swimmers, intializes grid then spawn
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem)
+
+					--spawn in
 					for i=1,number_to_spawn do
 						Spawn_Animal_Swimmer(self, k_item, k_subitem, i, false)
 					end
@@ -1493,8 +1506,14 @@ local function SetupAnimals(self)
 				elseif v_subitem.object_logic_type == CV_Logic_Type_Static then
 					-- spawn static, set grid then spawn
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_static(v_subitem)
+
+					--setup sprite types and flip
+					local sprite_selection = 1
+					local flip_h = false
+
+					--spawn in
 					for i=1,number_to_spawn do
-						Spawn_Animal_Static(self, k_item, k_subitem, i)
+						Spawn_Animal_Static(self, k_item, k_subitem, i, sprite_selection, flip_h)
 					end
 				end
 			end
