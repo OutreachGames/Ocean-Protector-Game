@@ -256,19 +256,33 @@ local CV_Spawn_Keys = {
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
 	},
-	--[[#TODO add humans
+	--#TODO add humans
 	item_humans = {
 		subitem_ranger = {
 			spawn_list_key = "item_human__subitem_ranger",
+			spawn_coll_factory = "spawner_human_ranger#collectionfactory",
+			spawn_y_range = {204, 204},
+			spawn_x_min = RES.Boundary_X[1]-300,
+			spawn_z_base = 0,
+			object_dimensions = { x = 412, y = 230 }, --compiled sprite/spine dimensions
 		},
 		subitem_captain = {
 			spawn_list_key = "item_human__subitem_captain",
+			spawn_coll_factory = "spawner_human_captain#collectionfactory",
+			spawn_y_range = {204, 204},
+			spawn_x_min = RES.Boundary_X[1]-300,
+			spawn_z_base = 0,
+			object_dimensions = { x = 412, y = 230 }, --compiled sprite/spine dimensions
 		},
 		subitem_guide = {
 			spawn_list_key = "item_human__subitem_guide",
+			spawn_coll_factory = "spawner_human_guide#collectionfactory",
+			spawn_y_range = {204, 204},
+			spawn_x_min = RES.Boundary_X[1]-300,
+			spawn_z_base = 0,
+			object_dimensions = { x = 448, y = 215 }, --compiled sprite/spine dimensions
 		}
 	},
-	--]]
 }
 
 local CV_Update_Property = {
@@ -1510,7 +1524,7 @@ local function SetupAnimals(self)
 					-- spawn static, set grid then spawn
 					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_static(v_subitem)
 
-					--#TODO setup sprite types and flip
+					--setup sprite types and flip
 					local num_opts = v_subitem.object_num_sprite_options or 1
 
 					--spawn in
@@ -1536,11 +1550,41 @@ local function SetupAnimals(self)
 
 end
 
+local function SetupBoat(self, boat_type_name)
+
+	-- defaults
+	boat_type_name = boat_type_name or "subitem_captain"
+	local subitem_tbl = CV_Spawn_Keys.item_humans[boat_type_name]
+
+	if subitem_tbl == nil then
+		print("Error boat_type_name of <"..tostring(boat_type_name).."> does not exist! \n")
+		return
+	end
+
+	-- create collection with GO, and spawn off-screen
+	local scale = 1
+	local rot, props = nil, nil
+	local collfact_name = subitem_tbl.spawn_coll_factory
+	local x = subitem_tbl.spawn_x_min
+	local y = EXT:Random_fromTable(subitem_tbl.spawn_y_range)
+	local z = subitem_tbl.spawn_z_base
+	local spanwn_pos = vmath.vector3(x,y,z)
+	local new_collection = collectionfactory.create(collfact_name, spanwn_pos, rot, props, scale)
+
+	-- add GO to tracker
+	Spawned_AddObject(self, subitem_tbl.spawn_list_key, new_collection[HSH.STR_go])
+
+	-- call boat move
+	local msg_info = {minfo_swim_to_x = 0}
+	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, msg_info)
+
+end
+
 local function SetupBuoy(self)
 
 	-- starts looping buoy movment and adds to tracker table as way to measure pH
 
-	-- set it at left the kick off
+	-- float back and forth
 	go.animate("/ph_buoy/go_rope", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTQUAD, 3)
 	go.animate("/ph_buoy/go_body", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -3, go.EASING_INOUTSINE, 3)
 
@@ -1654,7 +1698,8 @@ local function SceneStart(self)
 	-- setup weather (after animals for some reason...)
 	Setup_Weather(self, true)
 
-	-- setup buoy
+	-- setup buoy and boats
+	SetupBoat(self)
 	SetupBuoy(self)
 
 	-- play sounds 
@@ -1670,10 +1715,6 @@ function init(self)
 		msg.post(".", "acquire_input_focus")
 		-- randomize random generator
 		math.randomseed(socket.gettime())
-
-	go.animate("/boat_fishing/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.1)
-	go.animate("/boat_touring/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.2)
-	go.animate("/boat_ranger/go", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.3)
 
 
 	SceneStart(self)

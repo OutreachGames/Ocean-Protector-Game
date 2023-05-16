@@ -1,0 +1,63 @@
+-- OVERVIEW:
+-- setups and controls an individual boat
+-- Requirements: 
+--   individual game object must have particle effects
+
+-- dependencies
+local RES = require ("modules.screen_res_md")
+local HSH = require ("modules.hashes_md")
+local EXT = require ("modules.extend_md")
+
+-- properties
+go.property("Obj_Translation_Speed_Max", 100)
+
+
+-- functions
+local function Move_to_Position_X(self, x_location)
+
+	-- orders boat to move to given x while running particles
+
+	-- defaults 
+	x_location = x_location or 0
+
+	-- setup
+	local distance = math.abs(go.get(".", "position.x") - x_location)
+	local move_duration = 0
+	local max_speed = self.Obj_Translation_Speed_Max
+	if distance > 0 and max_speed > 0 then
+		move_duration = distance / max_speed
+	end
+	local delay = 0
+	
+	-- make boat move and run particles for same duration
+	particlefx.play("#particlefx")
+	local function func_stop_bubbles(self)
+		particlefx.stop("#particlefx")
+	end
+	
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, x_location, go.EASING_INOUTSINE, move_duration, delay, func_stop_bubbles)
+	
+end
+
+function init(self)
+	-- float back an forth
+	go.animate(".", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.1)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_order_swim_to_pos then
+
+		-- start swimming to new position
+		Move_to_Position_X(self, message.minfo_swim_to_x)
+
+	end
+	
+end
+
