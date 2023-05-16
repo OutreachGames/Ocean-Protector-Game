@@ -1,7 +1,7 @@
 -- OVERVIEW:
 -- setups and controls an individual boat
 -- Requirements: 
---   individual game object must have particle effects
+--   individual game object must have particle effects and sound
 
 -- dependencies
 local RES = require ("modules.screen_res_md")
@@ -13,7 +13,7 @@ go.property("Obj_Translation_Speed_Max", 100)
 
 
 -- functions
-local function Move_to_Position_X(self, x_location)
+local function Move_to_Position_X(self, x_location, delete_self_when_done)
 
 	-- orders boat to move to given x while running particles
 
@@ -28,26 +28,38 @@ local function Move_to_Position_X(self, x_location)
 		move_duration = distance / max_speed
 	end
 	local delay = 0
-	
+
+	-- setup to stop bubbles and sound when done moving
+	local function func_stop_bubbles(self)
+
+		particlefx.stop("#particlefx", {clear = false})
+		sound.stop("#sound")
+		if delete_self_when_done then
+			go.delete()
+		end
+
+	end
+
 	-- make boat move and run particles for same duration
 	particlefx.play("#particlefx")
-	local function func_stop_bubbles(self)
-		particlefx.stop("#particlefx")
-	end
-	
+
+	sound.play("#sound", {delay = 0, gain = 0.20, pan = 0, speed = 1.0})
+
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, x_location, go.EASING_INOUTSINE, move_duration, delay, func_stop_bubbles)
-	
+
 end
 
 function init(self)
+
 	-- float back an forth
 	go.animate(".", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.1)
+
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+
+	particlefx.stop("#particlefx", {clear = false})
+
 end
 
 function on_message(self, message_id, message, sender)
@@ -57,7 +69,11 @@ function on_message(self, message_id, message, sender)
 		-- start swimming to new position
 		Move_to_Position_X(self, message.minfo_swim_to_x)
 
+	elseif message_id == HSH.msg_order_expire then
+		local kill_when_stopped = true
+		go.delete()
+
 	end
-	
+
 end
 
