@@ -1563,7 +1563,14 @@ local function SetupBoat(self, boat_type_name)
 
 	-- create collection with GO, and spawn off-screen
 	local scale = 1
-	local rot, props = nil, nil
+	local rot = nil
+	local props = {
+		[HSH.STR_go] = {
+			Obj_Translation_Speed_Max = 100,
+			Obj_Dimension_X = subitem_tbl.object_dimensions.x
+		}
+	}
+
 	local collfact_name = subitem_tbl.spawn_coll_factory
 	local x = subitem_tbl.spawn_x_min
 	local y = EXT:Random_fromTable(subitem_tbl.spawn_y_range)
@@ -1575,7 +1582,8 @@ local function SetupBoat(self, boat_type_name)
 	Spawned_AddObject(self, subitem_tbl.spawn_list_key, new_collection[HSH.STR_go])
 
 	-- call boat move
-	local msg_info = {minfo_swim_to_x = 0}
+	local msg_info = {minfo_swim_to_x = RES.Center_X}
+
 	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, msg_info)
 
 end

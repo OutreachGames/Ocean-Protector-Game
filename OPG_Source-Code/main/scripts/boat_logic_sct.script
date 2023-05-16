@@ -6,10 +6,10 @@
 -- dependencies
 local RES = require ("modules.screen_res_md")
 local HSH = require ("modules.hashes_md")
-local EXT = require ("modules.extend_md")
 
 -- properties
 go.property("Obj_Translation_Speed_Max", 100)
+go.property("Obj_Dimension_X", 450)
 
 
 -- functions
@@ -21,6 +21,7 @@ local function Move_to_Position_X(self, x_location, delete_self_when_done)
 	x_location = x_location or 0
 
 	-- setup
+	local easing = go.EASING_INOUTSINE
 	local distance = math.abs(go.get(".", "position.x") - x_location)
 	local move_duration = 0
 	local max_speed = self.Obj_Translation_Speed_Max
@@ -45,7 +46,7 @@ local function Move_to_Position_X(self, x_location, delete_self_when_done)
 
 	sound.play("#sound", {delay = 0, gain = 0.20, pan = 0, speed = 1.0})
 
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, x_location, go.EASING_INOUTSINE, move_duration, delay, func_stop_bubbles)
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, x_location, easing, move_duration, delay, func_stop_bubbles)
 
 end
 
@@ -67,11 +68,10 @@ function on_message(self, message_id, message, sender)
 	if message_id == HSH.msg_order_swim_to_pos then
 
 		-- start swimming to new position
-		Move_to_Position_X(self, message.minfo_swim_to_x)
+		Move_to_Position_X(self, message.minfo_swim_to_x, message.minfo)
 
 	elseif message_id == HSH.msg_order_expire then
-		local kill_when_stopped = true
-		go.delete()
+		Move_to_Position_X(self, RES.Boundary_X[2] + self.Obj_Dimension_X, true)
 
 	end
 
