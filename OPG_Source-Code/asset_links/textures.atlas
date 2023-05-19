@@ -55,7 +55,7 @@ images {
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/asset_files/images/background/Asset_Bottom_Water.png"
+  image: "/asset_files/images/background/Asset_Bottom_Water_windowed.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
@@ -268,6 +268,10 @@ images {
 }
 images {
   image: "/asset_files/images/crustaceans_shrimp/shrimp_section_tail.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/background/Asset_Bottom_Water_pane.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0

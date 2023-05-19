@@ -15,6 +15,7 @@ local CV_Z_Failsafe = 0.0001
 local CV_Default_Base_Scale = 0.9
 local CV_Logic_Type_Swimmer = 1
 local CV_Logic_Type_Static = 2
+local CV_Logic_Type_Micro = 3
 
 local CV_Spawn_Keys = {
 
@@ -55,8 +56,8 @@ local CV_Spawn_Keys = {
 
 	--[[#TODO add plankton
 	item_plankton = {
-		subitem_plankton = {
-			spawn_list_key = "item_plankton__subitem_plankton",
+		subitem_phytoplankton = {
+			spawn_list_key = "item_plankton__subitem_phytoplankton",
 			info_url = "https://oceanservice.noaa.gov/facts/plankton.html"
 		}
 	},
@@ -126,9 +127,9 @@ local CV_Spawn_Keys = {
 			object_logic_type = CV_Logic_Type_Static,
 			info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
 			static_spawner_tbl = {
-				{-726, -417, CV_Base_Z_Buoy + 0.05}, --1
-				{-709, -409, CV_Base_Z_Buoy + 0.05}, --2
-				{-680, -418, CV_Base_Z_Buoy + 0.05}, --3
+				{-546, -417, CV_Base_Z_Buoy + 0.05}, --1
+				{-529, -409, CV_Base_Z_Buoy + 0.05}, --2
+				{-500, -418, CV_Base_Z_Buoy + 0.05}, --3
 				{-233, -274, CV_Base_Z_Items-0.15}, --4
 				{-249, -278, CV_Base_Z_Items-0.15}, --5
 				{-222, -285, CV_Base_Z_Items-0.15}, --6
@@ -256,7 +257,6 @@ local CV_Spawn_Keys = {
 			info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
 		}
 	},
-	--#TODO add humans
 	item_humans = {
 		subitem_ranger = {
 			spawn_list_key = "item_human__subitem_ranger",
@@ -1067,7 +1067,8 @@ local function SetStatic_Weather(self, is_raining)
 	-- run
 	go.set("background_sky_ocean#sprite", "tint", tint_sky or vmath1)
 	go.set("background_water_top#sprite", "tint", tint_watertop or vmath1)
-	go.set("background_water_bottom_full#sprite", "tint", tint_waterbottom or vmath1)
+	go.set("background_water_bottom_full_window#sprite", "tint", tint_waterbottom or vmath1)
+	go.set("background_water_bottom_full_pane#sprite", "tint", tint_waterbottom or vmath1)
 
 	msg.post("background_sun#sprite", str_set)
 	msg.post("background_water_light#rays_bottom", str_set)

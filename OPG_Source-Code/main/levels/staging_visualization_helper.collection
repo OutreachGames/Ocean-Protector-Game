@@ -41,7 +41,7 @@ collection_instances {
   id: "ph_buoy"
   collection: "/main/classes/ph_buoy.collection"
   position {
-    x: -696.0
+    x: -516.0
     y: 181.0
     z: 0.0
   }
@@ -121,7 +121,7 @@ collection_instances {
   id: "mollusks_oyster1"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -726.0
+    x: -546.0
     y: -417.0
     z: 1.0
   }
@@ -141,7 +141,7 @@ collection_instances {
   id: "mollusks_oyster2"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -709.0
+    x: -529.0
     y: -409.0
     z: 1.0
   }
@@ -161,7 +161,7 @@ collection_instances {
   id: "mollusks_oyster3"
   collection: "/main/classes/mollusks_oyster.collection"
   position {
-    x: -680.0
+    x: -500.0
     y: -418.0
     z: 1.0
   }
@@ -644,7 +644,7 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/asset_links/textures.atlas\\\"\\n"
-  "default_animation: \\\"Asset_Bottom_Water\\\"\\n"
+  "default_animation: \\\"Asset_Bottom_Water_windowed\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
