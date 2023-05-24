@@ -10,6 +10,7 @@ local EXT = require ("modules.extend_md")
 -- constants for easy tuning
 local CV_Base_Z_Buoy = 0.15
 local CV_Base_Z_Weather = 0.1
+local CV_Base_Z_Micro = -0.9
 local CV_Base_Z_Items = -0.2
 local CV_Z_Failsafe = 0.0001
 local CV_Default_Base_Scale = 0.9
@@ -55,10 +56,24 @@ local CV_Spawn_Keys = {
 	},
 
 	--[[#TODO add plankton
+		--Notes:
+			--diatom (static and silicic), dinoflagellate (moving and some calcaerous), algae strand or blob too perhaps (also static)
+			--some coccolithophore, which get smaller, there are some calcaerous dinoflagellates too which could also decrease
+			--overall very species dependent
 	item_plankton = {
 		subitem_phytoplankton = {
-			spawn_list_key = "item_plankton__subitem_phytoplankton",
-			info_url = "https://oceanservice.noaa.gov/facts/plankton.html"
+			spawn_list_key = "item_plankton__subitem_diatom",
+			spawn_coll_factory = "spawner_plankton_diatom#collectionfactory",
+			spawn_z_base = CV_Base_Z_Micro + (CV_Z_Failsafe*1),
+			spawn_y_range = {-25, 120},
+			object_logic_type = CV_Logic_Type_Micro,
+			spawn_max_count = 8,
+			object_dimensions = { x = 10, y = 10 }, --compiled sprite/spine dimensions
+			object_scale_base = CV_Default_Base_Scale,
+			object_rotation_speed_base = 40,
+			object_translation_speed_base = 25,
+			movement_easing_options = {move_go=1, move_stop=2},
+			info_url = "https://oceanservice.noaa.gov/facts/plankton.html", --https://oceanservice.noaa.gov/facts/phyto.html
 		}
 	},
 	--]]
