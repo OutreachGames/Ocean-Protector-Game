@@ -55,35 +55,41 @@ local CV_Spawn_Keys = {
 		}
 	},
 
-	--[[#TODO add plankton
+	--#TODO add plankton
 		--Notes:
 			--diatom (static and silicic), dinoflagellate (moving and some calcaerous), algae strand or blob too perhaps (also static)
 			--some coccolithophore, which get smaller, there are some calcaerous dinoflagellates too which could also decrease
+			--diatom (20-200 um) dionflagellate (15-400 um)
 			--overall very species dependent
 	item_plankton = {
+		--"https://oceanservice.noaa.gov/facts/plankton.html"
+		-- Plankton are a special case b/c the individual numbers would be too great to count.
+		-- Instead percentages are used, with the zoom bubble always being full but with different ratios.
+		-- These continually looped with sprites changing based on global percent tracking table. 
+		-- They do not show death animations, as particles would leave the zoom bubble and they move too fast to see much. 
 		subitem_phytoplankton = {
-			spawn_list_key = "item_plankton__subitem_diatom",
-			spawn_coll_factory = "spawner_plankton_diatom#collectionfactory",
+			spawn_list_key = "item_plankton__subitem_phytoplankton",
+			spawn_coll_factory = "spawner_plankton_phytoplankton#collectionfactory",
 			spawn_z_base = CV_Base_Z_Micro + (CV_Z_Failsafe*1),
-			spawn_y_range = {-25, 120},
+			spawn_y_range = {0, 160},
+			spawn_x_min = -820,
 			object_logic_type = CV_Logic_Type_Micro,
-			spawn_max_count = 8,
-			object_dimensions = { x = 10, y = 10 }, --compiled sprite/spine dimensions
+			spawn_max_count = 24,
+			object_dimensions = { x = 10, y = 10 }, --compiled sprite/spine dimensions --#UPDATE
+			--object_gridsize_multiplier = { x = 0.9, y = 0.9 },
 			object_scale_base = CV_Default_Base_Scale,
-			object_rotation_speed_base = 40,
-			object_translation_speed_base = 25,
-			movement_easing_options = {move_go=1, move_stop=2},
-			info_url = "https://oceanservice.noaa.gov/facts/plankton.html", --https://oceanservice.noaa.gov/facts/phyto.html
+			object_rotation_speed_base = 10,
+			object_translation_speed_base = 5,
+			object_num_sprite_options = 1,
+			info_url = "https://oceanservice.noaa.gov/facts/phyto.html"
 		}
 	},
-	--]]
 	item_coral = {
 		subitem_bulb = {
 			spawn_list_key = "item_coral__subitem_bulb",
 			spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
-			spawn_position_grid_static = {},
 			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
@@ -100,7 +106,6 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_coral_horn#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
-			spawn_position_grid_static = {},
 			object_dimensions = { x = 392, y = 270 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
@@ -117,7 +122,6 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
-			spawn_position_grid_static = {},
 			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
@@ -136,7 +140,6 @@ local CV_Spawn_Keys = {
 			spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
 			spawn_z_base = CV_Base_Z_Items - 0.2,
 			spawn_max_count = 18,
-			spawn_position_grid_static = {},
 			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
 			object_logic_type = CV_Logic_Type_Static,
@@ -1558,6 +1561,8 @@ local function SetupAnimals(self)
 						end
 						Spawn_Animal_Static(self, k_item, k_subitem, i, sprite_selection, flip_h)
 					end
+				elseif v_subitem.object_logic_type == CV_Logic_Type_Micro then
+					--#TODO add plankton spawning
 				end
 			end
 		end
