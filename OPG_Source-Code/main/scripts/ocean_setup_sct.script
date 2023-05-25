@@ -80,6 +80,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 10,
 			object_translation_speed_base = 18,
 			object_num_sprite_options = 9,
+			use_click_by_bounding_box = { x = {-800, -675}, y = {40, 160}},
 			info_url = "https://oceanservice.noaa.gov/facts/phyto.html"
 		}
 	},
@@ -1722,6 +1723,13 @@ local function Get_Item_Clicked_On(self, screen_pos)
 	local match_id_tbl = {}
 	local match_sum = 0
 
+	local function add_to_tbl(item_name, go_id, subitem_name)
+
+		match_id_tbl[item_name] = {selected_go_url = go_id, selected_go_subitem = subitem_name}
+		match_sum = match_sum + 1
+
+	end
+
 	for k_item_name, v_item_info in pairs(CV_Spawn_Keys) do
 		--for each subitem in item
 		for k_subitem_name, v_subitem_info in pairs(v_item_info) do
@@ -1730,18 +1738,27 @@ local function Get_Item_Clicked_On(self, screen_pos)
 			if object_dimensions ~= nil and match_id_tbl[k_item_name] == nil then
 				-- go through list and get position and scale and check distance
 				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key] or {}
-				for k_goid, _ in pairs(spawn_tbl) do
-					local pos = go.get_position(k_goid)
-					local scale = go.get_scale(k_goid)
-					local max_d_go = math.max(scale.x * object_dimensions.x, scale.y * object_dimensions.y)
-					-- if within distance save to list
-					if vmath.length(pos - click_pos) <= max_d_go then
-						match_id_tbl[k_item_name] = {selected_go_url = k_goid, selected_go_subitem = k_subitem_name}
-						match_sum = match_sum + 1
-						break
-						--print("Clicked on item "..k_item_name.."\n")
+
+				--first check if can just do bounding box check 
+				local bb = v_subitem_info.use_click_by_bounding_box
+				if bb ~= nil then
+					if (world_pos.x >= bb.x[1] and world_pos.x <= bb.x[2]) and (world_pos.y >= bb.y[1] and world_pos.y <= bb.y[2]) then
+						add_to_tbl(k_item_name, nil, k_subitem_name)
+					end
+				else
+					for k_goid, _ in pairs(spawn_tbl) do
+						local pos = go.get_position(k_goid)
+						local scale = go.get_scale(k_goid)
+						local max_d_go = math.max(scale.x * object_dimensions.x, scale.y * object_dimensions.y)
+						-- if within distance save to list
+						if vmath.length(pos - click_pos) <= max_d_go then
+							add_to_tbl(k_item_name, k_goid, k_subitem_name)
+							break
+							--print("Clicked on item "..k_item_name.."\n")
+						end
 					end
 				end
+
 			end
 		end
 	end

@@ -1284,7 +1284,7 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 		-- on 'needs clicked list'
 		if needs_clicked[k_itemname] ~= nil then
 			-- checked if it has been clicked or not, 
-			-- items not clicked take priority so the list can actually be doable
+			-- items not clicked take priority so the list can actually be completed
 
 			if self.items_that_were_clicked_list[k_itemname] == nil then
 				-- has not yet been clicked, so add it
