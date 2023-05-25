@@ -1086,7 +1086,8 @@ local function SetStatic_Weather(self, is_raining)
 	go.set("background_sky_ocean#sprite", "tint", tint_sky or vmath1)
 	go.set("background_water_top#sprite", "tint", tint_watertop or vmath1)
 	go.set("background_water_bottom_full_window#sprite", "tint", tint_waterbottom or vmath1)
-	go.set("background_water_bottom_full_pane#sprite", "tint", tint_waterbottom or vmath1)
+	go.set("background_water_bottom_full_pane_base#sprite", "tint", tint_waterbottom or vmath1)
+	go.set("background_water_bottom_full_pane_hider#sprite", "tint", tint_waterbottom or vmath1)
 
 	msg.post("background_sun#sprite", str_set)
 	msg.post("background_water_light#rays_bottom", str_set)
@@ -1481,6 +1482,8 @@ local function Spawn_Animal_Micro(self, item_name, subitem_name, i_position_in_g
 			Obj_Translation_Speed_Max = obj_translate_speed_base,
 			Obj_Rotation_Speed_Max = obj_rot_speed_base,
 			Obj_Formation_Position_Index = i_position_in_grid,
+			Obj_BaseGrid_Y_Height = subitem_tbl.object_dimensions.y,
+			Obj_BaseGrid_Y_Coordinate = pos_tbl.y
 		}
 	}
 
@@ -1498,7 +1501,7 @@ local function SetupAnimals(self)
 
 	-- setup some helper functions
 	-- easy grid for swimmers
-	local function func_grid_swimmers(spawn_subgroup, y_stack_base)
+	local function func_grid_swimmers(spawn_subgroup, rand_offset_factor, y_stack_base)
 
 		-- get grid points from just a few variables
 
@@ -1518,7 +1521,7 @@ local function SetupAnimals(self)
 			max_y = min_y + local_size_y*1.2
 		end
 
-		local rand_offset_factor = {x=0.25, y=0.3}
+		local rand_offset_factor = rand_offset_factor or {x=0.25, y=0.3}
 
 		local range_tbl = {x={min_x, max_x}, y={min_y, max_y}}
 		local cell_size_table = {x = local_size_x, y = local_size_y, z = spawn_subgroup.spawn_z_base}
@@ -1605,7 +1608,7 @@ local function SetupAnimals(self)
 					end
 				elseif v_subitem.object_logic_type == CV_Logic_Type_Micro then
 					--spawn plankton, set grid then spawn
-					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem, 0.01)
+					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem, {x=0.2, y=0.0}, 0.01)
 					for i=1,number_to_spawn do
 						Spawn_Animal_Micro(self, k_item, k_subitem, i, false)
 					end

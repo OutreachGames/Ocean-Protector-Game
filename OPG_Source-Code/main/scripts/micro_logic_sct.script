@@ -17,7 +17,8 @@ go.property("Obj_Health__1Diatom", 30)
 go.property("Obj_Health__2Dinoflag", 30)
 go.property("Obj_Spawn_Type_Current_Index", 0)
 go.property("Obj_Number_Sprite_Options", 9)
-
+go.property("Obj_BaseGrid_Y_Height", 40)
+go.property("Obj_BaseGrid_Y_Coordinate", 0)
 
 -- locals for easy access
 local CV_x_threshold_appear = -810
@@ -81,7 +82,7 @@ local function UpdateSprite(self)
 
 	-- give slight rotation
 	local z_rot = 0
-	if meta_info.use_random_flip then
+	if meta_info.use_random_rotation then
 		z_rot = EXT:Random_Magnitude(0, 15) or 0
 	end
 
@@ -117,6 +118,10 @@ local function ResetSpawn(self)
 	if distance > 0 and max_speed > 0 then
 		move_duration = distance / max_speed
 	end
+
+	--tweak y position just a bit, x has already been inherently tweaked by varying sprite widths
+	local rand_y = math.floor(self.Obj_BaseGrid_Y_Height * 0.3)
+	go.set(".", "position.y", self.Obj_BaseGrid_Y_Coordinate + math.random(-rand_y, rand_y))
 
 	local function func_wrap_position_and_reset(self)
 
