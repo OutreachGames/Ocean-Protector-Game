@@ -1,17 +1,122 @@
+-- OVERVIEW:
+-- controls game objects that move across the screen in a back and forth motion
+
+-- dependencies
+local RES = require ("modules.screen_res_md")
+local EXT = require("modules.extend_md")
+
+-- properties
+go.property("Obj_Formation_Position_Index", 1)
+go.property("Obj_Translation_Speed_Max", 20)
+go.property("Obj_Rotation_Speed_Max", 15)
+go.property("Obj_Spawn_Weight_0Algae", 20)
+go.property("Obj_Spawn_Weight_1Diatom", 40)
+go.property("Obj_Spawn_Weight_2Dinoflag", 40)
+go.property("Obj_Health_0Algae", 30)
+go.property("Obj_Health__1Diatom", 30)
+go.property("Obj_Health__2Dinoflag", 30)
+go.property("Obj_Spawn_Type_Current_Index", 0)
+go.property("Obj_Number_Sprite_Options", 9)
+
+
+-- locals for easy access
+local CV_type_to_sprite = {
+	--0 is type algae
+	--1 is type diatom
+	--2 is type dinoflagellate
+	typ_algae = {
+		sprite_options = {"algae_1", "algae_2", "algae_3"},
+		index_type = 0,
+		prop_weight_key = "Obj_Spawn_Weight_0Algae",
+		use_random_flip = true,
+		use_random_rotation = true
+	},
+	typ_diatom = {
+		sprite_options = {"diatom_1", "diatom_2", "diatom_3"},
+		index_type = 1,
+		prop_weight_key = "Obj_Spawn_Weight_1Diatom",
+		use_random_flip = true,
+		use_random_rotation = true
+	},
+	type_dinoflag = {
+		sprite_options = {"dinoflag_1", "dinoflag_2", "dinoflag_3"},
+		index_type = 2,
+		prop_weight_key = "Obj_Spawn_Weight_2Dinoflag",
+		use_random_flip = false,
+		use_random_rotation = true
+	}
+}
+
+
+--functions
+
+local function ChooseType(self)
+
+	--chooses random type
+	local choices = {}
+	for k,v in pairs(CV_type_to_sprite) do
+		table.insert(choices, {k, self[v.prop_weight_key]})
+	end
+
+	local selected_typ_key = EXT:math_Random_Weighted(choices)
+
+	--print("Selected phytoplankton type "..selected_typ_key.."\n")
+
+	return selected_typ_key
+
+end
+
+local function UpdateSprite(self, type_key)
+
+	--updates sprite type and tracking data
+
+	local meta_info = CV_type_to_sprite[type_key]
+	local sprite_animation = EXT:Random_fromTable(meta_info.sprite_options)
+
+	sprite.play_flipbook("#sprite", sprite_animation)
+
+	-- now tint for transparency according to health
+	go.set("#sprite", "tint", vmath.vector4(1, 1, 1, 1))
+
+	-- maybe flip
+	if meta_info.use_random_flip and math.random(0,1) == 1 then
+		sprite.set_hflip("#sprite", true)
+	end
+
+	self.Sprite_Width = (go.get("#sprite", "size.x") * go.get(".", "scale.x"))
+
+	-- give slight rotation and send on it's way
+	local z_rot = 0
+	if meta_info.use_random_flip then
+		z_rot = EXT:Random_Magnitude(0, 15) or 0
+	end
+	go.set(".", "euler.z", z_rot)
+
+end
+
+local function SetSpawn(self)
+
+	-- sets type of phytoplankton along with sprite and current type
+	-- also orders to move 
+
+	-- choose and set type
+	local type_key = ChooseType(self)
+
+	local meta_info = CV_type_to_sprite[type_key]
+	self.Obj_Spawn_Type_Current_Key = type_key
+	self.Obj_Spawn_Type_Current_Index = meta_info.index_type
+
+	-- update sprite
+	UpdateSprite(self, type_key)
+
+	-- #TODO send on it's way, with completed call back doing this all again but at new position
+
+
+end
+
+
 function init(self)
-	-- Add initialization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
+	SetSpawn(self)
 
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
 end

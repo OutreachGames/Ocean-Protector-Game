@@ -10,7 +10,7 @@ local EXT = require ("modules.extend_md")
 -- constants for easy tuning
 local CV_Base_Z_Buoy = 0.15
 local CV_Base_Z_Weather = 0.1
-local CV_Base_Z_Micro = -0.9
+local CV_Base_Z_Micro = -0.98
 local CV_Base_Z_Items = -0.2
 local CV_Z_Failsafe = 0.0001
 local CV_Default_Base_Scale = 0.9
@@ -71,16 +71,15 @@ local CV_Spawn_Keys = {
 			spawn_list_key = "item_plankton__subitem_phytoplankton",
 			spawn_coll_factory = "spawner_plankton_phytoplankton#collectionfactory",
 			spawn_z_base = CV_Base_Z_Micro + (CV_Z_Failsafe*1),
-			spawn_y_range = {0, 160},
-			spawn_x_min = -820,
+			spawn_y_range = {40, 160},
+			spawn_x_min = -870,
 			object_logic_type = CV_Logic_Type_Micro,
-			spawn_max_count = 24,
-			object_dimensions = { x = 10, y = 10 }, --compiled sprite/spine dimensions --#UPDATE
-			--object_gridsize_multiplier = { x = 0.9, y = 0.9 },
+			spawn_max_count = 32,
+			object_dimensions = { x = 40, y = 40 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 10,
 			object_translation_speed_base = 5,
-			object_num_sprite_options = 1,
+			object_num_sprite_options = 9,
 			info_url = "https://oceanservice.noaa.gov/facts/phyto.html"
 		}
 	},
@@ -445,7 +444,7 @@ local function Get_Scale_from_Y(pos_y, yrange_table_unscaled, scaling_y, new_y_r
 
 end
 
-local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_factors, use_center, print_results)
+local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_factors, use_center, y_stack_base, print_results)
 
     -- given an area and cell size, return a set of grid points
 
@@ -455,6 +454,7 @@ local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_
     end
 
 	required_num = required_num or 1
+	y_stack_base = y_stack_base or 0.1
 
     local x_min = range_tbl.x[1]
     local x_max = range_tbl.x[2]
@@ -546,7 +546,7 @@ local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_
 				-- save to table
 				num_cells = num_cells + 1
 				--remove z fighting + some global z based on height (somewhat in-case different groups overlap)
-				local z = z_base + (num_cells*0.001) + Get_Z_from_Y(y, 0.1)
+				local z = z_base + (num_cells*0.001) + Get_Z_from_Y(y, y_stack_base)
 				cells_tbl[num_cells] = {x = x, y = y, z = z, i_index = num_cells}
 				if print_results then
 					print("x: "..x..",   y: "..y..",   z: "..z.."\n")
@@ -1450,6 +1450,47 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 
 end
 
+local function Spawn_Animal_Micro(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen)
+
+	-- spawn an individual plankton
+	local subitem_tbl = CV_Spawn_Keys[item_name][subitem_name]
+
+	-- default arguments
+	if spawn_offscreen == nil then
+		spawn_offscreen = false
+	end
+
+	-- setup
+	local spawn_list_key_name = subitem_tbl.spawn_list_key
+	local collfact_name = subitem_tbl.spawn_coll_factory
+	local obj_scale_base = subitem_tbl.object_scale_base
+	local obj_rot_speed_base = subitem_tbl.object_rotation_speed_base
+	local obj_translate_speed_base = subitem_tbl.object_translation_speed_base
+	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
+
+	local rand_base = (math.random(75,100)/100)
+	local scale = obj_scale_base * rand_base
+
+	--print("x, y, z = ".. pos_tbl.x..", ".. pos_tbl.y..",".. pos_tbl.z.."\n")
+	local spanwn_pos = vmath.vector3(pos_tbl.x, pos_tbl.y, pos_tbl.z)
+	local rot
+
+	-- compile into properties table
+	local props = {
+		[HSH.STR_go] = {
+			Obj_Translation_Speed_Max = obj_translate_speed_base,
+			Obj_Rotation_Speed_Max = obj_rot_speed_base,
+			Obj_Formation_Position_Index = i_position_in_grid,
+		}
+	}
+
+	-- create collection with GO
+	local new_collection = collectionfactory.create(collfact_name, spanwn_pos, rot, props, scale)
+
+	-- add GO to tracker
+	Spawned_AddObject(self, spawn_list_key_name, new_collection[HSH.STR_go])
+
+end
 
 local function SetupAnimals(self)
 
@@ -1457,7 +1498,7 @@ local function SetupAnimals(self)
 
 	-- setup some helper functions
 	-- easy grid for swimmers
-	local function func_grid_swimmers(spawn_subgroup)
+	local function func_grid_swimmers(spawn_subgroup, y_stack_base)
 
 		-- get grid points from just a few variables
 
@@ -1481,7 +1522,8 @@ local function SetupAnimals(self)
 
 		local range_tbl = {x={min_x, max_x}, y={min_y, max_y}}
 		local cell_size_table = {x = local_size_x, y = local_size_y, z = spawn_subgroup.spawn_z_base}
-		local grid_points = GetGridPoints(range_tbl, cell_size_table, count, rand_offset_factor)
+		local use_center = true
+		local grid_points = GetGridPoints(range_tbl, cell_size_table, count, rand_offset_factor, use_center, y_stack_base)
 		return grid_points
 
 	end
@@ -1562,7 +1604,11 @@ local function SetupAnimals(self)
 						Spawn_Animal_Static(self, k_item, k_subitem, i, sprite_selection, flip_h)
 					end
 				elseif v_subitem.object_logic_type == CV_Logic_Type_Micro then
-					--#TODO add plankton spawning
+					--spawn plankton, set grid then spawn
+					CV_Spawn_Keys[k_item][k_subitem].spawn_position_grid_dynamic = func_grid_swimmers(v_subitem, 0.01)
+					for i=1,number_to_spawn do
+						Spawn_Animal_Micro(self, k_item, k_subitem, i, false)
+					end
 				end
 			end
 		end
