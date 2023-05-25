@@ -20,6 +20,9 @@ go.property("Obj_Number_Sprite_Options", 9)
 
 
 -- locals for easy access
+local CV_x_threshold_appear = -810
+local CV_x_threshold_disappear = -550
+
 local CV_type_to_sprite = {
 	--0 is type algae
 	--1 is type diatom
@@ -50,7 +53,7 @@ local CV_type_to_sprite = {
 
 --functions
 
-local function ChooseType(self)
+local function UpdateSprite(self)
 
 	--chooses random type
 	local choices = {}
@@ -62,15 +65,11 @@ local function ChooseType(self)
 
 	--print("Selected phytoplankton type "..selected_typ_key.."\n")
 
-	return selected_typ_key
-
-end
-
-local function UpdateSprite(self, type_key)
+	self.Obj_Spawn_Type_Current_Key = selected_typ_key
 
 	--updates sprite type and tracking data
 
-	local meta_info = CV_type_to_sprite[type_key]
+	local meta_info = CV_type_to_sprite[selected_typ_key]
 	local sprite_animation = EXT:Random_fromTable(meta_info.sprite_options)
 
 	sprite.play_flipbook("#sprite", sprite_animation)
@@ -78,45 +77,62 @@ local function UpdateSprite(self, type_key)
 	-- now tint for transparency according to health
 	go.set("#sprite", "tint", vmath.vector4(1, 1, 1, 1))
 
-	-- maybe flip
-	if meta_info.use_random_flip and math.random(0,1) == 1 then
-		sprite.set_hflip("#sprite", true)
-	end
-
 	self.Sprite_Width = (go.get("#sprite", "size.x") * go.get(".", "scale.x"))
 
-	-- give slight rotation and send on it's way
+	-- give slight rotation
 	local z_rot = 0
 	if meta_info.use_random_flip then
 		z_rot = EXT:Random_Magnitude(0, 15) or 0
 	end
+
+	-- maybe flip
+	--use z-rotation so we don't have to keep track of if sprite was flipped or not
+	if meta_info.use_random_flip and math.random(0,1) == 1 then
+		z_rot = z_rot + 180
+	end
+
 	go.set(".", "euler.z", z_rot)
+
 
 end
 
-local function SetSpawn(self)
+local function ResetSpawn(self)
 
 	-- sets type of phytoplankton along with sprite and current type
 	-- also orders to move 
 
 	-- choose and set type
-	local type_key = ChooseType(self)
+	UpdateSprite(self)
 
-	local meta_info = CV_type_to_sprite[type_key]
-	self.Obj_Spawn_Type_Current_Key = type_key
-	self.Obj_Spawn_Type_Current_Index = meta_info.index_type
+	-- send on it's way, with completed call back doing this all again but at new position
+	-- whereever go is, move to x_threshold_disappear + radius*1.2 
+	-- once done reposition back to x_threshold_appear - radius*1.2
 
-	-- update sprite
-	UpdateSprite(self, type_key)
+	local current_pos = go.get(".", "position.x")
+	local end_pos = CV_x_threshold_disappear + ((self.Sprite_Width/2)*1.2)
 
-	-- #TODO send on it's way, with completed call back doing this all again but at new position
+	local distance = math.abs(end_pos - current_pos)
+	local move_duration = 0
+	local max_speed = self.Obj_Translation_Speed_Max
+	if distance > 0 and max_speed > 0 then
+		move_duration = distance / max_speed
+	end
 
+	local function func_wrap_position_and_reset(self)
+
+		local wrap_pos = CV_x_threshold_appear - ((self.Sprite_Width/2)*1.2)
+		go.set(".", "position.x", wrap_pos)
+		ResetSpawn(self)
+
+	end
+
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, end_pos, go.EASING_LINEAR, move_duration, 0, func_wrap_position_and_reset)
 
 end
 
 
 function init(self)
 
-	SetSpawn(self)
+	ResetSpawn(self)
 
 end

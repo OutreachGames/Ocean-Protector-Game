@@ -78,7 +78,7 @@ local CV_Spawn_Keys = {
 			object_dimensions = { x = 40, y = 40 }, --compiled sprite/spine dimensions
 			object_scale_base = CV_Default_Base_Scale,
 			object_rotation_speed_base = 10,
-			object_translation_speed_base = 5,
+			object_translation_speed_base = 18,
 			object_num_sprite_options = 9,
 			info_url = "https://oceanservice.noaa.gov/facts/phyto.html"
 		}
