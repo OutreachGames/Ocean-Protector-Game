@@ -1,4 +1,16 @@
     --#TODOs Master List- 
+
+    -- bring in human boat in timer in screenplay
+    -- hide data graph and items until enabled in screenplay
+    -- add stage to click on all items to measure them
+    -- show OA effect with timer in screenplay
+    -- inject view items and click items after each decision
+    -- improve final debriefing
+    -- add home screen
+    -- add message scroll back
+    -- add save mechanic
+    -- add firebase connection and Google sheets connection
+
 	-- way to load in table of fish group health
 	-- way to save table of fish group health 
     -- for saves and level transitions, save position, size, tint, and any other properties of each go (static vs moving)
