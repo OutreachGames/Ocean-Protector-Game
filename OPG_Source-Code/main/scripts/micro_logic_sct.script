@@ -78,7 +78,7 @@ local function UpdateSprite(self)
 	-- now tint for transparency according to health
 	go.set("#sprite", "tint", vmath.vector4(1, 1, 1, 1))
 
-	self.Sprite_Width = (go.get("#sprite", "size.x") * go.get(".", "scale.x"))
+	self.Sprite_Width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x"))
 
 	-- give slight rotation
 	local z_rot = 0

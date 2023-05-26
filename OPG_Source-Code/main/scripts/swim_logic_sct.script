@@ -827,7 +827,7 @@ function init(self)
 	Toggle_MovingAnimation(self, "spine_is_idle")
 
 	-- set up some internal tracking variables
-	self.scale_magnitude = go.get(".", "scale.y")
+	self.scale_magnitude = math.abs(go.get(".", "scale.y"))
 	self.currently_active_run_type = CV_Status_Type.no_run_active
 
 	-- setup tracking of time stamps for movement

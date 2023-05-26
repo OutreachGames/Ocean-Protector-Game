@@ -1721,35 +1721,56 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 		match_id_tbl[item_name] = {selected_go_url = go_id, selected_go_subitem = subitem_name}
 		match_sum = match_sum + 1
+		--print("  Clicked on item "..item_name)
 
 	end
+
+	local function in_bounding_box(click_pos, go_id, go_base_dimensions)
+
+		local pos = go.get_position(go_id)
+		local scale = go.get_scale(go_id)
+		--recall scale can be -1 when object gets flipped
+		local x_range = (math.abs(scale.x) * go_base_dimensions.x)/2
+		local y_range = (math.abs(scale.y) * go_base_dimensions.y)/2
+
+		local bb_x_min = pos.x - x_range
+		local bb_x_max = pos.x + x_range
+		local bb_y_min = pos.y - y_range
+		local bb_y_max = pos.y + y_range
+
+		return (click_pos.x >= bb_x_min and click_pos.x <= bb_x_max) and (click_pos.y >= bb_y_min and click_pos.y <= bb_y_max)
+
+	end
+
+	--print("Starting match check")
 
 	for k_item_name, v_item_info in pairs(CV_Spawn_Keys) do
 		--for each subitem in item
 		for k_subitem_name, v_subitem_info in pairs(v_item_info) do
 			local object_dimensions = v_subitem_info.object_dimensions
 			--only continue if this has object dimensions, which means we can click on it
-			if object_dimensions ~= nil and match_id_tbl[k_item_name] == nil then
-				-- go through list and get position and scale and check distance
-				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key] or {}
+			if object_dimensions ~= nil then
 
-				--first check if can just do bounding box check 
+				-- go through list and get position and scale and check distance
+				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key]
+				if spawn_tbl == nil then
+					print("Warning, spawn_tbl with key <"..tostring(v_subitem_info.spawn_list_key).."> is nil...\n")
+					spawn_tbl = {}
+				end
+
+				--first check if can just do whole bounding box check 
 				local bb = v_subitem_info.use_click_by_bounding_box
 				if bb ~= nil then
 					if (world_pos.x >= bb.x[1] and world_pos.x <= bb.x[2]) and (world_pos.y >= bb.y[1] and world_pos.y <= bb.y[2]) then
 						add_to_tbl(k_item_name, nil, k_subitem_name)
 					end
 				else
+					local subitems_clicked = false
 					for k_goid, _ in pairs(spawn_tbl) do
-						local pos = go.get_position(k_goid)
-						local scale = go.get_scale(k_goid)
-						local max_d_go = math.max(scale.x * object_dimensions.x, scale.y * object_dimensions.y)
-						-- if within distance save to list
-						local click_pos = vmath.vector3(world_pos.x, world_pos.y, 0)
-						if vmath.length(pos - click_pos) <= max_d_go then
+						if not subitems_clicked and in_bounding_box(world_pos, k_goid, object_dimensions) then
+							subitems_clicked = true
 							add_to_tbl(k_item_name, k_goid, k_subitem_name)
-							break
-							--print("Clicked on item "..k_item_name.."\n")
+							
 						end
 					end
 				end
@@ -1760,7 +1781,11 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 	--send message to gui saying we clicked this
 	if match_sum > 0 then
+		--print("  Match sum is "..match_sum)
+		--for k,_ in pairs(match_id_tbl) do print("  "..k) end
 		msg.post("hud#gui", HSH.msg_report_go_clicked, {minfo_screen_position = screen_pos, minfo_match_tbl = match_id_tbl, minfo_match_count = match_sum})
+	--else
+		--print("No items found to click on!\n")
 	end
 
 	--return match_id_tbl
