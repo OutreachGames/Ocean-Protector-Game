@@ -598,8 +598,6 @@ local function Screen_Popup_Input(self, action_id, action)
 			-- some kind of debrief, whether it is a debrief of a new_info, decision, or item_click
 			if Loop_CompletionType_is_Primary(self, loop_type) and Loop_StatusType_is_Main(self) then
 
-				self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
-
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				local debrief_text = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 
@@ -607,6 +605,7 @@ local function Screen_Popup_Input(self, action_id, action)
 				-- otherwise finish up 
 				if debrief_text ~= nil and debrief_text ~= "" then
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
+					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					local run_sizing_debrief = true
 					local update_values_to_debrief = true
 					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
@@ -879,8 +878,8 @@ local function Screen_Decision_Input(self, action_id, action)
 				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
 				if Loop_StatusType_is_Main(self) and debrief_text ~= nil and debrief_text ~= "" then
 
-					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
+					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 
 					-- also subtract one from current progress if incorrect so we go back to it in the next submit
 					if STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, self.character_role_key, answer_string_key) then
@@ -890,6 +889,7 @@ local function Screen_Decision_Input(self, action_id, action)
 					-- add debrief screen and also update goals
 					local run_sizing_goals = false
 					Screen_Goals_Reset(self, true, run_sizing_goals, "Evaluate outcome of choice")
+
 					local run_sizing_popup = true
 					local reset_values_popup = true
 					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, "Update")
@@ -1287,6 +1287,8 @@ local function On_GO_Item_Click_InputEnd(self, item_name)
 	if debrief_text ~= nil and debrief_text ~= "" then
 		local run_sizing_debrief = true
 		local update_values_to_debrief = true
+		self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
+		self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 		Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
 	end
 
@@ -1464,6 +1466,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
 	local st = STR.CV.goal_completed_types
 	self.gameplay_loop_completion_type_primary = stage_type
+	self.gameplay_loop_completion_type_secondary = stage_type
 
 	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
 
