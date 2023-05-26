@@ -97,10 +97,11 @@ local function Items_Click_Status_Reset(self, items_to_click)
 	self.items_that_were_clicked_sum = 0
 
 	-- default is reset all items
-	if items_to_click == nil then
+	if items_to_click == "all_items_need_clicked" then
+		print("Default arg used, all items are going to be required to be clicked on...\n")
 		items_to_click = {}
 		for k,_ in pairs(CV_item_groups) do
-			table.insert(items_to_click, k)
+			items_to_click[k] = k
 		end
 	end
 
@@ -108,16 +109,25 @@ local function Items_Click_Status_Reset(self, items_to_click)
 	-- also save that we have not clicked them all yet
 	local sum_to_click = 0
 	if type(items_to_click) == "table" then
-		for _,v_itemname in ipairs(items_to_click) do
+		print("Got items to click as table \n ")
+
+		-- set items
+		for _,v_itemname in pairs(items_to_click) do
+			print("Add item to table to click "..v_itemname.."\n")
 			sum_to_click = sum_to_click + 1
 			self.items_that_need_clicked_list[v_itemname] = true
 			Items_Set_Color_Tracking(self, v_itemname, true)
 		end
+
+		-- saved click tracker variables
 		if sum_to_click > 0 then
 			self.items_all_clicked = false
 			self.items_that_need_clicked_sum = sum_to_click
 		end
+
 	end
+
+	print("Sum to click is "..sum_to_click.."\n")
 
 end
 

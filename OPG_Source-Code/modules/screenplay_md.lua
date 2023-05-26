@@ -65,10 +65,19 @@ STR.CV = {
 
 }
 
-function STR:GetTable_or_Value(tbl_or_str)
+function STR:GetString_from_Tbl_or_Value(tbl_or_str)
+
+    -- gets a string from a value or randomly from a table of options
 
     if type(tbl_or_str) == "table" then
-        return tbl_or_str[1]
+        local tbl__i
+        local length_tbl = #tbl_or_str
+        if length_tbl > 1 then
+            tbl__i = math.random(1, length_tbl)
+        else
+            tbl__i = 1
+        end
+        return tbl_or_str[tbl__i]
     else
         return tbl_or_str
     end
@@ -788,7 +797,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You've upgraded your engine to use less fuel. This upgrade cost money, but you have saved a lot money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You've upgraded your engine to use less fuel. This upgrade cost money, but you have saved a lot money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                     --#TODO: make short term points slightly lower here, but overall good
@@ -808,7 +817,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You've increased the number of trips you take on your boat. This has made you slightly earn more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You've increased the number of trips you take on your boat. This has made you slightly earn more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                     --#TODO: make short term points slightly higher here
@@ -828,7 +837,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You've chosen to keep your boat and the number of trips the same as before. The amount of money you spend and earn remains the same.  The amount of carbon dioxide that your boat emits also remains the same. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You've chosen to keep your boat and the number of trips the same as before. The amount of money you spend and earn remains the same.  The amount of carbon dioxide that your boat emits also remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "No change to OA points or sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -855,7 +864,7 @@ STR.Screenplay = {
                         "Dispose of the waste in the local inland landfill. "
                     },
                     text_debrief = {
-                        "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Best option to minimize coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -865,7 +874,7 @@ STR.Screenplay = {
                         "Dispose of the waste in the waters near the shore. "
                     },
                     text_debrief = {
-                        "You start disposing your waste nearshore waters, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
+                        "You start disposing your waste nearshore waters, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
                     },
                     -- "This causes more coastal OA. OA points and sustainability points decrease." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -875,7 +884,7 @@ STR.Screenplay = {
                         "Dispose of the waste in the waters far away from the shore. "
                     },
                     text_debrief = {
-                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
+                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
                     },
                     -- "This causes more coastal OA. OA points and sustainability points decrease." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -911,7 +920,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You have chosen to help the coral be more protected. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to help the coral be more protected. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -930,7 +939,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You have chosen to add nets around where nearby rivers meet the ocean. It turns out that adding these nets disrupted movement of river life. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to add nets around where nearby rivers meet the ocean. It turns out that adding these nets disrupted movement of river life. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "This might help catch large plastic waste going into the ocean but overall is expensive, not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     --#TODO: only make bad for fish, and not pH
@@ -950,7 +959,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, it turns out there is far too much plankton for anyone to remove. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, it turns out there is far too much plankton for anyone to remove. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     --#TODO: only make bad for fish, and not pH
@@ -987,7 +996,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped reduce the amount of excess phytoplankton. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped reduce the amount of excess phytoplankton. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1006,7 +1015,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You have chosen to keep things the same. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to keep things the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -1025,7 +1034,7 @@ STR.Screenplay = {
                         },
                     },
                     text_debrief = {
-                        "You have chosen to try and block off parts of the ocean. Unfortunately, that does not work and has caused disruptions to the ocean and cost you money. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to try and block off parts of the ocean. Unfortunately, that does not work and has caused disruptions to the ocean and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1052,7 +1061,7 @@ STR.Screenplay = {
                         "The money should be spent to add more buses, carpool lanes, and sidewalks throughout the city."
                     },
                     text_debrief = {
-                        "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Very useful option which decreases coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1062,7 +1071,7 @@ STR.Screenplay = {
                         "The money should be spent on creating more parking lots throughout the city."
                     },
                     text_debrief = {
-                        "The council has followed your advice to build more parking lots. This has increased excess nutrient pollution. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to build more parking lots. This has increased excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not useful option which increases runoff and coastal OA. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1072,7 +1081,7 @@ STR.Screenplay = {
                         "The money should be spent on building a large convention center in the city."
                     },
                     text_debrief = {
-                        "The council has followed your advice to build a large convention center. This has increased excess nutrient pollution. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to build a large convention center. This has increased excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "By itself this will not make a large change in CO2 emissions but increases runoff and over timer adds more fossil fuel emissions. Unchanged OA points and less sustainability points." 
                     --#TODO make unchanged for short-term, while still being bad for long-term
@@ -1100,7 +1109,7 @@ STR.Screenplay = {
                         "Businesses will be granted money to sell their goods to the local community."
                     },
                     text_debrief = {
-                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1110,7 +1119,7 @@ STR.Screenplay = {
                         "Businesses will be granted money to sell their products to cities in different states."
                     },
                     text_debrief = {
-                        "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1120,7 +1129,7 @@ STR.Screenplay = {
                         "Businesses will be granted money to buy new computers and office equipment."
                     },
                     text_debrief = {
-                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -1147,7 +1156,7 @@ STR.Screenplay = {
                         "Farmers will install solar panels on their farm and use less fertilizer on their fields."
                     },
                     text_debrief = {
-                        "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Very useful option which decreases nutrient runoff and fossil fuel emissions, which reduces OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1157,7 +1166,7 @@ STR.Screenplay = {
                         "Famers will buy additional large tractors so they can harvest their crops more quickly."
                     },
                     text_debrief = {
-                        "The farmers followed your advice to buy larger tractors. It turns out this has increased carbon dioxide emissions. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to buy larger tractors. It turns out this has increased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Likely will somewhat increase runoff and result in slightly less OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1167,7 +1176,7 @@ STR.Screenplay = {
                         "Farmers will build more barns on their land to store their crops and tractors."
                     },
                     text_debrief = {
-                        "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "By itself this will not make a large change in CO2 emissions and but may result in more nutrient runoff. Will not affect largely affect OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -1194,7 +1203,7 @@ STR.Screenplay = {
                         "People should carpool and/or use the bus to go to work and school."
                     },
                     text_debrief = {
-                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emmissions in the area. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Most useful option, as it reduces CO2 emissions. Also has bonus of saving people money! More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1204,7 +1213,7 @@ STR.Screenplay = {
                         "People should upgrade their car radios and seat cushions to make their cars more comfortable."
                     },
                     text_debrief = {
-                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emmissions in the area remains the same. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emmissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -1214,7 +1223,7 @@ STR.Screenplay = {
                         "People should use more taxis and buy rides to get to work and school."
                     },
                     text_debrief = {
-                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emmissions in the area. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option, as it increases CO2 emissions. Also has negative effect of costing people more money. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1241,7 +1250,7 @@ STR.Screenplay = {
                         "People should conserve water and energy when possible, such as not leaving on faucets or appliances if they are not using them."
                     },
                     text_debrief = {
-                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less enery has reduced the amount of carbon dioxide emmissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less enery has reduced the amount of carbon dioxide emmissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Most useful option, as it reduces CO2 emissions and overlaps with reducing runoff. Also has bonus of saving people money! More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_good_default
@@ -1251,7 +1260,7 @@ STR.Screenplay = {
                         "People should buy many house plants and place them throughout their homes and workplaces."
                     },
                     text_debrief = {
-                        "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability pointss." 
                     outcome_result_func = STR.CV.outcome_functions.option_fair_default
@@ -1261,7 +1270,7 @@ STR.Screenplay = {
                         "People should water their lawns and wash their cars more frequently."
                     },
                     text_debrief = {
-                        "People follow your advice and use more water on their lawns and cars. This has cost people money, and the extra water running over the land has increased excess nutrient pollution in the area. "..STR:GetTable_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use more water on their lawns and cars. This has cost people money, and the extra water running over the land has increased excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option, as it increases CO2 emissions and runoff. Also has negative effect of costing people money. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.option_bad_default
@@ -1374,7 +1383,7 @@ function STR:Get_Completion_Type(stage_key, substage_key)
         return nil
     end
 
-    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type) or self:GetTable_or_Value(self.Screenplay[stage_key].goal_completed_type_default)
+    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type) or self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_completed_type_default)
 
 end
 
@@ -1387,7 +1396,7 @@ function STR:Get_Goal_Text(stage_key, substage_key)
         return nil
     end
 
-    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].goal_text) or self:GetTable_or_Value(self.Screenplay[stage_key].goal_text_default)
+    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_text) or self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_text_default)
 
 end
 
@@ -1400,7 +1409,7 @@ function STR:Get_NewInfo_Text_Body(stage_key, substage_key)
         return nil
     end
 
-    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].display_text)
+    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].display_text)
 
 end
 
@@ -1412,7 +1421,7 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
         return nil
     end
 
-    return self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].text_debrief)
+    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].text_debrief)
 
 end
 
@@ -1444,15 +1453,15 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
         return nil
     end
 
-    local debrief_tbl = self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].debrief_text)
+    local debrief_tbl = self.Screenplay[stage_key][substage_key].debrief_text
 
     local items_tbl = {}
-    local i = 0
 
     if type(debrief_tbl) == "table" then
         for k_item_keyname,v_item_debrieftext in pairs(debrief_tbl) do
-            i = i + 1
-            items_tbl[i] = k_item_keyname
+            if v_item_debrieftext ~= "" then
+                items_tbl[k_item_keyname] = k_item_keyname
+            end
         end
     end
 
@@ -1473,7 +1482,7 @@ function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
 
     local q_info = decision_info.question_prompt
 
-    return self:GetTable_or_Value(q_info[character_role]) or self:GetTable_or_Value(q_info[1])
+    return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1])
 
 end
 
@@ -1495,7 +1504,7 @@ function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
     for k_userchoie_name, v_info in pairs(a_info) do
 
         local text_tbl = v_info.text_display
-        local answer_text = self:GetTable_or_Value(text_tbl[character_role]) or self:GetTable_or_Value(text_tbl[1])
+        local answer_text = self:GetString_from_Tbl_or_Value(text_tbl[character_role]) or self:GetString_from_Tbl_or_Value(text_tbl[1])
 
         a_i = a_i + 1
         a_tbl[a_i] = {user_choice_key = k_userchoie_name, choice_text_answer = answer_text}
@@ -1527,7 +1536,7 @@ function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_
 
     if a_info_i_debrief == nil then return nil end
 
-    return self:GetTable_or_Value(a_info_i_debrief[character_role]) or self:GetTable_or_Value(a_info_i_debrief[1])
+    return self:GetString_from_Tbl_or_Value(a_info_i_debrief[character_role]) or self:GetString_from_Tbl_or_Value(a_info_i_debrief[1])
 
 end
 
