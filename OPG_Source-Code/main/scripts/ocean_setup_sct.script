@@ -1749,7 +1749,7 @@ local function Get_Item_Clicked_On(self, screen_pos)
 		for k_subitem_name, v_subitem_info in pairs(v_item_info) do
 			local object_dimensions = v_subitem_info.object_dimensions
 			--only continue if this has object dimensions, which means we can click on it
-			if object_dimensions ~= nil then
+			if object_dimensions ~= nil and match_id_tbl[k_item_name] == nil then
 
 				-- go through list and get position and scale and check distance
 				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key]
@@ -1770,7 +1770,6 @@ local function Get_Item_Clicked_On(self, screen_pos)
 						if not subitems_clicked and in_bounding_box(world_pos, k_goid, object_dimensions) then
 							subitems_clicked = true
 							add_to_tbl(k_item_name, k_goid, k_subitem_name)
-							
 						end
 					end
 				end

@@ -180,7 +180,6 @@ STR.Screenplay = {
         -- Boat slides onto screen.
 
         user_lesson_05 = {
-            --#TODO get clicking working
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the highest-level consumer in our ocean food-web.",
             display_text = "Identify the highest-level component in the ocean food-web by clicking.",
@@ -304,14 +303,13 @@ STR.Screenplay = {
         -- Also show text explanations listed below. 
 
         user_lesson_18 = {
-            --#TODO get clicking working
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
             display_text = "Identify each component of the food-web has changed under more acidic oceans by clicking.",
             debrief_text = {
                 "",
                 item_plankton = {
-                    "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to get as nutrients or build their protective shells as easily, and less will survive. Plankton are the food base for many animals, so unhealthy plankton populations can hurt the entire food-web.",
+                    "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to get as nutrients or build their protective shells as easily, and less will survive. Plankton are the food base for many animals, so unhealthy or unbalanced plankton populations can affect the entire food-web.",
                 },
                 item_coral = {
                     "Coral"..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons. Also, unhealthy corals are more likely to become diseased and die. Many reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web."
