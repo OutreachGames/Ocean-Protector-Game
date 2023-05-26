@@ -1463,7 +1463,14 @@ local function GameLogic_Start(self)
 	Screen_Popup_Initialize(self, set_enabled)
 	Screen_Data_Initialize(self, set_enabled)
 	Screen_Plot_Initialize(self, set_enabled)
-	--Items_Click_Status_Reset(self, {"item_fish"})
+
+	-- reset click items tracker
+	local items_to_reset_ilist = {}
+	for k,_ in pairs(CV_item_groups) do
+		table.insert(items_to_reset_ilist, k)
+	end
+
+	Items_Click_Status_Reset(self, items_to_reset_ilist)
 
 	self.input_is_possible = true
 
@@ -1477,10 +1484,9 @@ local function GameLogic_Start(self)
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
 	-- kick off first action
-	--#TODO update when ready
 	timer.delay(6.0, false, function(self)
-		--Screen_Data_Initialize(self, true)
-		--GameLogic_Progress(self)
+		Screen_Data_Initialize(self, true)
+		GameLogic_Progress(self)
 	end)
 
 end

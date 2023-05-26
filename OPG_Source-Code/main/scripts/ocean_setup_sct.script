@@ -55,18 +55,17 @@ local CV_Spawn_Keys = {
 		}
 	},
 
-	--#TODO add plankton
-		--Notes:
-			--diatom (static and silicic), dinoflagellate (moving and some calcaerous), algae strand or blob too perhaps (also static)
-			--some coccolithophore, which get smaller, there are some calcaerous dinoflagellates too which could also decrease
-			--diatom (20-200 um) dionflagellate (15-400 um)
-			--overall very species dependent
 	item_plankton = {
-		--"https://oceanservice.noaa.gov/facts/plankton.html"
-		-- Plankton are a special case b/c the individual numbers would be too great to count.
-		-- Instead percentages are used, with the zoom bubble always being full but with different ratios.
-		-- These continually looped with sprites changing based on global percent tracking table. 
-		-- They do not show death animations, as particles would leave the zoom bubble and they move too fast to see much. 
+		--Notes:
+		--  diatom (static and silicic), dinoflagellate (moving and some calcaerous), algae strand or blob too perhaps (also static)
+		--  some coccolithophore, which get smaller, there are some calcaerous dinoflagellates too which could also decrease
+		--  diatom (20-200 um) dionflagellate (15-400 um)
+		--  overall very species dependent
+		--  "https://oceanservice.noaa.gov/facts/plankton.html"
+		--  Plankton are a special case b/c the individual numbers would be too great to count.
+		--  Instead percentages are used, with the zoom bubble always being full but with different ratios.
+		--  These continually looped with sprites changing based on global percent tracking table. 
+		--  They do not show death animations, as particles would leave the zoom bubble and they move too fast to see much. 
 		subitem_phytoplankton = {
 			spawn_list_key = "item_plankton__subitem_phytoplankton",
 			spawn_coll_factory = "spawner_plankton_phytoplankton#collectionfactory",
@@ -1279,9 +1278,9 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 	local rand_rot_range = subitem_tbl.random_rotation_range
 	local rot = nil
 	if rand_rot_range ~= nil then
-		--#TODO add slight random rotations following +- range
-		local min_range = rand_rot_range[1]
-		local max_range = rand_rot_range[2]
+		--add slight random rotations following +- range
+		local euler_z = EXT:Random_Magnitude(rand_rot_range[1], rand_rot_range[2]) or 0
+		rot = vmath.quat_rotation_z(math.rad(euler_z))
 	end
 
 	local rand_base = (math.random(90,100)/100)
@@ -1444,11 +1443,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, start_swimming_info)
 
 	-- #TODO remove when done testing
-	if i_position_in_grid < 4 then
-	timer.delay(2, false, function(self)
-		--Remove_Animal_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
-	end)
-	end
+	--Remove_Animal_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
 
 end
 
