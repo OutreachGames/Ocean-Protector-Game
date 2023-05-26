@@ -122,38 +122,39 @@ STR.Screenplay = {
         -- New popup box appears in the top header after each goal is completed. 
 
         user_lesson_02 = {
-            --#TODO get clicking working
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
             display_text = "Identify the base of the food-web in this scene by clicking.",
             show_hud_data_popup = false,
+            allow_duplicate_clicks = false,
             debrief_text = {
                 "",
                 item_plankton = {
-                    "Plankton "..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..ntab.."Phytoplankton are producers that use sunlight to get energy."..ntab.."Zooplankton are consumers that eat other plankton to get energy."
+                    "Plankton "..n..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..n..ntab.."- Phytoplankton are producers that use sunlight to get energy."..ntab.."- Zooplankton are consumers that eat other plankton to get energy."
                 }
             },
             extra_text = ""
         },
 
         user_lesson_03 = {
-            --#TODO get clicking working
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document consumers in our ocean food-web.",
             display_text = "Identify another component of the food-web in this scene by clicking.",
+            show_hud_data_popup = false,
+            allow_duplicate_clicks = false,
             debrief_text = {
                 "",
                 item_coral = {
-                    "Coral"..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet",
+                    "Coral"..n..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet",
                 },
                 item_fish = {
-                    "Fish"..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the small parrot fish and angel fish and the large tuna and grouper. All fish have some form of internal skeleton . Fish are important food for many different animals, including larger fish and humans."
+                    "Fish"..n..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the small parrot fish and angel fish and the large tuna and grouper. All fish have some form of internal skeleton . Fish are important food for many different animals, including larger fish and humans."
                 },
                 item_mollusks = {
-                    "Mollusks"..n.."Mollusks include oysters, snails, sea slugs, and even squid and octopi. Almost all mollusks have some kind of shell material somewhere around or in their body. Mollusks help cycle nutrients and are food for many animals, including humans."
+                    "Mollusks"..n..n.."Mollusks include oysters, snails, sea slugs, and even squid and octopi. Almost all mollusks have some kind of shell material somewhere around or in their body. Mollusks help cycle nutrients and are food for many animals, including humans."
                 },
                 item_crustaceans = {
-                    "Crustaceans"..n.."Crustaceans include crabs, lobsters, crayfish, shrimp, and krill. Almost all crustaceans have some form of external skeleton. Crustaceans are food for many animals, including humans, and help cycle nutrients."
+                    "Crustaceans"..n..n.."Crustaceans include crabs, lobsters, crayfish, shrimp, and krill. Almost all crustaceans have some form of external skeleton. Crustaceans are food for many animals, including humans, and help cycle nutrients."
                 }
             },
             extra_text = {
@@ -1457,6 +1458,7 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
     local ss_info = self.Screenplay[stage_key][substage_key]
     local debrief_tbl = ss_info.debrief_text
     local show_data_popup = ss_info.show_hud_data_popup or false
+    local allow_dup_clicks = ss_info.allow_duplicate_clicks or false
 
     local items_tbl = {}
 
@@ -1467,6 +1469,7 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
                     item_name = k_item_keyname,
                     show_debrief_text = self:GetString_from_Tbl_or_Value(v_item_debrieftext),
                     show_data_popup = show_data_popup,
+                    allow_duplicate_clicks = allow_dup_clicks,
                     item_was_clicked = false
                 }
             end

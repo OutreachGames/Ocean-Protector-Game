@@ -103,6 +103,7 @@ local function Items_Click_Status_Reset(self, items_to_click_info)
 				item_name = k,
 				show_debrief_text = "",
 				show_data_popup = nil,
+				allow_duplicate_clicks = false,
 				item_was_clicked = false
 			}
 		end
@@ -589,14 +590,14 @@ local function Screen_Popup_Input(self, action_id, action)
 
 		print("Continue Button was pressed")
 
-		local loop_type = STR.CV.goal_completed_types.class_new_information
+		local new_info_loop_type = STR.CV.goal_completed_types.class_new_information
 
-		if Valid_Event_Check_Full(self, loop_type) then
+		if Valid_Event_Check_Full(self, new_info_loop_type) then
 
 			-- if primary loop type is new_info and not in debrief then run debrief check
 			-- if that is not the case, then it means we got to this new_info via
 			-- some kind of debrief, whether it is a debrief of a new_info, decision, or item_click
-			if Loop_CompletionType_is_Primary(self, loop_type) and Loop_StatusType_is_Main(self) then
+			if Loop_CompletionType_is_Primary(self, new_info_loop_type) and Loop_StatusType_is_Main(self) then
 
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				local debrief_text = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
@@ -619,12 +620,22 @@ local function Screen_Popup_Input(self, action_id, action)
 				-- if debrief of new_info then run new_info completion function if any exists before just progressing. 
 				-- this is b/c the event type we came from to this stage 
 				-- is not a new_info and already had it's outcome func ran 
-				if Loop_CompletionType_is_Primary(self, loop_type) then
+				if Loop_CompletionType_is_Primary(self, new_info_loop_type) then
 					local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 				end
 				--#TODO update here with additional types, might not always want to run progress
-				msg.post(".", HSH.msg_request_game_progress)
+				local progress_to_next_stage = false
+				if Loop_CompletionType_is_Primary(self, STR.CV.goal_completed_types.class_click_items) then
+					if self.items_all_clicked then
+						progress_to_next_stage = true
+					end
+				else
+					progress_to_next_stage = true
+				end
+				if progress_to_next_stage then
+					msg.post(".", HSH.msg_request_game_progress)
+				end
 			end
 
 		end
@@ -1348,7 +1359,9 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 				break
 			else
 				-- has been clicked, but maybe player wants to view graph again
-				back_item_clicked = k_itemname
+				if needs_clicked[k_itemname].allow_duplicate_clicks then
+					back_item_clicked = k_itemname
+				end
 			end
 
 		end
