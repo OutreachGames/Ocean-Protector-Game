@@ -96,6 +96,14 @@ local function Items_Click_Status_Reset(self, items_to_click)
 	self.items_that_were_clicked_list = {}
 	self.items_that_were_clicked_sum = 0
 
+	-- default is reset all items
+	if items_to_click == nil then
+		items_to_click = {}
+		for k,_ in pairs(CV_item_groups) do
+			table.insert(items_to_click, k)
+		end
+	end
+
 	-- if there are items to add to 'needs click' list then add them
 	-- also save that we have not clicked them all yet
 	local sum_to_click = 0
@@ -1423,22 +1431,21 @@ local function GameLogic_Progress(self, i_stage_addition)
 	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
 
 	if stage_type == st.class_click_items then
-		--
+		-- setup clicking on items
+		--#TODO get clicking items working
+		On_GO_Items_Clicked_Reset(self, true)
+		local items_to_click = STR:Get_Items_to_Click(stage_key, substage_key)
+		Items_Click_Status_Reset(self, items_to_click)
 
 	elseif stage_type == st.class_decisison then
+		-- setup decision
 		local q_text = STR:Get_Decision_Text_Question(stage_key, substage_key, self.character_role_key)
 		local a_tbl = STR:Get_Decision_Text_Options(stage_key, substage_key, self.character_role_key)
 		local reset_values = true
 		Screen_Decision_Reset(self, true, true, reset_values, #a_tbl, q_text, a_tbl)
 
 	elseif stage_type == st.class_new_information then
-		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
-		local run_sizer = true
-		local reset_values = true
-		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
-
-	elseif stage_type == st.class_new_information_and_click_items then
-		--#TODO change this eventually
+		-- setup new information
 		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 		local run_sizer = true
 		local reset_values = true
@@ -1465,12 +1472,7 @@ local function GameLogic_Start(self)
 	Screen_Plot_Initialize(self, set_enabled)
 
 	-- reset click items tracker
-	local items_to_reset_ilist = {}
-	for k,_ in pairs(CV_item_groups) do
-		table.insert(items_to_reset_ilist, k)
-	end
-
-	Items_Click_Status_Reset(self, items_to_reset_ilist)
+	Items_Click_Status_Reset(self)
 
 	self.input_is_possible = true
 
@@ -1483,8 +1485,8 @@ local function GameLogic_Start(self)
 	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
-	-- kick off first action
-	timer.delay(6.0, false, function(self)
+	-- kick off first action #TODO update to 4 once done testing
+	timer.delay(0.0, false, function(self)
 		Screen_Data_Initialize(self, true)
 		GameLogic_Progress(self)
 	end)

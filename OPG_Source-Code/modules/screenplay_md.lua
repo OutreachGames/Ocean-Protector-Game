@@ -50,8 +50,7 @@ STR.CV = {
     goal_completed_types = {
         class_new_information = 1,
         class_decisison = 2,
-        class_click_items = 3,
-        class_view_items = 4
+        class_click_items = 3
     },
 
     debrief_decision_view = {
@@ -1433,6 +1432,31 @@ function STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
     else
         return false
     end
+
+end
+
+
+function STR:Get_Items_to_Click(stage_key, substage_key)
+
+    -- gets items that must be clicked for this stage
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local debrief_tbl = self:GetTable_or_Value(self.Screenplay[stage_key][substage_key].debrief_text)
+
+    local items_tbl = {}
+    local i = 0
+
+    if type(debrief_tbl) == "table" then
+        for k_item_keyname,v_item_debrieftext in pairs(debrief_tbl) do
+            i = i + 1
+            items_tbl[i] = k_item_keyname
+        end
+    end
+
+    return items_tbl
 
 end
 
