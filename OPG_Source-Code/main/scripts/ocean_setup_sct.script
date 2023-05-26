@@ -79,7 +79,7 @@ local CV_Spawn_Keys = {
 			object_rotation_speed_base = 10,
 			object_translation_speed_base = 18,
 			object_num_sprite_options = 9,
-			use_click_by_bounding_box = { x = {-800, -675}, y = {40, 160}},
+			use_click_by_bounding_box = { x = {-800, -550}, y = {40, 160}},
 			info_url = "https://oceanservice.noaa.gov/facts/phyto.html"
 		}
 	},
@@ -1714,7 +1714,6 @@ local function Get_Item_Clicked_On(self, screen_pos)
 	-- get position of each and compare distance to this click postion
 	-- if overlap found break and return that item
 
-	local click_pos = vmath.vector3(world_pos.x, world_pos.y, 0)
 	local match_id_tbl = {}
 	local match_sum = 0
 
@@ -1746,6 +1745,7 @@ local function Get_Item_Clicked_On(self, screen_pos)
 						local scale = go.get_scale(k_goid)
 						local max_d_go = math.max(scale.x * object_dimensions.x, scale.y * object_dimensions.y)
 						-- if within distance save to list
+						local click_pos = vmath.vector3(world_pos.x, world_pos.y, 0)
 						if vmath.length(pos - click_pos) <= max_d_go then
 							add_to_tbl(k_item_name, k_goid, k_subitem_name)
 							break

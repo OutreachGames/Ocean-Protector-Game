@@ -82,7 +82,7 @@ local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
 
 end
 
-local function Items_Click_Status_Reset(self, items_to_click)
+local function Items_Click_Status_Reset(self, items_to_click_info)
 
 	-- update tracker lists of what items need to be clicked and which items have been clicked
 
@@ -90,33 +90,35 @@ local function Items_Click_Status_Reset(self, items_to_click)
 
 	self.items_that_need_clicked_list = nil
 	self.items_that_need_clicked_list = {}
-	self.items_that_need_clicked_sum = 0
 
-	self.items_that_were_clicked_list = nil
-	self.items_that_were_clicked_list = {}
+	self.items_that_need_clicked_sum = 0
 	self.items_that_were_clicked_sum = 0
 
 	-- default is reset all items
-	if items_to_click == "all_items_need_clicked" then
-		print("Default arg used, all items are going to be required to be clicked on...\n")
-		items_to_click = {}
+	if items_to_click_info == "all_items_need_clicked" then
+		--print("Default arg used, all items are going to be required to be clicked on...\n")
+		items_to_click_info = {}
 		for k,_ in pairs(CV_item_groups) do
-			items_to_click[k] = k
+			items_to_click_info[k] = {
+				item_name = k,
+				show_debrief_text = "",
+				show_data_popup = nil,
+				item_was_clicked = false
+			}
 		end
 	end
 
 	-- if there are items to add to 'needs click' list then add them
 	-- also save that we have not clicked them all yet
 	local sum_to_click = 0
-	if type(items_to_click) == "table" then
-		print("Got items to click as table \n ")
+	if type(items_to_click_info) == "table" then
 
-		-- set items
-		for _,v_itemname in pairs(items_to_click) do
-			print("Add item to table to click "..v_itemname.."\n")
+		self.items_that_need_clicked_list = items_to_click_info
+
+		-- count up items and set color
+		for k_itemname,_ in pairs(items_to_click_info) do
 			sum_to_click = sum_to_click + 1
-			self.items_that_need_clicked_list[v_itemname] = true
-			Items_Set_Color_Tracking(self, v_itemname, true)
+			Items_Set_Color_Tracking(self, k_itemname, true)
 		end
 
 		-- saved click tracker variables
@@ -853,7 +855,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 		--^ need to have tracker as off so if plot checks it properly knows what the status is
 		-- if plot thinks decisions is still on it can re-enable decision 
-		--#TODO save the values to master table before clearing them!
+		--#TODO save the values to a master table before clearing them!
 		local i = self.hud_decision_dynamic.goo_option_selected
 		local answer_string_key = self.hud_decision_dynamic.answer_choice_keys[i]
 
@@ -1274,6 +1276,33 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 
 end
 
+local function On_GO_Item_Click_InputEnd(self, item_name)
+
+	-- runs once successfull click on go item(s)
+
+	local item_click_info = self.items_that_need_clicked_list[item_name]
+
+	-- run debrief display
+	local debrief_text = item_click_info.show_debrief_text
+	if debrief_text ~= nil and debrief_text ~= "" then
+		local run_sizing_debrief = true
+		local update_values_to_debrief = true
+		Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
+	end
+
+	-- run pop-up display
+	if item_click_info.show_data_popup then
+		print("Item clicked and opening graph for <"..item_name..">. \n ")
+		Screen_Plot_Reset(self, true, true, item_name)
+		Items_Set_Color_Tracking(self, item_name, false)
+	end
+
+	if self.items_all_clicked then
+
+	end
+
+end
+
 local function On_GO_Item_Clicked_Received(self, clicked_info)
 
 	-- runs process when player clicks on go item(s)
@@ -1304,11 +1333,11 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 			-- checked if it has been clicked or not, 
 			-- items not clicked take priority so the list can actually be completed
 
-			if self.items_that_were_clicked_list[k_itemname] == nil then
+			if not needs_clicked[k_itemname].item_was_clicked then
 				-- has not yet been clicked, so add it
 				valid_item_clicked = k_itemname
 
-				self.items_that_were_clicked_list[k_itemname] = true
+				needs_clicked[k_itemname].item_was_clicked = true
 
 				if self.items_that_were_clicked_sum < self.items_that_need_clicked_sum then
 					self.items_that_were_clicked_sum = self.items_that_were_clicked_sum + 1
@@ -1323,20 +1352,18 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 		end
 	end
 
+	-- if this was last on list then set variable that all are done
+	if self.items_that_were_clicked_sum >= self.items_that_need_clicked_sum then
+		self.items_all_clicked = true
+		print("All items that need to be clicked were clicked. \n")
+	end
+
 	-- finish process to click on and save data on items
 	-- popup graph, which will also disable ocean script clicking
 	-- also set color in data view for color and bar
 	local graph_item = valid_item_clicked or back_item_clicked
 	if graph_item ~= nil then
-		print("Item clicked and opening graph for <"..graph_item..">. \n ")
-		Screen_Plot_Reset(self, true, true, graph_item)
-		Items_Set_Color_Tracking(self, graph_item, false)
-	end
-
-	-- if this was last on list then set variable that all are done
-	if self.items_that_were_clicked_sum >= self.items_that_need_clicked_sum then
-		self.items_all_clicked = true
-		print("All items that need to be clicked were clicked. \n")
+		On_GO_Item_Click_InputEnd(self, graph_item)
 	end
 
 end

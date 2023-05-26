@@ -22,7 +22,7 @@ go.property("Obj_BaseGrid_Y_Coordinate", 0)
 
 -- locals for easy access
 local CV_x_threshold_appear = -810
-local CV_x_threshold_disappear = -550
+local CV_x_threshold_disappear = -545
 
 local CV_type_to_sprite = {
 	--0 is type algae

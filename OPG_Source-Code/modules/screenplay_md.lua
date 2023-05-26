@@ -126,6 +126,7 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
             display_text = "Identify the base of the food-web in this scene by clicking.",
+            show_hud_data_popup = false,
             debrief_text = {
                 "",
                 item_plankton = {
@@ -1453,14 +1454,21 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
         return nil
     end
 
-    local debrief_tbl = self.Screenplay[stage_key][substage_key].debrief_text
+    local ss_info = self.Screenplay[stage_key][substage_key]
+    local debrief_tbl = ss_info.debrief_text
+    local show_data_popup = ss_info.show_hud_data_popup or false
 
     local items_tbl = {}
 
     if type(debrief_tbl) == "table" then
         for k_item_keyname,v_item_debrieftext in pairs(debrief_tbl) do
-            if v_item_debrieftext ~= "" then
-                items_tbl[k_item_keyname] = k_item_keyname
+            if k_item_keyname ~= "" and k_item_keyname ~= 1 then
+                items_tbl[k_item_keyname] = {
+                    item_name = k_item_keyname,
+                    show_debrief_text = self:GetString_from_Tbl_or_Value(v_item_debrieftext),
+                    show_data_popup = show_data_popup,
+                    item_was_clicked = false
+                }
             end
         end
     end
