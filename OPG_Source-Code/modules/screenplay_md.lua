@@ -110,7 +110,7 @@ STR.Screenplay = {
         user_lesson_01 = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans.",
-            debrief_text = "Let's observe all the life in this specific scene, starting with the base of the food-web.",
+            debrief_text = "Let's observe all the life in this specific ocean scene, starting with the base of the food-web.",
             extra_text = ""
         },
 
@@ -124,7 +124,7 @@ STR.Screenplay = {
         user_lesson_02 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
-            display_text = "Your current goal is shown on the left side of the screen. To start off, identify the base of the food-web in this scene by clicking.",
+            display_text = "Your new goal is to identify the base of the ocean food-web. Click on areas of this scene until you identify it. ", -- \nNote, your current goal is shown on the left side of the screen.
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             debrief_text = {

@@ -56,7 +56,7 @@ MYG.COLOR_TEXT_UNSELECTED = vmath.vector4(0.75, 0.75, 0.75, 1)
 MYG.COLOR_NEEDS_SELECTED = vmath.vector4(0.55, 0.55, 0.55, 1.0)
 MYG.COLOR_LOCKED = vmath.vector4(0.30, 0.30, 0.30, 1)
 
-MYG.MINIMIZE = vmath.vector3(0.1)
+MYG.MINIMIZE = vmath.vector3(0.01)
 MYG.MAXIMIZE = vmath.vector3(1)
 
 -- functions 

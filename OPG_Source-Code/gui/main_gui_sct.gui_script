@@ -12,37 +12,44 @@ local CV_item_groups = {
 	item_ph = {
 		group_name = "/group_item_ph",
 		plot_y_range = {7.5, 8.2},
-		plot_y_label = "Ocean pH"
+		plot_y_label = "Ocean pH",
+		clicked_label = "pH Buoy"
 	},
 	item_plankton = {
 		group_name = "/group_item_plankton",
 		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Plankton Health"
+		plot_y_label = "Plankton Health",
+		clicked_label = "Plankton"
 	},
 	item_coral = {
 		group_name = "/group_item_coral",
 		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Coral Health"
+		plot_y_label = "Coral Health",
+		clicked_label = "Coral"
 	},
 	item_fish = {
 		group_name = "/group_item_fish",
 		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Fish Health"
+		plot_y_label = "Fish Health",
+		clicked_label = "Fish"
 	},
 	item_mollusks = {
 		group_name = "/group_item_mollusks",
 		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Mollusk Health"
+		plot_y_label = "Mollusk Health",
+		clicked_label = "Mollusk"
 	},
 	item_crustaceans = {
 		group_name = "/group_item_crustaceans",
 		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Crustacean Health"
+		plot_y_label = "Crustacean Health",
+		clicked_label = "Crustacean"
 	},
 	item_humans = {
 		group_name = "/group_item_humans",
 		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Human Health"
+		plot_y_label = "Human Health",
+		clicked_label = "Human"
 	}
 }
 
@@ -651,19 +658,21 @@ local function Screen_Popup_Input(self, action_id, action)
 				-- if debrief of new_info then run new_info completion function if any exists before just progressing. 
 				-- this is b/c the event type we came from to this stage 
 				-- is not a new_info and already had it's outcome func ran 
+				--#TODO update here with additional types, might not always want to run progress
+				local progress_to_next_stage = false
+
 				if Loop_CompletionType_is_Primary(self, new_info_loop_type) then
 					local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
-				end
-				--#TODO update here with additional types, might not always want to run progress
-				local progress_to_next_stage = false
-				if Loop_CompletionType_is_Primary(self, STR.CV.goal_completed_types.class_click_items) then
+					progress_to_next_stage = true
+				elseif Loop_CompletionType_is_Primary(self, STR.CV.goal_completed_types.class_click_items) then
 					if self.items_all_clicked then
 						progress_to_next_stage = true
 					end
 				else
 					progress_to_next_stage = true
 				end
+
 				if progress_to_next_stage then
 					msg.post(".", HSH.msg_request_game_progress)
 				end
@@ -1289,6 +1298,26 @@ end
 
 
 -- HUD Process: Observe Items (Section 2)
+local function On_GO_Item_Click_Labeled(self, item_name, screen_pos)
+
+	-- play sound and label of what was clicked on regardless
+	sound.play("sound_controller#sound_button_1", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
+	local clicked_label_node = gui.get_node("gnode_clicked_label")
+	local label_txt = CV_item_groups[item_name].clicked_label
+	gui.set_text(clicked_label_node, label_txt)
+	gui.set_position(clicked_label_node, vmath.vector3(screen_pos.x, screen_pos.y, 0))
+
+	gui.set_enabled(clicked_label_node, true)
+	gui.set_scale(clicked_label_node, MY_GOO.MAXIMIZE)
+
+	local function func_shrink(self, subcontroller_node)
+		gui.set_enabled(subcontroller_node, false)
+	end
+
+	gui.animate(clicked_label_node, "scale", MY_GOO.MINIMIZE, gui.EASING_LINEAR, 0.5, 1, func_shrink)
+
+end
+
 local function On_GO_Item_Clicked_Requested(self, action_id, action)
 
 	-- send request to get object items clicked on
@@ -1300,10 +1329,16 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 	if not action.pressed then return end
 
 	-- also check side bars, and return if we clicked in those
-	if gui.pick_node(gui.get_node(self.hud_data_constant.node_frame_core), action.x, action.y) then
+	local data_node_controller = gui.get_node(self.hud_data_constant.node_controller)
+	local data_node_frame = gui.get_node(self.hud_data_constant.node_frame_core)
+
+	local goals_node_controller = gui.get_node(self.hud_goals_constant.node_controller)
+	local goals_node_frame = gui.get_node(self.hud_goals_constant.node_frame_core)
+
+	if gui.is_enabled(data_node_controller, false) and gui.pick_node(data_node_frame, action.x, action.y) then
 		--print("Clicked within data frame, not checking rest...\n")
 		return
-	elseif gui.pick_node(gui.get_node(self.hud_goals_constant.node_frame_core), action.x, action.y) then
+	elseif gui.is_enabled(goals_node_controller, false) and gui.pick_node(goals_node_frame, action.x, action.y) then
 		--print("Clicked within data frame, not checking rest...\n")
 		return
 	end
@@ -1318,15 +1353,20 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 
 end
 
-local function On_GO_Item_Click_InputEnd(self, item_name)
+local function On_GO_Item_Click_InputEnd(self, item_name, screen_pos, first_time_click)
 
 	-- runs once successfull click on go item(s)
 
+	On_GO_Item_Click_Labeled(self, item_name, screen_pos)
+
+	-- check if actually on list, if so get data and continue
 	local item_click_info = self.items_that_need_clicked_list[item_name]
+
+	if item_click_info == nil then return end
 
 	-- run debrief display
 	local debrief_text = item_click_info.show_debrief_text
-	if debrief_text ~= nil and debrief_text ~= "" then
+	if first_time_click and debrief_text ~= nil and debrief_text ~= "" then
 		local run_sizing_debrief = true
 		local update_values_to_debrief = true
 		self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
@@ -1339,10 +1379,6 @@ local function On_GO_Item_Click_InputEnd(self, item_name)
 		print("Item clicked and opening graph for <"..item_name..">. \n ")
 		Screen_Plot_Reset(self, true, true, item_name)
 		Items_Set_Color_Tracking(self, item_name, false)
-	end
-
-	if self.items_all_clicked then
-
 	end
 
 end
@@ -1371,17 +1407,20 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 	-- find first group that is on 'needs to be clicked' list but not on 'is clicked list'
 	local valid_item_clicked
 	local back_item_clicked
-	for k_itemname, _ in pairs(clicked_info.minfo_match_tbl) do
+	local not_allowed_click
+	for _,v_clicked_info in ipairs(clicked_info.minfo_match_tbl) do
 		-- on 'needs clicked list'
-		if needs_clicked[k_itemname] ~= nil then
+		local item_name = v_clicked_info.selected_go_item
+		local needs_clicked_item = needs_clicked[item_name]
+		if needs_clicked_item ~= nil then
 			-- checked if it has been clicked or not, 
 			-- items not clicked take priority so the list can actually be completed
 
-			if not needs_clicked[k_itemname].item_was_clicked then
+			if not needs_clicked_item.item_was_clicked then
 				-- has not yet been clicked, so add it
-				valid_item_clicked = k_itemname
+				valid_item_clicked = item_name
 
-				needs_clicked[k_itemname].item_was_clicked = true
+				needs_clicked_item.item_was_clicked = true
 
 				if self.items_that_were_clicked_sum < self.items_that_need_clicked_sum then
 					self.items_that_were_clicked_sum = self.items_that_were_clicked_sum + 1
@@ -1389,12 +1428,16 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 
 				break
 			else
-				-- has been clicked, but maybe player wants to view graph again
-				if needs_clicked[k_itemname].allow_duplicate_clicks then
-					back_item_clicked = k_itemname
+				-- has been clicked and is on list, but maybe player wants to view graph again
+				if needs_clicked_item.allow_duplicate_clicks then
+					back_item_clicked = item_name
+				else
+					not_allowed_click = item_name
 				end
 			end
-
+		else
+			--not on needs clicked list 
+			not_allowed_click = item_name
 		end
 	end
 
@@ -1407,9 +1450,13 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 	-- finish process to click on and save data on items
 	-- popup graph, which will also disable ocean script clicking
 	-- also set color in data view for color and bar
-	local graph_item = valid_item_clicked or back_item_clicked
-	if graph_item ~= nil then
-		On_GO_Item_Click_InputEnd(self, graph_item)
+	local final_item = valid_item_clicked or back_item_clicked or not_allowed_click
+	if final_item ~= nil then
+		local first_time_click
+		if valid_item_clicked then
+			first_time_click = true
+		end
+		On_GO_Item_Click_InputEnd(self, final_item, clicked_info.minfo_screen_position, first_time_click)
 	end
 
 end
@@ -1498,7 +1545,9 @@ local function GameLogic_Progress(self, i_stage_addition)
 	-- get and update goal text
 	local goal_text = STR:Get_Goal_Text(stage_key, substage_key)
 	local run_goal_sizing = not self.hud_goals_dynamic.screen_isactive
-	Screen_Goals_Reset(self, true, run_goal_sizing, goal_text)
+	if self.gameplay_loop_i_key > 1 then
+		Screen_Goals_Reset(self, true, run_goal_sizing, goal_text)
+	end
 
 	-- run other logic
 	self.gameplay_loop_status = CV_gameplay_loop.status_running_main
@@ -1576,7 +1625,6 @@ local function GameLogic_Start(self)
 
 	-- kick off first action #TODO update to 4 once done testing
 	timer.delay(0.0, false, function(self)
-		Screen_Data_Initialize(self, true)
 		GameLogic_Progress(self)
 	end)
 

@@ -87,7 +87,6 @@ local CV_Spawn_Keys = {
 		subitem_bulb = {
 			spawn_list_key = "item_coral__subitem_bulb",
 			spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
 			object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
@@ -103,7 +102,6 @@ local CV_Spawn_Keys = {
 		subitem_horn = {
 			spawn_list_key = "item_coral__subitem_horn",
 			spawn_coll_factory = "spawner_coral_horn#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
 			object_dimensions = { x = 392, y = 270 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
@@ -119,7 +117,6 @@ local CV_Spawn_Keys = {
 		subitem_pillar = {
 			spawn_list_key = "item_coral__subitem_pillar",
 			spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items - 0.3,
 			spawn_max_count = 3,
 			object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
@@ -137,7 +134,6 @@ local CV_Spawn_Keys = {
 		subitem_oyster = {
 			spawn_list_key = "item_mollusks__subitem_oyster",
 			spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
-			spawn_z_base = CV_Base_Z_Items - 0.2,
 			spawn_max_count = 18,
 			object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
 			object_scale_base = 1,
@@ -1330,9 +1326,9 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	local anim_multi_moving = anim_multi.moving or 1
 	local anim_multi_idle = anim_multi.idle or 0.5
 	local anim_multi_extra = anim_multi.extra or 0.5
-	anim_multi_moving = anim_multi_moving * (math.random(8,11)/10)
-	anim_multi_idle = anim_multi_idle * (math.random(8,11)/10)
-	anim_multi_extra = anim_multi_extra * (math.random(8,11)/10)
+	anim_multi_moving = anim_multi_moving * (math.random(80,110)/100)
+	anim_multi_idle = anim_multi_idle * (math.random(80,110)/100)
+	anim_multi_extra = anim_multi_extra * (math.random(80,110)/100)
 
 	local easing_opts = subitem_tbl.movement_easing_options or {move_go = 1, move_stop = 2}
 	local easing_move_go = easing_opts.move_go or 1
@@ -1532,7 +1528,6 @@ local function SetupAnimals(self)
 		local max_count_value = spawn_subgroup.spawn_max_count
 		local static_tbl = spawn_subgroup.static_spawner_tbl
 		local max_count_static_tbl = #static_tbl
-		local z_base = spawn_subgroup.spawn_z_base
 
 		if max_count_value > max_count_static_tbl then
 			print("Error: max_count_value is > max_count_static_tbl, there will not be enough grid slots! Setting max count value to table length max. \n")
@@ -1715,12 +1710,20 @@ local function Get_Item_Clicked_On(self, screen_pos)
 	-- if overlap found break and return that item
 
 	local match_id_tbl = {}
+	local match_item_key = {}
 	local match_sum = 0
 
 	local function add_to_tbl(item_name, go_id, subitem_name)
 
-		match_id_tbl[item_name] = {selected_go_url = go_id, selected_go_subitem = subitem_name}
 		match_sum = match_sum + 1
+		match_item_key[item_name] = true
+		local pos = go.get_position(go_id)
+		match_id_tbl[match_sum] = {
+			selected_go_url = go_id,
+			selected_go_item = item_name,
+			selected_go_subitem = subitem_name,
+			selected_go_click_proximity = -pos.z
+		}
 		--print("  Clicked on item "..item_name)
 
 	end
@@ -1749,7 +1752,8 @@ local function Get_Item_Clicked_On(self, screen_pos)
 		for k_subitem_name, v_subitem_info in pairs(v_item_info) do
 			local object_dimensions = v_subitem_info.object_dimensions
 			--only continue if this has object dimensions, which means we can click on it
-			if object_dimensions ~= nil and match_id_tbl[k_item_name] == nil then
+			--and if we have not clicked on it yet
+			if object_dimensions ~= nil then --and match_item_key[k_item_name] == nil 
 
 				-- go through list and get position and scale and check distance
 				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key]
@@ -1782,6 +1786,16 @@ local function Get_Item_Clicked_On(self, screen_pos)
 	if match_sum > 0 then
 		--print("  Match sum is "..match_sum)
 		--for k,_ in pairs(match_id_tbl) do print("  "..k) end
+		--sort match table ID by distance then by z
+		--first in list is closest with highest z
+
+		--sort with smallest distance last (largest first)
+		local function sort_click_proximity(a, b)
+			return a.selected_go_click_proximity > b.selected_go_click_proximity
+		end
+
+		table.sort(match_id_tbl, sort_click_proximity)
+
 		msg.post("hud#gui", HSH.msg_report_go_clicked, {minfo_screen_position = screen_pos, minfo_match_tbl = match_id_tbl, minfo_match_count = match_sum})
 	--else
 		--print("No items found to click on!\n")
