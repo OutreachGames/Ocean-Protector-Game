@@ -486,7 +486,7 @@ end
 
 
 -- HUD Screen: Popup 
-local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text)
+local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text, size_type)
 
 	-- reset Popup screen of HUD
 
@@ -513,6 +513,34 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 		if enabled_setting then
 			func_done(self, controller_node)
 			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+
+			--try to auto size if none specified
+			if size_type == nil then
+				local num_lines_guess = #body_text/50
+				if num_lines_guess > 8 then
+					size_type = "size_large"
+				elseif num_lines_guess > 3 then
+					size_type = "size_medium"
+				else
+					size_type = "size_small"
+				end
+			end
+
+			local y_ranges = {
+				size_small = {300, 148, 69},
+				size_medium = {400, 258, -41},
+				size_large = {500 ,358, -142}
+			}
+
+			local yvals = y_ranges[size_type]
+
+			local node_body_frame = gui.get_node(constant.node_frame_body)
+			local node_body_text = gui.get_node(constant.node_text_body)
+			local node_button_frame = gui.get_node(constant.node_continue_frame)
+			gui.set_size(node_body_frame, vmath.vector3(gui.get_size(node_body_frame).x, yvals[2], 0))
+			gui.set_size(node_body_text, vmath.vector3(gui.get_size(node_body_text).x, yvals[1], 0))
+			gui.set_position(node_button_frame, vmath.vector3(gui.get_position(node_button_frame).x, yvals[3], 0))
+
 			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
 		else
 			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
@@ -555,9 +583,12 @@ local function Screen_Popup_Initialize(self, enabled_status)
 	self.hud_popup_constant = {
 		hud_basename = basename,
 		node_controller = basename .. "/gnode_controller",
-		goo_continue_name = basename .. "/group_button_submit",
 		node_text_title = basename .. "/group_header/gui_frame_text",
 		node_text_body = basename .. "/gnode_info_text",
+		node_frame_body = basename .. "/group_body/gui_frame_core",
+		node_continue_frame = basename .. "/group_button_submit/gui_button_core",
+		node_continue_text = basename .. "group_button_submit/gui_button_label",
+		goo_continue_name = basename .. "/group_button_submit"
 	}
 
 	-- set dynamics
@@ -1489,6 +1520,11 @@ local function GameLogic_Progress(self, i_stage_addition)
 		On_GO_Items_Clicked_Reset(self, true)
 		local items_to_click = STR:Get_Items_to_Click(stage_key, substage_key)
 		Items_Click_Status_Reset(self, items_to_click)
+
+		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
+		local run_sizer = true
+		local reset_values = true
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
 
 	elseif stage_type == st.class_decisison then
 		-- setup decision

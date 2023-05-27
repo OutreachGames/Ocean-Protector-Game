@@ -1702,7 +1702,7 @@ embedded_instances {
   "pivot: PIVOT_CENTER\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "line_break: false\\n"
-  "text: \\\"Zoom x 200\\\"\\n"
+  "text: \\\"Zoom x 400\\\"\\n"
   "font: \\\"/asset_links/font_24p_bold.font\\\"\\n"
   "material: \\\"/builtins/fonts/label.material\\\"\\n"
   "\"\n"
