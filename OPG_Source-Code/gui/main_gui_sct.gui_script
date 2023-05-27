@@ -516,7 +516,7 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 
 			--try to auto size if none specified
 			if size_type == nil then
-				local num_lines_guess = #body_text/50
+				local num_lines_guess = #body_text/80
 				if num_lines_guess > 8 then
 					size_type = "size_large"
 				elseif num_lines_guess > 3 then
@@ -527,9 +527,9 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			end
 
 			local y_ranges = {
-				size_small = {300, 148, 69},
-				size_medium = {400, 258, -41},
-				size_large = {500 ,358, -142}
+				size_small = {250, 119, 108},
+				size_medium = {400, 258, -51},
+				size_large = {600, 468, -251}
 			}
 
 			local yvals = y_ranges[size_type]
@@ -537,8 +537,8 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			local node_body_frame = gui.get_node(constant.node_frame_body)
 			local node_body_text = gui.get_node(constant.node_text_body)
 			local node_button_frame = gui.get_node(constant.node_continue_frame)
-			gui.set_size(node_body_frame, vmath.vector3(gui.get_size(node_body_frame).x, yvals[2], 0))
-			gui.set_size(node_body_text, vmath.vector3(gui.get_size(node_body_text).x, yvals[1], 0))
+			gui.set_size(node_body_frame, vmath.vector3(gui.get_size(node_body_frame).x, yvals[1], 0))
+			gui.set_size(node_body_text, vmath.vector3(gui.get_size(node_body_text).x, yvals[2], 0))
 			gui.set_position(node_button_frame, vmath.vector3(gui.get_position(node_button_frame).x, yvals[3], 0))
 
 			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
