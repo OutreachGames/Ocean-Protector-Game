@@ -124,7 +124,7 @@ STR.Screenplay = {
         user_lesson_02 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
-            display_text = "Your new goal is to identify the base of the ocean food-web. Click on areas of this scene until you identify it. ", -- \nNote, your current goal is shown on the left side of the screen.
+            display_text = "Your new goal is to identify the base of the ocean food-web. \n\nThis current goal is shown on the left side of the screen. \n\nTo complete this goal, click 'Continue' and then click around in the ocean scene until you identify your goal.", -- \nNote, your current goal is shown on the left side of the screen.
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             debrief_text = {
@@ -139,13 +139,13 @@ STR.Screenplay = {
         user_lesson_03 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document four groups of consumers in our ocean food-web.",
-            display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking.",
+            display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemeber, click 'Contine' to close this screen then click around the ocean scene to complete your goal.\n\n",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             debrief_text = {
                 "",
                 item_coral = {
-                    "Coral"..n..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet",
+                    "Coral"..n..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet.",
                 },
                 item_fish = {
                     "Fish"..n..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the small parrot fish and angel fish and the large tuna and grouper. All fish have some form of internal skeleton . Fish are important food for many different animals, including larger fish and humans."
@@ -154,7 +154,7 @@ STR.Screenplay = {
                     "Mollusks"..n..n.."Mollusks include oysters, snails, sea slugs, and even squid and octopi. Almost all mollusks have some kind of shell material somewhere around or in their body. Mollusks help cycle nutrients and are food for many animals, including humans."
                 },
                 item_crustaceans = {
-                    "Crustaceans"..n..n.."Crustaceans include crabs, lobsters, crayfish, shrimp, and krill. Almost all crustaceans have some form of external skeleton. Crustaceans are food for many animals, including humans, and help cycle nutrients."
+                    "Crustaceans"..n..n.."Crustaceans include crabs, lobsters, crayfish, shrimp, and krill. Almost all crustaceans have some form of external skeleton. Crustaceans are food for many animals, including humans, and help cycle nutrients.\n\n\n" --tack on some newlines to make the hud box bigger
                 }
             },
             extra_text = {
@@ -321,7 +321,7 @@ STR.Screenplay = {
                     "Fish"..n.."Increased ocean acidity reduces fish size and populations. Some fish grow slower while others have more difficulty avoiding predators, and less will survive. Lower fish populations negatively affect many animals that rely on them for food, including humans."
                 },
                 item_humans = {
-                    "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. Also, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered."
+                    "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. Also, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered.\n\n\n"
                 },
                 item_crustaceans = {
                     "Crusteaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. Lower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected."
@@ -335,7 +335,7 @@ STR.Screenplay = {
 
         user_lesson_19 = {
             goal_text = "Review your knowledge on ocean acidification.",
-            display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we will move onto the next stage.",
+            display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we will move onto the next stage.\n\n",
             debrief_text = nil,
             extra_text = ""
         },

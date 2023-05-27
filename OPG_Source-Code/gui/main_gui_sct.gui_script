@@ -523,7 +523,8 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 
 			--try to auto size if none specified
 			if size_type == nil then
-				local num_lines_guess = #body_text/80
+				local _, counted_newlines = body_text:gsub('\n', '\n')
+				local num_lines_guess = math.max(counted_newlines, #body_text/80)
 				if num_lines_guess > 8 then
 					size_type = "size_large"
 				elseif num_lines_guess > 3 then
