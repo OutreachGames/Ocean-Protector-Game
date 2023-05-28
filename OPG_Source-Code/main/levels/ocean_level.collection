@@ -1,42 +1,4 @@
 name: "ocean_level"
-instances {
-  id: "camera"
-  prototype: "/orthographic/camera.go"
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  component_properties {
-    id: "script"
-    properties {
-      id: "projection"
-      value: "FIXED_AUTO"
-      type: PROPERTY_TYPE_HASH
-    }
-    properties {
-      id: "follow_horizontal"
-      value: "false"
-      type: PROPERTY_TYPE_BOOLEAN
-    }
-    properties {
-      id: "follow_vertical"
-      value: "false"
-      type: PROPERTY_TYPE_BOOLEAN
-    }
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
 collection_instances {
   id: "ph_buoy"
   collection: "/main/classes/ph_buoy.collection"
@@ -668,43 +630,6 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "hud"
-  data: "components {\n"
-  "  id: \"gui\"\n"
-  "  component: \"/gui/main_gui.gui\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "  property_decls {\n"
-  "  }\n"
-  "}\n"
-  ""
-  position {
-    x: -800.0
-    y: -450.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-embedded_instances {
   id: "spawner_fish_tuna"
   data: "embedded_components {\n"
   "  id: \"collectionfactory\"\n"
@@ -834,75 +759,6 @@ embedded_instances {
   "  data: \"sound: \\\"/asset_files/audio/sound_rain.ogg\\\"\\n"
   "looping: 1\\n"
   "group: \\\"soundgroup_weather\\\"\\n"
-  "gain: 1.0\\n"
-  "pan: 0.0\\n"
-  "speed: 1.0\\n"
-  "loopcount: 0\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"sound_button_2\"\n"
-  "  type: \"sound\"\n"
-  "  data: \"sound: \\\"/asset_files/audio/sound_button_click2.wav\\\"\\n"
-  "looping: 0\\n"
-  "group: \\\"soundgroup_gui\\\"\\n"
-  "gain: 1.0\\n"
-  "pan: 0.0\\n"
-  "speed: 1.0\\n"
-  "loopcount: 0\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"sound_button_1\"\n"
-  "  type: \"sound\"\n"
-  "  data: \"sound: \\\"/asset_files/audio/sound_button_click1.wav\\\"\\n"
-  "looping: 0\\n"
-  "group: \\\"soundgroup_gui\\\"\\n"
-  "gain: 1.0\\n"
-  "pan: 0.0\\n"
-  "speed: 1.0\\n"
-  "loopcount: 0\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"sound_button_3\"\n"
-  "  type: \"sound\"\n"
-  "  data: \"sound: \\\"/asset_files/audio/sound_button_click3.wav\\\"\\n"
-  "looping: 0\\n"
-  "group: \\\"soundgroup_gui\\\"\\n"
   "gain: 1.0\\n"
   "pan: 0.0\\n"
   "speed: 1.0\\n"

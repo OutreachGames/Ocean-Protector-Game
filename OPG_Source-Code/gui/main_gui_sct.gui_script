@@ -1332,9 +1332,9 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 	-- if valid ocean click then check if for item selecting or just something simple like bubbles
 
 	if On_GO_Items_Clicked_Basic_Valid(self) then
-		msg.post("level_controller", HSH.msg_request_go_clicked, {minfo_action = action})
+		msg.post("ocean_level:/level_controller", HSH.msg_request_go_clicked, {minfo_action = action})
 	else
-		msg.post("level_controller", HSH.msg_request_make_bubbles, {minfo_action = action})
+		msg.post("ocean_level:/level_controller", HSH.msg_request_make_bubbles, {minfo_action = action})
 	end
 
 end
@@ -1588,6 +1588,9 @@ local function GameLogic_Start(self)
 
 	MY_GOO.acquire_input()
 
+	msg.post("level_loader#collectionproxy", HSH.msg_builtin_load)
+	self.game_paused = false
+
 	local set_enabled = false
 
 	Initialize_Local_Info_Tbl()
@@ -1625,12 +1628,17 @@ end
 
 local function GamePauseToggle_Internal(self)
 
+	-- pause by setting game update factor to 0
 	self.game_paused = not self.game_paused
+
+	local factor
 	if self.game_paused then
-		--msg.post("ocean_level", "set_time_step", {factor = 0, mode = 1})
+		factor = 0
 	else
-		--msg.post("ocean_level", "set_time_step", {factor = 1, mode = 1})
+		factor = 1
 	end
+
+	msg.post("level_loader#collectionproxy", HSH.msg_builtin_set_timestep, {factor = factor, mode = 1})
 
 end
 
@@ -1651,6 +1659,10 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_builtin_proxy_loaded then
+		msg.post(sender, HSH.msg_builtin_enable)
+	end
 
 	if message_id == HSH.msg_request_fade_out or message_id == HSH.msg_request_fade_in then
 		Run_Fader(self, message_id == HSH.msg_request_fade_out, message.minfo_fade_duration)

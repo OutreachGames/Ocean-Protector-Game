@@ -96,7 +96,7 @@ end
 
 function on_message(self, message_id, message, sender)
 
-	if message_id == HSH.trigger_response then
+	if message_id == HSH.msg_builtin_trigger_response then
 
 		local shadow_level
 		if sender == msg.url("#shade_inner") then
