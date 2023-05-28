@@ -1311,7 +1311,7 @@ local function SetupAnimals(self)
 						--setup sprite types and flip
 						local opts = v_subitem.sprite_options or {1}
 						local num_opts = #opts
-print("num sprite opts "..num_opts)
+
 						--spawn in
 						for i=1,number_to_spawn do
 							local sprite_selection = 1
@@ -1325,7 +1325,7 @@ print("num sprite opts "..num_opts)
 							if num_opts > 1 and i == number_to_spawn then
 								flip_h = true
 							end
-							print("  sprite_selection "..sprite_selection)
+
 							Spawn_Animal_Static(self, k_item, k_subitem, i, sprite_selection, flip_h)
 						end
 					elseif INFO:Logic_is_Micro(v_subitem.object_logic_type) then
