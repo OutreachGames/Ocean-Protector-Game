@@ -1547,6 +1547,28 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 end
 
+local function OnPauseToggle(self, game_pause_toggle)
+
+	-- pauses all sounds since they do not seem to pause when dt is 0
+
+	sound.pause("sound_controller#sound_bubbles", game_pause_toggle)
+	sound.pause("sound_controller#sound_rain", game_pause_toggle)
+	sound.pause("sound_controller#sound_underwater", game_pause_toggle)
+	sound.pause("sound_controller#sound_waves", game_pause_toggle)
+	sound.pause("sound_controller#sound_bubbles", game_pause_toggle)
+
+	-- make sure to pause all boat sounds too with loop
+	for _,v_boat_typ_info in pairs(INFO.item_info.item_humans.subitem_info) do
+		local boat_list = self.spawned_objects_list[v_boat_typ_info.spawn_list_key]
+		if boat_list ~= nil then
+			for k_go_id, _ in pairs(boat_list) do
+				msg.post(k_go_id, HSH.msg_pause_game_msg_sent, {minfo_game_paused = game_pause_toggle})
+			end
+		end
+	end
+
+end
+
 local function SceneStart(self)
 
 	-- setup the scene variables and objects
@@ -1592,6 +1614,10 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_pause_game_msg_sent then
+		OnPauseToggle(self, message.minfo_game_paused)
+	end
 
 	if message_id == HSH.msg_request_change_weather then
 		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction)

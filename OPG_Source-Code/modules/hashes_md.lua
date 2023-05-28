@@ -24,6 +24,7 @@ local HASH = {
     msg_report_game_progressed = hash("msg_report_game_progressed"),
     msg_set_player_character_role = hash("msg_set_player_character_role"),
     msg_set_new_item_value = hash("msg_set_new_item_value"),
+    msg_pause_game_msg_sent = hash("pause_game_toggled"),
 
     -- controls
     control_touch = hash("touch"),

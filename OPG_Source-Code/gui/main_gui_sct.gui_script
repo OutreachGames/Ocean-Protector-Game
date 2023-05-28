@@ -1639,6 +1639,7 @@ local function GamePauseToggle_Internal(self)
 	end
 
 	msg.post("level_loader#collectionproxy", HSH.msg_builtin_set_timestep, {factor = factor, mode = 1})
+	msg.post("ocean_level:/level_controller#script", HSH.msg_pause_game_msg_sent, {minfo_game_paused = self.game_paused})
 
 end
 

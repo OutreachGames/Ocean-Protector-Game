@@ -53,6 +53,13 @@ local function Move_to_Position_X(self, x_location, delete_self_when_done)
 
 end
 
+local function OnPauseToggle(self, game_pause_toggle)
+
+	sound.pause("#sound", game_pause_toggle)
+
+end
+
+
 function init(self)
 
 	-- float back an forth
@@ -67,6 +74,10 @@ function final(self)
 end
 
 function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_pause_game_msg_sent then
+		OnPauseToggle(self, message.minfo_game_paused)
+	end
 
 	if message_id == HSH.msg_order_swim_to_pos then
 
