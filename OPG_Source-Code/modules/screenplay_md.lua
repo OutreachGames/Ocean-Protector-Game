@@ -1,13 +1,16 @@
 -- Module with the game story/dialogue lines
 
+-- dependencies
 local EXT = require ("modules.extend_md")
 local HSH = require ("modules.hashes_md")
 
-local STR = {}
-
+-- internal locals
 local n = '\n'
 local tab = '     '
 local ntab = n .. tab
+
+-- module 
+local STR = {}
 
 STR.CV = {
 

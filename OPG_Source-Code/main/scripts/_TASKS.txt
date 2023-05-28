@@ -2,7 +2,7 @@
 
     -- bring in human boat in timer in screenplay
     -- hide data graph and items until enabled in screenplay
-    -- add stage to click on all items to measure them
+    -- add stage to click on all items to measure them?
     -- show OA effect with timer in screenplay
     -- at end change goal to press button to restart or exit browser if done
 

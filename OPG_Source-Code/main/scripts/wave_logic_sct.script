@@ -13,13 +13,18 @@ go.property("Obj_Wave_Movment_X_Multiplier", 0.1)
 go.property("Obj_Wave_Movment_Y_Use", false)
 go.property("Obj_Wave_Movment_Y_Time", 2)
 go.property("Obj_Wave_Movment_Y_Scale", 0.60)
-go.property("Obj_Number_Sprite_Options", 1)
-go.property("Obj_Selected_Sprite_Option", 1)
 go.property("Obj_Wave_Sprite_FlipH", false)
 go.property("Obj_Tint_R", 1)
 go.property("Obj_Tint_G", 1)
 go.property("Obj_Tint_B", 1)
 go.property("Obj_PlayParticleFX", false)
+
+CV_wave_types = {
+	{}, --1. waves
+	{}, --2. clouds
+	{}, --3. water line
+	{}, --4. 
+}
 
 
 -- functions
@@ -77,14 +82,7 @@ local function Wave_Setup(self)
 	self.Current_sprite_string = "#sprite1"
 	-- recall, this sprite options need to be here, so that we can get the width
 	-- cannot change sprite after init since width might be different
-	if self.Obj_Number_Sprite_Options > 1 then
-		for i=1,self.Obj_Number_Sprite_Options do
-			if i ~= self.Obj_Selected_Sprite_Option then
-				msg.post("#sprite"..i , "disable")
-			end
-		end
-		self.Current_sprite_string = "#sprite" ..self.Obj_Selected_Sprite_Option
-	end
+	-- #TODO
 
 	-- now tint
 	go.set(self.Current_sprite_string, "tint", vmath.vector4(self.Obj_Tint_R, self.Obj_Tint_G, self.Obj_Tint_B, 1))

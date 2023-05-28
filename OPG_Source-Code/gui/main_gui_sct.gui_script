@@ -6,52 +6,10 @@ local HSH = require ("modules.hashes_md")
 local MY_GOO = require ("gui.gooey_theme_md")
 local STR = require ("modules.screenplay_md")
 local EXT = require ("modules.extend_md")
+local INFO = require("modules.item_info_md")
 
 -- constants
-local CV_item_groups = {
-	item_ph = {
-		group_name = "/group_item_ph",
-		plot_y_range = {7.5, 8.2},
-		plot_y_label = "Ocean pH",
-		clicked_label = "pH Buoy"
-	},
-	item_plankton = {
-		group_name = "/group_item_plankton",
-		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Plankton Health",
-		clicked_label = "Plankton"
-	},
-	item_coral = {
-		group_name = "/group_item_coral",
-		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Coral Health",
-		clicked_label = "Coral"
-	},
-	item_fish = {
-		group_name = "/group_item_fish",
-		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Fish Health",
-		clicked_label = "Fish"
-	},
-	item_mollusks = {
-		group_name = "/group_item_mollusks",
-		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Mollusk Health",
-		clicked_label = "Mollusk"
-	},
-	item_crustaceans = {
-		group_name = "/group_item_crustaceans",
-		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Crustacean Health",
-		clicked_label = "Crustacean"
-	},
-	item_humans = {
-		group_name = "/group_item_humans",
-		plot_y_range = {0.0, 1.0},
-		plot_y_label = "Human Health",
-		clicked_label = "Human"
-	}
-}
+local CV_item_groups = {}
 
 local CV_gameplay_loop = {
 	status_running_main = 1,
@@ -61,6 +19,16 @@ local CV_gameplay_loop = {
 
 
 -- functions
+
+local function Initialize_Local_Info_Tbl()
+
+	for k_item_name,v_item_info in pairs(INFO.item_info) do
+		if v_item_info.gui_info ~= nil then
+			CV_item_groups[k_item_name] = v_item_info.gui_info
+		end
+	end
+
+end
 
 local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
 
@@ -1622,6 +1590,8 @@ local function GameLogic_Start(self)
 
 	local set_enabled = false
 
+	Initialize_Local_Info_Tbl()
+
 	-- reset save table
 	Player_Data_Table_Reset(self)
 
@@ -1650,6 +1620,25 @@ local function GameLogic_Start(self)
 	timer.delay(0.0, false, function(self)
 		GameLogic_Progress(self)
 	end)
+
+end
+
+local function GamePauseToggle_Internal(self)
+
+	self.game_paused = not self.game_paused
+	if self.game_paused then
+		--msg.post("ocean_level", "set_time_step", {factor = 0, mode = 1})
+	else
+		--msg.post("ocean_level", "set_time_step", {factor = 1, mode = 1})
+	end
+
+end
+
+local function GamePauseToggle_Input(self, action_id, action)
+
+	if action_id == HSH.control_right and action.released then
+		GamePauseToggle_Internal(self)
+	end
 
 end
 
@@ -1696,5 +1685,7 @@ function on_input(self, action_id, action)
 	Screen_Plot_Input(self, action_id, action)
 	Screen_Popup_Input(self, action_id, action)
 	On_GO_Item_Clicked_Requested(self, action_id, action)
+
+	GamePauseToggle_Input(self, action_id, action)
 
 end

@@ -2,10 +2,12 @@
 
 local RES = {}
 
+-- internal locals
 local internal_game_resolution = {x=1600, y=900}
 -- values to this are also used through code where scaling res is used
 -- so if development res changes a lot of things will need to potentially change
 
+-- module
 RES.Screen_X = sys.get_config_int("display.width")
 RES.Screen_Y = sys.get_config_int("display.height")
 
