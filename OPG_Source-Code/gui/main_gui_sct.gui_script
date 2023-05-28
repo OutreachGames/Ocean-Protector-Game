@@ -1636,7 +1636,8 @@ end
 
 local function GamePauseToggle_Input(self, action_id, action)
 
-	if action_id == HSH.control_right and action.released then
+	--#TODO testing remove when done
+	if action_id == HSH.control_down and action.released then
 		GamePauseToggle_Internal(self)
 	end
 
