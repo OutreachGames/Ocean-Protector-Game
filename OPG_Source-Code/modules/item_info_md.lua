@@ -135,7 +135,7 @@ INFO.item_info = {
                     {-337, -459, CV_Base_Z_Items+0.2}, --bottom
                     {686, -266, CV_Base_Z_Items-0.15} --top
                 },
-                sprite_options = {"coral_bulb_1", "coral_bulb_1"}
+                sprite_options = {"coral_bulb_1", "coral_bulb_2"}
             },
             subitem_horn = {
                 subitem_enum = 2,
@@ -151,7 +151,7 @@ INFO.item_info = {
                     {286, -267, CV_Base_Z_Items-0.15}, --top
                     {611, -452, CV_Base_Z_Items+0.2} --bottom
                 },
-                sprite_options = {"coral_horn_1", "coral_horn_1"}
+                sprite_options = {"coral_horn_1", "coral_horn_2"}
             },
             subitem_pillar = {
                 subitem_enum = 3,
@@ -167,7 +167,7 @@ INFO.item_info = {
                     {-92, -442, CV_Base_Z_Items+0.2}, --bottom
                     {347, -446, CV_Base_Z_Items+0.2} --bottom
                 },
-                sprite_options = {"coral_pillar_1", "coral_pillar_1"}
+                sprite_options = {"coral_pillar_1", "coral_pillar_2"}
             }
         }
 	},

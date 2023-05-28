@@ -1309,8 +1309,9 @@ local function SetupAnimals(self)
 						v_subitem.spawn_position_grid_dynamic = func_grid_static(v_subitem)
 
 						--setup sprite types and flip
-						local num_opts = v_subitem.object_num_sprite_options or 1
-
+						local opts = v_subitem.sprite_options or {1}
+						local num_opts = #opts
+print("num sprite opts "..num_opts)
 						--spawn in
 						for i=1,number_to_spawn do
 							local sprite_selection = 1
@@ -1324,6 +1325,7 @@ local function SetupAnimals(self)
 							if num_opts > 1 and i == number_to_spawn then
 								flip_h = true
 							end
+							print("  sprite_selection "..sprite_selection)
 							Spawn_Animal_Static(self, k_item, k_subitem, i, sprite_selection, flip_h)
 						end
 					elseif INFO:Logic_is_Micro(v_subitem.object_logic_type) then
