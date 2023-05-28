@@ -1299,12 +1299,29 @@ end
 
 
 -- HUD Process: Observe Items (Section 2)
-local function On_GO_Item_Click_Labeled(self, item_name, screen_pos)
+local function On_GO_Item_Click_Labeled(self, screen_pos, unique_tbl)
 
 	-- play sound and label of what was clicked on regardless
 	sound.play("sound_controller#sound_button_1", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
 	local clicked_label_node = gui.get_node("gnode_clicked_label")
-	local label_txt = CV_item_groups[item_name].clicked_label
+
+	local labels_i_list = {}
+	local num_unique = 0
+	for k_itemname,_ in pairs(unique_tbl) do
+		num_unique = num_unique + 1
+		labels_i_list[num_unique] = CV_item_groups[k_itemname].clicked_label
+	end
+
+	local label_txt = ""
+	if num_unique == 1 then
+		label_txt = labels_i_list[1]
+	elseif num_unique == 2 then
+		label_txt = labels_i_list[1] .. " & ".. labels_i_list[2]
+	else
+		label_txt = table.concat(labels_i_list, ", ", 1, num_unique-1)
+		label_txt = label_txt .. " & " .. labels_i_list[num_unique]
+	end
+
 	gui.set_text(clicked_label_node, label_txt)
 	gui.set_position(clicked_label_node, vmath.vector3(screen_pos.x, screen_pos.y, 0))
 
@@ -1354,11 +1371,9 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 
 end
 
-local function On_GO_Item_Click_InputEnd(self, item_name, screen_pos, first_time_click)
+local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 
 	-- runs once successfull click on go item(s)
-
-	On_GO_Item_Click_Labeled(self, item_name, screen_pos)
 
 	-- check if actually on list, if so get data and continue
 	local item_click_info = self.items_that_need_clicked_list[item_name]
@@ -1406,9 +1421,11 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 
 	-- might have clicked on more then one item if they were overlapping so
 	-- find first group that is on 'needs to be clicked' list but not on 'is clicked list'
+	--#TODO ad conct list of names to display
 	local valid_item_clicked
 	local back_item_clicked
 	local not_allowed_click
+	local clicked_unique_tbl = {}
 	for _,v_clicked_info in ipairs(clicked_info.minfo_match_tbl) do
 		-- on 'needs clicked list'
 		local item_name = v_clicked_info.selected_go_item
@@ -1420,6 +1437,7 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 			if not needs_clicked_item.item_was_clicked then
 				-- has not yet been clicked, so add it
 				valid_item_clicked = item_name
+				clicked_unique_tbl[item_name] = true
 
 				needs_clicked_item.item_was_clicked = true
 
@@ -1432,13 +1450,16 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 				-- has been clicked and is on list, but maybe player wants to view graph again
 				if needs_clicked_item.allow_duplicate_clicks then
 					back_item_clicked = item_name
+					clicked_unique_tbl[item_name] = true
 				else
 					not_allowed_click = item_name
+					clicked_unique_tbl[item_name] = true
 				end
 			end
 		else
 			--not on needs clicked list 
 			not_allowed_click = item_name
+			clicked_unique_tbl[item_name] = true
 		end
 	end
 
@@ -1457,7 +1478,8 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 		if valid_item_clicked then
 			first_time_click = true
 		end
-		On_GO_Item_Click_InputEnd(self, final_item, clicked_info.minfo_screen_position, first_time_click)
+		On_GO_Item_Click_Labeled(self, clicked_info.minfo_screen_position, clicked_unique_tbl)
+		On_GO_Item_Click_InputEnd(self, final_item, first_time_click)
 	end
 
 end

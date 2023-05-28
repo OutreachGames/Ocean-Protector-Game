@@ -1717,6 +1717,10 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 		match_sum = match_sum + 1
 		match_item_key[item_name] = true
+
+		--only add it to take if the z value is higher or if distance is shorter?
+		--fine to just track all of them, not that expensive...
+
 		local pos = go.get_position(go_id)
 		match_id_tbl[match_sum] = {
 			selected_go_url = go_id,
@@ -1752,8 +1756,10 @@ local function Get_Item_Clicked_On(self, screen_pos)
 		for k_subitem_name, v_subitem_info in pairs(v_item_info) do
 			local object_dimensions = v_subitem_info.object_dimensions
 			--only continue if this has object dimensions, which means we can click on it
-			--and if we have not clicked on it yet
-			if object_dimensions ~= nil then --and match_item_key[k_item_name] == nil 
+			--and if we have not clicked on it yet?
+			--  which is fine is using only z depth for picking, since subitems generally have same z?
+			--  except coral though, which has large bounding box limits..
+			if object_dimensions ~= nil then
 
 				-- go through list and get position and scale and check distance
 				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key]
