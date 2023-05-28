@@ -24,7 +24,8 @@ local HASH = {
     msg_report_game_progressed = hash("msg_report_game_progressed"),
     msg_set_player_character_role = hash("msg_set_player_character_role"),
     msg_set_new_item_value = hash("msg_set_new_item_value"),
-    msg_pause_game_msg_sent = hash("pause_game_toggled"),
+    msg_pause_game_msg_sent = hash("msg_pause_game_msg_sent"),
+    msg_request_run_coastal_oa = hash("msg_request_run_coastal_oa"),
 
     -- controls
     control_touch = hash("touch"),
@@ -43,7 +44,7 @@ local HASH = {
     STR_go = hash("/go"),
 
     --built-ins
-    msg_builtin_trigger_response = hash("msg_builtin_trigger_response"),
+    msg_builtin_trigger_response = hash("trigger_response"),
     msg_builtin_load = hash("load"),
     msg_builtin_enable = hash("enable"),
     msg_builtin_proxy_loaded = hash("proxy_loaded"),

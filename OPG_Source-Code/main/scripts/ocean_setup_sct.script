@@ -1603,12 +1603,6 @@ end
 
 function init(self)
 
-	--#TODO- may move or take out eventually
-		msg.post(".", "acquire_input_focus")
-		-- randomize random generator
-		math.randomseed(socket.gettime())
-
-
 	SceneStart(self)
 
 end
@@ -1618,36 +1612,17 @@ function on_message(self, message_id, message, sender)
 	if message_id == HSH.msg_pause_game_msg_sent then
 		OnPauseToggle(self, message.minfo_game_paused)
 	end
-
 	if message_id == HSH.msg_request_change_weather then
 		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction)
-	elseif message_id == HSH.msg_report_swim_run_started then
-	elseif message_id == HSH.msg_report_swim_run_completed then
+	elseif message_id == HSH.msg_request_run_coastal_oa then
+		Run_CoastalOA(self, message.minfo_percent_coastal_oa_hide)
+	--elseif message_id == HSH.msg_report_swim_run_started then
+	--elseif message_id == HSH.msg_report_swim_run_completed then
 	elseif message_id == HSH.msg_request_make_bubbles then
 		local world_pos = CAM.screen_to_world(nil, vmath.vector3(message.minfo_action.x, message.minfo_action.y, 0))
 		Make_Bubbles(self, world_pos.x)
 	elseif message_id == HSH.msg_request_go_clicked then
 		Get_Item_Clicked_On(self, message.minfo_action)
 	end
-
-end
-
-function on_input(self, action_id, action)
-
-	--#TODO remove eventually
-	--change weather
-	if action_id == HSH.control_right or action_id == HSH.control_left then
-		local is_supposed_to_rain = action_id == HSH.control_right
-		-- if it is raining and we want it to rain then do nothing
-		-- if it is not raining and we do not want it to rain then do nothing
-		local wave_direction = math.random(0,1)
-		msg.post("level_controller", HSH.msg_request_change_weather, {minfo_is_raining=is_supposed_to_rain, minfo_wave_direction=wave_direction})
-	end
-
-	--trigger nutrient influx
-	if action_id == HSH.control_up then
-		Run_CoastalOA(self)
-	end
-
 
 end

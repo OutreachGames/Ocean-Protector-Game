@@ -863,6 +863,8 @@ embedded_instances {
   "\\\"\\n"
   "  \\\"Up Arrow: Add Nutrient Influx\\\\n"
   "\\\"\\n"
+  "  \\\"Down Arrow: Toggle Pause\\\\n"
+  "\\\"\\n"
   "  \\\"Click: Trigger Bubbles\\\"\\n"
   "font: \\\"/builtins/fonts/system_font.font\\\"\\n"
   "material: \\\"/builtins/fonts/label.material\\\"\\n"
