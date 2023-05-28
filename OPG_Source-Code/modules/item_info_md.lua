@@ -25,31 +25,36 @@ INFO.item_info = {
 	--   'spawn_x_max' is dynamically created based on max count of spawn needed
 
 	item_weather = {
+        item_enum = 0,
         subitem_info = {
             subitem_clouds = {
+                subitem_enum = 1,
                 spawn_list_key = "item_weather__subitem_clouds",
                 spawn_coll_factory = "spawner_weather_clouds#collectionfactory",
                 spawn_z_base = CV_Base_Z_Weather,
                 spawn_y_range = {280, 380},
-                sprite_options = {} --#TODO
+                sprite_options = {"Asset_Cloud1", "Asset_Cloud2", "Asset_Cloud3"}
             },
             subitem_waterlines = {
+                subitem_enum = 2,
                 spawn_list_key = "item_weather__subitem_waterlines",
                 spawn_coll_factory = "spawner_weather_waterlines#collectionfactory",
                 spawn_z_base = CV_Base_Z_Weather + 0.1,
                 spawn_y_range = {155, 155}
             },
             subitem_waves = {
+                subitem_enum = 3,
                 spawn_list_key = "item_weather__subitem_waves",
                 spawn_coll_factory = "spawner_weather_waves#collectionfactory",
                 spawn_z_base = CV_Base_Z_Weather,
                 spawn_y_range = {175, 200},
-                sprite_options = {} --#TODO
+                sprite_options = {"Asset_Wave_Even", "Asset_Wave_UnEven"}
             },
         }
 	},
 
 	item_ph = {
+        item_enum = 1,
         gui_info = {
             group_name = "/group_item_ph",
             plot_y_range = {7.5, 8.2},
@@ -58,6 +63,7 @@ INFO.item_info = {
         },
         subitem_info = {
             subitem_buoy = {
+                subitem_enum = 1,
                 spawn_list_key = "item_ph__subitem_buoy",
                 object_dimensions = { x = 126, y = 185 }, --compiled sprite/spine dimensions
                 info_url = "https://oceanacidification.noaa.gov/WhatWeDo/Monitoring.aspx"
@@ -66,6 +72,7 @@ INFO.item_info = {
 	},
 
 	item_plankton = {
+        item_enum = 2,
         gui_info = {
             group_name = "/group_item_plankton",
             plot_y_range = {0.0, 1.0},
@@ -85,6 +92,7 @@ INFO.item_info = {
 		--  They do not show death animations, as particles would leave the zoom bubble and they move too fast to see much. 
 		subitem_info = {
             subitem_phytoplankton = {
+                subitem_enum = 1,
                 spawn_list_key = "item_plankton__subitem_phytoplankton",
                 spawn_coll_factory = "spawner_plankton_phytoplankton#collectionfactory",
                 spawn_z_base = CV_Base_Z_Micro + (CV_Z_Failsafe*1),
@@ -96,21 +104,15 @@ INFO.item_info = {
                 object_scale_base = CV_Default_Base_Scale,
                 object_rotation_speed_base = 10,
                 object_translation_speed_base = 18,
-                sprite_options = {}, --#TODO
+                --sprite_options = {}, --phytoplankton uses it's own unqiue system
                 use_click_by_bounding_box = { x = {-800, -550}, y = {40, 160}},
-                info_url = "https://oceanservice.noaa.gov/facts/phyto.html",
-    
-                gui_info = {
-                    group_name = "/group_item_plankton",
-                    plot_y_range = {0.0, 1.0},
-                    plot_y_label = "Plankton Health",
-                    clicked_label = "Plankton"
-                },
+                info_url = "https://oceanservice.noaa.gov/facts/phyto.html"
             }
         }
 	},
 
 	item_coral = {
+        item_enum = 3,
         gui_info = {
             group_name = "/group_item_coral",
             plot_y_range = {0.0, 1.0},
@@ -120,6 +122,7 @@ INFO.item_info = {
         item_is_alive = true,
         subitem_info = {
             subitem_bulb = {
+                subitem_enum = 1,
                 spawn_list_key = "item_coral__subitem_bulb",
                 spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
                 spawn_max_count = 3,
@@ -132,9 +135,10 @@ INFO.item_info = {
                     {-337, -459, CV_Base_Z_Items+0.2}, --bottom
                     {686, -266, CV_Base_Z_Items-0.15} --top
                 },
-                sprite_options = {} --#TODO
+                sprite_options = {"coral_bulb_1", "coral_bulb_1"}
             },
             subitem_horn = {
+                subitem_enum = 2,
                 spawn_list_key = "item_coral__subitem_horn",
                 spawn_coll_factory = "spawner_coral_horn#collectionfactory",
                 spawn_max_count = 3,
@@ -147,9 +151,10 @@ INFO.item_info = {
                     {286, -267, CV_Base_Z_Items-0.15}, --top
                     {611, -452, CV_Base_Z_Items+0.2} --bottom
                 },
-                sprite_options = {} --#TODO
+                sprite_options = {"coral_horn_1", "coral_horn_1"}
             },
             subitem_pillar = {
+                subitem_enum = 3,
                 spawn_list_key = "item_coral__subitem_pillar",
                 spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
                 spawn_max_count = 3,
@@ -162,12 +167,13 @@ INFO.item_info = {
                     {-92, -442, CV_Base_Z_Items+0.2}, --bottom
                     {347, -446, CV_Base_Z_Items+0.2} --bottom
                 },
-                sprite_options = {} --#TODO
-            },
+                sprite_options = {"coral_pillar_1", "coral_pillar_1"}
+            }
         }
 	},
 
 	item_mollusks = {
+        item_enum = 4,
         gui_info = {
             group_name = "/group_item_mollusks",
             plot_y_range = {0.0, 1.0},
@@ -177,6 +183,7 @@ INFO.item_info = {
         item_is_alive = true,
         subitem_info = {
             subitem_oyster = {
+                subitem_enum = 1,
                 spawn_list_key = "item_mollusks__subitem_oyster",
                 spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
                 spawn_max_count = 18,
@@ -207,6 +214,7 @@ INFO.item_info = {
                 random_rotation_range = {0,5}
             },
             subitem_conch = {
+                subitem_enum = 2,
                 spawn_list_key = "item_mollusks__subitem_conch",
                 spawn_coll_factory = "spawner_mollusks_conch#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + 0.1 + (CV_Z_Failsafe*6),
@@ -228,6 +236,7 @@ INFO.item_info = {
 	},
 
 	item_fish = {
+        item_enum = 5,
         gui_info = {
             group_name = "/group_item_fish",
             plot_y_range = {0.0, 1.0},
@@ -237,6 +246,7 @@ INFO.item_info = {
         item_is_alive = true,
         subitem_info = {
             subitem_tuna = {
+                subitem_enum = 1,
                 spawn_list_key = "item_fish__subitem_tuna",
                 spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*1),
@@ -254,6 +264,7 @@ INFO.item_info = {
                 info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
             },
             subitem_bluefish  = {
+                subitem_enum = 2,
                 spawn_list_key = "item_fish__subitem_bluefish",
                 spawn_coll_factory = "spawner_fish_bluefish#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*2),
@@ -271,6 +282,7 @@ INFO.item_info = {
                 info_url = "https://www.fisheries.noaa.gov/species/bluefish"
             },
             subitem_snapper = {
+                subitem_enum = 3,
                 spawn_list_key = "item_fish__subitem_snapper",
                 spawn_coll_factory = "spawner_fish_snapper#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*3),
@@ -291,6 +303,7 @@ INFO.item_info = {
 	},
 
 	item_crustaceans = {
+        item_enum = 6,
         gui_info = {
             group_name = "/group_item_crustaceans",
             plot_y_range = {0.0, 1.0},
@@ -300,6 +313,7 @@ INFO.item_info = {
         item_is_alive = true,
         subitem_info = {
             subitem_crab = {
+                subitem_enum = 1,
                 spawn_list_key = "item_crustaceans__subitem_crab",
                 spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items +0.11 + (CV_Z_Failsafe*5),
@@ -318,6 +332,7 @@ INFO.item_info = {
                 info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
             },
             subitem_shrimp = {
+                subitem_enum = 2,
                 spawn_list_key = "item_crustaceans__subitem_shrimp",
                 spawn_coll_factory = "spawner_crustaceans_shrimp#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*4),
@@ -338,6 +353,7 @@ INFO.item_info = {
 	},
 
 	item_humans = {
+        item_enum = 7,
         gui_info = {
             group_name = "/group_item_humans",
             plot_y_range = {0.0, 1.0},
@@ -389,6 +405,49 @@ end
 function INFO:Logic_is_Alive(item_name)
     local l_info = self.item_info[item_name] or {}
     return l_info.item_is_alive
+end
+
+function INFO:Get_ItemSubItem_Name_from_Enum(item_enum, subitem_enum)
+
+    --find item name first, then subitem name
+    local item_name, subitem_name
+
+    for k_item_name,v_item_info in pairs(self.item_info) do
+        if v_item_info.item_enum == item_enum then
+            item_name = k_item_name
+            for k_subitem_name, v_subitem_info in pairs(v_item_info.subitem_info) do
+                if v_subitem_info.subitem_enum == subitem_enum then
+                    subitem_name = k_subitem_name
+                    break
+                end
+            end
+            break
+        end
+    end
+
+    return item_name, subitem_name
+
+end
+
+function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
+
+    --returns i-based table of strings of possible sprite options, 
+    -- but only if more than one exist
+
+    local item_name, subitem_name = self:Get_ItemSubItem_Name_from_Enum(item_enum, subitem_enum)
+
+    if item_name == nil or subitem_name == nil then return nil end
+
+    local l_item = self.item_info[item_name]
+
+    if l_item == nil then return nil end
+
+    local l_subitem = self.item_info[item_name].subitem_info[subitem_name]
+
+    if l_subitem == nil then return nil end
+
+    return l_subitem.sprite_options
+
 end
 
 return INFO

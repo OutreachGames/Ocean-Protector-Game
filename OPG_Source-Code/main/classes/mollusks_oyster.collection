@@ -37,7 +37,7 @@ embedded_instances {
   "  }\n"
   "}\n"
   "embedded_components {\n"
-  "  id: \"sprite1\"\n"
+  "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/asset_links/textures.atlas\\\"\\n"
   "default_animation: \\\"oyster_base\\\"\\n"

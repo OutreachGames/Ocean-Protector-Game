@@ -8,8 +8,11 @@
 local HSH = require ("modules.hashes_md")
 local EXT = require ("modules.extend_md")
 local RES = require ("modules.screen_res_md")
+local INFO = require("modules.item_info_md")
 
 -- properties
+go.property("Obj_Item_Enum", -1)
+go.property("Obj_Subitem_Enum", -1)
 go.property("Obj_Translation_Speed_Max", 40)
 go.property("Obj_Rotation_Speed_Max", 60)
 go.property("Obj_Rotation_Speed_Min", 1.5)

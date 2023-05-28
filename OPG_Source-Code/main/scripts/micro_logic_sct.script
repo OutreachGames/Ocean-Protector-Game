@@ -4,8 +4,12 @@
 -- dependencies
 local RES = require ("modules.screen_res_md")
 local EXT = require("modules.extend_md")
+local INFO = require("modules.item_info_md")
 
 -- properties
+go.property("Obj_Item_Enum", -1)
+go.property("Obj_Subitem_Enum", -1)
+go.property("Obj_Selected_Sprite_Option", 1)
 go.property("Obj_Formation_Position_Index", 1)
 go.property("Obj_Translation_Speed_Max", 20)
 go.property("Obj_Rotation_Speed_Max", 15)
@@ -16,7 +20,6 @@ go.property("Obj_Health_0Algae", 30)
 go.property("Obj_Health__1Diatom", 30)
 go.property("Obj_Health__2Dinoflag", 30)
 go.property("Obj_Spawn_Type_Current_Index", 0)
-go.property("Obj_Number_Sprite_Options", 9)
 go.property("Obj_BaseGrid_Y_Height", 40)
 go.property("Obj_BaseGrid_Y_Coordinate", 0)
 

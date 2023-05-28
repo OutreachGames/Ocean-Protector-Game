@@ -6,8 +6,11 @@
 -- dependencies
 local RES = require ("modules.screen_res_md")
 local HSH = require ("modules.hashes_md")
+local INFO = require("modules.item_info_md")
 
 -- properties
+go.property("Obj_Item_Enum", -1)
+go.property("Obj_Subitem_Enum", -1)
 go.property("Obj_Translation_Speed_Max", 100)
 go.property("Obj_Dimension_X", 450)
 

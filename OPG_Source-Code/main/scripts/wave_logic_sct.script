@@ -3,8 +3,12 @@
 
 -- dependencies
 local RES = require ("modules.screen_res_md")
+local INFO = require("modules.item_info_md")
 
 -- properties
+go.property("Obj_Item_Enum", -1)
+go.property("Obj_Subitem_Enum", -1)
+go.property("Obj_Selected_Sprite_Option", 1)
 go.property("Obj_Wave_Movment_X_Use", true)
 go.property("Obj_Wave_Movment_X_Buffer", true)
 go.property("Obj_Wave_Movment_X_Direction", 0)
@@ -18,13 +22,6 @@ go.property("Obj_Tint_R", 1)
 go.property("Obj_Tint_G", 1)
 go.property("Obj_Tint_B", 1)
 go.property("Obj_PlayParticleFX", false)
-
-CV_wave_types = {
-	{}, --1. waves
-	{}, --2. clouds
-	{}, --3. water line
-	{}, --4. 
-}
 
 
 -- functions
@@ -77,19 +74,19 @@ local function Wave_Setup(self)
 
 	-- setup variables and values for new wave
 
-	-- if multiple options for sprites, then disable all of them and choose 1 to enable
-	-- disable all sprites except for chosen i
-	self.Current_sprite_string = "#sprite1"
 	-- recall, this sprite options need to be here, so that we can get the width
 	-- cannot change sprite after init since width might be different
-	-- #TODO
+	local opts = INFO:Get_Subitem_SpriteOptions(self.Obj_Item_Enum, self.Obj_Subitem_Enum)
+	if opts ~= nil then
+		sprite.play_flipbook("#sprite", opts[self.Obj_Selected_Sprite_Option])
+	end
 
 	-- now tint
-	go.set(self.Current_sprite_string, "tint", vmath.vector4(self.Obj_Tint_R, self.Obj_Tint_G, self.Obj_Tint_B, 1))
+	go.set("#sprite", "tint", vmath.vector4(self.Obj_Tint_R, self.Obj_Tint_G, self.Obj_Tint_B, 1))
 
 	-- flip if specified
 	if self.Obj_Wave_Sprite_FlipH then
-		sprite.set_hflip(self.Current_sprite_string, true)
+		sprite.set_hflip("#sprite", true)
 	end
 
 	-- check particle fx
@@ -110,7 +107,7 @@ local function Wave_Setup(self)
 		-- assume scale x=y=z
 		-- also take out 1 pixel from each side to fix perfectly aligned scrolling along x-axis 
 		-- (issue was that global position was always 0-1 pixels off from local position, and global position cannot be set)
-		self.Sprite_width = math.abs(go.get(self.Current_sprite_string, "size.x") * go.get(".", "scale.x")) - 4
+		self.Sprite_width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x")) - 4
 
 		-- default values are from left to right
 		local buffer = 0

@@ -439,7 +439,8 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 	local scaling_y = RES.Scaling_Y
 	local screen_width = RES.Internal_X
 
-	local sgroup = INFO.item_info.item_weather.subitem_info.subitem_waterlines
+	local s_item = INFO.item_info.item_weather
+	local sgroup = s_item.subitem_info.subitem_waterlines
 
 	local tint
 	if is_raining then
@@ -489,6 +490,8 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 
 		local props = {
 			[HSH.STR_go] = {
+				Obj_Item_Enum = s_item.item_enum,
+				Obj_Subitem_Enum = sgroup.subitem_enum,
 				Obj_Wave_Movment_X_Buffer = false,
 				Obj_Wave_Movment_X_Direction = wave_direction,
 				Obj_Wave_Movment_X_Time = movex_time,
@@ -512,7 +515,8 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 	local scaling_y = RES.Scaling_Y
 	local screen_width = RES.Internal_X
 
-	local sgroup = INFO.item_info.item_weather.subitem_info.subitem_clouds
+	local s_item = INFO.item_info.item_weather
+	local sgroup = s_item.subitem_info.subitem_clouds
 
 	local tint
 	if is_raining then
@@ -558,7 +562,7 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 
 	-- clouds either move in wave direction with wind, or choose a random direction
 	local sign
-	local mtime = 130 
+	local mtime = 130
 	if wave_direction > 0 then
 		sign = 1
 	elseif wave_direction < 0 then
@@ -589,7 +593,10 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 		end
 
 		local props = {
-			[HSH.STR_go] = { 
+			[HSH.STR_go] = {
+				Obj_Item_Enum = s_item.item_enum,
+				Obj_Subitem_Enum = sgroup.subitem_enum,
+				Obj_Selected_Sprite_Option = math.random(1, 3),
 				Obj_Wave_Movment_X_Buffer = true,
 				Obj_Wave_Movment_X_Direction = sign,
 				Obj_Wave_Movment_X_Time = movetime,
@@ -631,7 +638,8 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 	local scaling_y = RES.Scaling_Y
 	local screen_width = RES.Internal_X
 
-	local sgroup = INFO.item_info.item_weather.subitem_info.subitem_waves
+	local s_item = INFO.item_info.item_weather
+	local sgroup = s_item.subitem_info.subitem_waves
 
 	local tint
 	if is_raining then
@@ -682,9 +690,20 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 			y_scale = 0.70
 		end
 
+		local selected_sprite_i
+		if wave_direction ~= 0 then
+			selected_sprite_i = 2 -- uneven is sprite2
+			fliph = wave_direction < 0
+		else
+			selected_sprite_i = 1
+			fliph = math.random(0, 1) == 1
+		end
 
 		local props = {
-			[HSH.STR_go] = { 
+			[HSH.STR_go] = {
+				Obj_Item_Enum = s_item.item_enum,
+				Obj_Subitem_Enum = sgroup.subitem_enum,
+				Obj_Selected_Sprite_Option = selected_sprite_i,
 				Obj_Wave_Movment_X_Buffer = true,
 				Obj_Wave_Movment_X_Time = move_time,
 				Obj_Wave_Movment_X_Direction = wave_direction,
@@ -964,7 +983,8 @@ end
 local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_grid, sprite_selection, flip_h)
 
 	-- spawn a static individual
-	local subitem_tbl = INFO.item_info[item_name].subitem_info[subitem_name]
+	local s_item = INFO.item_info[item_name]
+	local subitem_tbl = s_item.subitem_info[subitem_name]
 
 	-- setup
 	local spawn_list_key_name = subitem_tbl.spawn_list_key
@@ -988,7 +1008,10 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 
 	local props = {
 		[HSH.STR_go] = {
+			Obj_Item_Enum = s_item.item_enum,
+			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Wave_Sprite_FlipH = flip_h,
+			Obj_Selected_Sprite_Option = sprite_selection
 		}
 	}
 
@@ -1003,7 +1026,8 @@ end
 local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen)
 
 	-- spawn an individual swimmer
-	local subitem_tbl = INFO.item_info[item_name].subitem_info[subitem_name]
+	local s_item = INFO.item_info[item_name]
+	local subitem_tbl = s_item.subitem_info[subitem_name]
 
 	-- default arguments
 	if spawn_offscreen == nil then
@@ -1088,6 +1112,8 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	-- compile into properties table
 	local props = {
 		[HSH.STR_go] = {
+			Obj_Item_Enum = s_item.item_enum,
+			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Translation_Speed_Max = move_speed_multi * obj_translate_speed_base,
 			Obj_Rotation_Speed_Max = move_speed_multi * obj_rot_speed_base,
 			Obj_On_Force_Stop_Slowdown_Distance = slowdown_distance,
@@ -1145,7 +1171,8 @@ end
 local function Spawn_Animal_Micro(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen)
 
 	-- spawn an individual plankton
-	local subitem_tbl = INFO.item_info[item_name].subitem_info[subitem_name]
+	local s_item = INFO.item_info[item_name]
+	local subitem_tbl = s_item.subitem_info[subitem_name]
 
 	-- default arguments
 	if spawn_offscreen == nil then
@@ -1170,6 +1197,8 @@ local function Spawn_Animal_Micro(self, item_name, subitem_name, i_position_in_g
 	-- compile into properties table
 	local props = {
 		[HSH.STR_go] = {
+			Obj_Item_Enum = s_item.item_enum,
+			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Translation_Speed_Max = obj_translate_speed_base,
 			Obj_Rotation_Speed_Max = obj_rot_speed_base,
 			Obj_Formation_Position_Index = i_position_in_grid,
@@ -1316,7 +1345,8 @@ local function SetupBoat(self, boat_type_name)
 
 	-- defaults
 	boat_type_name = boat_type_name or "subitem_captain"
-	local subitem_tbl = INFO.item_info.item_humans.subitem_info[boat_type_name]
+	local s_item = INFO.item_info.item_humans
+	local subitem_tbl = s_item.subitem_info[boat_type_name]
 
 	if subitem_tbl == nil then
 		print("Error boat_type_name of <"..tostring(boat_type_name).."> does not exist! \n")
@@ -1328,6 +1358,8 @@ local function SetupBoat(self, boat_type_name)
 	local rot = nil
 	local props = {
 		[HSH.STR_go] = {
+			Obj_Item_Enum = s_item.item_enum,
+			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Translation_Speed_Max = 100,
 			Obj_Dimension_X = subitem_tbl.object_dimensions.x
 		}
