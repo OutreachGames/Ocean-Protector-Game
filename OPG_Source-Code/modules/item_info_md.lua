@@ -450,4 +450,14 @@ function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
 
 end
 
+function INFO:Get_Spawn_List_Key(item_enum, subitem_enum)
+
+    local item_key, subitem_key = self:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
+
+    if item_key == nil or subitem_key == nil then return nil end
+
+    return self.item_info[item_key].subitem_info[subitem_key].spawn_list_key
+
+end
+
 return INFO

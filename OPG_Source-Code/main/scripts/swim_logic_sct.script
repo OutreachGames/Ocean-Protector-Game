@@ -821,8 +821,14 @@ local function On_Message_StopMovement(self, is_instant, kill_when_stopped)
 
 end
 
+local function OnExpire(self, is_instant)
 
-function init(self)
+	local kill_when_stopped = true
+	On_Message_StopMovement(self, is_instant, kill_when_stopped)
+
+end
+
+local function GO_Setup(self)
 
 	-- set resting euler z rotation when object spawned in scene
 	go.set(".", "euler.z", self.Obj_Resting_Euler_Z)
@@ -848,6 +854,13 @@ function init(self)
 
 end
 
+
+function init(self)
+
+	GO_Setup(self)
+
+end
+
 function on_message(self, message_id, message, sender)
 
 	if message_id == HSH.msg_order_swim_to_pos then
@@ -866,9 +879,8 @@ function on_message(self, message_id, message, sender)
 		-- set which group this object belongs to
 		self.spawn_keys_subitem_list_key = message.minfo_spawn_keys_subitem_list_key
 
-	elseif message_id == HSH.msg_order_expire then
-		local kill_when_stopped = true
-		On_Message_StopMovement(self, message.minfo_stop_is_instant, kill_when_stopped)
+	elseif message_id == HSH.msg_order_expire_start then
+		OnExpire(self, message.minfo_stop_is_instant)
 	end
 
 end

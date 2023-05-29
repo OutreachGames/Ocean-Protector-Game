@@ -334,6 +334,9 @@ end
 
 local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
 
+	if self.spawned_objects_list[spawn_list_key] == nil then return end
+	if self.spawned_objects_list[spawn_list_key][go_id] == nil then return end
+
 	-- delete go object
 	if delete_go then
 		go.delete(go_id)
@@ -369,6 +372,7 @@ local function Spawned_AddObject(self, spawn_list_key, go_id)
 		print("Error, spawn game object id is already present! Overriding old value. \n")
 	end
 
+	--print("Add object "..tostring(go_id).." to spawn list key "..spawn_list_key.."\n")
 	self.spawned_objects_list[spawn_list_key][go_id] = true
 
 end
@@ -972,11 +976,12 @@ local function Remove_Animal_Generic(self, item_name, subitem_name, go_id, delet
 	Spawned_RemoveObject(self, spawn_list_key_name, go_id, delete_go)
 
 	-- if not deleting then send expire message
+	-- which will delete the go, just after a specified event
+	-- for example, do not delete go until animation done
+	-- but remove from tracker list
+	-- so we can add more swimmers without incorrectly hitting max amount
 	if not delete_go then
-		-- do not delete go until animation done
-		-- but remove from tracker list so we 
-		-- can add more swimmers without incorrectly hitting max amount
-		msg.post(go_id, HSH.msg_order_expire)
+		msg.post(go_id, HSH.msg_order_expire_start)
 	end
 
 end
@@ -1603,6 +1608,13 @@ local function SceneStart(self)
 
 end
 
+local function ExpireObjectCheck(self, spawn_list_key, go_id)
+
+	--msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
+	Spawned_RemoveObject(self, spawn_list_key, go_id, true)
+
+end
+
 
 function init(self)
 
@@ -1626,6 +1638,8 @@ function on_message(self, message_id, message, sender)
 		Make_Bubbles(self, world_pos.x)
 	elseif message_id == HSH.msg_request_go_clicked then
 		Get_Item_Clicked_On(self, message.minfo_action)
+	elseif message_id == HSH.msg_reported_expire_done then
+		ExpireObjectCheck(self, message.minfo_spawn_list_key, sender)
 	end
 
 end

@@ -21,8 +21,13 @@ go.property("Obj_Tint_B", 1)
 
 
 -- functions
+local function OnExpire(self)
 
-function init(self)
+	go.delete()
+
+end
+
+local function GO_Setup(self)
 
 	--set selected sprite 
 
@@ -43,6 +48,13 @@ function init(self)
 
 end
 
+
+function init(self)
+
+	GO_Setup(self)
+
+end
+
 function final(self)
 	-- Add finalization code here
 	-- Learn more: https://defold.com/manuals/script/
@@ -50,7 +62,9 @@ function final(self)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
+
+	if message_id == HSH.msg_order_expire_start then
+		OnExpire(self)
+	end
+
 end

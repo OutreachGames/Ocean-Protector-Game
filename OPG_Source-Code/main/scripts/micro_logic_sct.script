@@ -4,6 +4,7 @@
 -- dependencies
 local RES = require ("modules.screen_res_md")
 local EXT = require("modules.extend_md")
+local HSH = require("modules.hashes_md")
 local INFO = require("modules.item_info_md")
 
 -- properties
@@ -56,6 +57,11 @@ local CV_type_to_sprite = {
 
 
 --functions
+local function OnExpire(self)
+
+	go.delete()
+
+end
 
 local function UpdateSprite(self)
 
@@ -142,5 +148,13 @@ end
 function init(self)
 
 	ResetSpawn(self)
+
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == HSH.msg_order_expire_start then
+		OnExpire(self)
+	end
 
 end

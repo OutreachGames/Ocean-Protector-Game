@@ -36,8 +36,6 @@ local function Move_to_Position_X(self, x_location, delete_self_when_done)
 	-- setup to stop bubbles and sound when done moving
 	local function func_stop_bubbles(self)
 
-		particlefx.stop("#particlefx", {clear = false})
-		sound.stop("#sound")
 		if delete_self_when_done then
 			go.delete()
 		end
@@ -53,22 +51,35 @@ local function Move_to_Position_X(self, x_location, delete_self_when_done)
 
 end
 
+local function OnExpire(self)
+
+	Move_to_Position_X(self, RES.Boundary_X[2] + self.Obj_Dimension_X, true)
+
+end
+
 local function OnPauseToggle(self, game_pause_toggle)
 
 	sound.pause("#sound", game_pause_toggle)
 
 end
 
-
-function init(self)
+local function GO_Setup(self)
 
 	-- float back an forth
 	go.animate(".", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.1)
 
 end
 
+
+function init(self)
+
+	GO_Setup(self)
+
+end
+
 function final(self)
 
+	sound.stop("#sound")
 	particlefx.stop("#particlefx", {clear = false})
 
 end
@@ -84,8 +95,8 @@ function on_message(self, message_id, message, sender)
 		-- start swimming to new position
 		Move_to_Position_X(self, message.minfo_swim_to_x, message.minfo)
 
-	elseif message_id == HSH.msg_order_expire then
-		Move_to_Position_X(self, RES.Boundary_X[2] + self.Obj_Dimension_X, true)
+	elseif message_id == HSH.msg_order_expire_start then
+		OnExpire(self)
 
 	end
 
