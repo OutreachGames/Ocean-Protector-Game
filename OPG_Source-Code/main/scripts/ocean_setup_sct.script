@@ -334,13 +334,17 @@ end
 
 local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
 
-	if self.spawned_objects_list[spawn_list_key] == nil then return end
-	if self.spawned_objects_list[spawn_list_key][go_id] == nil then return end
-
 	-- delete go object
 	if delete_go then
-		go.delete(go_id)
+		if go.exists(go_id) then
+			--print("Deleting individual object "..go_id.."\n")
+			go.delete(go_id)
+		end
 	end
+
+	-- remove from list if it was on list
+	if self.spawned_objects_list[spawn_list_key] == nil then return end
+	if self.spawned_objects_list[spawn_list_key][go_id] == nil then return end
 
 	-- remove from list and update list sum
 	self.spawned_objects_list[spawn_list_key][go_id] = nil
@@ -1170,7 +1174,13 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, start_swimming_info)
 
 	-- #TODO remove when done testing
-	--Remove_Animal_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
+	--[[
+	timer.delay(1, false, function ()
+		if math.random(0,6) == 0 then
+			Remove_Animal_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
+		end
+	end)
+	--]]
 
 end
 
@@ -1610,7 +1620,6 @@ end
 
 local function ExpireObjectCheck(self, spawn_list_key, go_id)
 
-	--msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
 	Spawned_RemoveObject(self, spawn_list_key, go_id, true)
 
 end
