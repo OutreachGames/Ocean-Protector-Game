@@ -13,6 +13,7 @@ local CV_Default_Base_Scale = 0.9
 local CV_Logic_Type_Swimmer = 1
 local CV_Logic_Type_Static = 2
 local CV_Logic_Type_Micro = 3
+local CV_Effect_Decomp_Dimensions = {x = 300, y = 80}
 
 local INFO = {}
 
@@ -450,14 +451,36 @@ function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
 
 end
 
-function INFO:Get_Spawn_List_Key(item_enum, subitem_enum)
+function INFO:Get_Subitem_Value(item_enum, subitem_enum, subitem_value_key)
 
     local item_key, subitem_key = self:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
 
     if item_key == nil or subitem_key == nil then return nil end
 
-    return self.item_info[item_key].subitem_info[subitem_key].spawn_list_key
+    return self.item_info[item_key].subitem_info[subitem_key][subitem_value_key]
 
 end
+
+function INFO:Calculate_Decomop_Scale(item_enum, subitem_enum, go_scale)
+
+    -- get width and height of subitem, then scale by scale
+    -- then scale that to width of decomp particle fx
+    local obj_dimensions = self:Get_Subitem_Value(item_enum, subitem_enum, "object_dimensions")
+
+    if obj_dimensions == nil then return nil end
+
+    local go_size_x = obj_dimensions.x * go_scale
+
+    return go_size_x/CV_Effect_Decomp_Dimensions.x
+
+end
+
+function INFO:Get_Spawn_List_Key(item_enum, subitem_enum)
+
+    return self:Get_Subitem_Value(item_enum, subitem_enum, "spawn_list_key")
+
+end
+
+
 
 return INFO

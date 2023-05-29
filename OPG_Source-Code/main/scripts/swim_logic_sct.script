@@ -33,6 +33,7 @@ go.property("Obj_Waypoint_2_Y", 0)
 go.property("Obj_Anim_Multi_Idle", 0.6)
 go.property("Obj_Anim_Multi_Extra", 0.6)
 go.property("Obj_Anim_Multi_Moving", 1.8)
+go.property("Obj_DecompEffect_Scale", 1.0)
 
 -- local hashes and constants for easy tuning
 local CV_Anim_Swim_Hash = hash("anim_moving_FacingLeft")
@@ -326,17 +327,42 @@ local function On_Death(self)
 
 	-- once fade out mostly done then play decomposition particles
 	-- save function to fade, trigger decomposition, and GO deletion
+	local particle_helper
+
 	local function func_decompose(self)
-		particlefx.play("#particle_decomposition")
+
+		-- create a decomposition go object, parent it to this go
+		-- then delete created decomp object when done
+		local scale = self.Obj_DecompEffect_Scale
+		local rot = vmath.quat_rotation_z(math.rad(0))
+		local decomp_collection = collectionfactory.create("ocean_level:/spawner_decomposition_large#collectionfactory", go.get_position(), rot, nil, scale)
+
+		--save and parent to this go
+		particle_helper = decomp_collection[HSH.STR_go]
+		msg.post(particle_helper, "set_parent", { parent_id = go.get_id(), keep_world_transform = 1 })
+
+		--trigger effect
+		local decomp_id = msg.url("ocean_level", particle_helper, "particlefx")
+		particlefx.play(decomp_id)
+		--print("particle fx euler z "..go.get(particle_helper, "euler.z"))
+
 	end
 
 	local decomp_delay = fadeout_delay
 	timer.delay(decomp_delay, false, func_decompose)
 
-	local delete_time = fadeout_delay + fadeout_time + 5
+	local delete_time = decomp_delay + fadeout_time + 5
 
 	local function func_delete(self)
+
+		--tell level manager to delete go and clear tracker table entry
 		msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
+
+		--delete decomposition particle helper if we used it
+		if particle_helper ~= nil then
+			go.delete(particle_helper)
+		end
+
 	end
 
 	timer.delay(delete_time, false, func_delete)
@@ -853,6 +879,9 @@ local function GO_Setup(self)
 	end
 
 	self.is_alive = true
+
+	-- calculate and set size of death decomposition
+	self.Obj_DecompEffect_Scale = INFO:Calculate_Decomop_Scale(self.Obj_Item_Enum, self.Obj_Subitem_Enum, self.scale_magnitude) or 1
 
 end
 
