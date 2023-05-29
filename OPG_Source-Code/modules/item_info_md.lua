@@ -14,6 +14,7 @@ local CV_Logic_Type_Swimmer = 1
 local CV_Logic_Type_Static = 2
 local CV_Logic_Type_Micro = 3
 local CV_Effect_Decomp_Dimensions = {x = 300, y = 80}
+local CV_Base_Wave_Direction = 1
 
 local INFO = {}
 
@@ -469,6 +470,10 @@ function INFO:Get_Spawn_List_Key(item_enum, subitem_enum)
 
 end
 
+function INFO:Get_BaseWave_Direction()
 
+    return CV_Base_Wave_Direction
+
+end
 
 return INFO

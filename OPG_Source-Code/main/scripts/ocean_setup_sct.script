@@ -8,6 +8,9 @@ local HSH = require ("modules.hashes_md")
 local EXT = require ("modules.extend_md")
 local INFO = require("modules.item_info_md")
 
+-- properties
+go.property("Obj_Percent_Coastal_OA_to_Hide", 0)
+
 -- locals 
 local CV_Update_Property = {
 	method_overwrite = 0,
@@ -15,6 +18,7 @@ local CV_Update_Property = {
 	method_add = 2,
 }
 
+local CV_Weather_Reload_Time = 0.25
 
 -- functions
 
@@ -734,37 +738,71 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 
 end
 
-local function Run_CoastalOA(self, percentage_to_hide)
+local function SetPlanktonViewer(self, toggle_option)
+
+	-- toggle the plankton viewer
+
+	self.plankton_viewer_enabled = toggle_option
+
+	local new_z, new_scale
+	if toggle_option then
+		-- if enabling
+		new_z = -1
+		new_scale = 0.01
+	else
+		-- if disabling
+		new_z = -0.8
+		new_scale = 1
+	end
+
+	local function func_done(self)
+		go.set("background_water_bottom_full_pane_hider", "position.z", new_z)
+	end
+
+	go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, new_scale, go.EASING_LINEAR, 0.2, 0, func_done)
+
+end
+
+local function Run_CoastalOA(self, update_percentage_to_hide)
 
 	-- plays particle effect for coastal acidification
 	-- make sure weather going from left to right when OACoast is running
 	-- to reduce amount shown just move spawner game object more off to the left
 	-- full throttle coastal OA effect is when game object of "spawner_coastOA" is at x pos of -800
 
+	if update_percentage_to_hide ~= nil then
+		self.Obj_Percent_Coastal_OA_to_Hide = update_percentage_to_hide
+	else
+		update_percentage_to_hide = self.Obj_Percent_Coastal_OA_to_Hide
+	end
+
 	if self.coastal_oa_playing then
 		print("Notice: Run Coastal OA function called while currently running, requested run will not occur...")
 		return
+	else
+		print("Starting Coastal Acidification effect \n")
 	end
 
 	-- default args
 	-- includes amount of effect to hide/show, 1 is fullly hidden, 0 is show everything
-	if type(percentage_to_hide) ~= "number" then
-		percentage_to_hide = 0
+	if type(update_percentage_to_hide) ~= "number" then
+		update_percentage_to_hide = 0
 	end
 
 	-- if hiding entire effect then return early, otherwise clamp
-	if percentage_to_hide >= 1 then
+	if update_percentage_to_hide >= 1 then
 		return
 	end
-	percentage_to_hide = EXT:math_clamp(percentage_to_hide, 0, 1)
+	update_percentage_to_hide = EXT:math_clamp(update_percentage_to_hide, 0, 1)
 
 	-- play particle effect suite and save status
 	self.coastal_oa_playing = true
+	SetPlanktonViewer(self, false)
 
 	-- move spawner object to starting position based on amount of effect to show
 	local runoff_emitter_length = 800
 	local runoff_offset = 100
-	local amount_to_hide = runoff_emitter_length * percentage_to_hide
+	local amount_to_hide = runoff_emitter_length * update_percentage_to_hide
 	local start_x = RES.Boundary_X[1] - (runoff_emitter_length/2) - amount_to_hide + runoff_offset
 	local end_x = start_x + runoff_emitter_length
 	local duration = 10
@@ -781,6 +819,7 @@ local function Run_CoastalOA(self, percentage_to_hide)
 
 	local function func_set_oa(self)
 		self.coastal_oa_playing = false
+		SetPlanktonViewer(self, true)
 	end
 
 	timer.delay(anim_duration, false, func_set_oa)
@@ -840,7 +879,7 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 		is_supposed_to_rain = false
 	end
 	if type(wave_direction) ~= "number" then
-		wave_direction = 1
+		wave_direction = INFO:Get_BaseWave_Direction()
 	end
 
 	-- clear anything that was around previously
@@ -919,7 +958,7 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 
 end
 
-local function Weather_Change(self, is_supposed_to_rain, wave_direction)
+local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coastal_oa_at_end)
 
 	-- change the weather to raining or sunny
 
@@ -960,6 +999,9 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction)
 			-- once fully visible again allow weather to be changed again
 			timer.delay(1.0, false, function(self)
 				self.weather_changeable = true
+				if run_coastal_oa_at_end then
+					Run_CoastalOA(self)
+				end
 			end)
 		end)
 
@@ -1174,7 +1216,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, start_swimming_info)
 
 	-- #TODO remove when done testing
-	----[[
+	--[[
 	timer.delay(1, false, function ()
 		if math.random(0,6) == 0 then
 			Remove_Animal_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
@@ -1565,7 +1607,7 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 end
 
-local function OnPauseToggle(self, game_pause_toggle)
+local function OnPauseToggle_SoundHelper(self, game_pause_toggle)
 
 	-- pauses all sounds since they do not seem to pause when dt is 0
 
@@ -1587,6 +1629,22 @@ local function OnPauseToggle(self, game_pause_toggle)
 
 end
 
+local function ScenePause_SoundHelper(self)
+
+	OnPauseToggle_SoundHelper(self, true)
+
+end
+
+local function SceneUnpause_SoundHelper(self)
+
+	OnPauseToggle_SoundHelper(self, true)
+
+end
+
+local function ExpireObjectCheck(self, spawn_list_key, go_id)
+	Spawned_RemoveObject(self, spawn_list_key, go_id, true)
+end
+
 local function SceneStart(self)
 
 	-- setup the scene variables and objects
@@ -1594,12 +1652,15 @@ local function SceneStart(self)
 	-- set base variables
 	self.weather_changeable = true
 	self.weather_is_raining = false
-	self.reload_time = 0.25
+	self.reload_time = CV_Weather_Reload_Time
 	self.no_wind_default = 1
 	self.spawned_objects_list = nil
 	self.spawned_objects_list = {}
 	self.spawned_objects_sum = nil
 	self.spawned_objects_sum = {}
+
+	SetPlanktonViewer(self, true)
+
 	Make_Bubbles(self)
 
 	-- setup animals
@@ -1608,19 +1669,23 @@ local function SceneStart(self)
 	-- setup weather (after animals for some reason...)
 	Setup_Weather(self, true)
 
-	-- setup buoy and boats
-	SetupBoat(self)
+	-- setup buoy
 	SetupBuoy(self)
 
 	-- play sounds 
 	sound.play("sound_controller#sound_underwater", {delay = 0, gain = 0.15, pan = 0, speed = 1.0})
 	sound.play("sound_controller#sound_waves", {delay = 0, gain = 0.08, pan = 0, speed = 1.0})
 
+	-- set coastal OA tracking
+	self.Obj_Percent_Coastal_OA_to_Hide = 0
+
 end
 
-local function ExpireObjectCheck(self, spawn_list_key, go_id)
+local function On_SpecialAction(self, special_action_name)
 
-	Spawned_RemoveObject(self, spawn_list_key, go_id, true)
+	if special_action_name == "special_setup_first_boat" then
+		SetupBoat(self)
+	end
 
 end
 
@@ -1634,10 +1699,10 @@ end
 function on_message(self, message_id, message, sender)
 
 	if message_id == HSH.msg_pause_game_msg_sent then
-		OnPauseToggle(self, message.minfo_game_paused)
+		OnPauseToggle_SoundHelper(self, message.minfo_game_paused)
 	end
 	if message_id == HSH.msg_request_change_weather then
-		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction)
+		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction, message.minfo_run_coastal_oa_too)
 	elseif message_id == HSH.msg_request_run_coastal_oa then
 		Run_CoastalOA(self, message.minfo_percent_coastal_oa_hide)
 	--elseif message_id == HSH.msg_report_swim_run_started then
@@ -1649,6 +1714,8 @@ function on_message(self, message_id, message, sender)
 		Get_Item_Clicked_On(self, message.minfo_action)
 	elseif message_id == HSH.msg_reported_expire_done then
 		ExpireObjectCheck(self, message.minfo_spawn_list_key, sender)
+	elseif message_id == HSH.msg_request_special_case_action then
+		On_SpecialAction(self, message.minfo_special_case_key)
 	end
 
 end

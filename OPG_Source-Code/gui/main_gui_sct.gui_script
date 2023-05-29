@@ -1646,11 +1646,55 @@ local function GamePauseToggle_Internal(self)
 
 end
 
+local function GamePause_On(self)
+
+	-- if game should be paused but is not paused, then pause it
+	if not self.game_paused then
+		GamePauseToggle_Internal(self)
+	end
+
+end
+
+local function GamePause_Off(self)
+
+	-- if game should be resumed but is paused, then resume it
+	if self.game_paused then
+		GamePauseToggle_Internal(self)
+	end
+
+end
+
 local function GamePauseToggle_Input(self, action_id, action)
 
 	--#TODO testing remove when done
 	if action_id == HSH.control_down and action.released then
 		GamePauseToggle_Internal(self)
+	end
+
+end
+
+local function OceanScene_ChangeWeather(self, is_raining, wave_direction, run_coastal_oa_when_done)
+
+	msg.post("ocean_level:/level_controller", HSH.msg_request_change_weather, {minfo_is_raining=is_raining, minfo_wave_direction=wave_direction, minfo_run_coastal_oa_too = run_coastal_oa_when_done})
+
+end
+
+local function OceanScene_RunCoastalOA(self, percent_coastal_oa_to_hide)
+
+	msg.post("ocean_level:/level_controller", HSH.msg_request_run_coastal_oa, {minfo_percent_coastal_oa_hide = percent_coastal_oa_to_hide})
+
+end
+
+local function On_SpecialAction(self, special_action_name)
+
+	if special_action_name == "special_setup_first_boat" then
+		msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = special_action_name})
+	elseif special_action_name == "special_setup_coastal_oa_1" then
+		local is_raining = true
+		local run_coastal_oa_when_done = true
+		OceanScene_ChangeWeather(self, is_raining, INFO:Get_BaseWave_Direction(), run_coastal_oa_when_done)
+		--start but then pause the game 
+		timer.delay(5, false, GamePause_On)
 	end
 
 end
@@ -1664,15 +1708,13 @@ local function GameHandleButtonInput(self, action_id, action)
 	--change weather
 	if action_id == HSH.control_right or action_id == HSH.control_left then
 		local is_supposed_to_rain = action_id == HSH.control_right
-		-- if it is raining and we want it to rain then do nothing
-		-- if it is not raining and we do not want it to rain then do nothing
-		local wave_direction = math.random(0,1)
-		msg.post("ocean_level:/level_controller", HSH.msg_request_change_weather, {minfo_is_raining=is_supposed_to_rain, minfo_wave_direction=wave_direction})
+		local wave_direction = 1
+		OceanScene_ChangeWeather(self, is_supposed_to_rain, wave_direction)
 	end
 
 	--trigger nutrient influx
 	if action_id == HSH.control_up then
-		msg.post("ocean_level:/level_controller", HSH.msg_request_run_coastal_oa, {minfo_percent_coastal_oa_hide = 0})
+		OceanScene_RunCoastalOA(self, 0)
 	end
 
 end
@@ -1709,8 +1751,10 @@ function on_message(self, message_id, message, sender)
 
 	elseif message_id == HSH.msg_set_player_character_role then
 		self.character_role_key = message.minfo_role_name
-	elseif message_id == HSH.msg_set_new_item_value then
+	elseif message_id == HSH.msg_update_item_value then
 		Player_Data_Table_RunScoreInput(self, message.minfo_item_score_update_tbl)
+	elseif message_id == HSH.msg_request_special_case_action then
+		On_SpecialAction(self, message.minfo_special_case_key)
 	end
 
 end

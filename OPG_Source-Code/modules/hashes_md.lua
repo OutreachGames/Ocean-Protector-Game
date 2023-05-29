@@ -24,7 +24,8 @@ local HASH = {
     msg_request_game_repeat = hash("msg_request_game_repeat"),
     msg_report_game_progressed = hash("msg_report_game_progressed"),
     msg_set_player_character_role = hash("msg_set_player_character_role"),
-    msg_set_new_item_value = hash("msg_set_new_item_value"),
+    msg_request_special_case_action = hash("msg_request_special_case_action"),
+    msg_update_item_value = hash("msg_update_item_value"),
     msg_pause_game_msg_sent = hash("msg_pause_game_msg_sent"),
     msg_request_run_coastal_oa = hash("msg_request_run_coastal_oa"),
 
