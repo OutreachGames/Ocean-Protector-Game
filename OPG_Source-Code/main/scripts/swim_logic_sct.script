@@ -334,6 +334,9 @@ local function On_Death(self)
 		-- create a decomposition go object, parent it to this go
 		-- then delete created decomp object when done
 		local scale = self.Obj_DecompEffect_Scale
+
+		--local base_dimensions = INFO:Get_Subitem_Value(self.Obj_Item_Enum, self.Obj_Subitem_Enum, "object_dimensions")
+		--print("base_dimensions.x: "..base_dimensions.x..", self.scale_magnitude: "..self.scale_magnitude..", self.Obj_DecompEffect_Scale: "..self.Obj_DecompEffect_Scale)
 		local rot = vmath.quat_rotation_z(math.rad(0))
 		local decomp_collection = collectionfactory.create("ocean_level:/spawner_decomposition_large#collectionfactory", go.get_position(), rot, nil, scale)
 
