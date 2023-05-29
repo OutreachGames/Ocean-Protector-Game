@@ -738,28 +738,35 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 
 end
 
-local function SetPlanktonViewer(self, toggle_option)
+local function SetPlanktonViewer(self, toggle_option, is_instant)
 
 	-- toggle the plankton viewer
 
+	if self.plankton_viewer_enabled == toggle_option then return end
+
 	self.plankton_viewer_enabled = toggle_option
 
-	local new_z, new_scale
 	if toggle_option then
 		-- if enabling
-		new_z = -1
-		new_scale = 0.01
+		if is_instant then
+			go.set("background_water_bottom_full_pane_hider", "position.z", -1)
+			go.set("background_water_bottom_full_pane_hider", "scale", 0.05)
+		else
+			go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, 0.05, go.EASING_LINEAR, 0.2, 0)
+			go.animate("background_water_bottom_full_pane_hider", "position.z", go.PLAYBACK_ONCE_FORWARD, -1, go.EASING_LINEAR, 0, 0.2)
+		end
+
 	else
 		-- if disabling
-		new_z = -0.8
-		new_scale = 1
-	end
+		if is_instant then
+			go.set("background_water_bottom_full_pane_hider", "position.z", -0.8)
+			go.set("background_water_bottom_full_pane_hider", "scale", 1)
+		else
+			go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_LINEAR, 0.21, 0)
+			go.animate("background_water_bottom_full_pane_hider", "position.z", go.PLAYBACK_ONCE_FORWARD, -0.8, go.EASING_LINEAR, 0, 0.1)
+		end
 
-	local function func_done(self)
-		go.set("background_water_bottom_full_pane_hider", "position.z", new_z)
 	end
-
-	go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, new_scale, go.EASING_LINEAR, 0.2, 0, func_done)
 
 end
 
