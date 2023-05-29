@@ -752,8 +752,8 @@ local function SetPlanktonViewer(self, toggle_option, is_instant)
 			go.set("background_water_bottom_full_pane_hider", "position.z", -1)
 			go.set("background_water_bottom_full_pane_hider", "scale", 0.05)
 		else
-			go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, 0.05, go.EASING_LINEAR, 0.2, 0)
-			go.animate("background_water_bottom_full_pane_hider", "position.z", go.PLAYBACK_ONCE_FORWARD, -1, go.EASING_LINEAR, 0, 0.2)
+			go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, 0.05, go.EASING_LINEAR, 0.23, 0)
+			go.animate("background_water_bottom_full_pane_hider", "position.z", go.PLAYBACK_ONCE_FORWARD, -1, go.EASING_LINEAR, 0, 0.23)
 		end
 
 	else
@@ -762,7 +762,7 @@ local function SetPlanktonViewer(self, toggle_option, is_instant)
 			go.set("background_water_bottom_full_pane_hider", "position.z", -0.8)
 			go.set("background_water_bottom_full_pane_hider", "scale", 1)
 		else
-			go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_LINEAR, 0.21, 0)
+			go.animate("background_water_bottom_full_pane_hider", "scale", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_LINEAR, 0.25, 0)
 			go.animate("background_water_bottom_full_pane_hider", "position.z", go.PLAYBACK_ONCE_FORWARD, -0.8, go.EASING_LINEAR, 0, 0.1)
 		end
 
