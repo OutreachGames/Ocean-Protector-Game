@@ -59,7 +59,7 @@ local CV_type_to_sprite = {
 --functions
 local function OnExpire(self)
 
-	go.delete()
+	msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
 
 end
 

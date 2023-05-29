@@ -334,9 +334,11 @@ local function On_Death(self)
 	timer.delay(decomp_delay, false, func_decompose)
 
 	local delete_time = fadeout_delay + fadeout_time + 5
+
 	local function func_delete(self)
-		go.delete()
+		msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
 	end
+
 	timer.delay(delete_time, false, func_delete)
 
 end
@@ -440,7 +442,7 @@ local function On_Movement_StopForce(self, is_instant, kill_when_stopped)
 
 	-- no need to stop if not moving
 	if not self.goal_status_moving then
-		return 0 
+		return 0
 	end
 
 	-- set run type status
