@@ -302,15 +302,17 @@ local function Set_Sea_Particles(self, toggle_on, clear_instant)
 
 end
 
-local function Spawned_ResetAll(self, spawn_list_key)
+local function Spawned_ResetAll(self, spawn_list_key, delete_gos)
 
 	-- reset all spawned objects from given list key
 
 	-- if there have been objects spawned then delete and clear them all
 	if self.spawned_objects_list[spawn_list_key] ~= nil then
 		if self.spawned_objects_sum[spawn_list_key] > 0 then
-			for k_gourl, _ in pairs(self.spawned_objects_list[spawn_list_key]) do
-				go.delete(k_gourl)
+			if delete_gos then
+				for k_gourl, _ in pairs(self.spawned_objects_list[spawn_list_key]) do
+					go.delete(k_gourl)
+				end
 			end
 		end
 	end
@@ -333,7 +335,6 @@ end
 local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
 
 	-- delete go object
-	if delete_go == nil then delete_go = true end
 	if delete_go then
 		go.delete(go_id)
 	end
@@ -352,7 +353,7 @@ local function Spawned_AddObject(self, spawn_list_key, go_id)
 
 	if current_count == nil then
 		print("Warning: Add Spawned Object provided with non-initalized spawn type key "..spawn_list_key..", initializing now...\n")
-		Spawned_ResetAll(self, spawn_list_key)
+		Spawned_ResetAll(self, spawn_list_key, true)
 		current_count = 0
 	end
 
@@ -838,7 +839,7 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 	-- note, cannot delete objects then spawn more in same frame, 
 	-- as that overrides buffer and makes other bugs
 	for _, v_groupkey in pairs(INFO.item_info.item_weather.subitem_info) do
-		Spawned_ResetAll(self, v_groupkey.spawn_list_key)
+		Spawned_ResetAll(self, v_groupkey.spawn_list_key, true)
 	end
 
 	local function loader_helper(self)
@@ -1284,7 +1285,7 @@ local function SetupAnimals(self)
 				v_subitem.is_spawn_flipped = math.random(0,1) == 0
 
 				-- reset all in this group 
-				Spawned_ResetAll(self, v_subitem.spawn_list_key)
+				Spawned_ResetAll(self, v_subitem.spawn_list_key, true)
 
 				-- reset any previous grids
 				v_subitem.spawn_position_grid_dynamic = nil
@@ -1392,7 +1393,9 @@ local function SetupBuoy(self)
 	go.animate("/ph_buoy/go_rope", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTQUAD, 3)
 	go.animate("/ph_buoy/go_body", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -3, go.EASING_INOUTSINE, 3)
 
-	Spawned_AddObject(self, INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key, "/ph_buoy/go_clickme")
+	local buoy_list_key = INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key
+	Spawned_ResetAll(self, buoy_list_key, true)
+	Spawned_AddObject(self, buoy_list_key, "/ph_buoy/go_clickme")
 
 end
 
