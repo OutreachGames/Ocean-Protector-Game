@@ -408,7 +408,7 @@ function INFO:Logic_is_Alive(item_name)
     return l_info.item_is_alive
 end
 
-function INFO:Get_ItemSubItem_Name_from_Enum(item_enum, subitem_enum)
+function INFO:Get_ItemSubItem_Names_from_Enum(item_enum, subitem_enum)
 
     --find item name first, then subitem name
     local item_name, subitem_name
@@ -430,30 +430,9 @@ function INFO:Get_ItemSubItem_Name_from_Enum(item_enum, subitem_enum)
 
 end
 
-function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
-
-    --returns i-based table of strings of possible sprite options, 
-    -- but only if more than one exist
-
-    local item_name, subitem_name = self:Get_ItemSubItem_Name_from_Enum(item_enum, subitem_enum)
-
-    if item_name == nil or subitem_name == nil then return nil end
-
-    local l_item = self.item_info[item_name]
-
-    if l_item == nil then return nil end
-
-    local l_subitem = self.item_info[item_name].subitem_info[subitem_name]
-
-    if l_subitem == nil then return nil end
-
-    return l_subitem.sprite_options
-
-end
-
 function INFO:Get_Subitem_Value(item_enum, subitem_enum, subitem_value_key)
 
-    local item_key, subitem_key = self:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
+    local item_key, subitem_key = self:Get_ItemSubItem_Names_from_Enum(item_enum, subitem_enum)
 
     if item_key == nil or subitem_key == nil then return nil end
 
@@ -461,10 +440,11 @@ function INFO:Get_Subitem_Value(item_enum, subitem_enum, subitem_value_key)
 
 end
 
-function INFO:Calculate_Decomop_Scale(item_enum, subitem_enum, go_scale)
+function INFO:Calculate_Decompositon_Scale(item_enum, subitem_enum, go_scale)
 
     -- get width and height of subitem, then scale by scale
     -- then scale that to width of decomp particle fx
+
     local obj_dimensions = self:Get_Subitem_Value(item_enum, subitem_enum, "object_dimensions")
 
     if obj_dimensions == nil then return nil end
@@ -472,6 +452,14 @@ function INFO:Calculate_Decomop_Scale(item_enum, subitem_enum, go_scale)
     local go_size_x = obj_dimensions.x * go_scale
 
     return go_size_x/CV_Effect_Decomp_Dimensions.x
+
+end
+
+function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
+
+    --returns i-based table of strings of possible sprite options if set
+
+    return self:Get_Subitem_Value(item_enum, subitem_enum, "sprite_options")
 
 end
 

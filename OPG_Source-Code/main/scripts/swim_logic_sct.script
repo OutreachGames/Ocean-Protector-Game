@@ -881,7 +881,7 @@ local function GO_Setup(self)
 	self.is_alive = true
 
 	-- calculate and set size of death decomposition
-	self.Obj_DecompEffect_Scale = INFO:Calculate_Decomop_Scale(self.Obj_Item_Enum, self.Obj_Subitem_Enum, self.scale_magnitude) or 1
+	self.Obj_DecompEffect_Scale = INFO:Calculate_Decompositon_Scale(self.Obj_Item_Enum, self.Obj_Subitem_Enum, self.scale_magnitude) or 1
 
 end
 
