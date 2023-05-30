@@ -187,7 +187,10 @@ local function Player_Data_Table_GetEntry(self, item_key, i_key)
 	end
 
 	local item_data = self.player_data_tbl.item_data_tbl[item_key]
-	if item_data == nil then return nil end
+	if item_data == nil then
+		print("Note: item key input of <"..tostring(item_key).."> to function 'Player Data Table Get Entry' is not matched with entry, returning nil")
+		return nil
+	end
 
 	-- default i-key is last in list
 	i_key = i_key or #item_data
@@ -341,25 +344,30 @@ end
 -- HUD Process: Update Items 
 local function Player_Data_Table_RunScoreInput(self, score_tbl)
 
-	-- takes a table with item keys and new delta scores and updates item scores accordingly
+	-- takes a table with item keys and new delta scores and updates item scores in player save table accordingly
+
+	-- do this by looping through things we can track and checking if they match what is in table with same string key
 	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
-		-- get previous entry and new delta 
+		-- get previous entry
 		local previous_entry = Player_Data_Table_GetEntry(self, k_itemname) or {}
 		local previous_score = previous_entry.item_tracker_score or 0
+
+		-- get new delta by matching our known trackers with the score update table provided to function
 		local update_score = score_tbl[k_itemname] or score_tbl[1]
 
-		-- if nil then skip this one
-		if update_score == nil then
-			return
+		--print("Update score for new entry for "..tostring(k_itemname).." is <"..tostring(update_score).."> \n")
+
+		-- only update if not nil
+		-- remember, do not return or break since it breakds the loop matching
+		if update_score ~= nil then
+			-- new value is previous + delta 
+			local new_value = previous_score + update_score
+
+			Player_Data_Table_AddEntry(self, k_itemname, new_value)
+
+			-- update hud data trackers done on click
 		end
-		--print("Update score for new entry is <"..tostring(update_score).."> \n")
 
-		-- new value is previous + delta 
-		local new_value = previous_score + update_score
-
-		Player_Data_Table_AddEntry(self, k_itemname, new_value)
-
-		-- update hud data trackers done on click
 	end
 
 end
