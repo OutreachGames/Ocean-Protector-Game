@@ -295,7 +295,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 100.0
+    x: 170.0
     y: 50.0
     z: 0.0
     w: 1.0
@@ -308,7 +308,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Data"
+  text: "Data Log"
   font: "font_header_bold"
   id: "gnode_header_text"
   xanchor: XANCHOR_NONE

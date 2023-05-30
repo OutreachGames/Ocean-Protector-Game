@@ -318,7 +318,9 @@ STR.Screenplay = {
             extra_text = "",
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action("special_setup_pH_buoy")
-            end,
+                --#TODO update pH values with values from NOAA
+                STR.CV.outcome_functions.func_option_outcome_dynamic({item_ph = -0.5})
+            end
         },
 
         user_lesson_15b = {
@@ -331,11 +333,9 @@ STR.Screenplay = {
             display_text = "Let's measure the current pH of the ocean water. \n\nTo do this, click 'Continue' then click on the buoy on the left side of the screen.",
             debrief_text = {
                 "",
-                item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in our data log, which you can access at any time by clicking the arrow button above 'Ocean pH' in the right hand side screen. "}
-            },
-            outcome_result_func = function()
-                STR.CV.outcome_functions.func_option_outcome_dynamic({item_ph = -0.5}) --#TODO update pH values with values from NOAA
-            end,
+                --#TODO update pH values with values from NOAA
+                item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in your Data Log, which you can access at any time by clicking the arrow button above 'Ocean pH' in the right hand side screen. "}
+            }
         },
 
         user_lesson_15c = {
@@ -348,7 +348,19 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Ocean acidification hurts life throughout our oceans, including us. "..n..n.."For example, many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes."..n..n,
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
-            extra_text = ""
+            extra_text = "",
+            outcome_result_func = function()
+                --recall we already decreased pH
+                local initial_decreases = {
+                    item_plankton = -0.5,
+                    item_coral = -0.5,
+                    item_mollusks = -0.5,
+                    item_fish = -0.5,
+                    item_crustaceans = -0.5,
+                    item_humans = -0.5,
+                }
+                STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases)
+            end
         },
 
         -- Show animation of determinantal effects 
@@ -388,22 +400,7 @@ STR.Screenplay = {
                 item_humans = {
                     "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. \n\nAlso, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered.\n\n\n"
                 }
-            },
-            extra_text = {
-                ""
-            },
-            outcome_result_func = function()
-                --recall we already decreased pH
-                local initial_decreases = {
-                    item_plankton = -0.5,
-                    item_coral = -0.5,
-                    item_mollusks = -0.5,
-                    item_fish = -0.5,
-                    item_crustaceans = -0.5,
-                    item_humans = -0.5,
-                }
-                STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases)
-            end
+            }
         },
 
         user_lesson_18 = {
