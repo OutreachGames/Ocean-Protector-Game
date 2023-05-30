@@ -776,7 +776,7 @@ STR.Screenplay = {
     s05_decisions_character_role = {
 
         --#TODO: add view and click stages after each choice
-        --#TODO: fix sizing animation
+        --#TODO: fix sizing animation?
 
         -- Run role decisions
 

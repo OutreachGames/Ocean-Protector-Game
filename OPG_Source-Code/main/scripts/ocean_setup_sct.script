@@ -1148,7 +1148,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	-- set spawn position, possibly offscreen
 	local spanwn_pos = vmath.vector3(waypoint1_pos_x, waypoint1_pos_y, pos_tbl.z)
 	if spawn_offscreen then
-		--#TODO 
+		--#TODO deal with new swimmers joining school in random position
 		--  find way to deal with swimming in from offscreen to join current direction of school, 
 		--  or stop all school at wp1
 		--  also find way to get offscreen swimmer caught up with school but then slowed down

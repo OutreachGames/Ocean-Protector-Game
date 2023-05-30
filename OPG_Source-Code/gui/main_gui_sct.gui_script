@@ -171,7 +171,7 @@ local function Player_Data_Table_AddEntry(self, item_key, new_value)
 
 	self.player_data_tbl.item_data_tbl[item_key][num_items + 1] = {item_tracker_score = new_value}
 
-	--print("Adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> \n")
+	print("Adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> \n")
 
 end
 
@@ -198,18 +198,27 @@ end
 
 
 -- HUD Screen: Data (Section 1)
-local function Screen_Data_TrackerUpdate(self)
+local function Screen_Data_TrackerUpdate(self, item_name)
 
-	-- update progress bars
+	-- update progress bar(s), default is to update all bars
 
 	local constant = self.hud_data_constant
-	for k_itemname,v_gui_groupname in pairs(constant.goo_group_names) do
+	local items_to_update
+	if item_name ~= nil then
+		items_to_update = {}
+		items_to_update[item_name] = true
+	else
+		items_to_update = constant.goo_group_names
+	end
 
-		--#TODO enable controller if key exists and has data, otherwise disable
-		--# recall that updating works on disabled node
+	--#TODO enable controller if key exists and has data, otherwise disable
+	--# recall that updating works on disabled node
+
+	for k_itemname,_ in pairs(items_to_update) do
+		local gui_groupname = constant.goo_group_names[k_itemname]
 
 		-- get nodes
-		local max_length_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_max_x)
+		local max_length_node = gui.get_node(gui_groupname..constant.basename_item_bar_max_x)
 		local max_size = gui.get_size(max_length_node)
 		-- get health percent
 		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
@@ -219,11 +228,10 @@ local function Screen_Data_TrackerUpdate(self)
 		end
 		local new_health_value = EXT:math_clamp(entry_health_data.item_tracker_score, 0, 1)
 		-- set as new size
-		local progress_node = gui.get_node(v_gui_groupname..constant.basename_item_bar_progress)
+		local progress_node = gui.get_node(gui_groupname..constant.basename_item_bar_progress)
 		local new_size = gui.get_size(progress_node)
 		new_size.x = EXT:math_round(max_size.x * new_health_value, 0)
 		gui.set_size(progress_node, new_size)
-
 	end
 
 end
@@ -291,8 +299,10 @@ local function Player_Data_Table_Reset(self, update_hud_screens)
 	-- plus hud screens may not have been initialized yet
 
 	-- if this is running in repeat game section though, might need to re-run data item reset?
+	-- doesn't look like this function is only run when starting or repeating game
 	if update_hud_screens then
 		Screen_Data_TrackerUpdate(self)
+
 		if self.hud_plot_dynamic.screen_isactive then
 			Plot_Data_TrackerUpdate(self, self.hud_plot_dynamic.active_itemkey)
 		end
@@ -333,7 +343,7 @@ end
 -- HUD Process: Update Items 
 local function Player_Data_Table_RunScoreInput(self, score_tbl)
 
-	-- takes a table and updates scores accordingly
+	-- takes a table with item keys and new delta scores and updates item scores accordingly
 	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
 		-- get previous entry and new delta 
 		local previous_entry = Player_Data_Table_GetEntry(self, k_itemname) or {}
@@ -344,18 +354,13 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl)
 		-- new value is previous + delta 
 		local new_value = previous_score + update_score
 
-		--#TODO testing only, remove when done testing!
+		--#TODO remove when done testing!
 		new_value = math.random(80,120)/100 * new_value
 
 		Player_Data_Table_AddEntry(self, k_itemname, new_value)
 
-		-- #TODO update where this goes, since usually won't seen updates until clicking on item
-		-- update trackers
-		Screen_Data_TrackerUpdate(self)
+		-- update hud data trackers done on click
 	end
-
-	-- #TODO update where this goes, since usually won't seen updates until clicking on item
-	Plot_Data_TrackerUpdate(self, self.hud_plot_dynamic.active_itemkey)
 
 end
 
@@ -1390,6 +1395,7 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 
 	local debrief_text = item_click_info.show_debrief_text
 	if first_time_click then
+
 		-- check and run debrief 
 		if debrief_text ~= nil and debrief_text ~= "" then
 			local run_sizing_debrief = true
@@ -1399,27 +1405,32 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 			Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
 		end
 
+		-- check and run item data view enabling
 		local enable_goto = item_click_info.enable_goto_in_data_hud_onclick
 		local enable_item = item_click_info.enable_item_in_data_hud_onclick
 		if enable_goto or enable_item then
-			-- check and run item data view enabling
 			-- failsafe to enable data gauge if not enabled
 			if not self.hud_data_dynamic.screen_isactive then
 				Screen_Data_Reset(self, true)
 			end
 
 			ScreenData_ToggleItem(self, item_name, true, enable_item, enable_goto)
-
 		end
+
+		-- update score tracker variables 
+		Screen_Data_TrackerUpdate(self, item_name)
+
+		-- set data hud color
+		Items_Set_Color_Tracking(self, item_name, false)
 
 	end
 
 	-- run pop-up display
 	if item_click_info.show_data_popup then
+		-- update graph plot
 		print("Item clicked and opening graph for <"..item_name..">. \n ")
 		--#TODO FIXME!
-		--Screen_Plot_Reset(self, true, true, item_name)
-		--Items_Set_Color_Tracking(self, item_name, false)
+		--Screen_Plot_Reset(self, true, true, item_name) --also runs plot update
 	end
 
 end
@@ -1446,7 +1457,6 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 
 	-- might have clicked on more then one item if they were overlapping so
 	-- find first group that is on 'needs to be clicked' list but not on 'is clicked list'
-	--#TODO ad conct list of names to display
 	local valid_item_clicked
 	local back_item_clicked
 	local not_allowed_click
