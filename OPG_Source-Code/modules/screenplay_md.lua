@@ -331,11 +331,17 @@ STR.Screenplay = {
             display_text = "Let's measure the current pH of the ocean water. \n\nTo do this, click 'Continue' then click on the buoy on the left side of the screen.",
             debrief_text = {
                 "",
-                item_ph = {"Measuring the pH today we can compare it to our measurements of the past. The current pH is 8.0, which is 30% lower than the pH measured over 150 years ago. "..n..n.."This increase in acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."}
+                item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in our data log, which you can access at any time by clicking the arrow button above 'Ocean pH' in the right hand side screen. "}
             },
             outcome_result_func = function()
-                STR.CV.outcome_functions.func_option_outcome_dynamic({0, item_ph = -0.5}) --#TODO update pH values with values from NOAA
+                STR.CV.outcome_functions.func_option_outcome_dynamic({item_ph = -0.5}) --#TODO update pH values with values from NOAA
             end,
+        },
+
+        user_lesson_15c = {
+            goal_text = "Follow information prompts.",
+            display_text = "When we compare the pH of today's oceans to to pH measurements of the past there is a distinct different."..n..n.."We observe that pH is now 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
+            debrief_text = "This increase in ocean acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 
         user_lesson_16 = {
@@ -357,7 +363,7 @@ STR.Screenplay = {
         user_lesson_17 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Examine how each ocean group has changed under more acidic conditions in our ocean scene.",
-            display_text = "Identify how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. ",
+            display_text = "Identify how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. \n\n\n",
             show_hud_data_popup = true,
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = false,
@@ -389,7 +395,6 @@ STR.Screenplay = {
             outcome_result_func = function()
                 --recall we already decreased pH
                 local initial_decreases = {
-                    0,
                     item_plankton = -0.5,
                     item_coral = -0.5,
                     item_mollusks = -0.5,
