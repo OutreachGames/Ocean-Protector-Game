@@ -354,9 +354,6 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl)
 		-- new value is previous + delta 
 		local new_value = previous_score + update_score
 
-		--#TODO remove when done testing!
-		new_value = math.random(80,120)/100 * new_value
-
 		Player_Data_Table_AddEntry(self, k_itemname, new_value)
 
 		-- update hud data trackers done on click
@@ -423,7 +420,6 @@ local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
 
 	-- reset tracking table
 	self.hud_goals_dynamic.screen_isactive = enabled_setting
-	self.hud_goals_dynamic.is_maximized = true
 
 end
 
@@ -550,7 +546,6 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 
 	-- reset tracking table
 	self.hud_popup_dynamic.screen_isactive = enabled_setting
-	self.hud_popup_dynamic.is_maximized = true
 	self.hud_popup_dynamic.overall_size = size_type or "size_medium"
 
 end
@@ -1122,7 +1117,7 @@ local function Screen_Data_Reset(self, enabled_setting)
 	self.hud_data_dynamic.is_maximized = true
 	self.hud_data_dynamic.goo_items_areactive = true
 
-	-- enable and set bars accordingly
+	-- enable and set data summary bars accordingly
 	Screen_Data_TrackerUpdate(self)
 
 end
@@ -1654,6 +1649,115 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 end
 
+
+-- HUD Screen: Main Menu (Seciton 1)
+local function Screen_MainMenu_Reset(self, enabled_setting, run_sizing)
+
+	-- reset Main Menu screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	-- set enabled status
+	local constant = self.hud_mainmenu_constant
+	local controller_node = gui.get_node(constant.node_controller)
+
+	-- reset tracking table
+	self.hud_mainmenu_dynamic.screen_isactive = enabled_setting
+
+	-- run enabling status and possibly sizing
+	local function func_done(self, node)
+
+		gui.set_enabled(node, enabled_setting)
+
+	end
+
+	if run_sizing then
+		if enabled_setting then
+			func_done(self, controller_node)
+			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+		else
+			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+		end
+	else
+		func_done(self, controller_node)
+	end
+
+end
+
+local function Screen_MainMenu_Initialize(self, enabled_status)
+
+	-- set contants and setup dynamic values and components
+
+	local basename = "hud_startmenu"
+
+	self.hud_mainmenu_constant = nil
+	self.hud_mainmenu_dynamic = nil
+
+	-- set constants
+	self.hud_mainmenu_constant = {
+		hud_basename = basename,
+		node_controller = basename .. "/gnode_controller",
+		goo_game_new_name = basename .. "/group_button_game_new",
+		goo_game_resume_name = basename .. "/group_button_game_resume",
+	}
+
+	-- set dynamics
+	self.hud_mainmenu_dynamic = {}
+	Screen_MainMenu_Reset(self, enabled_status, true)
+
+end
+
+local function Screen_MainMenu_Input(self, action_id, action)
+
+	-- runs 'On Input' for Main Menu screen on HUD
+
+	-- early out if not allowed to use
+	if not self.hud_mainmenu_dynamic.screen_isactive then
+		return
+	end
+
+	local hudinfo = self.hud_mainmenu_constant
+
+	local function func_new_game(button)
+
+		-- handle all the button functionality
+
+		-- set that this screen is no longer interactive
+		local run_sizer = false
+		Screen_MainMenu_Reset(self, false, run_sizer)
+
+		GameLogic_Progress(self)
+
+		--print("New game started!")
+
+	end
+
+	local function func_resume_game(button)
+
+		-- handle all the button functionality
+
+		-- set that this screen is no longer interactive
+		local run_sizer = false
+		Screen_MainMenu_Reset(self, false, run_sizer)
+
+		--#TODO add functionality
+		--print("Game resumed!")
+
+	end
+
+	MY_GOO.button_simple(hudinfo.goo_game_new_name, action_id, action, func_new_game)
+
+	--#TODO add resume game functionality
+	--MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
+
+end
+
+-- HUD Process: More Gameplay
 local function GamePauseToggle_Internal(self)
 
 	-- pause by setting game update factor to 0
@@ -1691,7 +1795,7 @@ end
 
 local function GamePauseToggle_Input(self, action_id, action)
 
-	--#TODO testing remove when done
+	--#TODO remove when done testing
 	if action_id == HSH.control_down and action.released then
 		GamePauseToggle_Internal(self)
 	end
@@ -1728,7 +1832,7 @@ end
 
 local function GameHandleButtonInput(self, action_id, action)
 
-	--#TODO testing remove when done
+	--#TODO remove when done testing
 
 	if not action.released then return end
 
@@ -1745,6 +1849,7 @@ local function GameHandleButtonInput(self, action_id, action)
 	end
 
 end
+
 
 local function GameLogic_Start(self)
 
@@ -1785,10 +1890,8 @@ local function GameLogic_Start(self)
 	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
-	-- kick off first action #TODO update to 4 once done testing
-	timer.delay(0.0, false, function(self)
-		GameLogic_Progress(self)
-	end)
+	-- kick off first action 
+	Screen_MainMenu_Initialize(self, true)
 
 end
 
@@ -1835,6 +1938,8 @@ end
 function on_input(self, action_id, action)
 
 	if not self.input_is_possible then return end
+
+	Screen_MainMenu_Input(self, action_id, action)
 
 	Screen_Decision_Input(self, action_id, action)
 	Screen_Data_Input(self, action_id, action)
