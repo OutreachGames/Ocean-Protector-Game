@@ -334,7 +334,7 @@ STR.Screenplay = {
                 item_ph = {"Measuring the pH today we can compare it to our measurements of the past. The current pH is 8.0, which is 30% lower than the pH measured over 150 years ago. "..n..n.."This increase in acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."}
             },
             outcome_result_func = function()
-                STR.CV.outcome_functions.func_option_outcome_dynamic({0, item_ph = {-0.5}}) --#TODO update pH values with values from NOAA
+                STR.CV.outcome_functions.func_option_outcome_dynamic({0, item_ph = -0.5}) --#TODO update pH values with values from NOAA
             end,
         },
 

@@ -105,7 +105,7 @@ local function Items_Click_Status_Reset(self, items_to_click_info)
 
 	end
 
-	print("Sum to click is "..sum_to_click.."\n")
+	--print("Sum to click is "..sum_to_click.."\n")
 
 end
 
@@ -482,6 +482,33 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 	local constant = self.hud_popup_constant
 	local controller_node = gui.get_node(constant.node_controller)
 
+	-- enable and set text, but only if enabling
+	-- do this before sizing so text sizer can be used
+	if enabled_setting and reset_values then
+		if body_text ~= nil then
+			gui.set_text(gui.get_node(constant.node_text_body), body_text)
+
+			-- also try to auto size if none specified
+			if size_type == nil then
+				local _, counted_newlines = body_text:gsub('\n', '\n')
+				local num_lines_guess = math.max(counted_newlines, #body_text/80)
+				if num_lines_guess > 8 then
+					size_type = "size_large"
+				elseif num_lines_guess > 3 then
+					size_type = "size_medium"
+				else
+					size_type = "size_small"
+				end
+				self.hud_popup_dynamic.overall_size = size_type or "size_medium"
+			end
+
+		end
+		title_text = title_text or "New Information"
+		if title_text ~= nil then
+			gui.set_text(gui.get_node(constant.node_text_title), title_text)
+		end
+	end
+
 	-- run enabling status and possibly sizing
 	local function func_done(self, node)
 
@@ -494,26 +521,13 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			func_done(self, controller_node)
 			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
 
-			--try to auto size if none specified
-			if size_type == nil then
-				local _, counted_newlines = body_text:gsub('\n', '\n')
-				local num_lines_guess = math.max(counted_newlines, #body_text/80)
-				if num_lines_guess > 8 then
-					size_type = "size_large"
-				elseif num_lines_guess > 3 then
-					size_type = "size_medium"
-				else
-					size_type = "size_small"
-				end
-			end
-
 			local y_ranges = {
 				size_small = {250, 119, 108},
 				size_medium = {400, 258, -51},
 				size_large = {600, 468, -251}
 			}
 
-			local yvals = y_ranges[size_type]
+			local yvals = y_ranges[self.hud_popup_dynamic.overall_size]
 
 			local node_body_frame = gui.get_node(constant.node_frame_body)
 			local node_body_text = gui.get_node(constant.node_text_body)
@@ -537,17 +551,7 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 	-- reset tracking table
 	self.hud_popup_dynamic.screen_isactive = enabled_setting
 	self.hud_popup_dynamic.is_maximized = true
-
-	-- enable and set text, but only if enabling
-	if enabled_setting then
-		if body_text ~= nil then
-			gui.set_text(gui.get_node(constant.node_text_body), body_text)
-		end
-		title_text = title_text or "New Information"
-		if title_text ~= nil then
-			gui.set_text(gui.get_node(constant.node_text_title), title_text)
-		end
-	end
+	self.hud_popup_dynamic.overall_size = size_type or "size_medium"
 
 end
 
