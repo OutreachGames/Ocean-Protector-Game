@@ -26,23 +26,16 @@ STR.CV = {
             end
 
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = outcome_tbl_scores})
-
         end,
 
         func_option_outcome_default_good = function() -- (+)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.05}})
-            --return 0.05
-            --item_ph = {}, item_coral = {}, --...
         end,
         func_option_outcome_default_fair = function() -- (0)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.0}})
-            --return 0.0
-            --item_ph = {}, item_coral = {}, --...
         end,
         func_option_outcome_default_bad = function() -- (-)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-0.05}})
-            --return -0.05
-            --item_ph = {}, item_coral = {}, --...
         end,
 
         func_set_role = function(chosen_role_name)

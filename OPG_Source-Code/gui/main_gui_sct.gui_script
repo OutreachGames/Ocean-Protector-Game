@@ -171,7 +171,7 @@ local function Player_Data_Table_AddEntry(self, item_key, new_value)
 
 	self.player_data_tbl.item_data_tbl[item_key][num_items + 1] = {item_tracker_score = new_value}
 
-	print("Adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> \n")
+	print("Adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(num_items + 1).."> \n")
 
 end
 
@@ -211,12 +211,10 @@ local function Screen_Data_TrackerUpdate(self, item_name)
 		items_to_update = constant.goo_group_names
 	end
 
-	--#TODO enable controller if key exists and has data, otherwise disable
 	--# recall that updating works on disabled node
 
 	for k_itemname,_ in pairs(items_to_update) do
 		local gui_groupname = constant.goo_group_names[k_itemname]
-
 		-- get nodes
 		local max_length_node = gui.get_node(gui_groupname..constant.basename_item_bar_max_x)
 		local max_size = gui.get_size(max_length_node)
