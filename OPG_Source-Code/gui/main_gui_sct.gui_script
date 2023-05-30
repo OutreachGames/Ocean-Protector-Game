@@ -1118,6 +1118,35 @@ local function Screen_Data_Reset(self, enabled_setting)
 
 end
 
+local function ScreenData_ToggleItem(self, item_name, toggle_status, update_item, update_goto_button)
+
+	-- sets status of goto button and overall item within Data HUD section
+
+	local hudinfo = self.hud_data_constant
+	local name = hudinfo.goo_group_names[item_name]
+	if name == nil then
+		print("Error: function 'ScreenData ToggleItem' provided with not known item name of <"..tostring(item_name)..">\n")
+		return
+	end
+
+	if toggle_status == nil then
+		toggle_status = false
+	end
+
+	-- update overall item status
+	if update_item then
+		local node_item_controller = gui.get_node(name..hudinfo.basename_item_controller)
+		gui.set_enabled(node_item_controller, toggle_status)
+	end
+
+	-- update goto button status
+	if update_goto_button then
+		local node_gotto_button_core = gui.get_node(name..hudinfo.goo_item_gotograph..hudinfo.basename_item_button_core)
+		gui.set_enabled(node_gotto_button_core, toggle_status)
+	end
+
+end
+
 local function Screen_Data_Initialize(self, enabled_status)
 
 	-- set contants and setup dynamic values and components
@@ -1140,15 +1169,21 @@ local function Screen_Data_Initialize(self, enabled_status)
 		basename_item_bar_progress = "/group_healthbar/gui_frame_progress",
 		basename_item_bar_max_x = "/group_healthbar/tracker_max_length",
 		basename_item_bar_label = "/gnode_body_text",
+		basename_item_button_core = "/gui_button_core",
+		basename_item_controller = "/gnode_controller",
 		goo_group_names = {},
 		goo_group_goto_buttons = {},
 	}
 
-	-- add button strings contcatenated
+	-- add goto graph button strings
+	-- also disable goto buttons and overall items until gameplay adds/reveals them
 	for k,v in pairs(CV_item_groups) do
 		local name = basename .. v.group_name
 		self.hud_data_constant.goo_group_names[k] = name
-		self.hud_data_constant.goo_group_goto_buttons[k] = name .. self.hud_data_constant.goo_item_gotograph
+		local button_name = name .. self.hud_data_constant.goo_item_gotograph
+		self.hud_data_constant.goo_group_goto_buttons[k] = button_name
+		-- disable goto button and overall item for starting out
+		ScreenData_ToggleItem(self, k, false, true, true)
 	end
 
 	-- set dynamics
@@ -1324,9 +1359,12 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 	if gui.is_enabled(data_node_controller, false) and gui.pick_node(data_node_frame, action.x, action.y) then
 		--print("Clicked within data frame, not checking rest...\n")
 		return
-	elseif gui.is_enabled(goals_node_controller, false) and gui.pick_node(goals_node_frame, action.x, action.y) then
+	--elseif gui.is_enabled(goals_node_controller, false) and gui.pick_node(goals_node_frame, action.x, action.y) then
 		--print("Clicked within data frame, not checking rest...\n")
-		return
+		-- no need to worry about goals since they only overlap the boat and just barely and goals as no buttons
+		-- also better to allow clicking through goals so players don't get confused 
+		--   as to why they cannot click the boat when it comes on-screen
+		--return
 	end
 
 	-- if valid ocean click then check if for item selecting or just something simple like bubbles
@@ -1348,19 +1386,38 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 
 	if item_click_info == nil then return end
 
-	-- run debrief display
+	-- run debrief display and item enabling if first click
+
 	local debrief_text = item_click_info.show_debrief_text
-	if first_time_click and debrief_text ~= nil and debrief_text ~= "" then
-		local run_sizing_debrief = true
-		local update_values_to_debrief = true
-		self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
-		self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
-		Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
+	if first_time_click then
+		-- check and run debrief 
+		if debrief_text ~= nil and debrief_text ~= "" then
+			local run_sizing_debrief = true
+			local update_values_to_debrief = true
+			self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
+			self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
+			Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
+		end
+
+		local enable_goto = item_click_info.enable_goto_in_data_hud_onclick
+		local enable_item = item_click_info.enable_item_in_data_hud_onclick
+		if enable_goto or enable_item then
+			-- check and run item data view enabling
+			-- failsafe to enable data gauge if not enabled
+			if not self.hud_data_dynamic.screen_isactive then
+				Screen_Data_Reset(self, true)
+			end
+
+			ScreenData_ToggleItem(self, item_name, true, enable_item, enable_goto)
+
+		end
+
 	end
 
 	-- run pop-up display
 	if item_click_info.show_data_popup then
 		print("Item clicked and opening graph for <"..item_name..">. \n ")
+		--#TODO FIXME!
 		--Screen_Plot_Reset(self, true, true, item_name)
 		--Items_Set_Color_Tracking(self, item_name, false)
 	end
@@ -1651,8 +1708,6 @@ local function On_SpecialAction(self, special_action_name)
 		timer.delay(5, false, GamePause_On)
 	elseif special_action_name == "special_setup_start_goals_gauge" then
 		self.special_setup_goals_hud_enabled = true
-	elseif special_action_name == "special_setup_start_data_gauge" then
-		Screen_Data_Reset(self, true)
 	end
 
 end

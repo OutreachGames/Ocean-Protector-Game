@@ -67,12 +67,12 @@ STR.CV = {
 
     debrief_decision_view = {
         --"Your decision has happened ..." 
-        "Let's observe how that decision affects the ocean. ",
+        "Let's observe how that decision affects our ocean scene. ",
     },
 
     debrief_decision_click = {
         --"The effects of our decision are underway ..." 
-        "Now let's measure and record the status of each group in our data tracker. Click on a member of each group to measure it. ",
+        "Now let's measure and record the status of each group in our data tracker. Click 'Continue' then click on a member of each group to measure it. ",
     }
 
 }
@@ -142,15 +142,14 @@ STR.Screenplay = {
             display_text = "Your new goal is to identify the base of the ocean food-web. \n\nThis current goal is shown on the left side of the screen. \n\nTo complete this goal, click 'Continue' and then click around in the ocean scene until you identify your goal.",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
+            enable_item_in_data_hud_onclick = true,
+            enable_goto_in_data_hud_onclick = false,
             debrief_text = {
                 "",
                 item_plankton = {
                     "Plankton "..n..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..n..ntab.."- Phytoplankton are producers that use sunlight to get energy."..ntab.."- Zooplankton are consumers that eat other plankton to get energy."
                 }
             },
-            outcome_result_func = function()
-                STR.CV.outcome_functions.func_setup_special_action("special_setup_start_data_gauge")
-            end,
             extra_text = ""
         },
 
@@ -160,6 +159,8 @@ STR.Screenplay = {
             display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemeber, click 'Contine' to close this screen then click around the ocean scene to document the consumer groups.\n\n",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
+            enable_item_in_data_hud_onclick = true,
+            enable_goto_in_data_hud_onclick = false,
             debrief_text = {
                 "",
                 item_coral = {
@@ -206,6 +207,8 @@ STR.Screenplay = {
             display_text = "Identify the highest-level consumer in this scene. To do this, click 'Continue' then click on the group you think is the highest consumer. ",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
+            enable_item_in_data_hud_onclick = true,
+            enable_goto_in_data_hud_onclick = false,
             debrief_text = {
                 "",
                 item_humans = {
@@ -322,6 +325,8 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             show_hud_data_popup = true,
             allow_duplicate_clicks = false,
+            enable_item_in_data_hud_onclick = true,
+            enable_goto_in_data_hud_onclick = true,
             goal_text = "Document the current pH of the ocean water.",
             display_text = "Let's measure the current pH of the ocean water. \n\nTo do this, click 'Continue' then click on the buoy on the left side of the screen.",
             debrief_text = {
@@ -355,6 +360,8 @@ STR.Screenplay = {
             display_text = "Identify how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. ",
             show_hud_data_popup = true,
             allow_duplicate_clicks = false,
+            enable_item_in_data_hud_onclick = false,
+            enable_goto_in_data_hud_onclick = true,
             debrief_text = {
                 "",
                 item_plankton = {
@@ -1524,6 +1531,8 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
     local debrief_tbl = ss_info.debrief_text
     local show_data_popup = ss_info.show_hud_data_popup or false
     local allow_dup_clicks = ss_info.allow_duplicate_clicks or false
+    local enable_item = ss_info.enable_item_in_data_hud_onclick or false
+    local enable_goto = ss_info.enable_goto_in_data_hud_onclick or false
 
     local items_tbl = {}
 
@@ -1535,6 +1544,8 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
                     show_debrief_text = self:GetString_from_Tbl_or_Value(v_item_debrieftext),
                     show_data_popup = show_data_popup,
                     allow_duplicate_clicks = allow_dup_clicks,
+                    enable_item_in_data_hud_onclick = enable_item,
+                    enable_goto_in_data_hud_onclick = enable_goto,
                     item_was_clicked = false
                 }
             end
