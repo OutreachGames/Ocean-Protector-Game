@@ -214,7 +214,7 @@ local function Screen_Data_TrackerUpdate(self)
 		-- get health percent
 		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
 		if entry_health_data == nil then
-			print("Error current entry health data for Player Data Table Get Entry is nil, not updating...\n")
+			print("Error current entry health data for 'Player Data Table Get Entry' function is nil, not updating...\n")
 			return
 		end
 		local new_health_value = EXT:math_clamp(entry_health_data.item_tracker_score, 0, 1)
@@ -631,8 +631,6 @@ local function Screen_Popup_Input(self, action_id, action)
 				local progress_to_next_stage = false
 
 				if Loop_CompletionType_is_Primary(self, new_info_loop_type) then
-					local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 					progress_to_next_stage = true
 				elseif Loop_CompletionType_is_Primary(self, STR.CV.goal_completed_types.class_click_items) then
 					if self.items_all_clicked then
@@ -643,6 +641,8 @@ local function Screen_Popup_Input(self, action_id, action)
 				end
 
 				if progress_to_next_stage then
+					local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
+					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
 				end
 			end
@@ -1361,8 +1361,8 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 	-- run pop-up display
 	if item_click_info.show_data_popup then
 		print("Item clicked and opening graph for <"..item_name..">. \n ")
-		Screen_Plot_Reset(self, true, true, item_name)
-		Items_Set_Color_Tracking(self, item_name, false)
+		--Screen_Plot_Reset(self, true, true, item_name)
+		--Items_Set_Color_Tracking(self, item_name, false)
 	end
 
 end
@@ -1536,7 +1536,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	-- get and update goal text
 	local goal_text = STR:Get_Goal_Text(stage_key, substage_key)
 	local run_goal_sizing = not self.hud_goals_dynamic.screen_isactive
-	if self.gameplay_loop_i_key > 1 then
+	if self.special_setup_goals_hud_enabled then
 		Screen_Goals_Reset(self, true, run_goal_sizing, goal_text)
 	end
 
@@ -1556,7 +1556,6 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 	if stage_type == st.class_click_items then
 		-- setup clicking on items
-		--#TODO get clicking items working
 		On_GO_Items_Clicked_Reset(self, true)
 		local items_to_click = STR:Get_Items_to_Click(stage_key, substage_key)
 		Items_Click_Status_Reset(self, items_to_click)
@@ -1581,51 +1580,6 @@ local function GameLogic_Progress(self, i_stage_addition)
 		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
 
 	end
-
-end
-
-local function GameLogic_Start(self)
-
-	-- randomize random generator
-	math.randomseed(socket.gettime())
-
-	MY_GOO.acquire_input()
-
-	msg.post("level_loader#collectionproxy", HSH.msg_builtin_load)
-	self.game_paused = false
-
-	local set_enabled = false
-
-	Initialize_Local_Info_Tbl()
-
-	-- reset save table
-	Player_Data_Table_Reset(self)
-
-	On_GO_Items_Clicked_Reset(self, set_enabled)
-	Screen_Goals_Initialize(self, set_enabled)
-	Screen_Decision_Initialize(self, set_enabled)
-	Screen_Popup_Initialize(self, set_enabled)
-	Screen_Data_Initialize(self, set_enabled)
-	Screen_Plot_Initialize(self, set_enabled)
-
-	-- reset click items tracker
-	Items_Click_Status_Reset(self)
-
-	self.input_is_possible = true
-
-	self.character_role_key = "none"
-	self.gameplay_loop_completion_type_primary = 0
-	self.gameplay_loop_completion_type_secondary = 0
-	self.gameplay_loop_i_key = 0
-
-	-- get stage and substage list in order
-	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
-	self.gameplay_loop_order = STR:GameOrder_CreateTable()
-
-	-- kick off first action #TODO update to 4 once done testing
-	timer.delay(0.0, false, function(self)
-		GameLogic_Progress(self)
-	end)
 
 end
 
@@ -1695,6 +1649,10 @@ local function On_SpecialAction(self, special_action_name)
 		OceanScene_ChangeWeather(self, is_raining, INFO:Get_BaseWave_Direction(), run_coastal_oa_when_done)
 		--start but then pause the game 
 		timer.delay(5, false, GamePause_On)
+	elseif special_action_name == "special_setup_start_goals_gauge" then
+		self.special_setup_goals_hud_enabled = true
+	elseif special_action_name == "special_setup_start_data_gauge" then
+		Screen_Data_Reset(self, true)
 	end
 
 end
@@ -1716,6 +1674,52 @@ local function GameHandleButtonInput(self, action_id, action)
 	if action_id == HSH.control_up then
 		OceanScene_RunCoastalOA(self, 0)
 	end
+
+end
+
+local function GameLogic_Start(self)
+
+	-- randomize random generator
+	math.randomseed(socket.gettime())
+
+	MY_GOO.acquire_input()
+
+	msg.post("level_loader#collectionproxy", HSH.msg_builtin_load)
+	self.game_paused = false
+
+	local set_enabled = false
+
+	Initialize_Local_Info_Tbl()
+
+	-- reset save table
+	Player_Data_Table_Reset(self)
+
+	On_GO_Items_Clicked_Reset(self, set_enabled)
+	Screen_Goals_Initialize(self, set_enabled)
+	Screen_Decision_Initialize(self, set_enabled)
+	Screen_Popup_Initialize(self, set_enabled)
+	Screen_Data_Initialize(self, set_enabled)
+	Screen_Plot_Initialize(self, set_enabled)
+
+	-- reset click items tracker
+	Items_Click_Status_Reset(self)
+
+	self.input_is_possible = true
+
+	self.character_role_key = "none"
+	self.gameplay_loop_completion_type_primary = 0
+	self.gameplay_loop_completion_type_secondary = 0
+	self.gameplay_loop_i_key = 0
+	self.special_setup_goals_hud_enabled = false
+
+	-- get stage and substage list in order
+	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
+	self.gameplay_loop_order = STR:GameOrder_CreateTable()
+
+	-- kick off first action #TODO update to 4 once done testing
+	timer.delay(0.0, false, function(self)
+		GameLogic_Progress(self)
+	end)
 
 end
 

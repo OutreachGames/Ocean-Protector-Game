@@ -37,6 +37,8 @@ local function Move_to_Position_X(self, x_location, delete_self_when_done)
 	local function func_stop_bubbles(self)
 
 		particlefx.stop("#particlefx", {clear = false})
+		sound.stop("#sound")
+
 		if delete_self_when_done then
 			msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
 		end

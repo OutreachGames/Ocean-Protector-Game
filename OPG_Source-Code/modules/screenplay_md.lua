@@ -32,17 +32,17 @@ STR.CV = {
         func_option_outcome_default_good = function() -- (+)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.05}})
             --return 0.05
-            --item_pH = {}, item_coral = {}, --...
+            --item_ph = {}, item_coral = {}, --...
         end,
         func_option_outcome_default_fair = function() -- (0)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.0}})
             --return 0.0
-            --item_pH = {}, item_coral = {}, --...
+            --item_ph = {}, item_coral = {}, --...
         end,
         func_option_outcome_default_bad = function() -- (-)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-0.05}})
             --return -0.05
-            --item_pH = {}, item_coral = {}, --...
+            --item_ph = {}, item_coral = {}, --...
         end,
 
         func_set_role = function(chosen_role_name)
@@ -123,6 +123,9 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans.",
             debrief_text = "Let's observe all the life in this specific ocean scene, starting with the base of the food-web.",
+            outcome_result_func = function()
+                STR.CV.outcome_functions.func_setup_special_action("special_setup_start_goals_gauge")
+            end,
             extra_text = ""
         },
 
@@ -136,7 +139,7 @@ STR.Screenplay = {
         user_lesson_02 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
-            display_text = "Your new goal is to identify the base of the ocean food-web. \n\nThis current goal is shown on the left side of the screen. \n\nTo complete this goal, click 'Continue' and then click around in the ocean scene until you identify your goal.", -- \nNote, your current goal is shown on the left side of the screen.
+            display_text = "Your new goal is to identify the base of the ocean food-web. \n\nThis current goal is shown on the left side of the screen. \n\nTo complete this goal, click 'Continue' and then click around in the ocean scene until you identify your goal.",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             debrief_text = {
@@ -145,13 +148,16 @@ STR.Screenplay = {
                     "Plankton "..n..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..n..ntab.."- Phytoplankton are producers that use sunlight to get energy."..ntab.."- Zooplankton are consumers that eat other plankton to get energy."
                 }
             },
+            outcome_result_func = function()
+                STR.CV.outcome_functions.func_setup_special_action("special_setup_start_data_gauge")
+            end,
             extra_text = ""
         },
 
         user_lesson_03 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document four groups of consumers in our ocean food-web.",
-            display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemeber, click 'Contine' to close this screen then click around the ocean scene to complete your goal.\n\n",
+            display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemeber, click 'Contine' to close this screen then click around the ocean scene to document the consumer groups.\n\n",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             debrief_text = {
@@ -197,11 +203,13 @@ STR.Screenplay = {
         user_lesson_05 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the highest-level consumer in our ocean food-web.",
-            display_text = "Identify the highest-level component in the ocean food-web by clicking.",
+            display_text = "Identify the highest-level consumer in this scene. To do this, click 'Continue' then click on the group you think is the highest consumer. ",
+            show_hud_data_popup = false,
+            allow_duplicate_clicks = false,
             debrief_text = {
                 "",
                 item_humans = {
-                    "Humans"..n.."Though humans do not live in the water we rely heavily on our oceans!"
+                    "Humans"..n.."Though humans do not live in the water we rely heavily on our oceans! Our actions also have big impacts on ocean water and ocean life! "
                 }
             },
             extra_text = ""
@@ -209,7 +217,7 @@ STR.Screenplay = {
 
         user_lesson_06 = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans affect us all, even those of us who live far away from the coast. Billions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. In addition, our oceans help cycle nutrients and are even a source of new medicines.",
+            display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nBillions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nIn addition, our oceans help cycle nutrients and are even a source of new medicines.\n\n",
             debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
             extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer."
         },
@@ -218,7 +226,7 @@ STR.Screenplay = {
 
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
-            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. This threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. ",
+            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n",
             debrief_text = "Why is this happening? Let's find out.",
             extra_text = ""
         },
@@ -236,14 +244,14 @@ STR.Screenplay = {
 
         user_lesson_09 = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans absorb much of this excess carbon dioxide gas. This excess carbon dioxide gase mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.",
+            display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gase mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.\n\n",
             debrief_text = nil,
             extra_text = ""
         },
 
         user_lesson_10a = {
             goal_text = "Follow information prompts.",
-            display_text = "Acidification can also occur due to nutrient pollution. Excess nutrient pollution can come from human sources such as fertilizers, soaps, and industrial waste.",
+            display_text = "Acidification can also occur due to nutrient pollution. \n\nExcess nutrient pollution can come from human sources such as fertilizers, soaps, and industrial waste.\n\n",
             debrief_text = nil,
             extra_text = ""
         },
@@ -267,7 +275,7 @@ STR.Screenplay = {
             debrief_text = nil,
             outcome_result_func = function()
                 --#TODO add delay to progress function
-                STR.CV.outcome_functions.func_setup_special_action("special_setup_coastal_oa_1")
+                --STR.CV.outcome_functions.func_setup_special_action("special_setup_coastal_oa_1")
             end,
             extra_text = ""
         },
@@ -276,7 +284,7 @@ STR.Screenplay = {
 
         user_lesson_12 = {
             goal_text = "Follow information prompts.",
-            display_text = "These phytoplankton populations grow extremely quickly but then die and decompose in large amounts. The decopmosing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.",
+            display_text = "These phytoplankton populations grow extremely quickly but then die and decompose in large amounts. \n\nThe decopmosing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
             debrief_text = nil,
             extra_text = ""
         },
@@ -312,14 +320,16 @@ STR.Screenplay = {
 
         user_lesson_15b = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
+            show_hud_data_popup = true,
+            allow_duplicate_clicks = false,
             goal_text = "Document the current pH of the ocean water.",
             display_text = "Let's measure the current pH of the ocean water. \n\nTo do this, click 'Continue' then click on the buoy on the left side of the screen.",
             debrief_text = {
                 "",
-                item_pH = {"Measuring the pH today we can compare it to our measurements of the past. The current pH is 8.0, which is 30% lower than the pH measured over 150 years ago. "..n..n.."This increase in acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."}
+                item_ph = {"Measuring the pH today we can compare it to our measurements of the past. The current pH is 8.0, which is 30% lower than the pH measured over 150 years ago. "..n..n.."This increase in acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."}
             },
             outcome_result_func = function()
-                STR.CV.outcome_functions.func_option_outcome_dynamic({0, item_pH = {-0.5}}) --#TODO update pH values with values from NOAA
+                STR.CV.outcome_functions.func_option_outcome_dynamic({0, item_ph = {-0.5}}) --#TODO update pH values with values from NOAA
             end,
         },
 
@@ -343,25 +353,27 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Examine how each ocean group has changed under more acidic conditions in our ocean scene.",
             display_text = "Identify how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. ",
+            show_hud_data_popup = true,
+            allow_duplicate_clicks = false,
             debrief_text = {
                 "",
                 item_plankton = {
-                    "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to get as nutrients or build their protective shells as easily. Plankton are the food base for many animals, so unhealthy or unbalanced plankton populations can affect the entire food-web.",
+                    "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to get as nutrients or build their protective shells as easily. \n\nPlankton are the food base for many animals, so unhealthy or unbalanced plankton populations can affect the entire food-web.\n\n\n",
                 },
                 item_coral = {
-                    "Coral"..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons. Also, unhealthy corals are more likely to become diseased and die. Many reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web."
+                    "Coral"..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons. Also, unhealthy corals are more likely to become diseased and die. \n\nMany reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web.\n\n\n"
                 },
                 item_mollusks = {
-                    "Mollusks"..n.."As ocean water increases in acidity, mollusks may have a much more difficult time building their protective shells, and less will survive. A decrease in mollusk populations can upset nutrient cycling in the ocean and provide less food to animals that rely on them, including humans."
+                    "Mollusks"..n.."As ocean water increases in acidity, mollusks may have a much more difficult time building their protective shells, and less will survive. \n\nA decrease in mollusk populations can upset nutrient cycling in the ocean and provide less food to animals that rely on them, including humans.\n\n\n"
                 },
                 item_fish = {
-                    "Fish"..n.."Increased ocean acidity reduces fish size and populations. Some fish grow slower while others have more difficulty avoiding predators, and less will survive. Lower fish populations negatively affect many animals that rely on them for food, including humans."
+                    "Fish"..n.."Increased ocean acidity reduces fish size and populations. Some fish grow slower while others have more difficulty avoiding predators, and less will survive. \n\nLower fish populations negatively affect many animals that rely on them for food, including humans.\n\n\n"
                 },
                 item_crustaceans = {
-                    "Crusteaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. Lower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected."
+                    "Crusteaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. \n\nLower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected.\n\n\n"
                 },
                 item_humans = {
-                    "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. Also, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered.\n\n\n"
+                    "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. \n\nAlso, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered.\n\n\n"
                 }
             },
             extra_text = {

@@ -1457,12 +1457,13 @@ local function SetupBuoy(self, hide_buoy)
 
 	-- starts looping buoy movment and adds to tracker table as way to measure pH
 
+	local buoy_list_key = INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key
+
 	if hide_buoy then
 		local hide_rot = 35
 		go.set("/ph_buoy/go_rope", "euler.z", hide_rot)
-	else
-		local buoy_list_key = INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key
 		Spawned_ResetAll(self, buoy_list_key, true)
+	else
 		Spawned_AddObject(self, buoy_list_key, "/ph_buoy/go_clickme")
 		-- reposition to proper spot then float back and forth
 		local og_rot = 0
