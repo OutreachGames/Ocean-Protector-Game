@@ -604,7 +604,7 @@ local function Screen_Popup_Input(self, action_id, action)
 		local reset_values = true
 		Screen_Popup_Reset(self, false, run_sizing, reset_values)
 
-		print("Continue Button was pressed")
+		--print("Continue Button was pressed")
 
 		local new_info_loop_type = STR.CV.goal_completed_types.class_new_information
 
@@ -846,7 +846,7 @@ local function Screen_Decision_Input(self, action_id, action)
 				gui.set_color(gui.get_node(Info.goo_option_names[v_otherindex]..Info.goo_option_label_basename), MY_GOO.COLOR_TEXT_UNSELECTED)
 			end
 
-			print("radio "..index.." selected")
+			--print("radio "..index.." selected")
 		end
 
 		local function func_radio_1(radio)
@@ -891,7 +891,7 @@ local function Screen_Decision_Input(self, action_id, action)
 		local reset_values = true
 		Screen_Decision_Reset(self, false, run_sizer, reset_values)
 
-		print("Submit Button was pressed")
+		--print("Submit Button was pressed")
 
 		local loop_type = STR.CV.goal_completed_types.class_decisison
 
@@ -1094,7 +1094,7 @@ local function Screen_Plot_Input(self, action_id, action)
 		local run_sizer = false
 		Screen_Plot_Reset(self, false, run_sizer)
 
-		print("Exit Button was pressed")
+		--print("Exit Button was pressed")
 
 	end
 
@@ -1252,7 +1252,7 @@ local function Screen_Data_Input(self, action_id, action)
 		self.hud_data_dynamic.goo_items_areactive = is_now_maximized
 		self.hud_data_dynamic.is_maximized = is_now_maximized
 
-		print("Sizer was toggled. Is now maximized is "..tostring(is_now_maximized))
+		--print("Sizer was toggled. Is now maximized is "..tostring(is_now_maximized))
 
 	end
 
@@ -1270,7 +1270,7 @@ local function Screen_Data_Input(self, action_id, action)
 
 		Screen_Plot_Reset(self, true, needs_expanding, table_key)
 
-		print("Goto button was pressed for "..table_key)
+		--print("Goto button was pressed for "..table_key)
 
 	end
 
@@ -1432,7 +1432,7 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 	-- run pop-up display
 	if item_click_info.show_data_popup then
 		-- update graph plot
-		print("Item clicked and opening graph for <"..item_name..">. \n ")
+		--print("Item clicked and opening graph for <"..item_name..">. \n ")
 		--#TODO FIXME!
 		--Screen_Plot_Reset(self, true, true, item_name) --also runs plot update
 	end
@@ -1505,7 +1505,7 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 	-- if this was last on list then set variable that all are done
 	if self.items_that_were_clicked_sum >= self.items_that_need_clicked_sum then
 		self.items_all_clicked = true
-		print("All items that need to be clicked were clicked. \n")
+		--print("All items that need to be clicked were clicked. \n")
 	end
 
 	-- finish process to click on and save data on items
