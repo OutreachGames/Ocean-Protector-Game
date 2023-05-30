@@ -1,5 +1,12 @@
     --#TODOs Master List- 
 
+    -- pause menu has black 1x1 gui square over screen
+    -- add time delay to next stage progression
+    -- add bunch of new lines to make info box large then add images 
+    -- also add stages to say "now lets view how this looks in our ocean scene"
+    -- add front that can move through quickly as option to coastal OA, 
+    --   also has clouds that hit sun and add timed ocean water color and sky fade
+
     -- hide data graph and items until enabled in screenplay
     -- add stage to click on all items to measure them?
     -- show OA effect with timer in screenplay

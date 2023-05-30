@@ -1687,7 +1687,7 @@ end
 
 local function On_SpecialAction(self, special_action_name)
 
-	if special_action_name == "special_setup_first_boat" then
+	if special_action_name == "special_setup_first_boat" or special_action_name == "special_setup_pH_buoy" then
 		msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = special_action_name})
 	elseif special_action_name == "special_setup_coastal_oa_1" then
 		local is_raining = true

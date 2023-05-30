@@ -295,23 +295,39 @@ STR.Screenplay = {
 
         user_lesson_14 = {
             goal_text = "Follow information prompts.",
-            display_text = "We use the pH scale to measure how acidic or basic something is. The pH scale runs from 0 to 14, with 7 being a neutral pH. Values above 7 are basic, or alkaline. Values below 7 are acidic.",
-            debrief_text = nil,
-            extra_text = "Did you know?"..n.."pH is measured on a logarithmic scale, where small changes have increasingly greater eﬀects."..n.." For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic a pH of 7."
+            display_text = "We use the pH scale to measure how acidic or basic something is. \n\nThe pH scale runs from 0 to 14, with 7 being a neutral pH. \n\nValues above 7 are basic, or alkaline. Values below 7 are acidic.\n\n",
+            debrief_text = "pH is measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic a pH of 7. \n\n",
+            extra_text = "",
         },
 
-        user_lesson_15 = {
+        user_lesson_15a = {
             goal_text = "Follow information prompts.",
-            display_text = "We have measured the pH of our oceans for over 150 years and found that the water has become more acidic by about 30% during that time.",
-            debrief_text = "This increase in acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels.",
-            extra_text = ""
+            display_text = "We have measured the pH of our oceans for over 150 years. \n\n In the past we measured the pH manually. In the modern day, we commonly measure pH remotely using ocean buoys. \n\n",
+            debrief_text = "",
+            extra_text = "",
+            outcome_result_func = function()
+                STR.CV.outcome_functions.func_setup_special_action("special_setup_pH_buoy")
+            end,
+        },
+
+        user_lesson_15b = {
+            goal_completed_type = STR.CV.goal_completed_types.class_click_items,
+            goal_text = "Document the current pH of the ocean water.",
+            display_text = "Let's measure the current pH of the ocean water. \n\nTo do this, click 'Continue' then click on the buoy on the left side of the screen.",
+            debrief_text = {
+                "",
+                item_pH = {"Measuring the pH today we can compare it to our measurements of the past. The current pH is 8.0, which is 30% lower than the pH measured over 150 years ago. "..n..n.."This increase in acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."}
+            },
+            outcome_result_func = function()
+                STR.CV.outcome_functions.func_option_outcome_dynamic({0, item_pH = {-0.5}}) --#TODO update pH values with values from NOAA
+            end,
         },
 
         user_lesson_16 = {
             goal_text = "Follow information prompts.",
-            display_text = "Ocean acidification hurts life throughout our oceans, including us.",
-            debrief_text = "Let's observe how this increase in ocean acidity has hurt each animal group in our ocean scene.",
-            extra_text = "Did you know?"..n.."Many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes. "
+            display_text = "Ocean acidification hurts life throughout our oceans, including us. "..n..n.."For example, many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes."..n..n,
+            debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
+            extra_text = ""
         },
 
         -- Show animation of determinantal effects 
@@ -325,8 +341,8 @@ STR.Screenplay = {
 
         user_lesson_17 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
-            goal_text = "Examine how each animal group has changed under more acidic conditions in our ocean scene.",
-            display_text = "Identify each component of the food-web has changed under more acidic oceans by clicking.",
+            goal_text = "Examine how each ocean group has changed under more acidic conditions in our ocean scene.",
+            display_text = "Identify how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. ",
             debrief_text = {
                 "",
                 item_plankton = {
@@ -352,7 +368,17 @@ STR.Screenplay = {
                 ""
             },
             outcome_result_func = function()
-                STR.CV.outcome_functions.func_option_outcome_dynamic({-0.5})
+                --recall we already decreased pH
+                local initial_decreases = {
+                    0,
+                    item_plankton = -0.5,
+                    item_coral = -0.5,
+                    item_mollusks = -0.5,
+                    item_fish = -0.5,
+                    item_crustaceans = -0.5,
+                    item_humans = -0.5,
+                }
+                STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases)
             end
         },
 

@@ -1453,17 +1453,25 @@ local function SetupBoat(self, boat_type_name)
 
 end
 
-local function SetupBuoy(self)
+local function SetupBuoy(self, hide_buoy)
 
 	-- starts looping buoy movment and adds to tracker table as way to measure pH
 
-	-- float back and forth
-	go.animate("/ph_buoy/go_rope", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTQUAD, 3)
-	go.animate("/ph_buoy/go_body", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -3, go.EASING_INOUTSINE, 3)
-
-	local buoy_list_key = INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key
-	Spawned_ResetAll(self, buoy_list_key, true)
-	Spawned_AddObject(self, buoy_list_key, "/ph_buoy/go_clickme")
+	if hide_buoy then
+		local hide_rot = 35
+		go.set("/ph_buoy/go_rope", "euler.z", hide_rot)
+	else
+		local buoy_list_key = INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key
+		Spawned_ResetAll(self, buoy_list_key, true)
+		Spawned_AddObject(self, buoy_list_key, "/ph_buoy/go_clickme")
+		-- reposition to proper spot then float back and forth
+		local og_rot = 0
+		local setup_time = 3
+		local float_loop_start = setup_time + 0.2
+		go.animate("/ph_buoy/go_rope", "euler.z", go.PLAYBACK_ONCE_FORWARD, og_rot, go.EASING_OUTSINE, setup_time)
+		go.animate("/ph_buoy/go_rope", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTQUAD, 3, float_loop_start)
+		go.animate("/ph_buoy/go_body", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -3, go.EASING_INOUTSINE, 3, float_loop_start)
+	end
 
 end
 
@@ -1680,8 +1688,8 @@ local function SceneStart(self)
 	-- setup weather (after animals for some reason...)
 	Setup_Weather(self, true)
 
-	-- setup buoy
-	SetupBuoy(self)
+	-- setup buoy by first just hiding it
+	SetupBuoy(self, true)
 
 	-- play sounds 
 	sound.play("sound_controller#sound_underwater", {delay = 0, gain = 0.15, pan = 0, speed = 1.0})
@@ -1696,6 +1704,8 @@ local function On_SpecialAction(self, special_action_name)
 
 	if special_action_name == "special_setup_first_boat" then
 		SetupBoat(self)
+	elseif special_action_name == "special_setup_pH_buoy" then
+		SetupBuoy(self)
 	end
 
 end
