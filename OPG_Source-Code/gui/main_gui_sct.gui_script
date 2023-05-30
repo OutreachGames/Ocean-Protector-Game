@@ -38,7 +38,7 @@ local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
 	local data_info = self.hud_data_constant
 	local item_base_groupname = data_info.goo_group_names[item_name]
 	if item_base_groupname == nil then
-		print("Error item name of <"..tostring(item_name).."> is not present in HUD Data Constant table ...\n")
+		print("Error: Item name of <"..tostring(item_name).."> is not present in HUD Data Constant table ...\n")
 		return
 	end
 
@@ -171,7 +171,7 @@ local function Player_Data_Table_AddEntry(self, item_key, new_value)
 
 	self.player_data_tbl.item_data_tbl[item_key][num_items + 1] = {item_tracker_score = new_value}
 
-	print("Adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(num_items + 1).."> \n")
+	print("TRK: adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(num_items + 1).."> \n")
 
 end
 
@@ -180,10 +180,10 @@ local function Player_Data_Table_GetEntry(self, item_key, i_key)
 	-- gets an i-based entry from player save table for given item key and i-key
 
 	if self.player_data_tbl == nil then
-		print("Error: Unable to get entry in player data table because player data table does not exist \n")
+		print("Error: unable to get entry in player data table because player data table does not exist \n")
 	end
 	if self.player_data_tbl.item_data_tbl == nil then
-		print("Error: Unable to get entry in item data table of player data table because item data table does not exist \n")
+		print("Error: unable to get entry in item data table of player data table because item data table does not exist \n")
 	end
 
 	local item_data = self.player_data_tbl.item_data_tbl[item_key]
@@ -221,7 +221,7 @@ local function Screen_Data_TrackerUpdate(self, item_name)
 		-- get health percent
 		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
 		if entry_health_data == nil then
-			print("Error current entry health data for 'Player Data Table Get Entry' function is nil, not updating...\n")
+			print("Error: current entry health data for 'Player Data Table Get Entry' function is nil, not updating...\n")
 			return
 		end
 		local new_health_value = EXT:math_clamp(entry_health_data.item_tracker_score, 0, 1)
@@ -1005,7 +1005,7 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 	-- set the axis and labels depending on the specified item group
 	local item_info = CV_item_groups[item_group_key]
 	if item_info == nil then
-		print("Error, the following key does not exist in the item groups list: "..item_group_key.."\n")
+		print("Error: the following key does not exist in the item groups list: "..item_group_key.."\n")
 		return
 	end
 
@@ -1600,7 +1600,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 
 	if stage_key == nil or substage_key == nil then
-		print("Game loop is completed! \n")
+		print("TRK: Game loop is completed! \n")
 		return
 	end
 
@@ -1623,7 +1623,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	self.gameplay_loop_completion_type_primary = stage_type
 	self.gameplay_loop_completion_type_secondary = stage_type
 
-	print("Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
+	print("  TRK: Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
 
 	if stage_type == st.class_click_items then
 		-- setup clicking on items
