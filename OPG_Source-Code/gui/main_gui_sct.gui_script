@@ -30,85 +30,6 @@ local function Initialize_Local_Info_Tbl()
 
 end
 
-local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
-
-	-- set color in data view for color and bar
-
-	--"hud_data/group_item_ph/gnode_controller"
-	local data_info = self.hud_data_constant
-	local item_base_groupname = data_info.goo_group_names[item_name]
-	if item_base_groupname == nil then
-		print("Error: Item name of <"..tostring(item_name).."> is not present in HUD Data Constant table ...\n")
-		return
-	end
-
-	local color_text, color_bar
-
-	if needs_to_be_clicked then
-		color_text = MY_GOO.COLOR_NEEDS_SELECTED
-		color_bar = MY_GOO.COLOR_NEEDS_SELECTED
-	else
-		color_text = MY_GOO.COLOR_TEXT_DEFAULT
-		color_bar = MY_GOO.COLOR_DEFAULT
-	end
-
-	gui.set_color(gui.get_node(item_base_groupname..data_info.basename_item_bar_progress), color_bar)
-	gui.set_color(gui.get_node(item_base_groupname..data_info.basename_item_bar_label), color_text)
-
-end
-
-local function Items_Click_Status_Reset(self, items_to_click_info)
-
-	-- update tracker lists of what items need to be clicked and which items have been clicked
-
-	self.items_all_clicked = true
-
-	self.items_that_need_clicked_list = nil
-	self.items_that_need_clicked_list = {}
-
-	self.items_that_need_clicked_sum = 0
-	self.items_that_were_clicked_sum = 0
-
-	-- default is reset all items
-	if items_to_click_info == "all_items_need_clicked" then
-		--print("Default arg used, all items are going to be required to be clicked on...\n")
-		items_to_click_info = {}
-		for k,_ in pairs(CV_item_groups) do
-			items_to_click_info[k] = {
-				item_name = k,
-				show_debrief_text = "",
-				show_data_popup = nil,
-				allow_duplicate_clicks = false,
-				item_was_clicked = false
-			}
-		end
-	end
-
-	-- if there are items to add to 'needs click' list then add them
-	-- also save that we have not clicked them all yet
-	local sum_to_click = 0
-	if type(items_to_click_info) == "table" then
-
-		self.items_that_need_clicked_list = items_to_click_info
-
-		-- count up items and set color
-		for k_itemname,_ in pairs(items_to_click_info) do
-			sum_to_click = sum_to_click + 1
-			Items_Set_Color_Tracking(self, k_itemname, true)
-		end
-
-		-- saved click tracker variables
-		if sum_to_click > 0 then
-			self.items_all_clicked = false
-			self.items_that_need_clicked_sum = sum_to_click
-		end
-
-	end
-
-	--print("Sum to click is "..sum_to_click.."\n")
-
-end
-
 local function Get_Current_Stage_and_Substage(self)
 
 	-- returns two string values for current stage and substage
@@ -201,6 +122,123 @@ end
 
 
 -- HUD Screen: Data (Section 1)
+local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
+
+	-- set color in data view for color and bar
+
+	--"hud_data/group_item_ph/gnode_controller"
+	local hudinfo = self.hud_data_constant
+	local item_base_groupname = hudinfo.goo_group_names[item_name]
+	if item_base_groupname == nil then
+		print("Error: Item name of <"..tostring(item_name).."> is not present in HUD Data Constant table ...\n")
+		return
+	end
+
+	local color_text, color_bar
+
+	if needs_to_be_clicked then
+		color_text = MY_GOO.COLOR_NEEDS_SELECTED
+		color_bar = MY_GOO.COLOR_NEEDS_SELECTED
+	else
+		color_text = MY_GOO.COLOR_TEXT_DEFAULT
+		color_bar = MY_GOO.COLOR_DEFAULT
+	end
+
+	--update colors, goto button, health bar, and item label 
+	local huditem_name = hudinfo.goo_group_names[item_name]
+	if huditem_name == nil then
+		print("Error: function 'Items SetColor Tracking' provided with not known item name of <"..tostring(item_name)..">\n")
+		return
+	end
+	local node_gotto_button_core = gui.get_node(huditem_name..hudinfo.goo_item_gotograph..hudinfo.basename_item_button_core)
+	gui.set_color(node_gotto_button_core, color_bar)
+
+	gui.set_color(gui.get_node(item_base_groupname..hudinfo.basename_item_bar_progress), color_bar)
+	gui.set_color(gui.get_node(item_base_groupname..hudinfo.basename_item_bar_label), color_text)
+
+end
+
+local function ScreenData_ToggleItem(self, item_name, toggle_status, update_item, update_goto_button)
+
+	-- sets status of goto button and overall item within Data HUD section
+
+	local hudinfo = self.hud_data_constant
+	local huditem_name = hudinfo.goo_group_names[item_name]
+	if huditem_name == nil then
+		print("Error: function 'ScreenData ToggleItem' provided with not known item name of <"..tostring(item_name)..">\n")
+		return
+	end
+
+	if toggle_status == nil then
+		toggle_status = false
+	end
+
+	-- update overall item status
+	if update_item then
+		local node_item_controller = gui.get_node(huditem_name..hudinfo.basename_item_controller)
+		gui.set_enabled(node_item_controller, toggle_status)
+	end
+
+	-- update goto button status
+	if update_goto_button then
+		local node_gotto_button_core = gui.get_node(huditem_name..hudinfo.goo_item_gotograph..hudinfo.basename_item_button_core)
+		gui.set_enabled(node_gotto_button_core, toggle_status)
+	end
+
+end
+
+local function Items_Click_Status_Reset(self, items_to_click_info)
+
+	-- update tracker lists of what items need to be clicked and which items have been clicked
+
+	self.items_all_clicked = true
+
+	self.items_that_need_clicked_list = nil
+	self.items_that_need_clicked_list = {}
+
+	self.items_that_need_clicked_sum = 0
+	self.items_that_were_clicked_sum = 0
+
+	-- default is reset all items
+	if items_to_click_info == "all_items_need_clicked" then
+		--print("Default arg used, all items are going to be required to be clicked on...\n")
+		items_to_click_info = {}
+		for k,_ in pairs(CV_item_groups) do
+			items_to_click_info[k] = {
+				item_name = k,
+				show_debrief_text = "",
+				show_data_popup = nil,
+				allow_duplicate_clicks = false,
+				item_was_clicked = false
+			}
+		end
+	end
+
+	-- if there are items to add to 'needs click' list then add them
+	-- also save that we have not clicked them all yet
+	local sum_to_click = 0
+	if type(items_to_click_info) == "table" then
+
+		self.items_that_need_clicked_list = items_to_click_info
+
+		-- count up items and set color
+		for k_itemname,_ in pairs(items_to_click_info) do
+			sum_to_click = sum_to_click + 1
+			Items_Set_Color_Tracking(self, k_itemname, true)
+		end
+
+		-- saved click tracker variables
+		if sum_to_click > 0 then
+			self.items_all_clicked = false
+			self.items_that_need_clicked_sum = sum_to_click
+		end
+
+	end
+
+	--print("Sum to click is "..sum_to_click.."\n")
+
+end
+
 local function Screen_Data_TrackerUpdate(self, item_name)
 
 	-- update progress bar(s), default is to update all bars
@@ -236,6 +274,7 @@ local function Screen_Data_TrackerUpdate(self, item_name)
 	end
 
 end
+
 
 -- HUD Screens: Graph Plot (Section 1)
 local function Plot_Data_TrackerUpdate(self, item_key)
@@ -467,7 +506,7 @@ local function Screen_Goals_Input(self, action_id, action)
 		return
 	end
 
-	local Info = self.hud_goals_constant
+	local Hud_info = self.hud_goals_constant
 
 end
 
@@ -599,7 +638,7 @@ local function Screen_Popup_Input(self, action_id, action)
 		return
 	end
 
-	local Info = self.hud_popup_constant
+	local Hud_info = self.hud_popup_constant
 
 	local function func_continue(button)
 
@@ -666,7 +705,7 @@ local function Screen_Popup_Input(self, action_id, action)
 
 	end
 
-	MY_GOO.button_simple(Info.goo_continue_name, action_id, action, func_continue)
+	MY_GOO.button_simple(Hud_info.goo_continue_name, action_id, action, func_continue)
 
 end
 
@@ -825,7 +864,7 @@ local function Screen_Decision_Input(self, action_id, action)
 		return
 	end
 
-	local Info = self.hud_decision_constant
+	local Hud_info = self.hud_decision_constant
 	local num_options = self.hud_decision_dynamic.number_answer_options
 
 	local function func_radiogroup(local_group_id, local_action_id, local_action)
@@ -839,17 +878,17 @@ local function Screen_Decision_Input(self, action_id, action)
 			-- set the selected index and allow the submit button
 			self.hud_decision_dynamic.goo_option_selected = index
 			self.hud_decision_dynamic.goo_sumbit_isactive = true
-			gui.set_color(gui.get_node(Info.node_submit_box_name), MY_GOO.COLOR_DEFAULT)
-			gui.set_color(gui.get_node(Info.node_submit_text_name), MY_GOO.COLOR_TEXT_DEFAULT)
+			gui.set_color(gui.get_node(Hud_info.node_submit_box_name), MY_GOO.COLOR_DEFAULT)
+			gui.set_color(gui.get_node(Hud_info.node_submit_text_name), MY_GOO.COLOR_TEXT_DEFAULT)
 
 			-- visually highlight which choice was selected
 			local other_nodes = {1, 2, 3}
 			other_nodes[index] = nil
 
 			-- note that trying to use the bright white makes text darker actually
-			gui.set_color(gui.get_node(Info.goo_option_names[index]..Info.goo_option_label_basename), MY_GOO.COLOR_TEXT_DEFAULT)
+			gui.set_color(gui.get_node(Hud_info.goo_option_names[index]..Hud_info.goo_option_label_basename), MY_GOO.COLOR_TEXT_DEFAULT)
 			for _,v_otherindex in pairs(other_nodes) do
-				gui.set_color(gui.get_node(Info.goo_option_names[v_otherindex]..Info.goo_option_label_basename), MY_GOO.COLOR_TEXT_UNSELECTED)
+				gui.set_color(gui.get_node(Hud_info.goo_option_names[v_otherindex]..Hud_info.goo_option_label_basename), MY_GOO.COLOR_TEXT_UNSELECTED)
 			end
 
 			--print("radio "..index.." selected")
@@ -869,16 +908,16 @@ local function Screen_Decision_Input(self, action_id, action)
 		end
 
 		if num_options >= 1 then
-			MY_GOO.radio(Info.goo_option_names[1], local_group_id, local_action_id, local_action, func_radio_1)
+			MY_GOO.radio(Hud_info.goo_option_names[1], local_group_id, local_action_id, local_action, func_radio_1)
 		end
 		if num_options >= 2 then
-			MY_GOO.radio(Info.goo_option_names[2], local_group_id, local_action_id, local_action, func_radio_2)
+			MY_GOO.radio(Hud_info.goo_option_names[2], local_group_id, local_action_id, local_action, func_radio_2)
 		end
 		if num_options >= 3 then
-			MY_GOO.radio(Info.goo_option_names[3], local_group_id, local_action_id, local_action, func_radio_3)
+			MY_GOO.radio(Hud_info.goo_option_names[3], local_group_id, local_action_id, local_action, func_radio_3)
 		end
 		if num_options >= 4 then
-			MY_GOO.radio(Info.goo_option_names[4], local_group_id, local_action_id, local_action, func_radio_4)
+			MY_GOO.radio(Hud_info.goo_option_names[4], local_group_id, local_action_id, local_action, func_radio_4)
 		end
 
 	end
@@ -940,7 +979,7 @@ local function Screen_Decision_Input(self, action_id, action)
 	MY_GOO.radiogroup("radiogroup_answer_options", action_id, action, func_radiogroup)
 
 	if self.hud_decision_dynamic.goo_sumbit_isactive then
-		MY_GOO.button_simple(Info.goo_submit_name, action_id, action, func_submit)
+		MY_GOO.button_simple(Hud_info.goo_submit_name, action_id, action, func_submit)
 	end
 
 end
@@ -1090,7 +1129,7 @@ local function Screen_Plot_Input(self, action_id, action)
 		return
 	end
 
-	local Info = self.hud_plot_constant
+	local Hud_info = self.hud_plot_constant
 
 	local function func_exit(button)
 
@@ -1104,7 +1143,7 @@ local function Screen_Plot_Input(self, action_id, action)
 
 	end
 
-	MY_GOO.button_simple(Info.goo_exit_name, action_id, action, func_exit)
+	MY_GOO.button_simple(Hud_info.goo_exit_name, action_id, action, func_exit)
 
 end
 
@@ -1130,35 +1169,6 @@ local function Screen_Data_Reset(self, enabled_setting)
 
 	-- enable and set data summary bars accordingly
 	Screen_Data_TrackerUpdate(self)
-
-end
-
-local function ScreenData_ToggleItem(self, item_name, toggle_status, update_item, update_goto_button)
-
-	-- sets status of goto button and overall item within Data HUD section
-
-	local hudinfo = self.hud_data_constant
-	local name = hudinfo.goo_group_names[item_name]
-	if name == nil then
-		print("Error: function 'ScreenData ToggleItem' provided with not known item name of <"..tostring(item_name)..">\n")
-		return
-	end
-
-	if toggle_status == nil then
-		toggle_status = false
-	end
-
-	-- update overall item status
-	if update_item then
-		local node_item_controller = gui.get_node(name..hudinfo.basename_item_controller)
-		gui.set_enabled(node_item_controller, toggle_status)
-	end
-
-	-- update goto button status
-	if update_goto_button then
-		local node_gotto_button_core = gui.get_node(name..hudinfo.goo_item_gotograph..hudinfo.basename_item_button_core)
-		gui.set_enabled(node_gotto_button_core, toggle_status)
-	end
 
 end
 
@@ -1216,7 +1226,7 @@ local function Screen_Data_Input(self, action_id, action)
 		return
 	end
 
-	local Info = self.hud_data_constant
+	local Hud_info = self.hud_data_constant
 
 	-- sizer button
 	local function func_button_sizer(button)
@@ -1235,14 +1245,14 @@ local function Screen_Data_Input(self, action_id, action)
 		-- if is not currently maximized then expand
 
 		local is_now_maximized
-		local subcontroller_node = gui.get_node(Info.node_subcontroller)
+		local subcontroller_node = gui.get_node(Hud_info.node_subcontroller)
 
-		local frame_node = gui.get_node(Info.node_frame_core)
+		local frame_node = gui.get_node(Hud_info.node_frame_core)
 
 		if self.hud_data_dynamic.is_maximized then
 			-- run shrink and disable
 			is_now_maximized = false
-			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.node_min_length)).y, gui.EASING_INBACK, 0.4)
+			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Hud_info.node_min_length)).y, gui.EASING_INBACK, 0.4)
 			gui.animate(subcontroller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.35, 0, func_shrink)
 		else
 			-- run expand and enable
@@ -1250,7 +1260,7 @@ local function Screen_Data_Input(self, action_id, action)
 			-- needs to be enabled to have size change, 
 			-- but since default is large, will already be set small when disabled
 			gui.set_enabled(subcontroller_node, true)
-			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Info.node_max_length)).y, gui.EASING_OUTBACK, 0.4)
+			gui.animate(frame_node, "size.y", gui.get_size(gui.get_node(Hud_info.node_max_length)).y, gui.EASING_OUTBACK, 0.4)
 			gui.animate(subcontroller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.35, 0, func_expand)
 		end
 
@@ -1262,7 +1272,7 @@ local function Screen_Data_Input(self, action_id, action)
 
 	end
 
-	MY_GOO.checkbox_sizer(Info.goo_minimizer, action_id, action, func_button_sizer)
+	MY_GOO.checkbox_sizer(Hud_info.goo_minimizer, action_id, action, func_button_sizer)
 
 
 	-- goto buttons
@@ -1303,14 +1313,38 @@ local function Screen_Data_Input(self, action_id, action)
 	end
 
 	if self.hud_data_dynamic.goo_items_areactive then
-		local gotos = Info.goo_group_goto_buttons
-		MY_GOO.button_goto(gotos.item_ph, action_id, action, func_goto_ph)
-		MY_GOO.button_goto(gotos.item_plankton, action_id, action, func_goto_plankton)
-		MY_GOO.button_goto(gotos.item_coral, action_id, action, func_goto_coral)
-		MY_GOO.button_goto(gotos.item_fish, action_id, action, func_goto_fish)
-		MY_GOO.button_goto(gotos.item_mollusks, action_id, action, func_goto_mollusks)
-		MY_GOO.button_goto(gotos.item_crustaceans, action_id, action, func_goto_crustaceans)
-		MY_GOO.button_goto(gotos.item_humans, action_id, action, func_goto_humans)
+		local gotos = Hud_info.goo_group_goto_buttons
+		local needs_clicked = self.items_that_need_clicked_list
+
+		local button_helper = {
+			item_ph = func_goto_ph,
+			item_plankton = func_goto_plankton,
+			item_coral = func_goto_coral,
+			item_fish = func_goto_fish,
+			item_mollusks = func_goto_mollusks,
+			item_crustaceans = func_goto_crustaceans,
+			item_humans = func_goto_humans
+		}
+
+		--goal is to look like this
+		--if not self.items_that_need_clicked_list.item_ph.item_was_clicked then
+			--MY_GOO.button_goto(gotos.item_ph, action_id, action, func_goto_ph)
+		--end
+
+		-- only allow clicking on goto if item was clicked/selected and updated 
+
+		for k_itemname, v_func_goto in pairs(button_helper) do
+			local button_available = true
+			if needs_clicked ~= nil and needs_clicked[k_itemname] ~= nil then
+				if not needs_clicked[k_itemname].item_was_clicked then
+					button_available = false
+				end
+			end
+			if button_available then
+				MY_GOO.button_goto(gotos[k_itemname], action_id, action, v_func_goto)
+			end
+		end
+
 	end
 
 end
