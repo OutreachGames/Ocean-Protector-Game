@@ -367,7 +367,11 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl)
 		-- remember, do not return or break since it breakds the loop matching
 		if update_score ~= nil then
 			-- new value is previous + delta 
-			local new_value = previous_score + update_score
+			-- clamp new entry between 0 and 1 so that next entry might have a visible positive effect
+			-- IE if we did not clamp this may happend:
+			--   new value gets -1.2 so that even a positive action next time does not show any benefit
+			--   also visible bars are already clamped between 0 and 1 anyway
+			local new_value = EXT:math_clamp(previous_score + update_score, 0, 1)
 
 			Player_Data_Table_AddEntry(self, k_itemname, new_value)
 

@@ -1378,9 +1378,9 @@ STR.Screenplay = {
         key_basename_default = "user_lesson_",
 
         user_lesson_21a = {
-            goal_text = "Review the outcomes of your decisions. ",
+            goal_text = "Review outcomes of your decisions. ",
             display_text = "You have completed your work! Let's analyze the final health of each group of life in our ocean scene. ",
-            debrief_text = nil, --#TODO add debrief review here
+            debrief_text = "Outcome summary: ", --#TODO add debrief review here
             extra_text = ""
         },
 
@@ -1388,17 +1388,21 @@ STR.Screenplay = {
         -- life to evaluate how each has changed due to their cumulative decisions and outcomes. 
 
         user_lesson_21 = {
-            goal_text = "Review the summary of game. ",
+            goal_text = "Review summary. ",
             display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! "..n..n.."We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part, then together we can help protect our oceans! "..n..n,
             debrief_text = nil,
         },
 
         user_lesson_22 = {
-            --#TODO this could just be an info screen that brings up a 'Rerun Game' or 'Review Outcomes' buttons in main menu
+            -- this could just be an info screen that brings up a 'Rerun Game' or 'Review Outcomes' buttons in main menu
+            -- having submit button allows not accidentally hitting replay button and is similar to what players have seen
+            -- also allows for using existing logic
             goal_completed_type = STR.CV.goal_completed_types.class_decisison,
             goal_text = "Select end game option.",
             question_prompt = {
-                "You have now completed the game! You can now choose to review your outcomes again, view additional NOAA resources, or rerun the game and try to improve your score."
+                "You have now completed the game! You can now choose to review your outcomes again, view additional NOAA resources, or rerun the game." 
+                -- 
+                --..n..n.."Rerunning the game will allow you to select a character of your choice again and allow you to try and improve your score."..n..n
             },
             answer_options = {
                 user_choice_1 = {
@@ -1408,20 +1412,20 @@ STR.Screenplay = {
                     text_debrief = nil,
                     outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
                 },
-                --#TODO think about adding option to just do another character along with quiz
+                --#TODO think about adding option to just do another character along with quiz?
                 user_choice_2 = {
                     text_display = {
                         "Review the outcomes of your decisions again. After reviewing your outcomes you will be returned to this option screen. "
                     },
-                    text_debrief = nil, --#TODO add debrief review here along with loop to go back to this screen
+                    text_debrief = "Outcome summary: ", --#TODO add debrief review here along with loop to go back to this screen
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
                     text_display = {
-                        "To learn more check out these great resources from NOAA! Note, this will open a new, seperate web page. After clicking 'Submit' with this option you will be returned to this screen."
+                        "To learn more check out these great resources from NOAA! After reviewing your outcomes you will be returned to this option screen. "
                     },
-                    text_debrief = nil, --#TODO add debrief review here along with loop to go back to this screen
+                    text_debrief = "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, seperate web page. Click 'Continue' to go back to the end game options screen. ", --#TODO add NOAA link here
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
