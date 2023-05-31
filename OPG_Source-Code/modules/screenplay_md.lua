@@ -691,13 +691,15 @@ STR.Screenplay = {
         user_lesson_19 = {
             goal_text = "Follow information prompts.",
             display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans. ",
-            debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening.",
+            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas emissions will help prevent further ocean acidifcation."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n,
+            -- OLDER: 
+            --  debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n,
             extra_text = ""
         },
 
         user_lesson_20 = {
             goal_text = "Follow information prompts.",
-            display_text = "Let's now choose a specific character role and work to reduce the impacts of ocean acidification.",
+            display_text = "Let's now choose a specific character role and work to reduce the impacts of ocean acidification with specific decisions.",
             debrief_text = nil,
             extra_text = ""
         },
@@ -1376,46 +1378,54 @@ STR.Screenplay = {
         key_basename_default = "user_lesson_",
 
         user_lesson_21a = {
-            goal_text = "Follow information prompts.",
-            --#TODO: add the following after the first sentence: "This completion is saved so you can examine it again later."
+            goal_text = "Review the outcomes of your decisions. ",
             display_text = "You have completed your work! Let's analyze the final health of each group of life in our ocean scene. ",
-            debrief_text = nil,
+            debrief_text = nil, --#TODO add debrief review here
             extra_text = ""
-        },
-
-        user_lesson_21b = {
-            goal_completed_type = STR.CV.goal_completed_types.class_decisison,
-            goal_text = "Select which option you would prefer.",
-            question_prompt = {
-                "You have now completed the game! You now have the choice to restart the game and try to improve your score and choose a different character."
-            },
-            answer_options = {
-                user_choice_1 = {
-                    text_display = {
-                        "Restart and redo the entire game. "
-                    },
-                    text_debrief = nil,
-                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
-                },
-                user_choice_2 = {
-                    text_display = {
-                        "Complete the game and view the last screen. "
-                    },
-                    text_debrief = nil,
-                    repeat_question_decision = true,
-                    outcome_result_func = STR.CV.outcome_functions.option_empty
-                },
-            },
         },
 
         -- Users will examine the final summary and graphs of each group of 
         -- life to evaluate how each has changed due to their cumulative decisions and outcomes. 
 
-        user_lesson_22 = {
-            goal_text = "Follow information prompts.",
-            display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part, then together we can help protect our oceans! ",
+        user_lesson_21 = {
+            goal_text = "Review the summary of game. ",
+            display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! "..n..n.."We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part, then together we can help protect our oceans! "..n..n,
             debrief_text = nil,
-            extra_text = "For more information on ocean acidification check out these resources from NOAA. "
+        },
+
+        user_lesson_22 = {
+            --#TODO this could just be an info screen that brings up a 'Rerun Game' or 'Review Outcomes' buttons in main menu
+            goal_completed_type = STR.CV.goal_completed_types.class_decisison,
+            goal_text = "Select end game option.",
+            question_prompt = {
+                "You have now completed the game! You can now choose to review your outcomes again, view additional NOAA resources, or rerun the game and try to improve your score."
+            },
+            answer_options = {
+                user_choice_1 = {
+                    text_display = {
+                        "Go through the game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
+                    },
+                    text_debrief = nil,
+                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                },
+                --#TODO think about adding option to just do another character along with quiz
+                user_choice_2 = {
+                    text_display = {
+                        "Review the outcomes of your decisions again. After reviewing your outcomes you will be returned to this option screen. "
+                    },
+                    text_debrief = nil, --#TODO add debrief review here along with loop to go back to this screen
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_3 = {
+                    text_display = {
+                        "To learn more check out these great resources from NOAA! Note, this will open a new, seperate web page. After clicking 'Submit' with this option you will be returned to this screen."
+                    },
+                    text_debrief = nil, --#TODO add debrief review here along with loop to go back to this screen
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
         },
 
         -- Run game end
