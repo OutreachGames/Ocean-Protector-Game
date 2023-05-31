@@ -317,39 +317,6 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 
 end
 
---HUD Process: Reset Player Data Table
-local function Player_Data_Table_Reset(self, update_hud_screens)
-
-	-- resets player data
-
-	self.player_data_tbl = nil
-	self.player_data_tbl = {}
-	self.player_data_tbl.item_data_tbl = {}
-
-	-- go through item keys and initialize table and add first entry of fully healthy
-	for k_itemname,_ in pairs(CV_item_groups) do
-		self.player_data_tbl.item_data_tbl[k_itemname] = {}
-		Player_Data_Table_AddEntry(self, k_itemname, 1.0)
-	end
-
-	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
-	-- the init function intializes the plot and data screens, 
-	-- and each of this initialization functions run the reset function for each
-	-- which runs the health bar reset to whatever the value in this health tracker table is
-	-- plus hud screens may not have been initialized yet
-
-	-- if this is running in repeat game section though, might need to re-run data item reset?
-	-- doesn't look like this function is only run when starting or repeating game
-	if update_hud_screens then
-		Screen_Data_TrackerUpdate(self)
-
-		if self.hud_plot_dynamic.screen_isactive then
-			Plot_Data_TrackerUpdate(self, self.hud_plot_dynamic.active_itemkey)
-		end
-	end
-
-end
-
 
 -- HUD Process: Observe Items (Section 1)
 local function On_GO_Items_Clicked_Reset(self, enabled_setting)
@@ -1165,7 +1132,7 @@ local function Screen_Data_Reset(self, enabled_setting)
 	-- reset tracking table
 	self.hud_data_dynamic.screen_isactive = enabled_setting
 	self.hud_data_dynamic.is_maximized = true
-	self.hud_data_dynamic.goo_items_areactive = true
+	self.hud_data_dynamic.goo_items_areactive = enabled_setting
 
 	-- enable and set data summary bars accordingly
 	Screen_Data_TrackerUpdate(self)
@@ -1345,6 +1312,43 @@ local function Screen_Data_Input(self, action_id, action)
 			end
 		end
 
+	end
+
+end
+
+
+--HUD Process: Reset Player Data Table
+local function Player_Data_Table_Reset(self, update_hud_screens)
+
+	-- resets player data
+
+	self.player_data_tbl = nil
+	self.player_data_tbl = {}
+	self.player_data_tbl.item_data_tbl = {}
+
+	-- go through item keys and initialize table and add first entry of fully healthy
+	for k_itemname,_ in pairs(CV_item_groups) do
+		self.player_data_tbl.item_data_tbl[k_itemname] = {}
+		Player_Data_Table_AddEntry(self, k_itemname, 1.0)
+	end
+
+	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
+	-- the init function intializes the plot and data screens, 
+	-- and each of this initialization functions run the reset function for each
+	-- which runs the health bar reset to whatever the value in this health tracker table is
+	-- plus hud screens may not have been initialized yet
+
+	-- if this is running in repeat game section though, might need to re-run data item reset?
+	-- doesn't look like accounting for that case is needed as 
+	-- this function is only run when starting or repeating game
+	if update_hud_screens then
+
+		Screen_Data_Reset(self, false)
+		-- ^^ recall data rest internally calls Screen_Data_TrackerUpdate( function 
+
+		if self.hud_plot_dynamic.screen_isactive then
+			Plot_Data_TrackerUpdate(self, self.hud_plot_dynamic.active_itemkey)
+		end
 	end
 
 end

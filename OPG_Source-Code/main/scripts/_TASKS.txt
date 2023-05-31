@@ -7,8 +7,6 @@
     -- add front that can move through quickly as option to coastal OA, 
     --   also has clouds that hit sun and add timed ocean water color and sky fade
 
-    -- hide data graph and items until enabled in screenplay
-    -- add stage to click on all items to measure them?
     -- show OA effect with timer in screenplay
     -- at end change goal to press button to restart or exit browser if done
 
