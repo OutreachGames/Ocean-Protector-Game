@@ -1449,7 +1449,9 @@ STR.Screenplay = {
                     text_display = {
                         "Review the outcomes of your decisions again. After reviewing your outcomes you will be returned to this option screen. "
                     },
-                    text_debrief = "Outcome summary: ", --#TODO add debrief review here along with loop to go back to this screen
+                    text_debrief = {
+                        "Outcome summary: "
+                    }, --#TODO add debrief review here along with loop to go back to this screen
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
@@ -1457,7 +1459,9 @@ STR.Screenplay = {
                     text_display = {
                         "To learn more check out these great resources from NOAA! After reviewing your outcomes you will be returned to this option screen. "
                     },
-                    text_debrief = "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, seperate web page. Click 'Continue' to go back to the end game options screen. ", --#TODO add NOAA link here
+                    text_debrief = {
+                        "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, seperate web page. Click 'Continue' to go back to the end game options screen. "
+                    }, --#TODO add NOAA link here
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
