@@ -37,17 +37,23 @@ STR.CV = {
             return nil
         end,
 
-        func_option_outcome_dynamic = function(outcome_tbl_scores, override_instead_insert)
+        func_option_outcome_dynamic = function(outcome_tbl_scores, override_instead_insert, was_best_choice)
 
             if outcome_tbl_scores == nil then
                 outcome_tbl_scores = {0}
             end
 
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = outcome_tbl_scores, minfo_overrides_instead_of_inserts = override_instead_insert})
+            local send_tbl = {
+                minfo_item_score_update_tbl = outcome_tbl_scores,
+                minfo_overrides_instead_of_inserts = override_instead_insert,
+                minfo_was_best_choice = was_best_choice
+            }
+
+            msg.post("hud#gui", HSH.msg_update_item_value, send_tbl)
         end,
 
         func_option_outcome_default_good = function() -- (+)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.055}})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.055}, minfo_was_best_choice = true})
         end,
         func_option_outcome_default_fair = function() -- (0)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.0}})
@@ -836,6 +842,8 @@ STR.Screenplay = {
 
         key_basename_default = "decision_role_",
 
+        -- recall, total questions asked is calculated dynamically at run time
+
         --[[
         decision_role_default = { -- Default framework
             question_prompt = {
@@ -1507,7 +1515,7 @@ function STR:Get_Completion_Type(stage_key, substage_key)
 
 end
 
-
+-- Goals HUD
 function STR:Get_Goal_Text(stage_key, substage_key)
 
     -- gets the goal text to display
@@ -1520,7 +1528,7 @@ function STR:Get_Goal_Text(stage_key, substage_key)
 
 end
 
-
+-- Popup/NewInfo HUD
 function STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 
     -- gets body text to display
@@ -1564,7 +1572,7 @@ function STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 
 end
 
-
+-- Items to Click
 function STR:Get_Items_to_Click(stage_key, substage_key)
 
     -- gets items that must be clicked for this stage
@@ -1602,7 +1610,7 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
 
 end
 
-
+-- Decision HUD
 function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
 
     -- gets the decision question text to display
@@ -1730,6 +1738,24 @@ function STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, character_
 
 end
 
+function STR:Get_Total_Choices()
+
+    -- gets number of total choices that have a player decision 
+    -- this will be demoninator in 'final grade' tally/score
+
+    local num_player_questions = 0
+
+    for k_substagename,_ in pairs(STR.Screenplay.s05_decisions_character_role) do
+        if string.find(k_substagename, "default") == nil then
+            num_player_questions = num_player_questions + 1
+        end
+    end
+
+    return num_player_questions
+
+end
+
+-- Setup
 function STR:GameOrder_CreateTable()
 
     -- get table with form {{stage_name_key = v_stagename, substage_name_key = v_substageame}, {}}
@@ -1773,5 +1799,6 @@ function STR:GameOrder_CreateTable()
     return full_order_tbl
 
 end
+
 
 return STR
