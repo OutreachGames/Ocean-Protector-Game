@@ -2042,6 +2042,8 @@ local function Game_RunRestart(self, reset_ply_data)
 		-- Recall, 'Game logic progress' function runs after selecting 'Start Game' option in starting menu
 		-- Which will occur if player is starting new game 
 		-- so only run it here if game already initialized (ie repeating game)
+		-- set this to 0 b/c if running repeat as part of debrief screen, 
+		-- then debrief logic will kick in and auto update game progess after this function call
 		GameLogic_Progress(self, 0)
 	end
 

@@ -1665,11 +1665,15 @@ function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
 
     -- randomize table by default
     if decision_info.prevent_option_randomization then
+
         local function func_sort_by_name(a, b) --ABC order, A first
 			return a.user_choice_key < b.user_choice_key
         end
 
-        return table.sort(a_tbl, func_sort_by_name)
+        -- sort table 
+        table.sort(a_tbl, func_sort_by_name)
+
+        return a_tbl
     else
         return EXT:Table_Shuffle(a_tbl)
     end
