@@ -15,6 +15,7 @@ local CV_Logic_Type_Static = 2
 local CV_Logic_Type_Micro = 3
 local CV_Effect_Decomp_Dimensions = {x = 300, y = 80}
 local CV_Base_Wave_Direction = 1
+local CV_Default_Y_Tick_Labels = {"Very Low", "Low", "Moderate", "High", "Very High"}
 
 local INFO = {}
 
@@ -60,10 +61,12 @@ INFO.item_info = {
         item_enum = 1,
         gui_info = {
             group_name = "/group_item_ph",
+            plot_y_axis_label = {"Average Annual Ocean pH"},
+            object_clicked_label = "pH Buoy",
+            plot_y_tick_labels = {{"7.90", "7.95", "8.00", "8.05", "8.10"}}
             -- main source is https://www.nnvl.noaa.gov/view/globaldata.html#ACID
             -- other source is http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
             --   with graph: http://www.igbp.net/images/18.30566fc6142425d6c911240/1384335514265/diagram-ph_projections.gif 
-            plot_y_range = {7.9, 8.1},
             -- visually it doesn't really matter since the bars will proportionally look same regardless of what the labels are
             -- would be neat to have past and then a future prediction plot though? (1870 and then 2100, instead of just 2020 to 2060)
             --   overall that would look the same as just the last data point though...
@@ -90,8 +93,6 @@ INFO.item_info = {
             --2060: 7.92
             --2080: 7.80 (7.84?)
             --2100: 7.80 (7.75?)
-            plot_y_label = "Average Ocean pH",
-            clicked_label = "pH Buoy"
         },
         subitem_info = {
             subitem_buoy = {
@@ -107,9 +108,9 @@ INFO.item_info = {
         item_enum = 2,
         gui_info = {
             group_name = "/group_item_plankton",
-            plot_y_range = {0.0, 1.0},
-            plot_y_label = "Plankton Health",
-            clicked_label = "Plankton"
+            plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
+            plot_y_axis_label = {"Plankton Health"}, --or "Plankton Biodiversity"
+            object_clicked_label = "Plankton"
         },
         item_is_alive = true,
 		--Notes:
@@ -147,9 +148,9 @@ INFO.item_info = {
         item_enum = 3,
         gui_info = {
             group_name = "/group_item_coral",
-            plot_y_range = {0.0, 1.0},
-            plot_y_label = "Coral Health",
-            clicked_label = "Coral"
+            plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
+            plot_y_axis_label = {"Coral Health"},
+            object_clicked_label = "Coral"
         },
         item_is_alive = true,
         subitem_info = {
@@ -208,9 +209,9 @@ INFO.item_info = {
         item_enum = 4,
         gui_info = {
             group_name = "/group_item_mollusks",
-            plot_y_range = {0.0, 1.0},
-            plot_y_label = "Mollusk Health",
-            clicked_label = "Mollusk"
+            plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
+            plot_y_axis_label = {"Mollusk Population Levels"},
+            object_clicked_label = "Mollusk"
         },
         item_is_alive = true,
         subitem_info = {
@@ -271,9 +272,9 @@ INFO.item_info = {
         item_enum = 5,
         gui_info = {
             group_name = "/group_item_fish",
-            plot_y_range = {0.0, 1.0},
-            plot_y_label = "Fish Health",
-            clicked_label = "Fish"
+            plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
+            plot_y_axis_label = {"Fish Population Levels"},
+            object_clicked_label = "Fish"
         },
         item_is_alive = true,
         subitem_info = {
@@ -338,9 +339,9 @@ INFO.item_info = {
         item_enum = 6,
         gui_info = {
             group_name = "/group_item_crustaceans",
-            plot_y_range = {0.0, 1.0},
-            plot_y_label = "Crustacean Health",
-            clicked_label = "Crustacean"
+            plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
+            plot_y_axis_label = {"Crustacean Population Levels"},
+            object_clicked_label = "Crustacean"
         },
         item_is_alive = true,
         subitem_info = {
@@ -388,9 +389,21 @@ INFO.item_info = {
         item_enum = 7,
         gui_info = {
             group_name = "/group_item_humans",
-            plot_y_range = {0.0, 1.0},
-            plot_y_label = "Human Health",
-            clicked_label = "Human"
+            plot_y_tick_labels = {
+                --recall 1 is default
+                CV_Default_Y_Tick_Labels,
+                subitem_captain = {"Very Low", "Low", "Moderate", "High", "Very High"},
+                subitem_ranger = {"Very Low", "Low", "Moderate", "High", "Very High"},
+                subitem_guide = {"Very Low", "Low", "Moderate", "High", "Very High"}
+            },
+            plot_y_axis_label = {
+                --recall 1 is default
+                "Human Health",
+                subitem_captain = "Fishing Bussiness Success",
+                subitem_ranger = "Marine Park Health",
+                subitem_guide = "Tour Bussiness Success"
+            },
+            object_clicked_label = "Human",
         },
         item_is_alive = true,
         subitem_info = {
@@ -421,6 +434,30 @@ INFO.item_info = {
         }
 	}
 }
+
+function INFO:Get_Y_Tick_Labels(item_name, opt_subitem_name)
+
+    local tick_labels_tbl = self.item_info[item_name].gui_info.plot_y_tick_labels
+
+    if opt_subitem_name ~= nil then
+        return tick_labels_tbl[opt_subitem_name] or tick_labels_tbl[1]
+    else
+        return tick_labels_tbl[1]
+    end
+
+end
+
+function INFO:Get_Y_Axis_Label(item_name, opt_subitem_name)
+
+    local axis_label_tbl = self.item_info[item_name].gui_info.plot_y_axis_label
+
+    if opt_subitem_name ~= nil then
+        return axis_label_tbl[opt_subitem_name] or axis_label_tbl[1]
+    else
+        return axis_label_tbl[1]
+    end
+
+end
 
 function INFO:Logic_is_Swimmer(logic_type)
     return logic_type == CV_Logic_Type_Swimmer

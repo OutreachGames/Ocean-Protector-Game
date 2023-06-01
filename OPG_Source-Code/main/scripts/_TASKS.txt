@@ -11,11 +11,9 @@
     -- add bunch of new lines to make info box large then add images 
     -- add higher CO2 mixing with ocean and increasing acidity
 
-    -- also update pH with values from NOAA for start and end
-    -- also add years on graph? if so then add a few blocks and a time jump showing decreases?
-    -- don't make all healths exactly -0.5 for present day start, 
-    --   plankton can be 0.6, humans can be 0.7, fish can 0.4, coral can be 0.3, mollusks can be 0.45, crustaceans can be 0.5, pH is ?? whatever corresponds to range and current day actual number
-    -- get final pH min and year for that min and divide by number of questions to get year labels for graph?
+    -- also add years on graph
+
+    -- maybe at last decision it tallies up all decisions and if all correct it sets to highest (just as failsafe to ensure players can get max)
 
     -- inject view items and click items after each decision
     --   in other words add stages after each decision to say "now lets view how this looks in our ocean scene"

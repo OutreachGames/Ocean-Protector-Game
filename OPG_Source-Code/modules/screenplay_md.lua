@@ -107,6 +107,18 @@ function STR:GetString_from_Tbl_or_Value(tbl_or_str)
 
 end
 
+function STR:Get_Subitem_from_Role(role_keyname)
+
+    local role_to_subitem = {
+        role_captain = "subitem_captain",
+        role_ranger = "subitem_ranger",
+        role_guide = "subitem_guide",
+    }
+
+    return role_to_subitem[role_keyname]
+
+end
+
 STR.Screenplay = {
 
     s01_new_information_start = {

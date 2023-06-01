@@ -1036,22 +1036,28 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 		return
 	end
 
+	-- get subname if human and we have chosen a character
+	local opt_subitem_name
+	if item_group_key == "item_humans" then
+		opt_subitem_name = STR:Get_Subitem_from_Role(self.character_role_key)
+		-- will be nil if has not selected character yet
+	end
+
+	local y_axis_label = INFO:Get_Y_Axis_Label(item_group_key, opt_subitem_name)
+
 	-- set title
-	local title = item_info.plot_y_label .. " through Time"
+	local title = y_axis_label .. " through Time"
 	title = string.gsub(title, " ", "   ")
 	gui.set_text(gui.get_node(constant.node_title_name), title)
 
 	-- set y axis label and ticks
-	local y_label = string.gsub(item_info.plot_y_label, " ", "   ")
+	local y_label = string.gsub(y_axis_label, " ", "   ")
 	gui.set_text(gui.get_node(constant.node_y_label), y_label)
 
 	-- set plot height and toggle
-	local ytick_start = item_info.plot_y_range[1]
-	local ytick_step = (item_info.plot_y_range[2] - ytick_start) / (constant.number_y_ticks - 1)
-
-	for i,v_node_y_tickname in ipairs(constant.node_y_ticks) do
-		local tick_label = string.format("%.2f", ytick_start + (ytick_step*(i-1)))
-		gui.set_text(gui.get_node(v_node_y_tickname), tick_label)
+	local tick_labels = INFO:Get_Y_Tick_Labels(item_group_key, opt_subitem_name)
+	for i_tickindex,v_node_y_tickname in ipairs(constant.node_y_ticks) do
+		gui.set_text(gui.get_node(v_node_y_tickname), tick_labels[i_tickindex])
 	end
 
 	-- enable and set graph bars accordingly
@@ -1066,7 +1072,6 @@ local function Screen_Plot_Initialize(self, enabled_status)
 
 	local basename = "hud_timeplot"
 	local plot_base = "/group_plot"
-	local num_y_ticks = 6
 
 	self.hud_plot_constant = nil
 	self.hud_plot_dynamic = nil
@@ -1078,21 +1083,22 @@ local function Screen_Plot_Initialize(self, enabled_status)
 		goo_exit_name = basename .. "/group_button_submit",
 		node_title_name = basename .. plot_base .. "/gui_text_title",
 		node_y_label = basename .. plot_base .. "/gui_text_label_yaxis",
-		node_y_ticks = {},
-		number_y_ticks = num_y_ticks,
-		max_number_bars = 15,
+		-- add ytick labels
+		-- must match number of labels specified in INFO module!
+		node_y_ticks = {
+			basename..plot_base.."/gui_text_label_ytick_p0",
+			basename..plot_base.."/gui_text_label_ytick_p25",
+			basename..plot_base.."/gui_text_label_ytick_p50",
+			basename..plot_base.."/gui_text_label_ytick_p75",
+			basename..plot_base.."/gui_text_label_ytick_p100",
+		},
+		max_number_bars = 11,
 		node_groupplots_controller = basename..plot_base.."/group_plots",
 		basename_individual_bar_group = basename..plot_base.."/group_plot_",
 		basename_individual_bar_label = "/gui_label",
 		basename_individual_bar_max_y = "/group_bar_element/tracker_max_length",
 		basename_individual_bar_progress = "/group_bar_element/gui_frame_progress",
 	}
-
-	-- add ytick labels
-	local ytick_base = basename .. plot_base .. "/gui_text_label_ytick_" -- save this for 'Find All' searches: "gui_text_label_ytick_0"
-	for i=1,num_y_ticks do
-		self.hud_plot_constant.node_y_ticks[i] = ytick_base..tostring(i-1)
-	end
 
 	-- set dynamics
 	self.hud_plot_dynamic = {}
@@ -1129,13 +1135,20 @@ end
 
 
 -- HUD Screen: Data (Section 2)
-local function Screen_Data_Reset(self, enabled_setting)
+local function Screen_Data_Reset(self, enabled_setting, disable_items_for_starting_out)
 
 	-- reset Data screen of HUD
 
 	-- default args
 	if enabled_setting == nil then
 		enabled_setting = false
+	end
+
+	-- disable goto button and overall item for starting out
+	if disable_items_for_starting_out then
+		for k,_ in pairs(CV_item_groups) do
+			ScreenData_ToggleItem(self, k, false, true, true)
+		end
 	end
 
 	-- set enabled status
@@ -1187,13 +1200,11 @@ local function Screen_Data_Initialize(self, enabled_status)
 		self.hud_data_constant.goo_group_names[k] = name
 		local button_name = name .. self.hud_data_constant.goo_item_gotograph
 		self.hud_data_constant.goo_group_goto_buttons[k] = button_name
-		-- disable goto button and overall item for starting out
-		ScreenData_ToggleItem(self, k, false, true, true)
 	end
 
 	-- set dynamics
 	self.hud_data_dynamic = {}
-	Screen_Data_Reset(self, enabled_status)
+	Screen_Data_Reset(self, enabled_status, true)
 
 end
 
@@ -1351,14 +1362,17 @@ local function Player_Data_Table_Reset(self, update_hud_screens)
 	-- which runs the health bar reset to whatever the value in this health tracker table is
 	-- plus hud screens may not have been initialized yet
 
-	-- if this is running in repeat game section though, might need to re-run data item reset?
-	-- doesn't look like accounting for that case is needed as 
 	-- this function is only run when starting or repeating game
+	-- also recall, that bar plots are updated and checked for each bar within player table each time bar plot is opened,
+	-- which means that if player table entry is not there, since it was reset, then bar will be hidden 
+	-- so no need to enable or disable bars since it already does it when opening bar plot
 	if update_hud_screens then
 
 		Screen_Data_Reset(self, false)
 		-- ^^ recall data rest internally calls Screen_Data_TrackerUpdate( function 
 
+		-- not really sure how we could get to this point, sice plot would have to be closed to click on restart
+		-- but update here for failsafe anyway
 		if self.hud_plot_dynamic.screen_isactive then
 			Plot_Data_TrackerUpdate(self, self.hud_plot_dynamic.active_itemkey)
 		end
@@ -1378,7 +1392,7 @@ local function On_GO_Item_Click_Labeled(self, screen_pos, unique_tbl)
 	local num_unique = 0
 	for k_itemname,_ in pairs(unique_tbl) do
 		num_unique = num_unique + 1
-		labels_i_list[num_unique] = CV_item_groups[k_itemname].clicked_label
+		labels_i_list[num_unique] = CV_item_groups[k_itemname].object_clicked_label
 	end
 
 	local label_txt = ""
@@ -1915,7 +1929,48 @@ local function GameHandleButtonInput(self, action_id, action)
 end
 
 
-local function GameLogic_Start(self)
+local function Game_RunRestart(self, reset_ply_data)
+
+	-- reset save table
+	if reset_ply_data then
+		local update_hud_screens
+		if self.gameplay_initialized then
+			update_hud_screens = true
+		end
+		Player_Data_Table_Reset(self, update_hud_screens)
+	end
+
+	self.character_role_key = "none"
+	local set_enabled = false
+	On_GO_Items_Clicked_Reset(self, set_enabled)
+
+	-- reset click items tracker
+	Items_Click_Status_Reset(self)
+
+	self.input_is_possible = true
+
+	self.gameplay_loop_completion_type_primary = 0
+	self.gameplay_loop_completion_type_secondary = 0
+	self.special_setup_goals_hud_enabled = false
+
+	-- get stage and substage list in order
+	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
+
+	-- if game has already been initialized, that means this function was called as part of a game restart
+	-- so close any menus that were open 
+	if self.gameplay_initialized then
+		-- popup and others should have already been closed by 
+		-- internal choice button logic that got us to this point
+		Screen_Goals_Reset(self, set_enabled)
+	end
+
+	-- go to starting stage
+	self.gameplay_loop_i_key = 0
+	GameLogic_Progress(self, 0)
+
+end
+
+local function Game_First_Initialization(self)
 
 	-- randomize random generator
 	math.randomseed(socket.gettime())
@@ -1923,36 +1978,24 @@ local function GameLogic_Start(self)
 	MY_GOO.acquire_input()
 
 	msg.post("level_loader#collectionproxy", HSH.msg_builtin_load)
-	self.game_paused = false
+	GamePause_Off(self)
 
-	local set_enabled = false
+	local enabled_setting = false
 
 	Initialize_Local_Info_Tbl()
-
-	-- reset save table
 	Player_Data_Table_Reset(self)
 
-	On_GO_Items_Clicked_Reset(self, set_enabled)
-	Screen_Goals_Initialize(self, set_enabled)
-	Screen_Decision_Initialize(self, set_enabled)
-	Screen_Popup_Initialize(self, set_enabled)
-	Screen_Data_Initialize(self, set_enabled)
-	Screen_Plot_Initialize(self, set_enabled)
+	Screen_Goals_Initialize(self, enabled_setting)
+	Screen_Decision_Initialize(self, enabled_setting)
+	Screen_Popup_Initialize(self, enabled_setting)
+	Screen_Data_Initialize(self, enabled_setting)
+	Screen_Plot_Initialize(self, enabled_setting)
 
-	-- reset click items tracker
-	Items_Click_Status_Reset(self)
-
-	self.input_is_possible = true
-
-	self.character_role_key = "none"
-	self.gameplay_loop_completion_type_primary = 0
-	self.gameplay_loop_completion_type_secondary = 0
-	self.gameplay_loop_i_key = 0
-	self.special_setup_goals_hud_enabled = false
-
-	-- get stage and substage list in order
-	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
+
+	self.gameplay_initialized = true
+
+	Game_RunRestart(self)
 
 	-- kick off first action 
 	Screen_MainMenu_Initialize(self, true)
@@ -1962,7 +2005,7 @@ end
 
 function init(self)
 
-	GameLogic_Start(self)
+	Game_First_Initialization(self)
 
 end
 
@@ -1979,16 +2022,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_request_game_progress then
 		GameLogic_Progress(self, 1)
 	elseif message_id == HSH.msg_request_game_repeat then
-
-		-- reset save table if specified
-		if message.minfo_reset_player_save then
-			Player_Data_Table_Reset(self, true)
-		end
-
-		-- go to specified stage
-		self.gameplay_loop_i_key = message.minfo_go_to_event_i or 0
-		GameLogic_Progress(self, 0)
-
+		Game_RunRestart(self, message.minfo_reset_player_save)
 	elseif message_id == HSH.msg_set_player_character_role then
 		self.character_role_key = message.minfo_role_name
 	elseif message_id == HSH.msg_update_item_value then
