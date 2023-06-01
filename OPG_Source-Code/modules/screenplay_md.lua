@@ -90,6 +90,10 @@ STR.CV = {
     debrief_decision_click = {
         --"The effects of our decision are underway ..." 
         "Now let's measure and record the status of each group in our data tracker. Click 'Continue' then click on a member of each group to measure it. ",
+    },
+
+    dynamic_text_updater = {
+        outcome_final_debrief = "outcome_final_debrief"  --#TODO add debrief review here along with loop to go back to this screen
     }
 
 }
@@ -133,7 +137,7 @@ STR.Screenplay = {
             --goal_text = "Follow information prompts.",
             --display_text = "",
             --debrief_text = "",
-            --extra_text = ""
+            --extra_text = nil
         --},
 
         goal_text_default = {
@@ -155,7 +159,7 @@ STR.Screenplay = {
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action("special_setup_start_goals_gauge")
             end,
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Students will examine and explore the scene by clicking on objects. 
@@ -179,7 +183,7 @@ STR.Screenplay = {
                     "Plankton "..n..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..n..ntab.."- Phytoplankton are producers that use sunlight to get energy."..ntab.."- Zooplankton are consumers that eat other plankton to get energy."
                 }
             },
-            extra_text = ""
+            extra_text = nil
         },
 
         user_lesson_03 = {
@@ -221,11 +225,11 @@ STR.Screenplay = {
         user_lesson_04 = {
             goal_text = "Follow information prompts.",
             display_text = "Excellent work, we have identified the groups of life in this scene. Throughout our oceans there are thousands of types of plants and animals, far too many to all show in just this scene!",
-            debrief_text = "For our example we are going to add just one more group, which is the overall highest-level consumer in the ocean.",
+            debrief_text = "For our example, we are going to add just one more group. Overall, this group is the highest-level consumer in the ocean.",
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action("special_setup_first_boat")
             end,
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Boat slides onto screen.
@@ -244,7 +248,7 @@ STR.Screenplay = {
                     "Humans"..n.."Though humans do not live in the water we rely heavily on our oceans! Our actions also have big impacts on ocean water and ocean life! "
                 }
             },
-            extra_text = ""
+            extra_text = nil
         },
 
         user_lesson_06 = {
@@ -258,9 +262,9 @@ STR.Screenplay = {
 
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
-            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n",
-            debrief_text = "Why is this happening? Let's find out.",
-            extra_text = ""
+            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out.",
+            debrief_text = nil,
+            extra_text = nil
         },
 
         -- Switch to land scene showing CO2 gas being given off by factories, cars, etc. 
@@ -269,7 +273,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories.",
             debrief_text = nil,
-            extra_text = ""
+            extra_text = nil
         },
 
         --Switch to animation showing gas being absorbed by ocean surface water.
@@ -278,14 +282,14 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gase mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.\n\n",
             debrief_text = nil,
-            extra_text = ""
+            extra_text = nil
         },
 
         user_lesson_10a = {
             goal_text = "Follow information prompts.",
             display_text = "Acidification can also occur due to nutrient pollution. \n\nExcess nutrient pollution can come from human sources such as fertilizers, soaps, and industrial waste.\n\n",
             debrief_text = nil,
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Switch back to terrestrial setting.
@@ -295,7 +299,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "The excess nutrient pollution can come from human sources such as fertilizers, soaps, and industrial waste.",
             debrief_text = nil,
-            extra_text = ""
+            extra_text = nil
         },
         --]]
 
@@ -309,7 +313,7 @@ STR.Screenplay = {
                 --#TODO add delay to progress function
                 --STR.CV.outcome_functions.func_setup_special_action("special_setup_coastal_oa_1")
             end,
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Show animation of nutrients running off from rainwater into ocean.
@@ -318,7 +322,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "These phytoplankton populations grow extremely quickly but then die and decompose in large amounts. \n\nThe decopmosing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
             debrief_text = nil,
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Show animation of large amounts of phytoplankton, 
@@ -328,7 +332,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Overall, acidification caused by burning of fossil fuels affects our oceans globally, while acidification caused by nutrient pollution affects our oceans in specific locations.",
             debrief_text = "How do we do we know the oceans have become more acidic?",
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Switch to animation showing gas being absorbed by ocean surface water?
@@ -337,14 +341,14 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "We use the pH scale to measure how acidic or basic something is. \n\nThe pH scale runs from 0 to 14, with 7 being a neutral pH. \n\nValues above 7 are basic, or alkaline. Values below 7 are acidic.\n\n",
             debrief_text = "pH is measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic a pH of 7. \n\n",
-            extra_text = "",
+            extra_text = nil,
         },
 
         user_lesson_15a = {
             goal_text = "Follow information prompts.",
             display_text = "We have measured the pH of our oceans for over 150 years. \n\n In the past we measured the pH manually. In the modern day, we commonly measure pH remotely using ocean buoys. \n\n",
-            debrief_text = "",
-            extra_text = "",
+            debrief_text = nil,
+            extra_text = nil,
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action("special_setup_pH_buoy")
                 local override_rather_than_insert = true
@@ -378,14 +382,14 @@ STR.Screenplay = {
         user_lesson_15c = {
             goal_text = "Follow information prompts.",
             display_text = "When we compare the pH of today's oceans to to pH measurements of the past there is a distinct different."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
-            debrief_text = "This increase in ocean acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
+            debrief_text = "This increase in ocean acidity over time is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 
         user_lesson_16 = {
             goal_text = "Follow information prompts.",
             display_text = "Ocean acidification hurts life throughout our oceans, including us. "..n..n.."For example, many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes."..n..n,
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
-            extra_text = "",
+            extra_text = nil,
             outcome_result_func = function()
                 --recall we already decreased pH
                 local initial_decreases = STR.CV.update_item_values_tbls.initial_oa_affected_values_life
@@ -438,7 +442,7 @@ STR.Screenplay = {
             goal_text = "Review your knowledge on ocean acidification.",
             display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we will move onto the next stage.\n\n",
             debrief_text = nil,
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Game presents list of review questions to confirm user knowledge. 
@@ -467,39 +471,39 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "oxygen"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "carbon dioxide"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Correct! Burning fossil fuels releases very high amounts of carbon dioxide gas into the atmosphere."
                     },
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "ozone"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
-                    text_display = {
+                    display_text = {
                         "helium"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
@@ -514,19 +518,19 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "True"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "This is true. Burning fossil fuels releases carbon dioxide gas. Much of this gas is absorbed by our oceans, which triggers chemical changes that make the water more acidic."
                     },
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "False"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
@@ -541,39 +545,39 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "noise pollution"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "nutrient pollution"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Correct! Nutrient pollution can be caused by using too much fertilizer, dumping wastewater, and other sources. If this polluted water makes its way to the ocean and can cause a chain reaction that makes the ocean water near our coasts more acidic."
                     },
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "light pollution"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
-                    text_display = {
+                    display_text = {
                         "gamma pollution"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
@@ -588,39 +592,39 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "warmer"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "more acidic"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Correct! If pH of water decreases that shows the acidity of the water has increased."
                     },
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "less acidic"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
-                    text_display = {
+                    display_text = {
                         "colder"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
@@ -635,40 +639,40 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "Plankton and Coral"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "Mollusks and Crustaceans"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "Fish and Humans"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_4 = {
-                    text_display = {
+                    display_text = {
                         "All of the groups listed here."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Correct! Ocean acidification harms plant and animal life throughout the ocean, including humans. As humans we rely on our oceans for food, ways to make a living, and even medicines."
                     },
                     outcome_result_func = STR.CV.outcome_functions.option_empty
@@ -682,19 +686,19 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "True"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "True! There are many steps each of us can take to help reduce ocean acidification. Continue with this program to make some of those decisions yourself!"
                     },
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "False"
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
                     repeat_question_decision = true,
@@ -711,7 +715,7 @@ STR.Screenplay = {
             --goal_text = "Follow information prompts.",
             --display_text = "",
             --debrief_text = "",
-            --extra_text = ""
+            --extra_text = nil
         --},
 
         goal_text_default = {
@@ -729,17 +733,17 @@ STR.Screenplay = {
         user_lesson_19 = {
             goal_text = "Follow information prompts.",
             display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans. ",
-            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas emissions will help prevent further ocean acidifcation."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n,
+            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidifcation."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n,
             -- OLDER: 
             --  debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n,
-            extra_text = ""
+            extra_text = nil
         },
 
         user_lesson_20 = {
             goal_text = "Follow information prompts.",
             display_text = "Let's now choose a specific character role and work to reduce the impacts of ocean acidification with specific decisions.",
             debrief_text = nil,
-            extra_text = ""
+            extra_text = nil
         },
 
         -- Setup character selection
@@ -775,31 +779,31 @@ STR.Screenplay = {
             answer_options = {
                 --#TODO update character selection screen so more info can be shown
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         --"Fishing Boat Captain"..n..
                         "Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "--..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "--..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
                     },
-                    text_debrief = nil,
+                    debrief_text = nil,
                     outcome_result_func = function()
                         STR.CV.outcome_functions.func_set_role("role_captain")
                     end
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         --"Marine Park Ranger"..n..
                         "Choose to be a marine park ranger. This character makes a living by watching over a marine park. "--..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "--..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
                     },
-                    text_debrief = nil,
+                    debrief_text = nil,
                     outcome_result_func = function()
                         STR.CV.outcome_functions.func_set_role("role_ranger")
                     end
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         --"Ocean Tour Guide"..n..
                         "Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "--..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and earn steady money. "--..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
                     },
-                    text_debrief = nil,
+                    debrief_text = nil,
                     outcome_result_func = function()
                         STR.CV.outcome_functions.func_set_role("role_guide")
                     end
@@ -860,11 +864,11 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         ""
                         --role_captain = {}, role_ranger = {}, role_guide = {},
                     },
-                    text_debrief = {
+                    debrief_text = {
                         ""
                         --role_captain = {}, role_ranger = {}, role_guide = {},
                     },
@@ -895,7 +899,7 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Upgrade the engine for your current fishing boat so that is uses less fuel."
@@ -907,7 +911,7 @@ STR.Screenplay = {
                             "Buy a new engine for your current tour boat that uses less fuel."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You've upgraded your engine to use less fuel. This upgrade cost money, but you have saved a lot money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
@@ -915,7 +919,7 @@ STR.Screenplay = {
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Keep your current fishing boat and go on more fishing trips."
@@ -927,7 +931,7 @@ STR.Screenplay = {
                             "Keep your current tour boat and go on more tours."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You've increased the number of trips you take on your boat. This has made you slightly earn more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
@@ -935,7 +939,7 @@ STR.Screenplay = {
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Keep your current fishing boat and do not change the number of fishing trips you take."
@@ -947,7 +951,7 @@ STR.Screenplay = {
                             "Keep your current tour boat and do not change the number of tours you do."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You've chosen to keep your boat and the number of trips the same as before. The amount of money you spend and earn remains the same.  The amount of carbon dioxide that your boat emits also remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "No change to OA points or sustainability points."
@@ -971,30 +975,30 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "Dispose of the waste in the local inland landfill. "
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Best option to minimize coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "Dispose of the waste in the waters near the shore. "
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You start disposing your waste nearshore waters, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
                     },
                     -- "This causes more coastal OA. OA points and sustainability points decrease." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "Dispose of the waste in the waters far away from the shore. "
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
                     },
                     -- "This causes more coastal OA. OA points and sustainability points decrease." 
@@ -1018,7 +1022,7 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Do not fish in or go too close to coral reefs."
@@ -1030,14 +1034,14 @@ STR.Screenplay = {
                             "Do not let tourists or your boat go too close to coral."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You have chosen to help the coral be more protected. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Find where the river from the nearby city meets the ocean and add nets to that boundary."
@@ -1049,7 +1053,7 @@ STR.Screenplay = {
                             "There is a river near the tour docks that goes into the ocean. Place nets where that river meets the ocean."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You have chosen to add nets around where nearby rivers meet the ocean. It turns out that adding these nets disrupted movement of river life. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "This might help catch large plastic waste going into the ocean but overall is expensive, not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
@@ -1057,7 +1061,7 @@ STR.Screenplay = {
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Manually try and remove excess phytoplankton from the water with fishing nets."
@@ -1069,7 +1073,7 @@ STR.Screenplay = {
                             "Manually try and remove algae from the water."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, it turns out there is far too much plankton for anyone to remove. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
@@ -1094,7 +1098,7 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Catch less fish that help eat excess phytoplankton."
@@ -1106,14 +1110,14 @@ STR.Screenplay = {
                             "Do not go near fish that eat excess phytoplankton."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You have chosen to help protect fish that eat excess phytoplankton. This has helped reduce the amount of excess phytoplankton. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Do not change the types or amounts of fish you catch."
@@ -1125,14 +1129,14 @@ STR.Screenplay = {
                             "Perform no changes and do not alter the places you go on your ocean tours."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You have chosen to keep things the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "",
                         role_captain = {
                             "Create large fishing net barriers and try and block off the parts of the ocean where you fish."
@@ -1144,7 +1148,7 @@ STR.Screenplay = {
                             "Create large barriers and try and block off the part of the ocean that you run tours through."
                         },
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "You have chosen to try and block off parts of the ocean. Unfortunately, that does not work and has caused disruptions to the ocean and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
@@ -1168,30 +1172,30 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "The money should be spent to add more buses, carpool lanes, and sidewalks throughout the city."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Very useful option which decreases coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "The money should be spent on creating more parking lots throughout the city."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The council has followed your advice to build more parking lots. This has increased excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not useful option which increases runoff and coastal OA. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "The money should be spent on building a large convention center in the city."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The council has followed your advice to build a large convention center. This has increased excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "By itself this will not make a large change in CO2 emissions but increases runoff and over timer adds more fossil fuel emissions. Unchanged OA points and less sustainability points." 
@@ -1216,30 +1220,30 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "Businesses will be granted money to sell their goods to the local community."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "Businesses will be granted money to sell their products to cities in different states."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "Businesses will be granted money to buy new computers and office equipment."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
@@ -1263,30 +1267,30 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "Farmers will install solar panels on their farm and use less fertilizer on their fields."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Very useful option which decreases nutrient runoff and fossil fuel emissions, which reduces OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "Famers will buy additional large tractors so they can harvest their crops more quickly."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The farmers followed your advice to buy larger tractors. It turns out this has increased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Likely will somewhat increase runoff and result in slightly less OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "Farmers will build more barns on their land to store their crops and tractors."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "By itself this will not make a large change in CO2 emissions and but may result in more nutrient runoff. Will not affect largely affect OA points or sustainability points." 
@@ -1310,30 +1314,30 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "People should carpool and/or use the bus to go to work and school."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Most useful option, as it reduces CO2 emissions. Also has bonus of saving people money! More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "People should upgrade their car radios and seat cushions to make their cars more comfortable."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emmissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "People should use more taxis and buy rides to get to work and school."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option, as it increases CO2 emissions. Also has negative effect of costing people more money. Less OA points and less sustainability points." 
@@ -1357,30 +1361,30 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "People should conserve water and energy when possible, such as not leaving on faucets or appliances if they are not using them."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "People follow your advice and use less energy and water when possible. This has saved people money. Using less enery has reduced the amount of carbon dioxide emmissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Most useful option, as it reduces CO2 emissions and overlaps with reducing runoff. Also has bonus of saving people money! More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "People should buy many house plants and place them throughout their homes and workplaces."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability pointss." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "People should water their lawns and wash their cars more frequently."
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "People follow your advice and use more water on their lawns and cars. This has cost people money, and the extra water running over the land has increased excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option, as it increases CO2 emissions and runoff. Also has negative effect of costing people money. Less OA points and less sustainability points." 
@@ -1404,7 +1408,7 @@ STR.Screenplay = {
             --goal_text = "Follow information prompts.",
             --display_text = "",
             --debrief_text = "",
-            --extra_text = ""
+            --extra_text = nil
         --},
 
         goal_text_default = {
@@ -1420,8 +1424,8 @@ STR.Screenplay = {
         user_lesson_21a = {
             goal_text = "Review outcomes of your decisions. ",
             display_text = "You have completed your work! Let's analyze the final health of each group of life in our ocean scene. ",
-            debrief_text = "Outcome summary: ", --#TODO add debrief review here
-            extra_text = ""
+            debrief_text = STR.CV.dynamic_text_updater.outcome_final_debrief,
+            extra_text = nil
         },
 
         -- Users will examine the final summary and graphs of each group of 
@@ -1447,28 +1451,28 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
+                    display_text = {
                         "Review the outcomes of your decisions again. After reviewing your outcomes you will be returned to this option screen. "
                     },
-                    text_debrief = {
-                        "Outcome summary: "
-                    }, --#TODO add debrief review here along with loop to go back to this screen
+                    debrief_text = {
+                        STR.CV.dynamic_text_updater.outcome_final_debrief
+                    },
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
                 user_choice_2 = {
-                    text_display = {
+                    display_text = {
                         "Go through the game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
                     },
-                    text_debrief = nil,
+                    debrief_text = nil,
                     outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
                 },
                 --#TODO think about adding option to just do another character along with quiz?
                 user_choice_3 = {
-                    text_display = {
+                    display_text = {
                         "To learn more check out these great resources from NOAA! After reviewing your outcomes you will be returned to this option screen. "
                     },
-                    text_debrief = {
+                    debrief_text = {
                         "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, seperate web page. Click 'Continue' to go back to the end game options screen. "
                     }, --#TODO add NOAA link here
                     repeat_question_decision = true,
@@ -1482,7 +1486,7 @@ STR.Screenplay = {
     },
 }
 
-
+-- General Checking
 function STR:ValidCheck(stage_key, substage_key)
 
     -- just run validity check and warn with prints if bad
@@ -1515,6 +1519,7 @@ function STR:Get_Completion_Type(stage_key, substage_key)
 
 end
 
+
 -- Goals HUD
 function STR:Get_Goal_Text(stage_key, substage_key)
 
@@ -1527,6 +1532,7 @@ function STR:Get_Goal_Text(stage_key, substage_key)
     return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_text) or self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_text_default)
 
 end
+
 
 -- Popup/NewInfo HUD
 function STR:Get_NewInfo_Text_Body(stage_key, substage_key)
@@ -1549,7 +1555,7 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
         return nil
     end
 
-    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].text_debrief)
+    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].debrief_text)
 
 end
 
@@ -1571,6 +1577,7 @@ function STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
     end
 
 end
+
 
 -- Items to Click
 function STR:Get_Items_to_Click(stage_key, substage_key)
@@ -1610,6 +1617,7 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
 
 end
 
+
 -- Decision HUD
 function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
 
@@ -1644,7 +1652,7 @@ function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
     local a_i = 0
     for k_userchoie_name, v_info in pairs(a_info) do
 
-        local text_tbl = v_info.text_display
+        local text_tbl = v_info.display_text
         local answer_text = self:GetString_from_Tbl_or_Value(text_tbl[character_role]) or self:GetString_from_Tbl_or_Value(text_tbl[1])
 
         a_i = a_i + 1
@@ -1681,7 +1689,7 @@ function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_
         return nil
     end
 
-    local a_info_i_debrief = a_info_i.text_debrief
+    local a_info_i_debrief = a_info_i.debrief_text
 
     if a_info_i_debrief == nil then return nil end
 

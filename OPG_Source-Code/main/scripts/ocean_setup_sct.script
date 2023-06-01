@@ -1356,6 +1356,8 @@ local function SetupAnimals(self)
 				Spawned_ResetAll(self, v_subitem.spawn_list_key, true)
 
 				-- reset any previous grids
+				-- yes, this transmits back to the module, but this is by far the cleanest way to do this
+				-- plus, it only runs once 
 				v_subitem.spawn_position_grid_dynamic = nil
 
 				-- get count to spawn
