@@ -55,12 +55,42 @@ INFO.item_info = {
         }
 	},
 
+    --#TODO add Y-axis label options (Poor, Fair, Excellent) or use range if none defined
 	item_ph = {
         item_enum = 1,
         gui_info = {
             group_name = "/group_item_ph",
-            plot_y_range = {7.5, 8.2},
-            plot_y_label = "Ocean pH",
+            -- main source is https://www.nnvl.noaa.gov/view/globaldata.html#ACID
+            -- other source is http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
+            --   with graph: http://www.igbp.net/images/18.30566fc6142425d6c911240/1384335514265/diagram-ph_projections.gif 
+            plot_y_range = {7.9, 8.1},
+            -- visually it doesn't really matter since the bars will proportionally look same regardless of what the labels are
+            -- would be neat to have past and then a future prediction plot though? (1870 and then 2100, instead of just 2020 to 2060)
+            --   overall that would look the same as just the last data point though...
+            -- 7.8 to 8.2 allow for showing historical and far future trends, 
+            --   and pH internal setting of -0.5 would match well with 2020 8.05 (range of 0.4 so half is 0.2, so 8.2->8.1)
+            --   would require internal pH changes to be not as big as other animal health changes 
+            --   b/c from 2020 to 2060 player would not be able to get to lowest pH of 7.8, only 7.9
+            --   also player would not be able to get back to highest level which would be frustrating in gameplay and 
+            --   also not align well with goal of game which is to inspire and show solutions are possible
+            -- 7.90 to 8.10 would allow for setting everything being able to go back up to starting position and have it make sense
+            --   otherwise code logic cap is needed, so for example pH does not go magically back up to 8.2
+            --   smaller would also mean internal question changes values might make more or less sense with decreases
+            --   though recall internal game logic is in percent delta, not actual pH 
+            --   so this would work b/c 7.9 is the lowest score one could possibly get (ie full most negative final score)
+            --   initial pH of starting in 1980, 2000 could work without time jump, 
+            --   but overall health of animals might look odd since were fish really 100% healthy in 1980 compared to 2020?
+            -- if going with narrower range then override first entry rather then add to, we do not want to see that high 1
+            --150 years ago was 1870 and pH was 8.2 (maybe 8.18?)
+            --1920 and 1970 also 8.1 (maybe 8.16 for 1920 and 8.13 for 1970?)
+            --  so first 50 years goes down by 0.02, then 0.03 for next fifty years
+            --1988/1990: 8.10; has gone down by 0.03 over 20 years
+            --2020: 8.05; has gone down by 0.05 over 30 years
+            --2040: 8.00
+            --2060: 7.92
+            --2080: 7.80 (7.84?)
+            --2100: 7.80 (7.75?)
+            plot_y_label = "Average Ocean pH",
             clicked_label = "pH Buoy"
         },
         subitem_info = {

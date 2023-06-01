@@ -84,15 +84,24 @@ local function Valid_Event_Check_Full(self, match_loop_type)
 
 end
 
-local function Player_Data_Table_AddEntry(self, item_key, new_value)
+local function Player_Data_Table_UpdateEntry(self, item_key, new_value, override_instead_insert)
 
 	-- adds an i-based entry to player save table for given item key 
 
 	local num_items = #self.player_data_tbl.item_data_tbl[item_key]
 
-	self.player_data_tbl.item_data_tbl[item_key][num_items + 1] = {item_tracker_score = new_value}
-
-	print("TRK: adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(num_items + 1).."> \n")
+	local new_entry_index = num_items
+	if override_instead_insert then
+		-- override current value instead of insert new one
+		new_entry_index = num_items
+		self.player_data_tbl.item_data_tbl[item_key][new_entry_index].item_tracker_score = new_value
+		print("TRK: overriding player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_index).."> \n")
+	else
+		-- insert new value
+		new_entry_index = num_items + 1
+		self.player_data_tbl.item_data_tbl[item_key][new_entry_index] = {item_tracker_score = new_value}
+		print("TRK: adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_index).."> \n")
+	end
 
 end
 
@@ -348,7 +357,7 @@ end
 
 
 -- HUD Process: Update Items 
-local function Player_Data_Table_RunScoreInput(self, score_tbl)
+local function Player_Data_Table_RunScoreInput(self, score_tbl, override_instead_insert)
 
 	-- takes a table with item keys and new delta scores and updates item scores in player save table accordingly
 
@@ -373,7 +382,7 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl)
 			--   also visible bars are already clamped between 0 and 1 anyway
 			local new_value = EXT:math_clamp(previous_score + update_score, 0, 1)
 
-			Player_Data_Table_AddEntry(self, k_itemname, new_value)
+			Player_Data_Table_UpdateEntry(self, k_itemname, new_value, override_instead_insert)
 
 			-- update hud data trackers done on click
 		end
@@ -1333,7 +1342,7 @@ local function Player_Data_Table_Reset(self, update_hud_screens)
 	-- go through item keys and initialize table and add first entry of fully healthy
 	for k_itemname,_ in pairs(CV_item_groups) do
 		self.player_data_tbl.item_data_tbl[k_itemname] = {}
-		Player_Data_Table_AddEntry(self, k_itemname, 1.0)
+		Player_Data_Table_UpdateEntry(self, k_itemname, 1.0)
 	end
 
 	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
@@ -1983,7 +1992,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_set_player_character_role then
 		self.character_role_key = message.minfo_role_name
 	elseif message_id == HSH.msg_update_item_value then
-		Player_Data_Table_RunScoreInput(self, message.minfo_item_score_update_tbl)
+		Player_Data_Table_RunScoreInput(self, message.minfo_item_score_update_tbl, message.minfo_overrides_instead_of_inserts)
 	elseif message_id == HSH.msg_request_special_case_action then
 		On_SpecialAction(self, message.minfo_special_case_key)
 	end

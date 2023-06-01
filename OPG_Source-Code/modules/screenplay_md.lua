@@ -13,19 +13,37 @@ local ntab = n .. tab
 local STR = {}
 
 STR.CV = {
+    update_item_values_tbls = {
+        -- recall that index of 1 is default for all keys if no string key is specified
+        -- also, if index of 1 not present and string key not present then no value will be added
+        initial_oa_affected_values_ph = {
+            -- note values initialized with 1, so this value is added to give OA value for data gauge
+            -- in other words, 1 + this_value = starting graph value
+            item_ph = -0.5, -- ie results in value of 0.5
+        },
+        initial_oa_affected_values_life = {
+            -- don't make all healths exactly -0.5 for present day start, 
+            item_plankton = -0.4, -- ie results in value of 0.6
+            item_coral = -0.7,
+            item_mollusks = -0.6,
+            item_fish = -0.45,
+            item_crustaceans = -0.5,
+            item_humans = -0.4,
+        }
+    },
 
     outcome_functions = {
         option_empty = function()
             return nil
         end,
 
-        func_option_outcome_dynamic = function(outcome_tbl_scores)
+        func_option_outcome_dynamic = function(outcome_tbl_scores, override_instead_insert)
 
             if outcome_tbl_scores == nil then
                 outcome_tbl_scores = {0}
             end
 
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = outcome_tbl_scores})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = outcome_tbl_scores, minfo_overrides_instead_of_inserts = override_instead_insert})
         end,
 
         func_option_outcome_default_good = function() -- (+)
@@ -311,8 +329,9 @@ STR.Screenplay = {
             extra_text = "",
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action("special_setup_pH_buoy")
-                --#TODO update pH values with values from NOAA
-                STR.CV.outcome_functions.func_option_outcome_dynamic({item_ph = -0.5})
+                local override_rather_than_insert = true
+                local start_vals = STR.CV.update_item_values_tbls.initial_oa_affected_values_ph
+                STR.CV.outcome_functions.func_option_outcome_dynamic(start_vals, override_rather_than_insert)
             end
         },
 
@@ -326,14 +345,21 @@ STR.Screenplay = {
             display_text = "Let's measure the current pH of the ocean water. \n\nTo do this, click 'Continue' then click on the buoy on the left side of the screen.",
             debrief_text = {
                 "",
-                --#TODO update pH values with values from NOAA
+                -- In our oceans, CO2 has increased by 15% since 1988.
+                -- From 1988 and 2019, the pH of the ocean decreased by 0.05 pH units.
+                -- 1988 was 8.10 and in 2020 it was 8.05
+                -- from https://noaa.maps.arcgis.com/apps/MapSeries/index.html?appid=adec7620009d439c85109ab9aa1ea227
+                -- or https://dataintheclassroom.noaa.gov/ocean-acidification/understanding-ocean-coastal-acidification-teacher-resources (Module 2 and 3)
+                --Since 1870 CO2 has increased by 40% in our oceans.
+                --Rate of acidificaiton is 10 times faster than any time in past 55 million years.
+                --http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
                 item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in your Data Log, which you can access at any time by clicking the arrow button above 'Ocean pH' in the right hand side screen. "}
             }
         },
 
         user_lesson_15c = {
             goal_text = "Follow information prompts.",
-            display_text = "When we compare the pH of today's oceans to to pH measurements of the past there is a distinct different."..n..n.."We observe that pH is now 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
+            display_text = "When we compare the pH of today's oceans to to pH measurements of the past there is a distinct different."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
             debrief_text = "This increase in ocean acidity is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 
@@ -344,15 +370,9 @@ STR.Screenplay = {
             extra_text = "",
             outcome_result_func = function()
                 --recall we already decreased pH
-                local initial_decreases = {
-                    item_plankton = -0.5,
-                    item_coral = -0.5,
-                    item_mollusks = -0.5,
-                    item_fish = -0.5,
-                    item_crustaceans = -0.5,
-                    item_humans = -0.5,
-                }
-                STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases)
+                local initial_decreases = STR.CV.update_item_values_tbls.initial_oa_affected_values_life
+                local override_rather_than_insert = true
+                STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases, override_rather_than_insert)
             end
         },
 
