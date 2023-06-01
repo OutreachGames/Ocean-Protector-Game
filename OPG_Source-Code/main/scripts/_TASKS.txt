@@ -13,6 +13,8 @@
 
     -- also add years on graph
 
+    -- update Humans in data graph with label text of "Your Success"?
+
     -- maybe at last decision it tallies up all decisions and if all correct it sets to highest (just as failsafe to ensure players can get max)
 
     -- inject view items and click items after each decision

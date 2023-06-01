@@ -63,6 +63,7 @@ INFO.item_info = {
             group_name = "/group_item_ph",
             plot_y_axis_label = {"Average Annual Ocean pH"},
             object_clicked_label = "pH Buoy",
+            data_view_label = {"Ocean pH"},
             plot_y_tick_labels = {{"7.90", "7.95", "8.00", "8.05", "8.10"}}
             -- main source is https://www.nnvl.noaa.gov/view/globaldata.html#ACID
             -- other source is http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
@@ -110,7 +111,8 @@ INFO.item_info = {
             group_name = "/group_item_plankton",
             plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
             plot_y_axis_label = {"Plankton Health"}, --or "Plankton Biodiversity"
-            object_clicked_label = "Plankton"
+            object_clicked_label = "Plankton",
+            data_view_label = {"Plankton"},
         },
         item_is_alive = true,
 		--Notes:
@@ -150,7 +152,8 @@ INFO.item_info = {
             group_name = "/group_item_coral",
             plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
             plot_y_axis_label = {"Coral Health"},
-            object_clicked_label = "Coral"
+            object_clicked_label = "Coral",
+            data_view_label = {"Coral"},
         },
         item_is_alive = true,
         subitem_info = {
@@ -211,7 +214,8 @@ INFO.item_info = {
             group_name = "/group_item_mollusks",
             plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
             plot_y_axis_label = {"Mollusk Population Levels"},
-            object_clicked_label = "Mollusk"
+            object_clicked_label = "Mollusk",
+            data_view_label = {"Mollusks"},
         },
         item_is_alive = true,
         subitem_info = {
@@ -341,7 +345,8 @@ INFO.item_info = {
             group_name = "/group_item_crustaceans",
             plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
             plot_y_axis_label = {"Crustacean Population Levels"},
-            object_clicked_label = "Crustacean"
+            object_clicked_label = "Crustacean",
+            data_view_label = {"Crustaceans"},
         },
         item_is_alive = true,
         subitem_info = {
@@ -404,6 +409,12 @@ INFO.item_info = {
                 subitem_guide = "Tour Bussiness Success"
             },
             object_clicked_label = "Human",
+            data_view_label = {
+                "Humans",
+                subitem_captain = "Your Success",
+                subitem_ranger = "Your Success",
+                subitem_guide = "Your Success"
+            }
         },
         item_is_alive = true,
         subitem_info = {
@@ -455,6 +466,18 @@ function INFO:Get_Y_Axis_Label(item_name, opt_subitem_name)
         return axis_label_tbl[opt_subitem_name] or axis_label_tbl[1]
     else
         return axis_label_tbl[1]
+    end
+
+end
+
+function INFO:Get_Data_Item_Label(item_name, opt_subitem_name)
+
+    local data_label_tbl = self.item_info[item_name].gui_info.data_view_label
+
+    if opt_subitem_name ~= nil then
+        return data_label_tbl[opt_subitem_name] or data_label_tbl[1]
+    else
+        return data_label_tbl[1]
     end
 
 end

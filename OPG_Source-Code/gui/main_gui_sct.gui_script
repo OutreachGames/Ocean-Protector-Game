@@ -1928,6 +1928,23 @@ local function GameHandleButtonInput(self, action_id, action)
 
 end
 
+local function Game_Change_Character(self, character_role_key)
+
+	-- changes player character variables and labels
+
+	if character_role_key == nil then
+		self.character_role_key = "none"
+		self.human_data_label = "Humans"
+	else
+		self.character_role_key = character_role_key
+		local subitem_name = STR:Get_Subitem_from_Role(character_role_key)
+		self.human_data_label = INFO:Get_Data_Item_Label("item_humans", subitem_name)
+	end
+
+	local data_human_label_node = gui.get_node("hud_data/group_item_humans/gnode_body_text")
+	gui.set_text(data_human_label_node, self.human_data_label)
+
+end
 
 local function Game_RunRestart(self, reset_ply_data)
 
@@ -1940,7 +1957,7 @@ local function Game_RunRestart(self, reset_ply_data)
 		Player_Data_Table_Reset(self, update_hud_screens)
 	end
 
-	self.character_role_key = "none"
+	Game_Change_Character(self)
 	local set_enabled = false
 	On_GO_Items_Clicked_Reset(self, set_enabled)
 
@@ -2024,7 +2041,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_request_game_repeat then
 		Game_RunRestart(self, message.minfo_reset_player_save)
 	elseif message_id == HSH.msg_set_player_character_role then
-		self.character_role_key = message.minfo_role_name
+		Game_Change_Character(self, message.minfo_role_name)
 	elseif message_id == HSH.msg_update_item_value then
 		Player_Data_Table_RunScoreInput(self, message.minfo_item_score_update_tbl, message.minfo_overrides_instead_of_inserts)
 	elseif message_id == HSH.msg_request_special_case_action then
