@@ -1431,6 +1431,7 @@ STR.Screenplay = {
             -- also allows for using existing logic
             goal_completed_type = STR.CV.goal_completed_types.class_decisison,
             goal_text = "Select end game option.",
+            prevent_option_randomization = true,
             question_prompt = {
                 "You have now completed the game! You can now choose to review your outcomes again, view additional NOAA resources, or rerun the game." 
                 -- 
@@ -1438,14 +1439,6 @@ STR.Screenplay = {
             },
             answer_options = {
                 user_choice_1 = {
-                    text_display = {
-                        "Go through the game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
-                    },
-                    text_debrief = nil,
-                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
-                },
-                --#TODO think about adding option to just do another character along with quiz?
-                user_choice_2 = {
                     text_display = {
                         "Review the outcomes of your decisions again. After reviewing your outcomes you will be returned to this option screen. "
                     },
@@ -1455,6 +1448,14 @@ STR.Screenplay = {
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
+                user_choice_2 = {
+                    text_display = {
+                        "Go through the game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
+                    },
+                    text_debrief = nil,
+                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                },
+                --#TODO think about adding option to just do another character along with quiz?
                 user_choice_3 = {
                     text_display = {
                         "To learn more check out these great resources from NOAA! After reviewing your outcomes you will be returned to this option screen. "
@@ -1642,8 +1643,16 @@ function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
         a_tbl[a_i] = {user_choice_key = k_userchoie_name, choice_text_answer = answer_text}
     end
 
-    -- randomize table
-    return EXT:Table_Shuffle(a_tbl)
+    -- randomize table by default
+    if decision_info.prevent_option_randomization then
+        local function func_sort_by_name(a, b) --ABC order, A first
+			return a.user_choice_key < b.user_choice_key
+        end
+
+        return table.sort(a_tbl, func_sort_by_name)
+    else
+        return EXT:Table_Shuffle(a_tbl)
+    end
 
 end
 
