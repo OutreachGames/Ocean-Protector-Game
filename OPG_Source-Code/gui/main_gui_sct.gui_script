@@ -1342,7 +1342,7 @@ end
 
 
 --HUD Process: Reset Player Data Table
-local function Player_Data_Table_Reset(self, update_hud_screens)
+local function Player_Data_Table_Reset(self, update_hud_screens, back_to_begining)
 
 	-- resets player data
 
@@ -1368,7 +1368,7 @@ local function Player_Data_Table_Reset(self, update_hud_screens)
 	-- so no need to enable or disable bars since it already does it when opening bar plot
 	if update_hud_screens then
 
-		Screen_Data_Reset(self, false)
+		Screen_Data_Reset(self, false, back_to_begining)
 		-- ^^ recall data rest internally calls Screen_Data_TrackerUpdate( function 
 
 		-- not really sure how we could get to this point, sice plot would have to be closed to click on restart
@@ -1941,6 +1941,7 @@ local function Game_Change_Character(self, character_role_key)
 		self.human_data_label = INFO:Get_Data_Item_Label("item_humans", subitem_name)
 	end
 
+	-- use full string name since gauge tracking might not be initialized yet
 	local data_human_label_node = gui.get_node("hud_data/group_item_humans/gnode_body_text")
 	gui.set_text(data_human_label_node, self.human_data_label)
 
@@ -1950,11 +1951,12 @@ local function Game_RunRestart(self, reset_ply_data)
 
 	-- reset save table
 	if reset_ply_data then
-		local update_hud_screens
+		local update_hud_screens, back_to_begining
 		if self.gameplay_initialized then
 			update_hud_screens = true
+			back_to_begining = true
 		end
-		Player_Data_Table_Reset(self, update_hud_screens)
+		Player_Data_Table_Reset(self, update_hud_screens, back_to_begining)
 	end
 
 	Game_Change_Character(self)
@@ -2000,6 +2002,8 @@ local function Game_First_Initialization(self)
 	local enabled_setting = false
 
 	Initialize_Local_Info_Tbl()
+	-- do not update HUD screens since they are not initialized yet, 
+	-- need to initialize player table first though so HUD screen initialization works
 	Player_Data_Table_Reset(self)
 
 	Screen_Goals_Initialize(self, enabled_setting)

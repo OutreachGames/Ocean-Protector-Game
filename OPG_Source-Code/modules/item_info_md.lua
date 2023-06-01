@@ -411,9 +411,9 @@ INFO.item_info = {
             object_clicked_label = "Human",
             data_view_label = {
                 "Humans",
-                subitem_captain = "Your Success",
-                subitem_ranger = "Your Success",
-                subitem_guide = "Your Success"
+                subitem_captain = "Fishing Success",
+                subitem_ranger = "Ranger Success",
+                subitem_guide = "Tour Success"
             }
         },
         item_is_alive = true,
