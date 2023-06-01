@@ -93,7 +93,7 @@ STR.CV = {
     },
 
     dynamic_text_updater = {
-        outcome_final_debrief = "outcome_final_debrief"  --#TODO add debrief review here along with loop to go back to this screen
+        outcome_final_debrief = HSH.helper_outcome_final_debrief
     }
 
 }
@@ -777,7 +777,7 @@ STR.Screenplay = {
                 "Please choose a character. Each character has specific goals and does a different job. You can view this information by clicking on each character button. "
             },
             answer_options = {
-                --#TODO update character selection screen so more info can be shown
+                --#TODO update character selection screen so more info can be shown?
                 user_choice_1 = {
                     display_text = {
                         --"Fishing Boat Captain"..n..
@@ -1425,6 +1425,7 @@ STR.Screenplay = {
             goal_text = "Review outcomes of your decisions. ",
             display_text = "You have completed your work! Let's analyze the final health of each group of life in our ocean scene. ",
             debrief_text = STR.CV.dynamic_text_updater.outcome_final_debrief,
+            debrief_is_dynamic = true,
             extra_text = nil
         },
 
@@ -1475,6 +1476,7 @@ STR.Screenplay = {
                     debrief_text = {
                         "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, seperate web page. Click 'Continue' to go back to the end game options screen. "
                     }, --#TODO add NOAA link here
+                    debrief_is_dynamic = true,
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
@@ -1555,7 +1557,9 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
         return nil
     end
 
-    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].debrief_text)
+    local info = self.Screenplay[stage_key][substage_key]
+
+    return self:GetString_from_Tbl_or_Value(info.debrief_text), info.debrief_is_dynamic
 
 end
 
@@ -1693,7 +1697,11 @@ function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_
 
     if a_info_i_debrief == nil then return nil end
 
-    return self:GetString_from_Tbl_or_Value(a_info_i_debrief[character_role]) or self:GetString_from_Tbl_or_Value(a_info_i_debrief[1])
+    local role_debrief = self:GetString_from_Tbl_or_Value(a_info_i_debrief[character_role])
+    local default_debrief = self:GetString_from_Tbl_or_Value(a_info_i_debrief[1])
+
+    local returned_debrief = role_debrief or default_debrief
+    return returned_debrief, a_info_i.debrief_is_dynamic
 
 end
 

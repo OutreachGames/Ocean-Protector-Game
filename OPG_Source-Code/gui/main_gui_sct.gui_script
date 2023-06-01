@@ -414,6 +414,21 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl, override_instead
 
 end
 
+local function TranslateHelperText(self, hashed_text_key)
+
+	-- takes hashed text key and translates and updates it with internal logic
+	-- returns as string
+
+	if hashed_text_key == HSH.helper_outcome_final_debrief then
+		local final_score = QuestionScores_GetFinalPercent(self)
+		local final_debrief_text = "Percentage of decisions with most optimal choices: "..string.format("%.0f", (final_score*100))
+		return final_debrief_text
+	else
+		return ""
+	end
+
+end
+
 
 -- HUD Screen: Goals
 local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
@@ -664,7 +679,11 @@ local function Screen_Popup_Input(self, action_id, action)
 			if Loop_CompletionType_is_Primary(self, new_info_loop_type) and Loop_StatusType_is_Main(self) then
 
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-				local debrief_text = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
+				local debrief_text, is_debrief_dynamic = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
+
+				if is_debrief_dynamic then
+					debrief_text = TranslateHelperText(self, debrief_text)
+				end
 
 				-- if there is debrief for this new_info screen then run it, 
 				-- otherwise finish up 
@@ -952,7 +971,12 @@ local function Screen_Decision_Input(self, action_id, action)
 
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
-				local debrief_text = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
+				local debrief_text, is_debrief_dynamic = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
+
+				if is_debrief_dynamic then
+					debrief_text = TranslateHelperText(self, debrief_text)
+				end
+
 				if Loop_StatusType_is_Main(self) and debrief_text ~= nil and debrief_text ~= "" then
 
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
@@ -1838,7 +1862,7 @@ local function Screen_MainMenu_Input(self, action_id, action)
 		local run_sizer = false
 		Screen_MainMenu_Reset(self, false, run_sizer)
 
-		GameLogic_Progress(self)
+		GameLogic_Progress(self, 1)
 
 		--print("New game started!")
 
@@ -2006,15 +2030,20 @@ local function Game_RunRestart(self, reset_ply_data)
 
 	-- if game has already been initialized, that means this function was called as part of a game restart
 	-- so close any menus that were open 
+
+	-- go to starting stage
+	self.gameplay_loop_i_key = 0
+
 	if self.gameplay_initialized then
 		-- popup and others should have already been closed by 
 		-- internal choice button logic that got us to this point
 		Screen_Goals_Reset(self, set_enabled)
-	end
 
-	-- go to starting stage
-	self.gameplay_loop_i_key = 0
-	GameLogic_Progress(self, 0)
+		-- Recall, 'Game logic progress' function runs after selecting 'Start Game' option in starting menu
+		-- Which will occur if player is starting new game 
+		-- so only run it here if game already initialized (ie repeating game)
+		GameLogic_Progress(self, 0)
+	end
 
 end
 
@@ -2044,9 +2073,9 @@ local function Game_First_Initialization(self)
 	self.num_player_affected_questions = STR:Get_Total_Choices()
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
 
-	self.gameplay_initialized = true
-
 	Game_RunRestart(self)
+
+	self.gameplay_initialized = true
 
 	-- kick off first action 
 	Screen_MainMenu_Initialize(self, true)

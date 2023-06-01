@@ -50,7 +50,10 @@ local HASH = {
     msg_builtin_load = hash("load"),
     msg_builtin_enable = hash("enable"),
     msg_builtin_proxy_loaded = hash("proxy_loaded"),
-    msg_builtin_set_timestep = hash("set_time_step")
+    msg_builtin_set_timestep = hash("set_time_step"),
+
+    -- other 
+    helper_outcome_final_debrief = hash("helper_outcome_final_debrief")
 
 }
 
