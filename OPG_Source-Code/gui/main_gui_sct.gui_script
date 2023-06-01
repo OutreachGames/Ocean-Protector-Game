@@ -312,7 +312,8 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 			new_size.y = EXT:math_round(max_size.y * new_health_value, 0)
 			-- set as new size and enable visibility
 			gui.set_size(progress_node, new_size)
-			gui.set_text(label_node, tostring(i) or "1")
+			local label_text = constant.specified_bar_labels[i]
+			gui.set_text(label_node, label_text or "")
 			set_visible = true
 		else
 			set_visible = false
@@ -1052,13 +1053,16 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 
 	-- set y axis label and ticks
 	local y_label = string.gsub(y_axis_label, " ", "   ")
-	gui.set_text(gui.get_node(constant.node_y_label), y_label)
+	gui.set_text(gui.get_node(constant.node_y_axis_label), y_label)
 
 	-- set plot height and toggle
 	local tick_labels = INFO:Get_Y_Tick_Labels(item_group_key, opt_subitem_name)
 	for i_tickindex,v_node_y_tickname in ipairs(constant.node_y_ticks) do
 		gui.set_text(gui.get_node(v_node_y_tickname), tick_labels[i_tickindex])
 	end
+
+	-- set x axis label (tick labels and bar visiibiliy handled in 'plot tracker update function' below)
+	gui.set_text(gui.get_node(constant.node_x_axis_label), INFO:Get_X_Axis_Label())
 
 	-- enable and set graph bars accordingly
 	-- get item key, and for each item bar progress and label to visible
@@ -1082,7 +1086,8 @@ local function Screen_Plot_Initialize(self, enabled_status)
 		node_controller = basename .. "/gnode_controller",
 		goo_exit_name = basename .. "/group_button_submit",
 		node_title_name = basename .. plot_base .. "/gui_text_title",
-		node_y_label = basename .. plot_base .. "/gui_text_label_yaxis",
+		node_y_axis_label = basename .. plot_base .. "/gui_text_label_yaxis",
+		node_x_axis_label = basename .. plot_base .. "/gui_text_label_xaxis",
 		-- add ytick labels
 		-- must match number of labels specified in INFO module!
 		node_y_ticks = {
@@ -1096,6 +1101,7 @@ local function Screen_Plot_Initialize(self, enabled_status)
 		node_groupplots_controller = basename..plot_base.."/group_plots",
 		basename_individual_bar_group = basename..plot_base.."/group_plot_",
 		basename_individual_bar_label = "/gui_label",
+		specified_bar_labels = INFO:Get_X_Tick_Labels(),
 		basename_individual_bar_max_y = "/group_bar_element/tracker_max_length",
 		basename_individual_bar_progress = "/group_bar_element/gui_frame_progress",
 	}

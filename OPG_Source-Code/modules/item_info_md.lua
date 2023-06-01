@@ -15,7 +15,26 @@ local CV_Logic_Type_Static = 2
 local CV_Logic_Type_Micro = 3
 local CV_Effect_Decomp_Dimensions = {x = 300, y = 80}
 local CV_Base_Wave_Direction = 1
+
 local CV_Default_Y_Tick_Labels = {"Very Low", "Low", "Moderate", "High", "Very High"}
+
+local CV_Plot_X_Axis_Label = "Time (years)"
+local CV_Plot_X_Bar_Labels = {
+    -- game starts with pH at 8, and in ~20 years it can go up to 8.1 or down to 7.9
+    -- realistically, pH will go down 0.05 every 20 years
+    -- so either double the time or make the plot y tick labels a more narrow range
+    -- or say we are not going to worry about it?
+    "'24", --1
+    "'26", --2
+    "'28", --3
+    "'30", --4
+    "'32", --5
+    "'34", --6
+    "'36", --7
+    "'38", --8
+    "'40", --9
+    "'42" --10
+}
 
 local INFO = {}
 
@@ -65,6 +84,7 @@ INFO.item_info = {
             object_clicked_label = "pH Buoy",
             data_view_label = {"Ocean pH"},
             plot_y_tick_labels = {{"7.90", "7.95", "8.00", "8.05", "8.10"}}
+            -- or {{"7.950", "7.975", "8.000", "8.025", "8.050"}}?
             -- main source is https://www.nnvl.noaa.gov/view/globaldata.html#ACID
             -- other source is http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
             --   with graph: http://www.igbp.net/images/18.30566fc6142425d6c911240/1384335514265/diagram-ph_projections.gif 
@@ -445,6 +465,14 @@ INFO.item_info = {
         }
 	}
 }
+
+function INFO:Get_X_Tick_Labels()
+    return CV_Plot_X_Bar_Labels
+end
+
+function INFO:Get_X_Axis_Label()
+    return CV_Plot_X_Axis_Label
+end
 
 function INFO:Get_Y_Tick_Labels(item_name, opt_subitem_name)
 
