@@ -47,13 +47,13 @@ STR.CV = {
         end,
 
         func_option_outcome_default_good = function() -- (+)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.05}})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.055}})
         end,
         func_option_outcome_default_fair = function() -- (0)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.0}})
         end,
         func_option_outcome_default_bad = function() -- (-)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-0.05}})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-0.055}})
         end,
 
         func_set_role = function(chosen_role_name)
