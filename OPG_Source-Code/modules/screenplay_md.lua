@@ -1458,6 +1458,7 @@ STR.Screenplay = {
                     debrief_text = {
                         STR.CV.dynamic_text_updater.outcome_final_debrief
                     },
+                    debrief_is_dynamic = true,
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
@@ -1476,7 +1477,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, seperate web page. Click 'Continue' to go back to the end game options screen. "
                     }, --#TODO add NOAA link here
-                    debrief_is_dynamic = true,
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
@@ -1765,7 +1765,7 @@ function STR:Get_Total_Choices()
 
     local num_player_questions = 0
 
-    for k_substagename,_ in pairs(STR.Screenplay.s05_decisions_character_role) do
+    for k_substagename,_ in pairs(STR.Screenplay.s05_decisions_character_role or {}) do
         if string.find(k_substagename, "default") == nil then
             num_player_questions = num_player_questions + 1
         end

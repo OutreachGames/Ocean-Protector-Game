@@ -1687,11 +1687,12 @@ local function DynamicObject_Reset(self)
 		end
 	end
 
-	-- setup animals with fresh values
-	SetupAnimals(self)
-
 	-- hide buoy
 	SetupBuoy(self, true)
+
+	-- setup animals with fresh values
+	-- use timer to prevent buffer overflow
+	timer.delay(0.25, false, SetupAnimals)
 
 end
 

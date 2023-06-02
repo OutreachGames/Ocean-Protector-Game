@@ -2053,7 +2053,8 @@ local function Game_RunRestart(self, reset_ply_data)
 		-- wait until fully dark/hidden, then reset, then fade back in
 		timer.delay(0.35, false, function(self)
 			msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = "special_restart_game"})
-			timer.delay(0.2, false, function(self)
+			--^ above takes 0.25 seconds at least so wait a bit 
+			timer.delay(0.45, false, function(self)
 				Run_Fader(self, false, 0.25)
 			end)
 		end)
