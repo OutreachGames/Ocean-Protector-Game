@@ -1210,7 +1210,7 @@ local function Screen_Decision_Input(self, action_id, action)
 	MY_GOO.radiogroup("radiogroup_answer_options", action_id, action, func_radiogroup)
 
 	if self.hud_decision_dynamic.has_hint_available then
-		MY_GOO.button_simple(Hud_info.goo_submit_name, action_id, action, func_hint_toggle)
+		MY_GOO.button_simple(Hud_info.goo_hint_name, action_id, action, func_hint_toggle)
 	end
 
 	if self.hud_decision_dynamic.goo_sumbit_isactive then
