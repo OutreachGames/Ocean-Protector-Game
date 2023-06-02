@@ -306,6 +306,33 @@ local function Set_Sea_Particles(self, toggle_on, clear_instant)
 
 end
 
+local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
+
+	-- delete go object
+	if delete_go then
+		if go.exists(go_id) then
+			--print("Deleting individual object "..go_id.."\n")
+			go.delete(go_id)
+		end
+	else
+		-- if not deleting then send expire message
+		-- which will delete the go, just after a specified event
+		-- for example, do not delete go until animation done
+		-- but remove from tracker list
+		-- so we can add more swimmers without incorrectly hitting max amount
+		msg.post(go_id, HSH.msg_order_expire_start)
+	end
+
+	-- remove from list if it was on list
+	if self.spawned_objects_list[spawn_list_key] == nil then return end
+	if self.spawned_objects_list[spawn_list_key][go_id] == nil then return end
+
+	-- remove from list and update list sum
+	self.spawned_objects_list[spawn_list_key][go_id] = nil
+	self.spawned_objects_sum[spawn_list_key] = self.spawned_objects_sum[spawn_list_key] - 1
+
+end
+
 local function Spawned_ResetAll(self, spawn_list_key, delete_gos)
 
 	-- reset all spawned objects from given list key
@@ -313,9 +340,11 @@ local function Spawned_ResetAll(self, spawn_list_key, delete_gos)
 	-- if there have been objects spawned then delete and clear them all
 	if self.spawned_objects_list[spawn_list_key] ~= nil then
 		if self.spawned_objects_sum[spawn_list_key] > 0 then
-			if delete_gos then
-				for k_gourl, _ in pairs(self.spawned_objects_list[spawn_list_key]) do
+			for k_gourl, _ in pairs(self.spawned_objects_list[spawn_list_key]) do
+				if delete_gos then
 					go.delete(k_gourl)
+				else
+					Spawned_RemoveObject(self, spawn_list_key, k_gourl, false)
 				end
 			end
 		end
@@ -333,26 +362,6 @@ local function Spawned_ResetAll(self, spawn_list_key, delete_gos)
 	-- since those are in the water and not affected by weather
 	-- also, so far, things like the bubbler, sea dust, and sun and not in spawn list
 	-- because they are always present in set amounts and easy to disable or change 
-
-end
-
-local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
-
-	-- delete go object
-	if delete_go then
-		if go.exists(go_id) then
-			--print("Deleting individual object "..go_id.."\n")
-			go.delete(go_id)
-		end
-	end
-
-	-- remove from list if it was on list
-	if self.spawned_objects_list[spawn_list_key] == nil then return end
-	if self.spawned_objects_list[spawn_list_key][go_id] == nil then return end
-
-	-- remove from list and update list sum
-	self.spawned_objects_list[spawn_list_key][go_id] = nil
-	self.spawned_objects_sum[spawn_list_key] = self.spawned_objects_sum[spawn_list_key] - 1
 
 end
 
@@ -384,6 +393,7 @@ local function Spawned_AddObject(self, spawn_list_key, go_id)
 	self.spawned_objects_list[spawn_list_key][go_id] = true
 
 end
+
 
 local function Spawned_UpdateProperty(self, spawn_list_key, list_prop_tbls) --{ {prop_name, prop_value, prop_method, prop_custom} }
 
@@ -1017,29 +1027,6 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 		end)
 
 	end)
-
-end
-
-local function Remove_Object_Generic(self, item_name, subitem_name, go_id, delete_go)
-
-	local subitem_tbl = INFO.item_info[item_name].subitem_info[subitem_name]
-
-	local spawn_list_key_name = subitem_tbl.spawn_list_key
-
-	if delete_go == nil then
-		delete_go = false
-	end
-
-	Spawned_RemoveObject(self, spawn_list_key_name, go_id, delete_go)
-
-	-- if not deleting then send expire message
-	-- which will delete the go, just after a specified event
-	-- for example, do not delete go until animation done
-	-- but remove from tracker list
-	-- so we can add more swimmers without incorrectly hitting max amount
-	if not delete_go then
-		msg.post(go_id, HSH.msg_order_expire_start)
-	end
 
 end
 
