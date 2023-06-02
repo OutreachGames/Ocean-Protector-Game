@@ -94,6 +94,12 @@ STR.CV = {
 
     dynamic_text_updater = {
         outcome_final_debrief = HSH.helper_outcome_final_debrief
+    },
+
+    hint_text_defaults = {
+        hint_lower_emissions = {
+            "Remember, making energy efficent decisions will reduce carbon dioxide emissions and help prevent ocean acidification. "
+        }
     }
 
 }
@@ -897,6 +903,9 @@ STR.Screenplay = {
                     "Congratulations on your promotion to Ocean Tour Guide! Now that you are in charge of tours, how do want to use your boat?"
                 },
             },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+            },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
@@ -973,6 +982,9 @@ STR.Screenplay = {
                     "As you use your boat for tours garbage and waste develops. You want to dispose and remove this waste in an ocean-friendly way. Which option do you choose? "
                 },
             },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+            },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
@@ -1019,6 +1031,9 @@ STR.Screenplay = {
                 role_guide = {
                     "You have observed how ocean life that tourists want to see can be impacted by ocean acidification. You want to continue to help maintain a healthy ocean are thinking about different options. Which one do you pick?"
                 },
+            },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
             answer_options = {
                 user_choice_1 = {
@@ -1096,6 +1111,9 @@ STR.Screenplay = {
                     "You are again thinking about ways to reduce the impacts of ocean acidification on the ocean life your tours rely on. Which option will you choose to do?"
                 },
             },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+            },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
@@ -1170,6 +1188,9 @@ STR.Screenplay = {
                     "With your ocean tour business, you provide jobs and money to local community. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
                 },
             },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+            },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
@@ -1218,6 +1239,9 @@ STR.Screenplay = {
                     "The city council continues to value your advice as a local business owner that provides local jobs. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
                 },
             },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+            },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
@@ -1264,6 +1288,9 @@ STR.Screenplay = {
                 role_guide = {
                     "Many of your friends are famers that live far inland. They are upgrading their farms and ask you for advice because you also help support local jobs. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
                 },
+            },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
             answer_options = {
                 user_choice_1 = {
@@ -1312,6 +1339,9 @@ STR.Screenplay = {
                     "The community appreciates the jobs your ocean tours support. They want to help improve ocean health and ask you for advice. What do you recommend they do?"
                 },
             },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+            },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
@@ -1358,6 +1388,9 @@ STR.Screenplay = {
                 role_guide = {
                     "People in community continue to value your input as a local business that provides ocean-based jobs. They again ask for your advice about how they can further improve ocean health. What do you recommend they do?"
                 },
+            },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
             answer_options = {
                 user_choice_1 = {
@@ -1636,6 +1669,22 @@ function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
     local q_info = decision_info.question_prompt
 
     return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1])
+
+end
+
+function STR:Get_Decision_Text_Hint(stage_key, substage_key, character_role)
+
+    -- gets the decision hint text to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local hint_info = decision_info.hint_text
+
+    return self:GetString_from_Tbl_or_Value(hint_info[character_role]) or self:GetString_from_Tbl_or_Value(hint_info[1])
 
 end
 
