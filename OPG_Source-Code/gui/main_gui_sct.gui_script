@@ -1992,6 +1992,8 @@ local function Game_Change_Character(self, character_role_key)
 		self.character_role_key = character_role_key
 		local subitem_name = STR:Get_Subitem_from_Role(character_role_key)
 		self.human_data_label = INFO:Get_Data_Item_Label("item_humans", subitem_name)
+		-- remove current boat and update with new boat
+		msg.post("ocean_level:/level_controller#script", HSH.msg_set_player_character_subitem, {minfo_subitem_boat_name = subitem_name})
 	end
 
 	-- use full string name since gauge tracking might not be initialized yet
@@ -2045,6 +2047,16 @@ local function Game_RunRestart(self, reset_ply_data)
 		-- set this to 0 b/c if running repeat as part of debrief screen, 
 		-- then debrief logic will kick in and auto update game progess after this function call
 		GameLogic_Progress(self, 0)
+
+		-- also if running game restart here then reset animals and buoy
+		Run_Fader(self, true, 0.25)
+		-- wait until fully dark/hidden, then reset, then fade back in
+		timer.delay(0.35, false, function(self)
+			msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = "special_restart_game"})
+			timer.delay(0.2, false, function(self)
+				Run_Fader(self, false, 0.25)
+			end)
+		end)
 	end
 
 end

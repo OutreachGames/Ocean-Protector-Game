@@ -1020,7 +1020,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 
 end
 
-local function Remove_Animal_Generic(self, item_name, subitem_name, go_id, delete_go)
+local function Remove_Object_Generic(self, item_name, subitem_name, go_id, delete_go)
 
 	local subitem_tbl = INFO.item_info[item_name].subitem_info[subitem_name]
 
@@ -1230,7 +1230,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	--[[
 	timer.delay(1, false, function ()
 		if math.random(0,6) == 0 then
-			Remove_Animal_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
+			Remove_Object_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
 		end
 	end)
 	--]]
@@ -1414,7 +1414,7 @@ local function SetupAnimals(self)
 
 end
 
-local function SetupBoat(self, boat_type_name)
+local function Spawn_Boat(self, boat_type_name)
 
 	-- defaults
 	boat_type_name = boat_type_name or "subitem_captain"
@@ -1455,6 +1455,20 @@ local function SetupBoat(self, boat_type_name)
 
 end
 
+local function Boat_Change_Character(self, boat_subitem_name)
+
+	-- clear all current boats with expire message
+	for _,v_subiteminfo in pairs(INFO.item_info.item_humans.subitem_info) do
+		Spawned_ResetAll(self, v_subiteminfo.spawn_list_key, false)
+	end
+
+	-- request new boat 
+	-- use subitem name instead of role so we do not need to 
+	--   require STR to use role to subitem converter
+	Spawn_Boat(self, boat_subitem_name)
+
+end
+
 local function SetupBuoy(self, hide_buoy)
 
 	-- starts looping buoy movment and adds to tracker table as way to measure pH
@@ -1463,6 +1477,8 @@ local function SetupBuoy(self, hide_buoy)
 
 	if hide_buoy then
 		local hide_rot = 35
+		go.cancel_animations("/ph_buoy/go_rope")
+		go.cancel_animations("/ph_buoy/go_body")
 		go.set("/ph_buoy/go_rope", "euler.z", hide_rot)
 		Spawned_ResetAll(self, buoy_list_key, true)
 	else
@@ -1651,20 +1667,32 @@ local function OnPauseToggle_SoundHelper(self, game_pause_toggle)
 
 end
 
-local function ScenePause_SoundHelper(self)
-
-	OnPauseToggle_SoundHelper(self, true)
-
-end
-
-local function SceneUnpause_SoundHelper(self)
-
-	OnPauseToggle_SoundHelper(self, true)
-
-end
-
 local function ExpireObjectCheck(self, spawn_list_key, go_id)
+
 	Spawned_RemoveObject(self, spawn_list_key, go_id, true)
+
+end
+
+local function DynamicObject_Reset(self)
+
+	-- reset all animals (includes humans) and buoy
+
+	-- run for animals
+	local delete_gos = true
+	for _, v_iteminfo in pairs(INFO.item_info) do
+		if v_iteminfo.item_is_alive then
+			for _,v_subiteminfo in pairs(v_iteminfo.subitem_info) do
+				Spawned_ResetAll(self, v_subiteminfo.spawn_list_key, delete_gos)
+			end
+		end
+	end
+
+	-- setup animals with fresh values
+	SetupAnimals(self)
+
+	-- hide buoy
+	SetupBuoy(self, true)
+
 end
 
 local function SceneStart(self)
@@ -1706,9 +1734,11 @@ end
 local function On_SpecialAction(self, special_action_name)
 
 	if special_action_name == "special_setup_first_boat" then
-		SetupBoat(self)
+		Spawn_Boat(self)
 	elseif special_action_name == "special_setup_pH_buoy" then
 		SetupBuoy(self)
+	elseif special_action_name == "special_restart_game" then
+		DynamicObject_Reset(self)
 	end
 
 end
@@ -1740,6 +1770,8 @@ function on_message(self, message_id, message, sender)
 		ExpireObjectCheck(self, message.minfo_spawn_list_key, sender)
 	elseif message_id == HSH.msg_request_special_case_action then
 		On_SpecialAction(self, message.minfo_special_case_key)
+	elseif message_id == HSH.msg_set_player_character_subitem then
+		Boat_Change_Character(self, message.minfo_subitem_boat_name)
 	end
 
 end
