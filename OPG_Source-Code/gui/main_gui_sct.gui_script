@@ -371,7 +371,12 @@ end
 
 local function QuestionScores_GetFinalPercent(self)
 
-	return self.player_data_tbl.num_best_answers/self.num_player_affected_questions
+	if self.num_player_affected_questions <= 0 then
+		-- edge case used in development testing where we removed all questions
+		return 0
+	else
+		return self.player_data_tbl.num_best_answers/self.num_player_affected_questions
+	end
 
 end
 
@@ -414,15 +419,117 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl, override_instead
 
 end
 
+local function DynamicText_FinalDebrief(self)
+
+    local n = "\n"
+
+    -- make table that has all final - initial values for all items
+    local items_delta = {}
+    for k_itemname,_ in pairs(CV_item_groups) do
+        local val_change_start = Player_Data_Table_GetEntry(self, "item_ph", 1)
+        local val_change_end = Player_Data_Table_GetEntry(self, "item_ph")
+        local val_delta = val_change_end - val_change_start
+        local percent_delta = (val_delta/val_change_start)
+        items_delta[k_itemname] = percent_delta
+    end
+
+    local function func_get_delta_text(percent_delta, special_acidity_case)
+
+        -- get net change 
+        local net_change_text
+        if percent_delta > 0.1 then
+            net_change_text = "Increased"
+        elseif percent_delta < -0.1 then
+            net_change_text = "Decreased"
+        end
+
+        -- get size of change
+        local magnitude_val = math.abs(percent_delta)
+        local magnitude_text
+        if magnitude_val > 0.8 then
+            magnitude_text = "Substantially"
+        elseif percent_delta > 0.5 then
+            magnitude_text = "Moderately"
+        elseif percent_delta > 0.5 then
+            magnitude_text = "Slightly"
+        end
+
+        -- combine and return
+        local combined_text = ""
+        if net_change_text ~= nil and magnitude_text ~= nil then
+            combined_text = magnitude_text .. " " .. net_change_text
+        else
+            combined_text = "Remained Relatively Stable"
+        end
+
+        if special_acidity_case then
+            if percent_delta > 0.1 then
+                combined_text = "This means that, on average, the ocean water has become "..string.lower(magnitude_text).." less acidic."
+            elseif percent_delta < 0.1 then
+                combined_text = "This means that, on average, the ocean water has become "..string.lower(magnitude_text).." more acidic."
+            else
+                combined_text = "This means that, on average, the acidity of the ocean water has remained about the same."
+            end
+        end
+
+        return combined_text
+
+    end
+
+    -- pH
+    local txt_ph = "Average Annual Ocean pH: "..func_get_delta_text(items_delta.item_ph)..n.."    "..func_get_delta_text(items_delta.item_ph, true)
+
+    -- ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
+    local txt_ocean_life = "Average Health of Ocean Life: "..func_get_delta_text(items_delta.item_ph)
+
+    -- human
+    local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.character_role_key))..": "
+    local txt_your_success = prefix_humans..func_get_delta_text(items_delta.item_humans)
+
+    -- reccomendation text
+    local final_score = QuestionScores_GetFinalPercent(self)
+    local txt_recomendations = "Recomendations: "..n
+
+    local good_suffix = "helped reduce ocean acidification, increased the health of ocean life, and improved your character goals."
+    local reminder_suffix = "choices that help reduce energy usage and/or nutrient pollution are effective ways to help prevent ocean acidification. "
+    local try_again_txt = "\n\nYou will soon have an option to rerun the game, too. "
+
+    -- recall that many questions have 0 change, so while they may not help as much they also do not hinder as much
+    if final_score == 100 then
+        txt_recomendations = "Fantastic work with the questions. Every choice you made "..good_suffix.." As you have shown,"..reminder_suffix..try_again_txt
+    elseif final_score > 70 then
+        txt_recomendations = "Very good work with the questions. Most of the choices you made "..good_suffix.." A few of the other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix..try_again_txt
+    elseif final_score > 40 then
+        txt_recomendations = "Good work with the questions. Many of the choices you made "..good_suffix.." Other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix..try_again_txt
+    else
+        txt_recomendations = "Good effort with the questions. Even if ocean health and your character goals may not have improved, it is still very useful to learn about how different choices lead to different outcomes. It can be tricky to know what the best choice might be for each question. Remember,"..reminder_suffix..try_again_txt
+    end
+
+    local text_tbl = {
+        "Summary of Decision Outcomes:",
+        n,
+        "Percentage of decisions with most optimal choices: "..string.format("%.0f", (final_score*100))..n,
+        -- ^possibly remove/comment out?
+        "The Data Log screen shows the final values for pH, ocean life, and your success. Here is a summary of how these have changed over time.",
+        txt_ph,
+        txt_ocean_life,
+        txt_your_success,
+        n,
+        txt_recomendations,
+        n
+    }
+
+    return table.concat(text_tbl, n)
+
+end
+
 local function TranslateHelperText(self, hashed_text_key)
 
 	-- takes hashed text key and translates and updates it with internal logic
 	-- returns as string
 
 	if hashed_text_key == HSH.helper_outcome_final_debrief then
-		local final_score = QuestionScores_GetFinalPercent(self)
-		local final_debrief_text = "Percentage of decisions with most optimal choices: "..string.format("%.0f", (final_score*100))
-		return final_debrief_text
+		return DynamicText_FinalDebrief(self)
 	else
 		return ""
 	end

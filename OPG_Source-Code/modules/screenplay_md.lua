@@ -84,7 +84,7 @@ STR.CV = {
 
     debrief_decision_view = {
         --"Your decision has happened ..." 
-        "Let's observe how that decision affects our ocean scene. ",
+        "\n\nLet's observe how that decision affects our ocean scene. ",
     },
 
     debrief_decision_click = {
@@ -912,7 +912,7 @@ STR.Screenplay = {
                         },
                     },
                     debrief_text = {
-                        "You've upgraded your engine to use less fuel. This upgrade cost money, but you have saved a lot money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've upgraded your engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                     --#TODO: make short term points slightly lower here, but overall good
@@ -932,7 +932,7 @@ STR.Screenplay = {
                         },
                     },
                     debrief_text = {
-                        "You've increased the number of trips you take on your boat. This has made you slightly earn more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've increased the number of trips you take on your boat. This earns you slightly more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                     --#TODO: make short term points slightly higher here
