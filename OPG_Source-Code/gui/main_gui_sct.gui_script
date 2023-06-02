@@ -538,7 +538,7 @@ local function TranslateHelperText(self, hashed_text_key)
 	-- returns as string
 
 	if hashed_text_key == HSH.helper_outcome_final_debrief then
-		return DynamicText_FinalDebrief(self)
+		return DynamicText_FinalDebrief(self), "Outcome Summary"
 	else
 		return ""
 	end
@@ -796,9 +796,10 @@ local function Screen_Popup_Input(self, action_id, action)
 
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				local debrief_text, is_debrief_dynamic = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
+				local debrief_title_text
 
 				if is_debrief_dynamic then
-					debrief_text = TranslateHelperText(self, debrief_text)
+					debrief_text, debrief_title_text = TranslateHelperText(self, debrief_text)
 				end
 
 				-- if there is debrief for this new_info screen then run it, 
@@ -808,7 +809,7 @@ local function Screen_Popup_Input(self, action_id, action)
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					local run_sizing_debrief = true
 					local update_values_to_debrief = true
-					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text)
+					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text)
 				else
 					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
@@ -1088,9 +1089,10 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
 				local debrief_text, is_debrief_dynamic = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
+				local debrief_title_text = "Update"
 
 				if is_debrief_dynamic then
-					debrief_text = TranslateHelperText(self, debrief_text)
+					debrief_text, debrief_title_text = TranslateHelperText(self, debrief_text)
 				end
 
 				if Loop_StatusType_is_Main(self) and debrief_text ~= nil and debrief_text ~= "" then
@@ -1109,7 +1111,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 					local run_sizing_popup = true
 					local reset_values_popup = true
-					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, "Update")
+					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, debrief_title_text)
 
 				else
 					msg.post(".", HSH.msg_request_game_progress)
