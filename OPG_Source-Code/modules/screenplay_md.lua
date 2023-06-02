@@ -1685,6 +1685,9 @@ function STR:Get_Decision_Text_Hint(stage_key, substage_key, character_role)
 
     local hint_info = decision_info.hint_text
 
+    -- recall, some decisions may not have hints
+    if hint_info == nil then return nil end
+
     return self:GetString_from_Tbl_or_Value(hint_info[character_role]) or self:GetString_from_Tbl_or_Value(hint_info[1])
 
 end
