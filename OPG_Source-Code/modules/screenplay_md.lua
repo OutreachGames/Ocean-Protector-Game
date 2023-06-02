@@ -84,7 +84,7 @@ STR.CV = {
 
     debrief_decision_view = {
         --"Your decision has happened ..." 
-        "\n\nLet's observe how that decision affects our ocean scene. ",
+        "\n\nLet's observe how that decision affects our ocean scene. \n\n\n",
     },
 
     debrief_decision_click = {
@@ -98,7 +98,7 @@ STR.CV = {
 
     hint_text_defaults = {
         hint_lower_emissions = {
-            "Remember, making energy efficent decisions will reduce carbon dioxide emissions and help prevent ocean acidification. "
+            "Making energy efficent decisions will help reduce emissions of carbon dioxide gas, which will help decrease ocean acidification. "
         }
     }
 
@@ -984,7 +984,7 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+                "Waste and garbage that makes it's way to the ocean can affect the entire marine food-web, as well as trigger acidification."
             },
             answer_options = {
                 user_choice_1 = {
@@ -1034,7 +1034,7 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+                "Healthy ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to physical changes. "
             },
             answer_options = {
                 user_choice_1 = {
@@ -1113,7 +1113,7 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+                "Well-balanced ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to physical changes. "
             },
             answer_options = {
                 user_choice_1 = {
@@ -1241,7 +1241,7 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+                "Cars and trucks emit large amounts of carbon dioxide gas, so reducing the distance or driving usage can help reduce emissions. "
             },
             answer_options = {
                 user_choice_1 = {
@@ -1291,7 +1291,7 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+                "Reducing the amount of fossil fuel use and nutient pollution are very effective ways to reduce ocean acidification. "
             },
             answer_options = {
                 user_choice_1 = {
@@ -1391,7 +1391,7 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+                "Reducing the amount of excess water and energy use helps reduce carbon dioxide emissions and helps decrease nutrient pollution runoff into the ocean. "
             },
             answer_options = {
                 user_choice_1 = {
