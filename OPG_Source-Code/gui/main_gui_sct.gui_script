@@ -943,7 +943,7 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 			local frame_node = gui.get_node(constant.node_frame)
 			gui.set_size(frame_node, vmath.vector3(gui.get_size(frame_node).x, pos_update.frame_ylength, 0))
 
-			local button_node = gui.get_node(constant.node_submit_box_name)
+			local button_node = gui.get_node(constant.node_submit_button_frame)
 			local current_pos_button = gui.get_position(button_node)
 			gui.set_position(button_node, vmath.vector3(current_pos_button.x, pos_update.submit_position_y, 0))
 
@@ -951,6 +951,7 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 			-- also set hint text now, too
 			if has_hint then
 				gui.set_enabled(hint_frame, true)
+				gui.set_position(hint_frame, vmath.vector3(-current_pos_button.x, pos_update.submit_position_y, 0))
 				gui.set_text(gui.get_node(constant.node_hint_body_text), hint_text)
 			end
 
@@ -989,8 +990,8 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	end
 
 	-- set tint on button to dark/locked
-	gui.set_color(gui.get_node(constant.node_submit_box_name), MY_GOO.COLOR_LOCKED)
-	gui.set_color(gui.get_node(constant.node_submit_text_name), MY_GOO.COLOR_LOCKED)
+	gui.set_color(gui.get_node(constant.node_submit_button_frame), MY_GOO.COLOR_LOCKED)
+	gui.set_color(gui.get_node(constant.node_submit_button_text), MY_GOO.COLOR_LOCKED)
 
 	-- set text 
 	if question_text ~= nil then
@@ -1042,8 +1043,8 @@ local function Screen_Decision_Initialize(self, enabled_status)
 		goo_option_core_basename = "/gui_radio_core",
 		goo_submit_name = basename.."/group_button_submit",
 		goo_hint_name = basename.."/group_button_hint",
-		node_submit_box_name = basename.."/group_button_submit/gui_button_core",
-		node_submit_text_name = basename.."/group_button_submit/gui_button_label",
+		node_submit_button_frame = basename.."/group_button_submit/gui_button_core",
+		node_submit_button_text = basename.."/group_button_submit/gui_button_label",
 		node_hint_subcontroller = basename .. "/gnode_hint_box_subcontroller",
 		node_hint_button_frame = basename .. "/group_button_hint/gui_button_core",
 		node_hint_button_text = basename .. "/group_button_hint/gui_button_label",
@@ -1081,8 +1082,8 @@ local function Screen_Decision_Input(self, action_id, action)
 			-- set the selected index and allow the submit button
 			self.hud_decision_dynamic.goo_option_selected = index
 			self.hud_decision_dynamic.goo_sumbit_isactive = true
-			gui.set_color(gui.get_node(Hud_info.node_submit_box_name), MY_GOO.COLOR_DEFAULT)
-			gui.set_color(gui.get_node(Hud_info.node_submit_text_name), MY_GOO.COLOR_TEXT_DEFAULT)
+			gui.set_color(gui.get_node(Hud_info.node_submit_button_frame), MY_GOO.COLOR_DEFAULT)
+			gui.set_color(gui.get_node(Hud_info.node_submit_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
 
 			-- visually highlight which choice was selected
 			local other_nodes = {1, 2, 3}
@@ -1192,17 +1193,20 @@ local function Screen_Decision_Input(self, action_id, action)
 		local hint_button_label
 		local enabled_setting
 		local controller_node = gui.get_node(Hud_info.node_hint_subcontroller)
-		if Hud_info.hint_box_is_open then
+
+		local current_setting = self.hud_decision_dynamic.hint_box_is_open
+		local new_setting = not current_setting
+		self.hud_decision_dynamic.hint_box_is_open = new_setting
+
+		if new_setting then
 			-- if hint open then close 
 			hint_button_label = "Hide Hint"
-			enabled_setting = false
 		else
 			-- if hint closed then open
 			hint_button_label = "Show Hint"
-			enabled_setting = true
 		end
 
-		SimpleToggleHelper(self, controller_node, enabled_setting, true)
+		SimpleToggleHelper(self, controller_node, new_setting, true)
 		gui.set_text(gui.get_node(Hud_info.node_hint_button_text), hint_button_label)
 
 	end
