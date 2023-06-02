@@ -498,7 +498,13 @@ local function DynamicText_FinalDebrief(self)
 
     local good_suffix = "helped reduce ocean acidification, increased the health of ocean life, and improved your character goals."
     local reminder_suffix = "choices that help reduce energy usage and/or nutrient pollution are effective ways to help prevent ocean acidification. "
-    local try_again_txt = "\n\nYou will soon have an option to rerun the game, too. "
+    local try_again_txt
+	if not self.final_debrief_shown then
+		self.final_debrief_shown = true
+		try_again_txt = "\n\nYou will soon have an option to rerun the game, too. "
+	else
+		try_again_txt = "\n\nDon't forget, you can rerun the game, too. "
+	end
 
     -- recall that many questions have 0 change, so while they may not help as much they also do not hinder as much
     if final_score == 100 then
@@ -2149,6 +2155,7 @@ local function Game_RunRestart(self, reset_ply_data)
 	self.gameplay_loop_completion_type_primary = 0
 	self.gameplay_loop_completion_type_secondary = 0
 	self.special_setup_goals_hud_enabled = false
+	self.final_debrief_shown = false
 
 	-- get stage and substage list in order
 	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
