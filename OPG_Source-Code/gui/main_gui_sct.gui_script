@@ -483,6 +483,8 @@ local function DynamicText_FinalDebrief(self)
 
     -- pH
 	local indent = "  "
+	--local txt_co2 = "Average Annual Carbon Dioxide Emissions: "..n..indent..func_get_delta_text(items_delta.item_ph)
+
     local txt_ph = "Average Annual Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)..n..indent..func_get_delta_text(items_delta.item_ph, true)
 
     -- ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
@@ -521,7 +523,7 @@ local function DynamicText_FinalDebrief(self)
     local text_tbl = {
         --"Summary of Decision Outcomes:",
         --"",
-        "Percentage of decisions with most optimal choices: "..string.format("%.0f", (final_score*100)).."%"..n,
+        "Percentage of decisions with most optimal choices: "..n..indent..string.format("%.0f", (final_score*100)).."% "..n,
         -- ^possibly remove/comment out?
         --"Summary of changes over time:",
         txt_ph,
