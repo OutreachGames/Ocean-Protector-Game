@@ -83,7 +83,7 @@ INFO.item_info = {
             plot_y_axis_label = {"Average Annual Ocean pH"},
             object_clicked_label = "pH Buoy",
             data_view_label = {"Ocean pH"},
-            plot_helper_text = "Recall, lower pH means more acidic",
+            plot_helper_text = {"Remember: lower pH means more acidic"},
             plot_y_tick_labels = {{"7.90", "7.95", "8.00", "8.05", "8.10"}}
             -- or {{"7.950", "7.975", "8.000", "8.025", "8.050"}}?
             -- main source is https://www.nnvl.noaa.gov/view/globaldata.html#ACID
@@ -513,12 +513,14 @@ end
 
 function INFO:Get_Plot_Subtitle_Text(item_name, opt_subitem_name)
 
-    local data_label_tbl = self.item_info[item_name].gui_info.plot_helper_text
+    local data_subtitle_tbl = self.item_info[item_name].gui_info.plot_helper_text
+
+    if data_subtitle_tbl == nil then return nil end
 
     if opt_subitem_name ~= nil then
-        return data_label_tbl[opt_subitem_name] or data_label_tbl[1]
+        return data_subtitle_tbl[opt_subitem_name] or data_subtitle_tbl[1]
     else
-        return data_label_tbl[1]
+        return data_subtitle_tbl[1]
     end
 
 end
