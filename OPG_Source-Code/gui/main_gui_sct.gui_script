@@ -1319,6 +1319,10 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 		gui.set_text(gui.get_node(v_node_y_tickname), tick_labels[i_tickindex])
 	end
 
+	-- set subtitle helper text
+	local subtitle_text = INFO:Get_Plot_Subtitle_Text(item_group_key, opt_subitem_name) or ""
+	gui.set_text(gui.get_node(constant.node_helper_subtitle_text), subtitle_text)
+
 	-- set x axis label (tick labels and bar visiibiliy handled in 'plot tracker update function' below)
 	gui.set_text(gui.get_node(constant.node_x_axis_label), INFO:Get_X_Axis_Label())
 
@@ -1362,6 +1366,7 @@ local function Screen_Plot_Initialize(self, enabled_status)
 		specified_bar_labels = INFO:Get_X_Tick_Labels(),
 		basename_individual_bar_max_y = "/group_bar_element/tracker_max_length",
 		basename_individual_bar_progress = "/group_bar_element/gui_frame_progress",
+		node_helper_subtitle_text = basename .. plot_base .. "/gui_text_subtitle"
 	}
 
 	-- set dynamics
