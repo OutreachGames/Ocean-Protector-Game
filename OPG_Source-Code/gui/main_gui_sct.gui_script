@@ -426,8 +426,8 @@ local function DynamicText_FinalDebrief(self)
     -- make table that has all final - initial values for all items
     local items_delta = {}
     for k_itemname,_ in pairs(CV_item_groups) do
-        local val_change_start = Player_Data_Table_GetEntry(self, "item_ph", 1)
-        local val_change_end = Player_Data_Table_GetEntry(self, "item_ph")
+        local val_change_start = Player_Data_Table_GetEntry(self, "item_ph", 1).item_tracker_score
+        local val_change_end = Player_Data_Table_GetEntry(self, "item_ph").item_tracker_score
         local val_delta = val_change_end - val_change_start
         local percent_delta = (val_delta/val_change_start)
         items_delta[k_itemname] = percent_delta
@@ -463,12 +463,17 @@ local function DynamicText_FinalDebrief(self)
         end
 
         if special_acidity_case then
+			if magnitude_text == nil then
+				magnitude_text = ""
+			else
+				magnitude_text = magnitude_text.." "
+			end
             if percent_delta > 0.1 then
-                combined_text = "This means that, on average, the ocean water has become "..string.lower(magnitude_text).." less acidic."
-            elseif percent_delta < 0.1 then
-                combined_text = "This means that, on average, the ocean water has become "..string.lower(magnitude_text).." more acidic."
+                combined_text = "On average, the ocean became "..string.lower(magnitude_text).."less acidic."
+            elseif percent_delta < -0.1 then
+                combined_text = "On average, the ocean became "..string.lower(magnitude_text).."more acidic."
             else
-                combined_text = "This means that, on average, the acidity of the ocean water has remained about the same."
+                combined_text = "On average, the acidity of the ocean water remained about the same."
             end
         end
 
@@ -477,18 +482,19 @@ local function DynamicText_FinalDebrief(self)
     end
 
     -- pH
-    local txt_ph = "Average Annual Ocean pH: "..func_get_delta_text(items_delta.item_ph)..n.."    "..func_get_delta_text(items_delta.item_ph, true)
+	local indent = "  "
+    local txt_ph = "Average Annual Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)..n..indent..func_get_delta_text(items_delta.item_ph, true)
 
     -- ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
-    local txt_ocean_life = "Average Health of Ocean Life: "..func_get_delta_text(items_delta.item_ph)
+    local txt_ocean_life = "Average Health of Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
     -- human
     local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.character_role_key))..": "
-    local txt_your_success = prefix_humans..func_get_delta_text(items_delta.item_humans)
+    local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
 
     -- reccomendation text
     local final_score = QuestionScores_GetFinalPercent(self)
-    local txt_recomendations = "Recomendations: "..n
+    local txt_recomendations
 
     local good_suffix = "helped reduce ocean acidification, increased the health of ocean life, and improved your character goals."
     local reminder_suffix = "choices that help reduce energy usage and/or nutrient pollution are effective ways to help prevent ocean acidification. "
@@ -502,21 +508,24 @@ local function DynamicText_FinalDebrief(self)
     elseif final_score > 40 then
         txt_recomendations = "Good work with the questions. Many of the choices you made "..good_suffix.." Other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix..try_again_txt
     else
-        txt_recomendations = "Good effort with the questions. Even if ocean health and your character goals may not have improved, it is still very useful to learn about how different choices lead to different outcomes. It can be tricky to know what the best choice might be for each question. Remember,"..reminder_suffix..try_again_txt
+		--"It can be tricky to know what the best choice might be for each question. " --might be too much reading
+        txt_recomendations = "Good effort with the questions. Even if ocean health and your character goals may not have improved, it is still very useful to learn about how different choices lead to different outcomes. Remember,"..reminder_suffix..try_again_txt
     end
 
     local text_tbl = {
-        "Summary of Decision Outcomes:",
-        n,
-        "Percentage of decisions with most optimal choices: "..string.format("%.0f", (final_score*100))..n,
+        --"Summary of Decision Outcomes:",
+        --"",
+        "Percentage of decisions with most optimal choices: "..string.format("%.0f", (final_score*100)).."%"..n,
         -- ^possibly remove/comment out?
-        "The Data Log screen shows the final values for pH, ocean life, and your success. Here is a summary of how these have changed over time.",
+        --"Summary of changes over time:",
         txt_ph,
+		"",
         txt_ocean_life,
+		"",
         txt_your_success,
         n,
-        txt_recomendations,
-        n
+        "Recomendations: ",
+		txt_recomendations
     }
 
     return table.concat(text_tbl, n)
