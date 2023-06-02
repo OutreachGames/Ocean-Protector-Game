@@ -672,7 +672,9 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			if size_type == nil then
 				local _, counted_newlines = body_text:gsub('\n', '\n')
 				local num_lines_guess = math.max(counted_newlines, #body_text/80)
-				if num_lines_guess > 8 then
+				if num_lines_guess > 12 then
+					size_type = "size_huge"
+				elseif num_lines_guess > 8 then
 					size_type = "size_large"
 				elseif num_lines_guess > 3 then
 					size_type = "size_medium"
@@ -704,7 +706,8 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			local y_ranges = {
 				size_small = {250, 119, 108},
 				size_medium = {400, 258, -51},
-				size_large = {600, 468, -251}
+				size_large = {600, 468, -251},
+				size_huge = {820, 680, -465},
 			}
 
 			local yvals = y_ranges[self.hud_popup_dynamic.overall_size]
@@ -1089,7 +1092,7 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
 				local debrief_text, is_debrief_dynamic = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
-				local debrief_title_text = "Update"
+				local debrief_title_text
 
 				if is_debrief_dynamic then
 					debrief_text, debrief_title_text = TranslateHelperText(self, debrief_text)
@@ -1111,7 +1114,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 					local run_sizing_popup = true
 					local reset_values_popup = true
-					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, debrief_title_text)
+					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, debrief_title_text or "Update")
 
 				else
 					msg.post(".", HSH.msg_request_game_progress)
@@ -1830,6 +1833,7 @@ local function Close_All_Center_Screens(self)
 
 end
 
+
 -- HUD Process: Game Loop
 local function GameLogic_Progress(self, i_stage_addition)
 
@@ -2005,6 +2009,7 @@ local function Screen_MainMenu_Input(self, action_id, action)
 	--MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
 
 end
+
 
 -- HUD Process: More Gameplay
 local function GamePauseToggle_Internal(self)
