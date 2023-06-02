@@ -643,6 +643,7 @@ STR.Screenplay = {
             question_prompt = { 
                 "Ocean acidification harms which of the following groups?"
             },
+            prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
                     display_text = {
