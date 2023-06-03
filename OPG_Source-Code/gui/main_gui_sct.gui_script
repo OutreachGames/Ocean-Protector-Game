@@ -17,6 +17,9 @@ local CV_gameplay_loop = {
 	status_unknown = 3
 }
 
+local CV_Bar_Old = vmath.vector4(0.80, 0.80, 0.80, 1)
+local CV_Bar_Current = vmath.vector4(1.0, 1.0, 1.0, 1)
+
 
 -- functions
 
@@ -105,27 +108,53 @@ local function Player_Data_Table_UpdateEntry(self, item_key, new_value, override
 
 end
 
-local function Player_Data_Table_GetEntry(self, item_key, i_key)
-
-	-- gets an i-based entry from player save table for given item key and i-key
+local function Player_Data_Table_Get_ItemTable(self, item_key)
 
 	if self.player_data_tbl == nil then
 		print("Error: unable to get entry in player data table because player data table does not exist \n")
+		return nil
 	end
 	if self.player_data_tbl.item_data_tbl == nil then
 		print("Error: unable to get entry in item data table of player data table because item data table does not exist \n")
+		return nil
 	end
 
 	local item_data = self.player_data_tbl.item_data_tbl[item_key]
+
 	if item_data == nil then
 		print("Note: item key input of <"..tostring(item_key).."> to function 'Player Data Table Get Entry' is not matched with entry, returning nil")
+	end
+
+	return item_data
+
+end
+
+local function Player_Data_Table_Get_ICount(self, item_key)
+
+	-- gets count of entries in player data table for given item key
+
+	local item_tbl = Player_Data_Table_Get_ItemTable(self, item_key)
+
+	if item_tbl == nil then return 0 end
+
+	return #item_tbl
+
+end
+
+local function Player_Data_Table_Get_IEntry(self, item_key, i_key)
+
+	-- gets an i-based entry from player save table for given item key and i-key
+
+	local item_tbl = Player_Data_Table_Get_ItemTable(self, item_key)
+	if item_tbl == nil then
+		print("Error: there is no entry in player data table for key <"..tostring(item_key).."> returning nil. ")
 		return nil
 	end
 
 	-- default i-key is last in list
-	i_key = i_key or #item_data
+	i_key = i_key or #item_tbl
 
-	return item_data[i_key]
+	return item_tbl[i_key]
 
 end
 
@@ -296,7 +325,7 @@ local function Screen_Data_TrackerUpdate(self, item_name)
 		local max_length_node = gui.get_node(gui_groupname..constant.basename_item_bar_max_x)
 		local max_size = gui.get_size(max_length_node)
 		-- get health percent
-		local entry_health_data = Player_Data_Table_GetEntry(self, k_itemname)
+		local entry_health_data = Player_Data_Table_Get_IEntry(self, k_itemname)
 		if entry_health_data == nil then
 			print("Error: current entry health data for 'Player Data Table Get Entry' function is nil, not updating...\n")
 			return
@@ -318,8 +347,17 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 	-- updates bar heights for plot given item
 	-- reminder all items use the same plot, so only one can be open at a time
 
+	local number_entries = Player_Data_Table_Get_ICount(self, item_key)
 	local constant = self.hud_plot_constant
-	for i=1, constant.max_number_bars do
+	local max_graph_bars = constant.max_number_bars
+
+	if number_entries > max_graph_bars then
+		print("Error: number of graph bars <"..tostring(max_graph_bars).."> will not be able to accomdate this many player data entries <"..tostring(number_entries).."> ")
+	end
+
+	local time_shade_bars = false
+
+	for i=1,max_graph_bars  do
 
 		-- get nodes to update/show or hide
 		local plot_id = constant.basename_individual_bar_group..i
@@ -328,7 +366,7 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 		local set_visible
 
 		-- if there is an i-match then make visible text and bar progress, otherwise hide visibility
-		local entry_health_data = Player_Data_Table_GetEntry(self, item_key, i)
+		local entry_health_data = Player_Data_Table_Get_IEntry(self, item_key, i)
 		if entry_health_data ~= nil then
 			-- get node sizes 
 			local max_y_length_node = gui.get_node(plot_id..constant.basename_individual_bar_max_y)
@@ -346,9 +384,19 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 			set_visible = false
 		end
 
+		-- update colors, 0.9by default, 1.1 if most recently shown bar
+		if time_shade_bars then
+			if i == number_entries then
+				gui.set_color(progress_node, CV_Bar_Current)
+			else
+				gui.set_color(progress_node, CV_Bar_Old)
+			end
+		end
+
 		-- visibility accordingly
 		gui.set_visible(label_node, set_visible)
 		gui.set_visible(progress_node, set_visible)
+
 
 	end
 
@@ -419,7 +467,7 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl, override_instead
 	-- do this by looping through things we can track and checking if they match what is in table with same string key
 	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
 		-- get previous entry
-		local previous_entry = Player_Data_Table_GetEntry(self, k_itemname) or {}
+		local previous_entry = Player_Data_Table_Get_IEntry(self, k_itemname) or {}
 		local previous_score = previous_entry.item_tracker_score or 0
 
 		-- get new delta by matching our known trackers with the score update table provided to function
@@ -453,8 +501,8 @@ local function DynamicText_FinalDebrief(self)
     -- make table that has all final - initial values for all items
     local items_delta = {}
     for k_itemname,_ in pairs(CV_item_groups) do
-        local val_change_start = Player_Data_Table_GetEntry(self, "item_ph", 1).item_tracker_score
-        local val_change_end = Player_Data_Table_GetEntry(self, "item_ph").item_tracker_score
+        local val_change_start = Player_Data_Table_Get_IEntry(self, "item_ph", 1).item_tracker_score
+        local val_change_end = Player_Data_Table_Get_IEntry(self, "item_ph").item_tracker_score
         local val_delta = val_change_end - val_change_start
         local percent_delta = (val_delta/val_change_start)
         items_delta[k_itemname] = percent_delta

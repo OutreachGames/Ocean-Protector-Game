@@ -9,6 +9,9 @@ local n = '\n'
 local tab = '     '
 local ntab = n .. tab
 
+local CV_Delta_Default = 0.055
+local CV_Delta_Zero = 0
+
 -- module 
 local STR = {}
 
@@ -33,14 +36,17 @@ STR.CV = {
     },
 
     outcome_functions = {
+
         option_empty = function()
             return nil
         end,
 
-        func_option_outcome_dynamic = function(outcome_tbl_scores, override_instead_insert, was_best_choice)
+        func_option_outcome_dynamic = function(outcome_tbl_scores, was_best_choice, override_instead_insert)
+
+            -- recall 'was_best_choice' only does anything when in role decision questions/choices
 
             if outcome_tbl_scores == nil then
-                outcome_tbl_scores = {0}
+                outcome_tbl_scores = {CV_Delta_Zero}
             end
 
             local send_tbl = {
@@ -53,13 +59,13 @@ STR.CV = {
         end,
 
         func_option_outcome_default_good = function() -- (+)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.055}, minfo_was_best_choice = true})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Default}, minfo_was_best_choice = true})
         end,
         func_option_outcome_default_fair = function() -- (0)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {0.0}})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Zero}})
         end,
         func_option_outcome_default_bad = function() -- (-)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-0.055}})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-CV_Delta_Default}})
         end,
 
         func_set_role = function(chosen_role_name)
@@ -359,7 +365,7 @@ STR.Screenplay = {
                 STR.CV.outcome_functions.func_setup_special_action("special_setup_pH_buoy")
                 local override_rather_than_insert = true
                 local start_vals = STR.CV.update_item_values_tbls.initial_oa_affected_values_ph
-                STR.CV.outcome_functions.func_option_outcome_dynamic(start_vals, override_rather_than_insert)
+                STR.CV.outcome_functions.func_option_outcome_dynamic(start_vals, nil, override_rather_than_insert)
             end
         },
 
@@ -400,7 +406,7 @@ STR.Screenplay = {
                 --recall we already decreased pH
                 local initial_decreases = STR.CV.update_item_values_tbls.initial_oa_affected_values_life
                 local override_rather_than_insert = true
-                STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases, override_rather_than_insert)
+                STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases, nil, override_rather_than_insert)
             end
         },
 

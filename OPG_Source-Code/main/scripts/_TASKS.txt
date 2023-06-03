@@ -15,18 +15,21 @@
     --   in other words add stages after each decision to say "now lets view how this looks in our ocean scene"
     -- add dynamic response to OA updates in real time
     --   make sure to never kill all of animal, otherwise no clicking will be possible and game will get stuck
+    --   need to make percent changes more dramatic than actual number, since 0.05 change means like 1 fish...
 
     -- also add summary debrief after clicking on items in each stage 
     --   no extra HUD screen with outcome question since it takes up too much space and player needs to be able to see things
     --   (Decision Outcome Summary: Decision: CO2 emissions or Nutrient Pollution: Ocean Acidity: Ocean Life Health: Your Success: )
     --   'Click 'Continue' to move to next decision'
-    -- highlight current bar in plot and make all others slightly grey (1.1 vs 0.9)
     -- add message scroll back (just a link to a PDF page with notes all written out, and add this to message along with link at bottom to click to open page )
 
     -- maybe at last decision it tallies up all decisions and if all correct it sets to highest? (just as failsafe to ensure players can get max)?
 
     -- add save mechanic (ie fast-forward to i key method with choices saved)
+    --   save following:
+    --     player_data_tracker_table, goals_shown, stage, substage, player_role, item_data_bar_shown, item_data_goto_shown, item_present
     -- add firebase connection and Google sheets connection
+    --  start time, each decision click with time since decisions started
 
 
 	-- way to load in table of fish group health
