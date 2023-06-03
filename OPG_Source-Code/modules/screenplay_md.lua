@@ -397,7 +397,7 @@ STR.Screenplay = {
                 --Since 1870 CO2 has increased by 40% in our oceans.
                 --Rate of acidificaiton is 10 times faster than any time in past 55 million years.
                 --http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
-                item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in your Data Log, which you can access at any time by clicking the arrow button above 'Ocean pH' in the right hand side screen. "}
+                item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in your Data Log. You can access these values at any time by clicking the arrow button for each item in the Data Log Screen."}
             }
         },
 
