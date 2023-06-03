@@ -121,7 +121,6 @@ end
 local function PlayerData_Set_Character(self, role_key)
 
 	-- changes player character variables and labels
-	-- #TODO add save to file here
 
 	local human_data_label
 	if role_key == nil then
@@ -143,14 +142,11 @@ end
 
 local function PlayerData_Set_Special(self, data_key, set_value)
 
-	-- #TODO add save to file here
 	self.player_data_tbl[data_key] = set_value
 
 end
 
 local function PlayerData_Update_SumBestChoices(self, value, override)
-
-	-- #TODO add save to file here
 
 	value = value or 1
 	if override then
@@ -164,6 +160,7 @@ end
 local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 
 	-- #TODO add save to file here
+	-- so game saves after each stage
 
 	new_ikey = new_ikey or 1
 	if override then
@@ -177,7 +174,6 @@ end
 local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override_instead_insert)
 
 	-- adds an i-based entry to player save table for given item key 
-	-- #TODO add save to file here
 
 	local num_items = #self.player_data_tbl.item_data_tbl[item_key]
 
@@ -197,8 +193,6 @@ local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override
 end
 
 local function PlayerData_UpdateHUDTracker(self, item_key, show_item, show_goto)
-
-	-- #TODO add save to file here
 
 	local hud_tracker =  self.player_data_tbl.item_data_tbl[item_key]
 	if show_item ~= nil then
@@ -1739,7 +1733,7 @@ end
 local function PlayerData_Reset(self, update_hud_screens, back_to_begining)
 
 	-- resets player data
-	-- #TODO add save to file here
+	-- #TODO add save/load to file here if being called at initialization/resume game
 
 	self.player_data_tbl = nil
 
