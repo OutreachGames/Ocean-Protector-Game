@@ -538,6 +538,7 @@ STR.Screenplay = {
             question_prompt = { 
                 "True or false? Burning fossil fuels leads to ocean acidification."
             },
+            prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
                     display_text = {
@@ -707,6 +708,7 @@ STR.Screenplay = {
             question_prompt = { 
                 "True or false? There are steps we can all take to reduce ocean acidification."
             },
+            prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
                     display_text = {

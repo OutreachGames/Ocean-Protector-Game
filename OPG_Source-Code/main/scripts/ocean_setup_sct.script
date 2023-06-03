@@ -275,6 +275,18 @@ local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_
 
 end
 
+local function GetDynamicGrid_IEntry(self, spawn_list_key, i_index)
+
+	local dyn_grid = self.dynamic_grids[spawn_list_key]
+	if dyn_grid == nil then
+		print("Error: function 'Get Dynamic Grid' supplied with invalid spawn list key <"..tostring(spawn_list_key)..">")
+		return {x=0, y=0, z=0}
+	else
+		return dyn_grid[i_index]
+	end
+
+end
+
 local function Set_Sea_Particles(self, toggle_on, clear_instant)
 
 	-- toggle sea dust on or off
@@ -805,7 +817,7 @@ local function Run_CoastalOA(self, update_percentage_to_hide)
 	end
 
 	-- default args
-	-- includes amount of effect to hide/show, 1 is fullly hidden, 0 is show everything
+	-- includes amount of effect to hide/show, 1 is fully hidden, 0 is show everything
 	if type(update_percentage_to_hide) ~= "number" then
 		update_percentage_to_hide = 0
 	end
@@ -1040,7 +1052,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 	local spawn_list_key_name = subitem_tbl.spawn_list_key
 	local collfact_name = subitem_tbl.spawn_coll_factory
 	--local obj_dimensions = subitem_tbl.object_dimensions
-	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
+	local pos_tbl = GetDynamicGrid_IEntry(self, spawn_list_key_name, i_position_in_grid)
 
 	local rand_rot_range = subitem_tbl.random_rotation_range
 	local rot = nil
@@ -1094,7 +1106,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	if subitem_tbl.object_translation_speed_can_vary then
 		obj_translate_speed_base = obj_translate_speed_base * (math.random(60,120)/100)
 	end
-	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
+	local pos_tbl = GetDynamicGrid_IEntry(self, spawn_list_key_name, i_position_in_grid)
 	local anim_multi = subitem_tbl.object_anim_multi or {moving = 1, idle = 0.5, extra = 0.5}
 	local anim_multi_moving = anim_multi.moving or 1
 	local anim_multi_idle = anim_multi.idle or 0.5
@@ -1241,7 +1253,7 @@ local function Spawn_Animal_Micro(self, item_name, subitem_name, i_position_in_g
 	local obj_scale_base = subitem_tbl.object_scale_base
 	local obj_rot_speed_base = subitem_tbl.object_rotation_speed_base
 	local obj_translate_speed_base = subitem_tbl.object_translation_speed_base
-	local pos_tbl = subitem_tbl.spawn_position_grid_dynamic[i_position_in_grid]
+	local pos_tbl =  GetDynamicGrid_IEntry(self, spawn_list_key_name, i_position_in_grid)
 
 	local rand_base = (math.random(75,100)/100)
 	local scale = obj_scale_base * rand_base
@@ -1275,62 +1287,6 @@ local function SetupAnimals(self)
 
 	-- spawn in all the animals 
 
-	-- setup some helper functions
-	-- easy grid for swimmers
-	local function func_grid_swimmers(spawn_subgroup, rand_offset_factor, y_stack_base)
-
-		-- get grid points from just a few variables
-
-		local scale = spawn_subgroup.object_scale_base
-		local count = spawn_subgroup.spawn_max_count
-		local obj_size = spawn_subgroup.object_dimensions
-		local obj_grid_mult = spawn_subgroup.object_gridsize_multiplier or {x=1, y=1}
-		local local_size_x = obj_size.x * scale * obj_grid_mult.x
-		local local_size_y = obj_size.y * scale * obj_grid_mult.y
-
-		local min_x = spawn_subgroup.spawn_x_min or 0
-		local max_x = min_x + (local_size_x*1.2)
-
-		local min_y = spawn_subgroup.spawn_y_range[1]
-		local max_y = spawn_subgroup.spawn_y_range[2]
-		if max_y + local_size_y < min_y then
-			max_y = min_y + local_size_y*1.2
-		end
-
-		local rand_offset_factor = rand_offset_factor or {x=0.25, y=0.3}
-
-		local range_tbl = {x={min_x, max_x}, y={min_y, max_y}}
-		local cell_size_table = {x = local_size_x, y = local_size_y, z = spawn_subgroup.spawn_z_base}
-		local use_center = true
-		local grid_points = GetGridPoints(range_tbl, cell_size_table, count, rand_offset_factor, use_center, y_stack_base)
-		return grid_points
-
-	end
-
-	local function func_grid_static(spawn_subgroup)
-
-		local max_count_value = spawn_subgroup.spawn_max_count
-		local static_tbl = spawn_subgroup.static_spawner_tbl
-		local max_count_static_tbl = #static_tbl
-
-		if max_count_value > max_count_static_tbl then
-			print("Error: max_count_value is > max_count_static_tbl, there will not be enough grid slots! Setting max count value to table length max. \n")
-			max_count_value = max_count_static_tbl
-		end
-
-		local cells_tbl = {}
-		for i=1,max_count_value do
-			local x = static_tbl[i][1]
-			local y = static_tbl[i][2]
-			local z = static_tbl[i][3] + (i*0.001) + Get_Z_from_Y(y, 0.1)
-			cells_tbl[i] = {x = x, y = y, z = z, i_index = i}
-		end
-
-		return cells_tbl
-
-	end
-
-
 	-- run compiled spawning
 	for k_item, v_item in pairs(INFO.item_info) do
 
@@ -1342,11 +1298,6 @@ local function SetupAnimals(self)
 				-- reset all in this group 
 				Spawned_ResetAll(self, v_subitem.spawn_list_key, true)
 
-				-- reset any previous grids
-				-- yes, this transmits back to the module, but this is by far the cleanest way to do this
-				-- plus, it only runs once 
-				v_subitem.spawn_position_grid_dynamic = nil
-
 				-- get count to spawn
 				local number_to_spawn = v_subitem.spawn_max_count
 
@@ -1354,18 +1305,12 @@ local function SetupAnimals(self)
 				if number_to_spawn ~= nil and number_to_spawn > 0 then
 
 					if INFO:Logic_is_Swimmer(v_subitem.object_logic_type) then
-						-- spawn swimmers, intializes grid then spawn
-						v_subitem.spawn_position_grid_dynamic = func_grid_swimmers(v_subitem)
-
-						--spawn in
+						--spawn in swimmers
 						for i=1,number_to_spawn do
 							Spawn_Animal_Swimmer(self, k_item, k_subitem, i, false)
 						end
 
 					elseif INFO:Logic_is_Static(v_subitem.object_logic_type) then
-						-- spawn static, set grid then spawn
-						v_subitem.spawn_position_grid_dynamic = func_grid_static(v_subitem)
-
 						--setup sprite types and flip
 						local opts = v_subitem.sprite_options or {1}
 						local num_opts = #opts
@@ -1387,8 +1332,7 @@ local function SetupAnimals(self)
 							Spawn_Animal_Static(self, k_item, k_subitem, i, sprite_selection, flip_h)
 						end
 					elseif INFO:Logic_is_Micro(v_subitem.object_logic_type) then
-						--spawn plankton, set grid then spawn
-						v_subitem.spawn_position_grid_dynamic = func_grid_swimmers(v_subitem, {x=0.2, y=0.0}, 0.01)
+						--spawn plankton
 						for i=1,number_to_spawn do
 							Spawn_Animal_Micro(self, k_item, k_subitem, i, false)
 						end
@@ -1458,7 +1402,7 @@ end
 
 local function SetupBuoy(self, hide_buoy)
 
-	-- starts looping buoy movment and adds to tracker table as way to measure pH
+	-- starts looping buoy movement and adds to tracker table as way to measure pH
 
 	local buoy_list_key = INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key
 
@@ -1526,7 +1470,7 @@ local function Get_Item_Clicked_On(self, screen_pos)
 	local world_pos = CAM.screen_to_world(nil, vmath.vector3(screen_pos.x, screen_pos.y, 0))
 
 	-- go through all items of spawn key lists
-	-- get position of each and compare distance to this click postion
+	-- get position of each and compare distance to this click position
 	-- if overlap found break and return that item
 
 	local match_id_tbl = {}
@@ -1683,6 +1627,100 @@ local function DynamicObject_Reset(self)
 
 end
 
+local function ResetDynamicGrids(self)
+
+	-- gets baseline grid positions for animals
+	-- since they only really need calculated once
+
+	self.dynamic_grids = nil
+
+	self.dynamic_grids = {}
+
+	-- setup some helper functions
+	-- easy grid for swimmers
+	local function func_grid_swimmers(spawn_subgroup, rand_offset_factor, y_stack_base)
+
+		-- get grid points from just a few variables
+
+		local scale = spawn_subgroup.object_scale_base
+		local count = spawn_subgroup.spawn_max_count
+		local obj_size = spawn_subgroup.object_dimensions
+		local obj_grid_mult = spawn_subgroup.object_gridsize_multiplier or {x=1, y=1}
+		local local_size_x = obj_size.x * scale * obj_grid_mult.x
+		local local_size_y = obj_size.y * scale * obj_grid_mult.y
+
+		local min_x = spawn_subgroup.spawn_x_min or 0
+		local max_x = min_x + (local_size_x*1.2)
+
+		local min_y = spawn_subgroup.spawn_y_range[1]
+		local max_y = spawn_subgroup.spawn_y_range[2]
+		if max_y + local_size_y < min_y then
+			max_y = min_y + local_size_y*1.2
+		end
+
+		local rand_offset_factor = rand_offset_factor or {x=0.25, y=0.3}
+
+		local range_tbl = {x={min_x, max_x}, y={min_y, max_y}}
+		local cell_size_table = {x = local_size_x, y = local_size_y, z = spawn_subgroup.spawn_z_base}
+		local use_center = true
+		local grid_points = GetGridPoints(range_tbl, cell_size_table, count, rand_offset_factor, use_center, y_stack_base)
+		return grid_points
+
+	end
+
+	local function func_grid_static(spawn_subgroup)
+
+		local max_count_value = spawn_subgroup.spawn_max_count
+		local static_tbl = spawn_subgroup.static_spawner_tbl
+		local max_count_static_tbl = #static_tbl
+
+		if max_count_value > max_count_static_tbl then
+			print("Error: max_count_value is > max_count_static_tbl, there will not be enough grid slots! Setting max count value to table length max. \n")
+			max_count_value = max_count_static_tbl
+		end
+
+		local cells_tbl = {}
+		for i=1,max_count_value do
+			local x = static_tbl[i][1]
+			local y = static_tbl[i][2]
+			local z = static_tbl[i][3] + (i*0.001) + Get_Z_from_Y(y, 0.1)
+			cells_tbl[i] = {x = x, y = y, z = z, i_index = i}
+		end
+
+		return cells_tbl
+
+	end
+
+	-- run compiled spawning
+	for k_item, v_item in pairs(INFO.item_info) do
+
+		if INFO:Logic_is_Alive(k_item) then
+			for k_subitem, v_subitem in pairs(v_item.subitem_info) do
+				local keyname = v_subitem.spawn_list_key
+				self.dynamic_grids[keyname] = {}
+
+				-- get count to spawn
+				local max_spawn_possible = v_subitem.spawn_max_count
+
+				-- only continue if spawn count > 0
+				if max_spawn_possible ~= nil and max_spawn_possible > 0 then
+
+					if INFO:Logic_is_Swimmer(v_subitem.object_logic_type) then
+						self.dynamic_grids[keyname] = func_grid_swimmers(v_subitem)
+					elseif INFO:Logic_is_Static(v_subitem.object_logic_type) then
+						self.dynamic_grids[keyname] = func_grid_static(v_subitem)
+					elseif INFO:Logic_is_Micro(v_subitem.object_logic_type) then
+						self.dynamic_grids[keyname] = func_grid_swimmers(v_subitem, {x=0.2, y=0.0}, 0.01)
+					end
+
+				end
+			end
+		end
+
+	end
+
+end
+
 local function SceneStart(self)
 
 	-- setup the scene variables and objects
@@ -1696,6 +1734,8 @@ local function SceneStart(self)
 	self.spawned_objects_list = {}
 	self.spawned_objects_sum = nil
 	self.spawned_objects_sum = {}
+
+	ResetDynamicGrids(self)
 
 	SetPlanktonViewer(self, true)
 
