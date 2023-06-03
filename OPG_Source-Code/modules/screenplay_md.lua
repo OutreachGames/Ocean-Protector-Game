@@ -1141,7 +1141,14 @@ STR.Screenplay = {
                             "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                         }
                     },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
+                    outcome_result_func = function ()
+                        local was_best_choice = true
+                        local outcome_tbl_scores = {
+                            CV_Delta_Default*2,
+                            item_coral = CV_Delta_Default*3
+                        }
+                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice)
+                    end
                 },
                 user_choice_2 = {
                     display_text = {
@@ -1159,7 +1166,14 @@ STR.Screenplay = {
                     debrief_text = {
                         "You have chosen to try and block off parts of the ocean. Unfortunately, creating physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    outcome_result_func = function ()
+                        local was_best_choice = false
+                        local outcome_tbl_scores = {
+                            -CV_Delta_Default,
+                            item_fish = -CV_Delta_Default*2
+                        }
+                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice)
+                    end
                 },
                 user_choice_3 = {
                     display_text = {
@@ -1248,25 +1262,25 @@ STR.Screenplay = {
             answer_options = {
                 user_choice_1 = {
                     display_text = {
-                        "Farmers will install solar panels on their farm and use less fertilizer on their fields."
+                        "Farmers should install solar panels on their farm and try to use less fertilizer on their fields."
                     },
                     debrief_text = {
                         "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
                     display_text = {
-                        "Famers will buy additional large tractors so they can harvest their crops more quickly."
+                        "Famers should buy additional tractors so they can harvest their crops more quickly."
                     },
                     debrief_text = {
-                        "The farmers followed your advice to buy larger tractors. It turns out this has increased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to buy extra tractors to speed up crop harvesting. Instead of making two trips with one tractor, now they can make one trip each with two tractors at once. Overall the amount of carbon dioxide emissions remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
                     display_text = {
-                        "Farmers will build more barns on their land to store their crops and tractors."
+                        "Farmers should build more barns on their land to store their crops and tractors."
                     },
                     debrief_text = {
                         "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
