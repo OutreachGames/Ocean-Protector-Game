@@ -435,7 +435,12 @@ INFO.item_info = {
                 subitem_captain = "Fishing Success",
                 subitem_ranger = "Ranger Success",
                 subitem_guide = "Tour Success"
-            }
+            },
+            plot_helper_text = {
+                subitem_captain = "Remember: your fishing success relies on healthy ocean life",
+                subitem_ranger = "Remember: your success relies on keeping ocean life healthy",
+                subitem_guide = "Remember: your tour success relies on healthy ocean life"
+            },
         },
         item_is_alive = true,
         subitem_info = {

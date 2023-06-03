@@ -58,6 +58,9 @@ STR.CV = {
             msg.post("hud#gui", HSH.msg_update_item_value, send_tbl)
         end,
 
+        func_option_outcome_default_super = function() -- (+)
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Default*2}, minfo_was_best_choice = true})
+        end,
         func_option_outcome_default_good = function() -- (+)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Default}, minfo_was_best_choice = true})
         end,
@@ -66,6 +69,9 @@ STR.CV = {
         end,
         func_option_outcome_default_bad = function() -- (-)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-CV_Delta_Default}})
+        end,
+        func_option_outcome_default_awful = function() -- (-)
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-CV_Delta_Default*2}})
         end,
 
         func_set_role = function(chosen_role_name)
@@ -332,7 +338,7 @@ STR.Screenplay = {
 
         user_lesson_12 = {
             goal_text = "Follow information prompts.",
-            display_text = "These phytoplankton populations grow extremely quickly but then die and decompose in large amounts. \n\nThe decopmosing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
+            display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decopmosing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
             debrief_text = nil,
             extra_text = nil
         },
@@ -828,7 +834,6 @@ STR.Screenplay = {
     s05_decisions_character_role = {
 
         --#TODO: add view and click stages after each choice
-        --#TODO: fix sizing animation?
 
         -- Run role decisions
 
@@ -913,12 +918,13 @@ STR.Screenplay = {
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
+            prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Upgrade the engine for your current fishing boat so that is uses less fuel."
+                            "Upgrade the engine of your current fishing boat so that is uses less fuel."
                         },
                         role_ranger = {
                             "Purchase a new engine for your current research boat that uses less fuel."
@@ -931,40 +937,38 @@ STR.Screenplay = {
                         "You've upgraded your engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
-                    --#TODO: make short term points slightly lower here, but overall good
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Keep your current fishing boat and go on more fishing trips."
+                            "Keep your current fishing boat the same. Instead, go on more fishing trips."
                         },
                         role_ranger = {
-                            "Keep your current research boat and go on more boat travels."
+                            "Keep your current research boat the same. Instead, go on more research trips."
                         },
                         role_guide = {
-                            "Keep your current tour boat and go on more tours."
+                            "Keep your current tour boat the same. Instead, go on more tours."
                         },
                     },
                     debrief_text = {
-                        "You've increased the number of trips you take on your boat. This earns you slightly more money, but also has cost a lot of money by buying more fuel.  You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've increased the number of trips you take on your boat. This earns you slightly more money, but also has cost a lot of money by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
-                    --#TODO: make short term points slightly higher here
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Keep your current fishing boat and do not change the number of fishing trips you take."
+                            "Keep your current fishing boat the same. Also, do not change the number of fishing trips you take."
                         },
                         role_ranger = {
-                            "Keep your current research boat and do not change the number of research trips you take."
+                            "Keep your current research boat the same. Also, do not change the number of research trips you take."
                         },
                         role_guide = {
-                            "Keep your current tour boat and do not change the number of tours you do."
+                            "Keep your current tour boat the same. Also, do not change the number of tours you do."
                         },
                     },
                     debrief_text = {
@@ -976,7 +980,84 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_02 = { -- Personal Nutrient Pollution Reduction
+        decision_role_02 = { -- Biologic Connection I (phytoplankton)
+            question_prompt = {
+                "",
+                role_captain = {
+                    "You have examined how the fish you rely on can be harmed by ocean acidification. You want to support healthy fish populations and are thinking about different options. Which one do you pick?"
+                },
+                role_ranger = {
+                    "Your work as a park ranger has shown how ocean life can be hurt by ocean acidification. You want to continue to help protect the ocean life in the park and are thinking about different options. Which one do you pick?"
+                },
+                role_guide = {
+                    "You have observed how ocean life that tourists want to see can be impacted by ocean acidification. You want to continue to help maintain a healthy ocean are thinking about different options. Which one do you pick?"
+                },
+            },
+            hint_text = {
+                "Healthy ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to environmental changes. "
+            },
+            prevent_option_randomization = true,
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "",
+                        role_captain = {
+                            "Catch less fish that help eat excess phytoplankton."
+                        },
+                        role_ranger = {
+                            "Make extra rules to protect fish that consume excess phytoplankton."
+                        },
+                        role_guide = {
+                            "On your tours make sure to keep a safe distance from fish that eat excess phytoplankton."
+                        },
+                    },
+                    debrief_text = {
+                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced, which has helped keep many other groups of life throughout the ocean healthy and balanced. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                    },
+                    -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "",
+                        role_captain = {
+                            "Manually try and remove excess phytoplankton from the water with fishing nets."
+                        },
+                        role_ranger = {
+                            "Try and remove excess nutrients and excess phytoplankton from the water with nets and filters."
+                        },
+                        role_guide = {
+                            "Manually try and remove excess phytoplankton from the water with nets."
+                        },
+                    },
+                    debrief_text = {
+                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, this does not work out because other ocean life is caught in the nets and disturbed. Also, the extra boat trips increase carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                    },
+                    -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "",
+                        role_captain = {
+                            "Keep the type of fish you catch the same has before, and do not try to remove excess phytoplankton."
+                        },
+                        role_ranger = {
+                            "Do not alter rules for fish protections and do not try to remove excess phytoplankton."
+                        },
+                        role_guide = {
+                            "Keep how you run tours the same as before, and do not try to remove excess phytoplankton."
+                        },
+                    },
+                    debrief_text = {
+                        "You have chosen to keep practices the same as they were before. Carbon dioxide emissions also have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                }
+            },
+        },
+
+        decision_role_03 = { -- Personal Nutrient Pollution Reduction
             question_prompt = {
                 "",
                 role_captain = {
@@ -995,7 +1076,7 @@ STR.Screenplay = {
             answer_options = {
                 user_choice_1 = {
                     display_text = {
-                        "Dispose of the waste in the local inland landfill. "
+                        "Dispose of the waste in the local landfill. "
                     },
                     debrief_text = {
                         "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
@@ -1005,10 +1086,10 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "Dispose of the waste in the waters near the shore. "
+                        "Dispose of the waste by burning it. "
                     },
                     debrief_text = {
-                        "You start disposing your waste nearshore waters, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
+                        "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
                     -- "This causes more coastal OA. OA points and sustainability points decrease." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
@@ -1018,7 +1099,7 @@ STR.Screenplay = {
                         "Dispose of the waste in the waters far away from the shore. "
                     },
                     debrief_text = {
-                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "In the future you plan to use a landfill for disposing your waste. "
+                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Travelling far from shore also uses more fuel, which increases carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
                     -- "This causes more coastal OA. OA points and sustainability points decrease." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
@@ -1026,86 +1107,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_03 = { -- Biologic Connection I
-            question_prompt = {
-                "",
-                role_captain = {
-                    "You have examined how the fish you rely on can be harmed by ocean acidification. You want to support healthy fish populations and are thinking about different options. Which one do you pick?"
-                },
-                role_ranger = {
-                    "Your work as a park ranger has shown how ocean life can be hurt by ocean acidification. You want to continue to help protect the ocean life in the park and are thinking about different options. Which one do you pick?"
-                },
-                role_guide = {
-                    "You have observed how ocean life that tourists want to see can be impacted by ocean acidification. You want to continue to help maintain a healthy ocean are thinking about different options. Which one do you pick?"
-                },
-            },
-            hint_text = {
-                "Healthy ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to physical changes. "
-            },
-            answer_options = {
-                user_choice_1 = {
-                    display_text = {
-                        "",
-                        role_captain = {
-                            "Do not fish in or go too close to coral reefs."
-                        },
-                        role_ranger = {
-                            "Create extra protections for the coral in your marine park."
-                        },
-                        role_guide = {
-                            "Do not let tourists or your boat go too close to coral."
-                        },
-                    },
-                    debrief_text = {
-                        "You have chosen to help the coral be more protected. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
-                    },
-                    -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
-                },
-                user_choice_2 = {
-                    display_text = {
-                        "",
-                        role_captain = {
-                            "Find where the river from the nearby city meets the ocean and add nets to that boundary."
-                        },
-                        role_ranger = {
-                            "Add buoys with floating nets near the shore where nearby rivers meet the ocean."
-                        },
-                        role_guide = {
-                            "There is a river near the tour docks that goes into the ocean. Place nets where that river meets the ocean."
-                        },
-                    },
-                    debrief_text = {
-                        "You have chosen to add nets around where nearby rivers meet the ocean. It turns out that adding these nets disrupted movement of river life. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
-                    },
-                    -- "This might help catch large plastic waste going into the ocean but overall is expensive, not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
-                    --#TODO: only make bad for fish, and not pH
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
-                },
-                user_choice_3 = {
-                    display_text = {
-                        "",
-                        role_captain = {
-                            "Manually try and remove excess phytoplankton from the water with fishing nets."
-                        },
-                        role_ranger = {
-                            "Try and remove excess nutrients and phytoplankton from the water with nets and filters."
-                        },
-                        role_guide = {
-                            "Manually try and remove algae from the water."
-                        },
-                    },
-                    debrief_text = {
-                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, it turns out there is far too much plankton for anyone to remove. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
-                    },
-                    -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
-                    --#TODO: only make bad for fish, and not pH
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
-                }
-            },
-        },
-
-        decision_role_04 = { -- Biologic Connection II
+        decision_role_04 = { -- Biologic Connection II (reef)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1121,22 +1123,31 @@ STR.Screenplay = {
             hint_text = {
                 "Well-balanced ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to physical changes. "
             },
+            prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Catch less fish that help eat excess phytoplankton."
+                            "Change how you fish around coral to ensure that you do not damage the coral."
                         },
                         role_ranger = {
-                            "Make extra rules to protect fish that consume excess phytoplankton."
+                            "Create extra rules that tell others to not get too close to the coral in your marine park."
                         },
                         role_guide = {
-                            "Do not go near fish that eat excess phytoplankton."
+                            "Do not let tourists or your boat go too close to coral to make sure you do not damage it."
                         },
                     },
                     debrief_text = {
-                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped reduce the amount of excess phytoplankton. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        role_captain = {
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups that include fish you catch. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        },
+                        role_ranger = {
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups as well. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        },
+                        role_guide = {
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        }
                     },
                     -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
@@ -1145,44 +1156,44 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Do not change the types or amounts of fish you catch."
+                            "Create large fishing net barriers and try and block off the parts of the ocean where you fish."
                         },
                         role_ranger = {
-                            "Do not change the current fish protections."
+                            "Create large barriers with nets around the marine park and try and seclude this area."
                         },
                         role_guide = {
-                            "Perform no changes and do not alter the places you go on your ocean tours."
+                            "Create large barriers with nets and try and block off the part of the ocean that you run tours through."
                         },
                     },
                     debrief_text = {
-                        "You have chosen to keep things the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to try and block off parts of the ocean. Unfortunately, creating physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                    -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Create large fishing net barriers and try and block off the parts of the ocean where you fish."
+                            "Do not change the how you catch fish and do not add net barriers."
                         },
                         role_ranger = {
-                            "Create large barriers around the marine park and try and seclude this area."
+                            "Do not change the current rules regarding coral or fish life. Also, do not add net barriers."
                         },
                         role_guide = {
-                            "Create large barriers and try and block off the part of the ocean that you run tours through."
+                            "Do not alter the places you go on your ocean tours and do not add net barriers.."
                         },
                     },
                     debrief_text = {
-                        "You have chosen to try and block off parts of the ocean. Unfortunately, that does not work and has caused disruptions to the ocean and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
         },
 
-        decision_role_05 = { -- Patnerships and Community I
+        decision_role_05 = { -- Patnerships and Community I (city council I)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1214,7 +1225,7 @@ STR.Screenplay = {
                         "The money should be spent on creating more parking lots throughout the city."
                     },
                     debrief_text = {
-                        "The council has followed your advice to build more parking lots. This has increased excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Not useful option which increases runoff and coastal OA. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
@@ -1224,66 +1235,15 @@ STR.Screenplay = {
                         "The money should be spent on building a large convention center in the city."
                     },
                     debrief_text = {
-                        "The council has followed your advice to build a large convention center. This has increased excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to build a large convention center. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "By itself this will not make a large change in CO2 emissions but increases runoff and over timer adds more fossil fuel emissions. Unchanged OA points and less sustainability points." 
-                    --#TODO make unchanged for short-term, while still being bad for long-term
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
-                }
-            },
-        },
-
-        decision_role_06 = { -- Patnerships and Community II
-            question_prompt = {
-                "",
-                role_captain = {
-                    "As someone who helps feed the community, the city council continues to value your advice. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
-                },
-                role_ranger = {
-                    "The city council continues to value your advice as someone who helps protect the ocean environment. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
-                },
-                role_guide = {
-                    "The city council continues to value your advice as a local business owner that provides local jobs. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
-                },
-            },
-            hint_text = {
-                "Cars and trucks emit large amounts of carbon dioxide gas, so reducing the distance or driving usage can help reduce emissions. "
-            },
-            answer_options = {
-                user_choice_1 = {
-                    display_text = {
-                        "Businesses will be granted money to sell their goods to the local community."
-                    },
-                    debrief_text = {
-                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
-                    },
-                    -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
-                },
-                user_choice_2 = {
-                    display_text = {
-                        "Businesses will be granted money to sell their products to cities in different states."
-                    },
-                    debrief_text = {
-                        "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
-                    },
-                    -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
-                },
-                user_choice_3 = {
-                    display_text = {
-                        "Businesses will be granted money to buy new computers and office equipment."
-                    },
-                    debrief_text = {
-                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
-                    },
-                    -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
         },
 
-        decision_role_07 = { -- Patnerships and Community III
+        decision_role_06 = { -- Patnerships and Community II (farmer friends)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1333,7 +1293,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_08 = { -- Community Education I
+        decision_role_07 = { -- Community Education I (community members I)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1358,7 +1318,7 @@ STR.Screenplay = {
                         "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Most useful option, as it reduces CO2 emissions. Also has bonus of saving people money! More OA points and more sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
                     display_text = {
@@ -1378,12 +1338,62 @@ STR.Screenplay = {
                         "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option, as it increases CO2 emissions. Also has negative effect of costing people more money. Less OA points and less sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
         },
 
-        decision_role_09 = { -- Community Education II
+        decision_role_08 = { -- Patnerships and Community III (city council II)
+            question_prompt = {
+                "",
+                role_captain = {
+                    "As someone who helps feed the community, the city council continues to value your advice. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
+                },
+                role_ranger = {
+                    "The city council continues to value your advice as someone who helps protect the ocean environment. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
+                },
+                role_guide = {
+                    "The city council continues to value your advice as a local business owner that provides local jobs. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
+                },
+            },
+            hint_text = {
+                "Cars and trucks emit large amounts of carbon dioxide gas, so reducing the distance or driving usage can help reduce emissions. "
+            },
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "Businesses will be granted money to sell their goods to the local community."
+                    },
+                    debrief_text = {
+                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                    },
+                    -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "Businesses will be granted money to sell their products to cities in different states."
+                    },
+                    debrief_text = {
+                        "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                    },
+                    -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "Businesses will be granted money to buy new computers and office equipment."
+                    },
+                    debrief_text = {
+                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                    },
+                    -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                }
+            },
+        },
+
+        decision_role_09 = { -- Community Education II (community members I)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1408,7 +1418,7 @@ STR.Screenplay = {
                         "People follow your advice and use less energy and water when possible. This has saved people money. Using less enery has reduced the amount of carbon dioxide emmissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Most useful option, as it reduces CO2 emissions and overlaps with reducing runoff. Also has bonus of saving people money! More OA points and more sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
                     display_text = {
@@ -1425,10 +1435,10 @@ STR.Screenplay = {
                         "People should water their lawns and wash their cars more frequently."
                     },
                     debrief_text = {
-                        "People follow your advice and use more water on their lawns and cars. This has cost people money, and the extra water running over the land has increased excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     -- "Least useful option, as it increases CO2 emissions and runoff. Also has negative effect of costing people money. Less OA points and less sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
         },
