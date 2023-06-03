@@ -9,8 +9,11 @@ local n = '\n'
 local tab = '     '
 local ntab = n .. tab
 
-local CV_Delta_Default = 0.055
+-- keep seperated incase we want to make starting values really low and only mainly go up from there
+-- ie ups will be large in magnitude, downs will be small in magnitude
+local CV_Delta_Up = 0.055
 local CV_Delta_Zero = 0
+local CV_Delta_Down = -0.055
 
 -- module 
 local STR = {}
@@ -59,19 +62,19 @@ STR.CV = {
         end,
 
         func_option_outcome_default_super = function() -- (+)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Default*2}, minfo_was_best_choice = true})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*2}, minfo_was_best_choice = true})
         end,
         func_option_outcome_default_good = function() -- (+)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Default}, minfo_was_best_choice = true})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up}, minfo_was_best_choice = true})
         end,
         func_option_outcome_default_fair = function() -- (0)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Zero}})
         end,
         func_option_outcome_default_bad = function() -- (-)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-CV_Delta_Default}})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-CV_Delta_Down}})
         end,
         func_option_outcome_default_awful = function() -- (-)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-CV_Delta_Default*2}})
+            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {-CV_Delta_Down*2}})
         end,
 
         func_set_role = function(chosen_role_name)
@@ -906,13 +909,13 @@ STR.Screenplay = {
             question_prompt = {
                 "",
                 role_captain = {
-                    "Congratulations on your promotion, Captain! Now that you are in charge, how do you want to use your boat?"
+                    "Congratulations on your promotion, Captain! Your fishing business has some extra money to spend. Now that you are in charge, how do you want to spend this money?"
                 },
                 role_ranger = {
-                    "Congratulations on your promotion to Marine Park Ranger! As a new ranger protecting this marine park, what do you think is the best way to use your boat?"
+                    "Congratulations on your promotion to Marine Park Ranger! You have recieved some money to spend how you see fit. As a new ranger protecting this marine park, which option do you choose?"
                 },
                 role_guide = {
-                    "Congratulations on your promotion to Ocean Tour Guide! Now that you are in charge of tours, how do want to use your boat?"
+                    "Congratulations on your promotion as Head Ocean Tour Guide! With this new position you have some extra money to spend. Now that you are in charge of tours, how do want to spend this money?"
                 },
             },
             hint_text = {
@@ -942,17 +945,17 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Keep your current fishing boat the same. Instead, go on more fishing trips."
+                            "Keep your current fishing boat the same. Instead, spend the money to go on more fishing trips."
                         },
                         role_ranger = {
-                            "Keep your current research boat the same. Instead, go on more research trips."
+                            "Keep your current research boat the same. Instead, spend the money to go on more research trips."
                         },
                         role_guide = {
-                            "Keep your current tour boat the same. Instead, go on more tours."
+                            "Keep your current tour boat the same. Instead, spend the money to go on more tours."
                         },
                     },
                     debrief_text = {
-                        "You've increased the number of trips you take on your boat. This earns you slightly more money, but also has cost a lot of money by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've increased the number of trips you take on your boat. This earns you slightly more money in the short term, but also has cost a lot of money in the long term by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
@@ -960,17 +963,17 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Keep your current fishing boat the same. Also, do not change the number of fishing trips you take."
+                            "Upgrade the digital equipment of your current fishing boat."
                         },
                         role_ranger = {
-                            "Keep your current research boat the same. Also, do not change the number of research trips you take."
+                            "Upgrade the digital equipment of your current research boat."
                         },
                         role_guide = {
-                            "Keep your current tour boat the same. Also, do not change the number of tours you do."
+                            "Upgrade the digital equipment of your current tour boat."
                         },
                     },
                     debrief_text = {
-                        "You've chosen to keep your boat and the number of trips the same as before. The amount of money you spend and earn remains the same.  The amount of carbon dioxide that your boat emits also remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've chosen to upgrade the digital equipment aboard your boat. Your boat sensors and communication lines are higher resolution, but the amount of carbon dioxide that your boat emits remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
@@ -1035,7 +1038,7 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Keep the type of fish you catch the same has before, and do not try to remove excess phytoplankton."
+                            "Keep the type of fish you catch the same has before and do not try to remove excess phytoplankton."
                         },
                         role_ranger = {
                             "Do not alter rules for fish protections and do not try to remove excess phytoplankton."
@@ -1144,8 +1147,8 @@ STR.Screenplay = {
                     outcome_result_func = function ()
                         local was_best_choice = true
                         local outcome_tbl_scores = {
-                            CV_Delta_Default*2,
-                            item_coral = CV_Delta_Default*3
+                            CV_Delta_Up*2,
+                            item_coral = CV_Delta_Up*3
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice)
                     end
@@ -1169,8 +1172,8 @@ STR.Screenplay = {
                     outcome_result_func = function ()
                         local was_best_choice = false
                         local outcome_tbl_scores = {
-                            -CV_Delta_Default,
-                            item_fish = -CV_Delta_Default*2
+                            CV_Delta_Down,
+                            item_fish = CV_Delta_Down*2
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice)
                     end
@@ -1179,13 +1182,13 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Do not change the how you catch fish and do not add net barriers."
+                            "Do not change how you catch fish and do not add net barriers."
                         },
                         role_ranger = {
                             "Do not change the current rules regarding coral or fish life. Also, do not add net barriers."
                         },
                         role_guide = {
-                            "Do not alter the places you go on your ocean tours and do not add net barriers.."
+                            "Do not alter the places you go on your ocean tours and do not add net barriers."
                         },
                     },
                     debrief_text = {
