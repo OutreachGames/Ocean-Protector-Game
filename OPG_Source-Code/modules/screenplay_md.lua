@@ -11,9 +11,9 @@ local ntab = n .. tab
 
 -- keep seperated incase we want to make starting values really low and only mainly go up from there
 -- ie ups will be large in magnitude, downs will be small in magnitude
-local CV_Delta_Up = 0.055
+local CV_Delta_Up = 0.06
 local CV_Delta_Zero = 0
-local CV_Delta_Down = -0.055
+local CV_Delta_Down = -0.04
 
 -- module 
 local STR = {}
@@ -25,16 +25,17 @@ STR.CV = {
         initial_oa_affected_values_ph = {
             -- note values initialized with 1, so this value is added to give OA value for data gauge
             -- in other words, 1 + this_value = starting graph value
+            -- make sure this value matches what the text description says the first pH value is
             item_ph = -0.5, -- ie results in value of 0.5
         },
         initial_oa_affected_values_life = {
             -- don't make all healths exactly -0.5 for present day start, 
-            item_plankton = -0.4, -- ie results in value of 0.6
-            item_coral = -0.7,
-            item_mollusks = -0.6,
-            item_fish = -0.45,
-            item_crustaceans = -0.5,
-            item_humans = -0.4,
+            item_plankton = -0.45, -- ie results in value of 0.55
+            item_coral = -0.8,
+            item_mollusks = -0.7,
+            item_fish = -0.55,
+            item_crustaceans = -0.6,
+            item_humans = -0.5,
         }
     },
 
@@ -921,7 +922,6 @@ STR.Screenplay = {
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
-            prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
                     display_text = {
