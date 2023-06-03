@@ -9,6 +9,8 @@ local EXT = require ("modules.extend_md")
 local INFO = require("modules.item_info_md")
 
 -- constants
+local CV_Current_Save_Version = 0.1
+
 local CV_item_groups = {}
 
 local CV_gameplay_loop = {
@@ -37,10 +39,10 @@ local function Get_Current_Stage_and_Substage(self)
 
 	-- returns two string values for current stage and substage
 
-	local event_info = self.gameplay_loop_order[self.gameplay_loop_i_key]
+	local event_info = self.gameplay_loop_order[self.player_data_tbl.gameplay_loop_i_key]
 
 	if event_info == nil then
-		print("Note: no valid event info exists for game loop key <"..tostring(self.gameplay_loop_i_key).."> \n")
+		print("Note: no valid event info exists for game loop key <"..tostring(self.player_data_tbl.gameplay_loop_i_key).."> \n")
 		return nil, nil
 	end
 
@@ -87,9 +89,77 @@ local function Valid_Event_Check_Full(self, match_loop_type)
 
 end
 
-local function Player_Data_Table_UpdateEntry(self, item_key, new_value, override_instead_insert)
+local function PlayerData_Set_Character(self, role_key)
+
+	-- changes player character variables and labels
+	-- #TODO add save to file here
+
+	local human_data_label
+	if role_key == nil then
+		self.player_data_tbl.character_role_key = "none"
+		human_data_label = "Humans"
+	else
+		self.player_data_tbl.character_role_key = role_key
+		local subitem_name = STR:Get_Subitem_from_Role(role_key)
+		human_data_label = INFO:Get_Data_Item_Label("item_humans", subitem_name)
+		-- remove current boat and update with new boat
+		msg.post("ocean_level:/level_controller#script", HSH.msg_set_player_character_subitem, {minfo_subitem_boat_name = subitem_name})
+	end
+
+	-- use full string name since gauge tracking might not be initialized yet
+	local data_human_label_node = gui.get_node("hud_data/group_item_humans/gnode_body_text")
+	gui.set_text(data_human_label_node, human_data_label)
+
+end
+
+local function PlayerData_Set_Special(self, data_key, set_value)
+
+	-- #TODO add save to file here
+	self.player_data_tbl[data_key] = set_value
+
+end
+
+local function QuestionScores_GetFinalPercent(self)
+
+	if self.num_player_affected_questions <= 0 then
+		-- edge case used in development testing where we removed all questions
+		return 0
+	else
+		return self.player_data_tbl.num_best_answers/self.num_player_affected_questions
+	end
+
+end
+
+local function PlayerData_Update_SumBestChoices(self, value, override)
+
+	-- #TODO add save to file here
+
+	value = value or 1
+	if override then
+		self.player_data_tbl.num_best_answers = value
+	else
+		self.player_data_tbl.num_best_answers = self.player_data_tbl.num_best_answers + value
+	end
+
+end
+
+local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
+
+	-- #TODO add save to file here
+
+	new_ikey = new_ikey or 1
+	if override then
+		self.player_data_tbl.gameplay_loop_i_key = new_ikey
+	else
+		self.player_data_tbl.gameplay_loop_i_key = self.player_data_tbl.gameplay_loop_i_key + new_ikey
+	end
+
+end
+
+local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override_instead_insert)
 
 	-- adds an i-based entry to player save table for given item key 
+		-- #TODO add save to file here
 
 	local num_items = #self.player_data_tbl.item_data_tbl[item_key]
 
@@ -108,7 +178,21 @@ local function Player_Data_Table_UpdateEntry(self, item_key, new_value, override
 
 end
 
-local function Player_Data_Table_Get_ItemTable(self, item_key)
+local function PlayerData_UpdateHUDTracker(self, item_key, show_item, show_goto)
+
+	-- #TODO add save to file here
+
+	local hud_tracker =  self.player_data_tbl.item_data_tbl[item_key]
+	if show_item ~= nil then
+		hud_tracker.data_item_shown = show_item
+	end
+	if show_goto ~= nil then
+		hud_tracker.data_goto_shown = show_goto
+	end
+
+end
+
+local function PlayerData_Get_ItemTable(self, item_key)
 
 	if self.player_data_tbl == nil then
 		print("Error: unable to get entry in player data table because player data table does not exist \n")
@@ -129,11 +213,11 @@ local function Player_Data_Table_Get_ItemTable(self, item_key)
 
 end
 
-local function Player_Data_Table_Get_ICount(self, item_key)
+local function PlayerData_Get_ICount(self, item_key)
 
 	-- gets count of entries in player data table for given item key
 
-	local item_tbl = Player_Data_Table_Get_ItemTable(self, item_key)
+	local item_tbl = PlayerData_Get_ItemTable(self, item_key)
 
 	if item_tbl == nil then return 0 end
 
@@ -141,11 +225,11 @@ local function Player_Data_Table_Get_ICount(self, item_key)
 
 end
 
-local function Player_Data_Table_Get_IEntry(self, item_key, i_key)
+local function PlayerData_Get_IEntry(self, item_key, i_key)
 
 	-- gets an i-based entry from player save table for given item key and i-key
 
-	local item_tbl = Player_Data_Table_Get_ItemTable(self, item_key)
+	local item_tbl = PlayerData_Get_ItemTable(self, item_key)
 	if item_tbl == nil then
 		print("Error: there is no entry in player data table for key <"..tostring(item_key).."> returning nil. ")
 		return nil
@@ -223,7 +307,7 @@ local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
 
 end
 
-local function ScreenData_ToggleItem(self, item_name, toggle_status, update_item, update_goto_button)
+local function ScreenData_ToggleItem(self, item_name, toggle_status, update_item_status, update_goto_button_status)
 
 	-- sets status of goto button and overall item within Data HUD section
 
@@ -239,15 +323,19 @@ local function ScreenData_ToggleItem(self, item_name, toggle_status, update_item
 	end
 
 	-- update overall item status
-	if update_item then
+	if update_item_status then
 		local node_item_controller = gui.get_node(huditem_name..hudinfo.basename_item_controller)
 		gui.set_enabled(node_item_controller, toggle_status)
+		-- record that in variable for saving, too
+		PlayerData_UpdateHUDTracker(self, item_name, toggle_status, nil)
 	end
 
 	-- update goto button status
-	if update_goto_button then
+	if update_goto_button_status then
 		local node_gotto_button_core = gui.get_node(huditem_name..hudinfo.goo_item_gotograph..hudinfo.basename_item_button_core)
 		gui.set_enabled(node_gotto_button_core, toggle_status)
+		-- record that in variable for saving, too
+		PlayerData_UpdateHUDTracker(self, item_name, nil, toggle_status)
 	end
 
 end
@@ -325,7 +413,7 @@ local function Screen_Data_TrackerUpdate(self, item_name)
 		local max_length_node = gui.get_node(gui_groupname..constant.basename_item_bar_max_x)
 		local max_size = gui.get_size(max_length_node)
 		-- get health percent
-		local entry_health_data = Player_Data_Table_Get_IEntry(self, k_itemname)
+		local entry_health_data = PlayerData_Get_IEntry(self, k_itemname)
 		if entry_health_data == nil then
 			print("Error: current entry health data for 'Player Data Table Get Entry' function is nil, not updating...\n")
 			return
@@ -347,7 +435,7 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 	-- updates bar heights for plot given item
 	-- reminder all items use the same plot, so only one can be open at a time
 
-	local number_entries = Player_Data_Table_Get_ICount(self, item_key)
+	local number_entries = PlayerData_Get_ICount(self, item_key)
 	local constant = self.hud_plot_constant
 	local max_graph_bars = constant.max_number_bars
 
@@ -366,7 +454,7 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 		local set_visible
 
 		-- if there is an i-match then make visible text and bar progress, otherwise hide visibility
-		local entry_health_data = Player_Data_Table_Get_IEntry(self, item_key, i)
+		local entry_health_data = PlayerData_Get_IEntry(self, item_key, i)
 		if entry_health_data ~= nil then
 			-- get node sizes 
 			local max_y_length_node = gui.get_node(plot_id..constant.basename_individual_bar_max_y)
@@ -433,41 +521,19 @@ end
 
 
 -- HUD Process: Update Items 
-local function QuestionScores_UpdateBestChoice(self, value, override)
-
-	value = value or 1
-	if override then
-		self.player_data_tbl.num_best_answers = value
-	else
-		self.player_data_tbl.num_best_answers = self.player_data_tbl.num_best_answers + value
-	end
-
-end
-
-local function QuestionScores_GetFinalPercent(self)
-
-	if self.num_player_affected_questions <= 0 then
-		-- edge case used in development testing where we removed all questions
-		return 0
-	else
-		return self.player_data_tbl.num_best_answers/self.num_player_affected_questions
-	end
-
-end
-
-local function Player_Data_Table_RunScoreInput(self, score_tbl, override_instead_insert, was_best_choice)
+local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert, was_best_choice)
 
 	-- takes a table with item keys and new delta scores and updates item scores in player save table accordingly
 
 	-- add to best choice tally if needed
 	if was_best_choice then
-		QuestionScores_UpdateBestChoice(self)
+		PlayerData_Update_SumBestChoices(self)
 	end
 
 	-- do this by looping through things we can track and checking if they match what is in table with same string key
 	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
 		-- get previous entry
-		local previous_entry = Player_Data_Table_Get_IEntry(self, k_itemname) or {}
+		local previous_entry = PlayerData_Get_IEntry(self, k_itemname) or {}
 		local previous_score = previous_entry.item_tracker_score or 0
 
 		-- get new delta by matching our known trackers with the score update table provided to function
@@ -480,12 +546,12 @@ local function Player_Data_Table_RunScoreInput(self, score_tbl, override_instead
 		if update_score ~= nil then
 			-- new value is previous + delta 
 			-- clamp new entry between 0 and 1 so that next entry might have a visible positive effect
-			-- IE if we did not clamp this may happend:
+			-- IE if we did not clamp this may happened:
 			--   new value gets -1.2 so that even a positive action next time does not show any benefit
 			--   also visible bars are already clamped between 0 and 1 anyway
 			local new_value = EXT:math_clamp(previous_score + update_score, 0, 1)
 
-			Player_Data_Table_UpdateEntry(self, k_itemname, new_value, override_instead_insert)
+			PlayerData_UpdateScoreTracker(self, k_itemname, new_value, override_instead_insert)
 
 			-- update hud data trackers done on click
 		end
@@ -501,8 +567,8 @@ local function DynamicText_FinalDebrief(self)
     -- make table that has all final - initial values for all items
     local items_delta = {}
     for k_itemname,_ in pairs(CV_item_groups) do
-        local val_change_start = Player_Data_Table_Get_IEntry(self, "item_ph", 1).item_tracker_score
-        local val_change_end = Player_Data_Table_Get_IEntry(self, "item_ph").item_tracker_score
+        local val_change_start = PlayerData_Get_IEntry(self, "item_ph", 1).item_tracker_score
+        local val_change_end = PlayerData_Get_IEntry(self, "item_ph").item_tracker_score
         local val_delta = val_change_end - val_change_start
         local percent_delta = (val_delta/val_change_start)
         items_delta[k_itemname] = percent_delta
@@ -566,10 +632,10 @@ local function DynamicText_FinalDebrief(self)
     local txt_ocean_life = "Average Health of Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
     -- human
-    local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.character_role_key))..": "
+    local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.player_data_tbl.character_role_key))..": "
     local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
 
-    -- reccomendation text
+    -- recommendation text
     local final_score = QuestionScores_GetFinalPercent(self)
     local txt_recomendations
 
@@ -688,11 +754,15 @@ local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
 	-- reset tracking table
 	self.hud_goals_dynamic.screen_isactive = enabled_setting
 
+	if enabled_setting and not self.player_data_tbl.special_setup_goals_hud_enabled then
+		PlayerData_Set_Special(self, "special_setup_goals_hud_enabled", true)
+	end
+
 end
 
 local function Screen_Goals_Initialize(self, enabled_status)
 
-	-- set contants and setup dynamic values and components
+	-- set constants and setup dynamic values and components
 
 	local basename = "hud_goals"
 
@@ -822,7 +892,7 @@ end
 
 local function Screen_Popup_Initialize(self, enabled_status)
 
-	-- set contants and setup dynamic values and components
+	-- set constants and setup dynamic values and components
 
 	local basename = "hud_newinfo"
 
@@ -1062,7 +1132,7 @@ end
 
 local function Screen_Decision_Initialize(self, enabled_status)
 
-	-- set contants and setup dynamic values and components
+	-- set constants and setup dynamic values and components
 
 	local basename = "hud_decision"
 
@@ -1197,11 +1267,12 @@ local function Screen_Decision_Input(self, action_id, action)
 
 				-- run outcome function
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-				STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, self.character_role_key, answer_string_key)
+				local role_key = self.player_data_tbl.character_role_key
+				STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, role_key, answer_string_key)
 
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
-				local debrief_text, is_debrief_dynamic = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, self.character_role_key, answer_string_key)
+				local debrief_text, is_debrief_dynamic = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, role_key, answer_string_key)
 				local debrief_title_text
 
 				if is_debrief_dynamic then
@@ -1214,8 +1285,8 @@ local function Screen_Decision_Input(self, action_id, action)
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 
 					-- also subtract one from current progress if incorrect so we go back to it in the next submit
-					if STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, self.character_role_key, answer_string_key) then
-						self.gameplay_loop_i_key = self.gameplay_loop_i_key - 1
+					if STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, role_key, answer_string_key) then
+						PlayerData_Update_I_Key_Progress(self, -1)
 					end
 
 					-- add debrief screen and also update goals
@@ -1346,7 +1417,7 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 	-- get subname if human and we have chosen a character
 	local opt_subitem_name
 	if item_group_key == "item_humans" then
-		opt_subitem_name = STR:Get_Subitem_from_Role(self.character_role_key)
+		opt_subitem_name = STR:Get_Subitem_from_Role(self.player_data_tbl.character_role_key)
 		-- will be nil if has not selected character yet
 	end
 
@@ -1371,7 +1442,7 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 	local subtitle_text = INFO:Get_Plot_Subtitle_Text(item_group_key, opt_subitem_name) or ""
 	gui.set_text(gui.get_node(constant.node_helper_subtitle_text), subtitle_text)
 
-	-- set x axis label (tick labels and bar visiibiliy handled in 'plot tracker update function' below)
+	-- set x axis label (tick labels and bar visibility handled in 'plot tracker update function' below)
 	gui.set_text(gui.get_node(constant.node_x_axis_label), INFO:Get_X_Axis_Label())
 
 	-- enable and set graph bars accordingly
@@ -1382,7 +1453,7 @@ end
 
 local function Screen_Plot_Initialize(self, enabled_status)
 
-	-- set contants and setup dynamic values and components
+	-- set constants and setup dynamic values and components
 
 	local basename = "hud_timeplot"
 	local plot_base = "/group_plot"
@@ -1480,11 +1551,15 @@ local function Screen_Data_Reset(self, enabled_setting, disable_items_for_starti
 	-- enable and set data summary bars accordingly
 	Screen_Data_TrackerUpdate(self)
 
+	if enabled_setting and not self.player_data_tbl.special_setup_data_hud_enabled then
+		PlayerData_Set_Special(self, "special_setup_data_hud_enabled", true)
+	end
+
 end
 
 local function Screen_Data_Initialize(self, enabled_status)
 
-	-- set contants and setup dynamic values and components
+	-- set constants and setup dynamic values and components
 
 	local basename = "hud_data"
 
@@ -1659,28 +1734,47 @@ end
 
 
 --HUD Process: Reset Player Data Table
-local function Player_Data_Table_Reset(self, update_hud_screens, back_to_begining)
+local function PlayerData_Reset(self, update_hud_screens, back_to_begining)
 
 	-- resets player data
+	-- #TODO add save to file here
 
 	self.player_data_tbl = nil
-	self.player_data_tbl = {}
-	QuestionScores_UpdateBestChoice(self, 0, true)
-	self.player_data_tbl.item_data_tbl = {}
+
+	self.player_data_tbl = {
+		unique_id_key = 1111,
+		save_version = CV_Current_Save_Version,
+		character_role_key = "NAN",
+		num_best_answers = 0,
+		gameplay_loop_i_key = 0,
+		special_setup_goals_hud_enabled = false,
+		special_setup_data_hud_enabled = false,
+		special_setup_item_boat_present = false,
+		special_setup_item_buoy_present = false,
+		item_data_tbl = {},
+		item_hud_status = {}
+	}
+
+	PlayerData_Update_SumBestChoices(self, 0, true)
 
 	-- go through item keys and initialize table and add first entry of fully healthy
 	for k_itemname,_ in pairs(CV_item_groups) do
 		self.player_data_tbl.item_data_tbl[k_itemname] = {}
-		Player_Data_Table_UpdateEntry(self, k_itemname, 1.0)
+		self.player_data_tbl.item_hud_status[k_itemname] = {}
+
+		PlayerData_UpdateScoreTracker(self, k_itemname, 1.0)
+
+		PlayerData_UpdateHUDTracker(self, k_itemname, false, false)
+
 	end
 
 	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
-	-- the init function intializes the plot and data screens, 
+	-- the init function initializes the plot and data screens, 
 	-- and each of this initialization functions run the reset function for each
 	-- which runs the health bar reset to whatever the value in this health tracker table is
 	-- plus hud screens may not have been initialized yet
 
-	-- this function is only run when starting or repeating game
+	-- recall this function is only run when starting or repeating game
 	-- also recall, that bar plots are updated and checked for each bar within player table each time bar plot is opened,
 	-- which means that if player table entry is not there, since it was reset, then bar will be hidden 
 	-- so no need to enable or disable bars since it already does it when opening bar plot
@@ -1689,7 +1783,7 @@ local function Player_Data_Table_Reset(self, update_hud_screens, back_to_beginin
 		Screen_Data_Reset(self, false, back_to_begining)
 		-- ^^ recall data rest internally calls Screen_Data_TrackerUpdate( function 
 
-		-- not really sure how we could get to this point, sice plot would have to be closed to click on restart
+		-- not really sure how we could get to this point, since plot would have to be closed to click on restart
 		-- but update here for failsafe anyway
 		if self.hud_plot_dynamic.screen_isactive then
 			Plot_Data_TrackerUpdate(self, self.hud_plot_dynamic.active_itemkey)
@@ -1777,7 +1871,7 @@ end
 
 local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 
-	-- runs once successfull click on go item(s)
+	-- runs once successful click on go item(s)
 
 	-- check if actually on list, if so get data and continue
 	local item_click_info = self.items_that_need_clicked_list[item_name]
@@ -1987,7 +2081,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 		i_stage_addition = 1
 	end
 
-	self.gameplay_loop_i_key = self.gameplay_loop_i_key + i_stage_addition
+	PlayerData_Update_I_Key_Progress(self, i_stage_addition)
 
 	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 
@@ -1999,7 +2093,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	-- get and update goal text
 	local goal_text = STR:Get_Goal_Text(stage_key, substage_key)
 	local run_goal_sizing = not self.hud_goals_dynamic.screen_isactive
-	if self.special_setup_goals_hud_enabled then
+	if self.player_data_tbl.special_setup_goals_hud_enabled then
 		Screen_Goals_Reset(self, true, run_goal_sizing, goal_text)
 	end
 
@@ -2030,9 +2124,10 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 	elseif stage_type == st.class_decisison then
 		-- setup decision
-		local q_text = STR:Get_Decision_Text_Question(stage_key, substage_key, self.character_role_key)
-		local a_tbl = STR:Get_Decision_Text_Options(stage_key, substage_key, self.character_role_key)
-		local hint_text = STR:Get_Decision_Text_Hint(stage_key, substage_key, self.character_role_key)
+		local role_key = self.player_data_tbl.character_role_key
+		local q_text = STR:Get_Decision_Text_Question(stage_key, substage_key, role_key)
+		local a_tbl = STR:Get_Decision_Text_Options(stage_key, substage_key, role_key)
+		local hint_text = STR:Get_Decision_Text_Hint(stage_key, substage_key, role_key)
 		local reset_values = true
 		Screen_Decision_Reset(self, true, true, reset_values, #a_tbl, q_text, a_tbl, hint_text)
 
@@ -2048,7 +2143,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 end
 
 
--- HUD Screen: Main Menu (Seciton 1)
+-- HUD Screen: Main Menu (Section 1)
 local function Screen_MainMenu_Reset(self, enabled_setting, run_sizing)
 
 	-- reset Main Menu screen of HUD
@@ -2071,7 +2166,7 @@ end
 
 local function Screen_MainMenu_Initialize(self, enabled_status)
 
-	-- set contants and setup dynamic values and components
+	-- set constants and setup dynamic values and components
 
 	local basename = "hud_startmenu"
 
@@ -2199,6 +2294,11 @@ local function On_SpecialAction(self, special_action_name)
 
 	if special_action_name == "special_setup_first_boat" or special_action_name == "special_setup_pH_buoy" then
 		msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = special_action_name})
+		if special_action_name == "special_setup_first_boat" then
+			PlayerData_Set_Special(self, "special_setup_item_boat_present", true)
+		elseif special_action_name == "special_setup_pH_buoy" then
+			PlayerData_Set_Special(self, "special_setup_item_buoy_present", true)
+		end
 	elseif special_action_name == "special_setup_coastal_oa_1" then
 		local is_raining = true
 		local run_coastal_oa_when_done = true
@@ -2206,7 +2306,8 @@ local function On_SpecialAction(self, special_action_name)
 		--start but then pause the game 
 		timer.delay(5, false, GamePause_On)
 	elseif special_action_name == "special_setup_start_goals_gauge" then
-		self.special_setup_goals_hud_enabled = true
+		-- function 'On Game Progress' checks this value then loads goals if it is on
+		PlayerData_Set_Special(self, "special_setup_goals_hud_enabled", true)
 	end
 
 end
@@ -2231,27 +2332,6 @@ local function GameHandleButtonInput(self, action_id, action)
 
 end
 
-local function Game_Change_Character(self, character_role_key)
-
-	-- changes player character variables and labels
-
-	if character_role_key == nil then
-		self.character_role_key = "none"
-		self.human_data_label = "Humans"
-	else
-		self.character_role_key = character_role_key
-		local subitem_name = STR:Get_Subitem_from_Role(character_role_key)
-		self.human_data_label = INFO:Get_Data_Item_Label("item_humans", subitem_name)
-		-- remove current boat and update with new boat
-		msg.post("ocean_level:/level_controller#script", HSH.msg_set_player_character_subitem, {minfo_subitem_boat_name = subitem_name})
-	end
-
-	-- use full string name since gauge tracking might not be initialized yet
-	local data_human_label_node = gui.get_node("hud_data/group_item_humans/gnode_body_text")
-	gui.set_text(data_human_label_node, self.human_data_label)
-
-end
-
 local function Game_RunRestart(self, reset_ply_data)
 
 	-- reset save table
@@ -2261,10 +2341,10 @@ local function Game_RunRestart(self, reset_ply_data)
 			update_hud_screens = true
 			back_to_begining = true
 		end
-		Player_Data_Table_Reset(self, update_hud_screens, back_to_begining)
+		PlayerData_Reset(self, update_hud_screens, back_to_begining)
 	end
 
-	Game_Change_Character(self)
+	PlayerData_Set_Character(self)
 	local set_enabled = false
 	On_GO_Items_Clicked_Reset(self, set_enabled)
 
@@ -2275,7 +2355,6 @@ local function Game_RunRestart(self, reset_ply_data)
 
 	self.gameplay_loop_completion_type_primary = 0
 	self.gameplay_loop_completion_type_secondary = 0
-	self.special_setup_goals_hud_enabled = false
 	self.final_debrief_shown = false
 
 	-- get stage and substage list in order
@@ -2285,7 +2364,7 @@ local function Game_RunRestart(self, reset_ply_data)
 	-- so close any menus that were open 
 
 	-- go to starting stage
-	self.gameplay_loop_i_key = 0
+	PlayerData_Update_I_Key_Progress(self, 0, true)
 
 	if self.gameplay_initialized then
 		-- popup and others should have already been closed by 
@@ -2296,7 +2375,7 @@ local function Game_RunRestart(self, reset_ply_data)
 		-- Which will occur if player is starting new game 
 		-- so only run it here if game already initialized (ie repeating game)
 		-- set this to 0 b/c if running repeat as part of debrief screen, 
-		-- then debrief logic will kick in and auto update game progess after this function call
+		-- then debrief logic will kick in and auto update game progress after this function call
 		GameLogic_Progress(self, 0)
 
 		-- also if running game restart here then reset animals and buoy
@@ -2328,7 +2407,7 @@ local function Game_First_Initialization(self)
 	Initialize_Local_Info_Tbl()
 	-- do not update HUD screens since they are not initialized yet, 
 	-- need to initialize player table first though so HUD screen initialization works
-	Player_Data_Table_Reset(self)
+	PlayerData_Reset(self)
 
 	Screen_Goals_Initialize(self, enabled_setting)
 	Screen_Decision_Initialize(self, enabled_setting)
@@ -2370,9 +2449,9 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_request_game_repeat then
 		Game_RunRestart(self, message.minfo_reset_player_save)
 	elseif message_id == HSH.msg_set_player_character_role then
-		Game_Change_Character(self, message.minfo_role_name)
+		PlayerData_Set_Character(self, message.minfo_role_name)
 	elseif message_id == HSH.msg_update_item_value then
-		Player_Data_Table_RunScoreInput(self, message.minfo_item_score_update_tbl, message.minfo_overrides_instead_of_inserts, message.minfo_was_best_choice)
+		PlayerData_RunScoreInput(self, message.minfo_item_score_update_tbl, message.minfo_overrides_instead_of_inserts, message.minfo_was_best_choice)
 	elseif message_id == HSH.msg_request_special_case_action then
 		On_SpecialAction(self, message.minfo_special_case_key)
 	end

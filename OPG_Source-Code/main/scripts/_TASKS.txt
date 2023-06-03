@@ -26,9 +26,7 @@
 
     -- maybe at last decision it tallies up all decisions and if all correct it sets to highest? (just as failsafe to ensure players can get max)?
 
-    -- add save mechanic (ie fast-forward to i key method with choices saved)
-    --   save following:
-    --     player_data_tracker_table, goals_shown, stage, substage, player_role, item_data_bar_shown, item_data_goto_shown, item_present
+    -- add save mechanic (ie fast-forward to i key method with choices saved) along with hooking up load button and adding 4 digit code
     -- add firebase connection and Google sheets connection
     --  start time, each decision click with time since decisions started
 
