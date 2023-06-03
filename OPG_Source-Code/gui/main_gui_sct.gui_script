@@ -89,6 +89,35 @@ local function Valid_Event_Check_Full(self, match_loop_type)
 
 end
 
+local function SimpleToggleHelper(self, controller_node, enabled_setting, run_sizing)
+
+	-- simple open or close screen
+	-- note, other screens have more complex things happening so this function is not used as often
+
+	-- run enabling status and possibly sizing
+	local function func_done(self, node)
+
+		gui.set_enabled(node, enabled_setting)
+
+	end
+
+	if run_sizing then
+		if enabled_setting then
+			func_done(self, controller_node)
+			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+		else
+			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
+			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+		end
+	else
+		func_done(self, controller_node)
+	end
+
+end
+
+
+-- Player Data Updating, Setting, and Getting
 local function PlayerData_Set_Character(self, role_key)
 
 	-- changes player character variables and labels
@@ -116,17 +145,6 @@ local function PlayerData_Set_Special(self, data_key, set_value)
 
 	-- #TODO add save to file here
 	self.player_data_tbl[data_key] = set_value
-
-end
-
-local function QuestionScores_GetFinalPercent(self)
-
-	if self.num_player_affected_questions <= 0 then
-		-- edge case used in development testing where we removed all questions
-		return 0
-	else
-		return self.player_data_tbl.num_best_answers/self.num_player_affected_questions
-	end
 
 end
 
@@ -159,7 +177,7 @@ end
 local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override_instead_insert)
 
 	-- adds an i-based entry to player save table for given item key 
-		-- #TODO add save to file here
+	-- #TODO add save to file here
 
 	local num_items = #self.player_data_tbl.item_data_tbl[item_key]
 
@@ -239,33 +257,6 @@ local function PlayerData_Get_IEntry(self, item_key, i_key)
 	i_key = i_key or #item_tbl
 
 	return item_tbl[i_key]
-
-end
-
-local function SimpleToggleHelper(self, controller_node, enabled_setting, run_sizing)
-
-	-- simple open or close screen
-	-- note, other screens have more complex things happening so this function is not used as often
-
-	-- run enabling status and possibly sizing
-	local function func_done(self, node)
-
-		gui.set_enabled(node, enabled_setting)
-
-	end
-
-	if run_sizing then
-		if enabled_setting then
-			func_done(self, controller_node)
-			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
-			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
-		else
-			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
-			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
-		end
-	else
-		func_done(self, controller_node)
-	end
 
 end
 
@@ -521,6 +512,17 @@ end
 
 
 -- HUD Process: Update Items 
+local function QuestionScores_GetFinalPercent(self)
+
+	if self.num_player_affected_questions <= 0 then
+		-- edge case used in development testing where we removed all questions
+		return 0
+	else
+		return self.player_data_tbl.num_best_answers/self.num_player_affected_questions
+	end
+
+end
+
 local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert, was_best_choice)
 
 	-- takes a table with item keys and new delta scores and updates item scores in player save table accordingly
