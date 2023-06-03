@@ -9,7 +9,7 @@ local n = '\n'
 local tab = '     '
 local ntab = n .. tab
 
--- keep seperated incase we want to make starting values really low and only mainly go up from there
+-- keep separated incase we want to make starting values really low and only mainly go up from there
 -- ie ups will be large in magnitude, downs will be small in magnitude
 local CV_Delta_Up = 0.06
 local CV_Delta_Zero = 0
@@ -211,7 +211,7 @@ STR.Screenplay = {
         user_lesson_03 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document four groups of consumers in our ocean food-web.",
-            display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemeber, click 'Contine' to close this screen then click around the ocean scene to document the consumer groups.\n\n",
+            display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemember, click 'Continue' to close this screen then click around the ocean scene to document the consumer groups.\n\n",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = true,
@@ -342,7 +342,7 @@ STR.Screenplay = {
 
         user_lesson_12 = {
             goal_text = "Follow information prompts.",
-            display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decopmosing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
+            display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decomposing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
             debrief_text = nil,
             extra_text = nil
         },
@@ -395,7 +395,7 @@ STR.Screenplay = {
                 -- from https://noaa.maps.arcgis.com/apps/MapSeries/index.html?appid=adec7620009d439c85109ab9aa1ea227
                 -- or https://dataintheclassroom.noaa.gov/ocean-acidification/understanding-ocean-coastal-acidification-teacher-resources (Module 2 and 3)
                 --Since 1870 CO2 has increased by 40% in our oceans.
-                --Rate of acidificaiton is 10 times faster than any time in past 55 million years.
+                --Rate of acidification is 10 times faster than any time in past 55 million years.
                 --http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
                 item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in your Data Log. You can access these values at any time by clicking the arrow button for each item in the Data Log Screen."}
             }
@@ -403,7 +403,7 @@ STR.Screenplay = {
 
         user_lesson_15c = {
             goal_text = "Follow information prompts.",
-            display_text = "When we compare the pH of today's oceans to to pH measurements of the past there is a distinct different."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
+            display_text = "When we compare the pH of today's oceans to pH measurements of the past there is a distinct different."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
             debrief_text = "This increase in ocean acidity over time is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 
@@ -756,7 +756,7 @@ STR.Screenplay = {
         user_lesson_19 = {
             goal_text = "Follow information prompts.",
             display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans. ",
-            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidifcation."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n,
+            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidification."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n,
             -- OLDER: 
             --  debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n,
             extra_text = nil
@@ -913,7 +913,7 @@ STR.Screenplay = {
                     "Congratulations on your promotion, Captain! Your fishing business has some extra money to spend. Now that you are in charge, how do you want to spend this money?"
                 },
                 role_ranger = {
-                    "Congratulations on your promotion to Marine Park Ranger! You have recieved some money to spend how you see fit. As a new ranger protecting this marine park, which option do you choose?"
+                    "Congratulations on your promotion to Marine Park Ranger! You have received some money to spend how you see fit. As a new ranger protecting this marine park, which option do you choose?"
                 },
                 role_guide = {
                     "Congratulations on your promotion as Head Ocean Tour Guide! With this new position you have some extra money to spend. Now that you are in charge of tours, how do want to spend this money?"
@@ -1069,7 +1069,7 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                "Waste and garbage that makes it's way to the ocean can affect the entire marine food-web, as well as trigger acidification."
+                "Waste and garbage that makes its way to the ocean can affect the entire marine food-web, as well as trigger acidification."
             },
             answer_options = {
                 user_choice_1 = {
@@ -1135,13 +1135,13 @@ STR.Screenplay = {
                     },
                     debrief_text = {
                         role_captain = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups that include fish you catch. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups that include fish you catch. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                         },
                         role_ranger = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups as well. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups as well. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                         },
                         role_guide = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                         }
                     },
                     outcome_result_func = function ()
@@ -1209,7 +1209,7 @@ STR.Screenplay = {
                     "Your work protecting the marine park has helped the environment and businesses that rely on the ocean. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
                 },
                 role_guide = {
-                    "With your ocean tour business, you provide jobs and money to local community. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
+                    "With your ocean tour business, you provide jobs and money to the local community. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
                 },
             },
             hint_text = {
@@ -1250,17 +1250,17 @@ STR.Screenplay = {
             question_prompt = {
                 "",
                 role_captain = {
-                    "You are friends with many famers that live far inland. They are upgrading their farms and ask you for advice because you also help supply food to people. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
+                    "You are friends with many farmers that live far inland. They are upgrading their farms and ask you for advice because you also help supply food to people. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
                 },
                 role_ranger = {
-                    "You have friends who are famers that live far inland. They are upgrading their farms and ask you for advice since you have experience in protecting the environment. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
+                    "You have friends who are farmers that live far inland. They are upgrading their farms and ask you for advice since you have experience in protecting the environment. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
                 },
                 role_guide = {
-                    "Many of your friends are famers that live far inland. They are upgrading their farms and ask you for advice because you also help support local jobs. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
+                    "Many of your friends are farmers that live far inland. They are upgrading their farms and ask you for advice because you also help support local jobs. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
                 },
             },
             hint_text = {
-                "Reducing the amount of fossil fuel use and nutient pollution are very effective ways to reduce ocean acidification. "
+                "Reducing the amount of fossil fuel use and nutrient pollution are very effective ways to reduce ocean acidification. "
             },
             answer_options = {
                 user_choice_1 = {
@@ -1274,10 +1274,10 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "Famers should buy additional tractors so they can harvest their crops more quickly."
+                        "farmers should buy additional tractors so they can harvest their crops more quickly."
                     },
                     debrief_text = {
-                        "The farmers followed your advice to buy extra tractors to speed up crop harvesting. Instead of making two trips with one tractor, now they can make one trip each with two tractors at once. Overall the amount of carbon dioxide emissions remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to buy extra tractors to speed up crop harvesting. Instead of making two trips with one tractor, now they can make one trip each with two tractors at once. Overall, the amount of carbon dioxide emissions remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
@@ -1315,7 +1315,7 @@ STR.Screenplay = {
                         "People should conserve water and energy when possible, such as not leaving on faucets or appliances if they are not using them."
                     },
                     debrief_text = {
-                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less enery has reduced the amount of carbon dioxide emmissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less energy has reduced the amount of carbon dioxide emissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
@@ -1371,7 +1371,7 @@ STR.Screenplay = {
                         "Businesses will be granted money to sell their products to cities in different states."
                     },
                     debrief_text = {
-                        "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 },
@@ -1391,7 +1391,7 @@ STR.Screenplay = {
             question_prompt = {
                 "",
                 role_captain = {
-                    "Folks in community continue to value your input as someone who provides local food from the ocean. They again ask for your advice about how they can further improve ocean health. What do you recommend they do?"
+                    "Folks in the community continue to value your input as someone who provides local food from the ocean. They again ask for your advice about how they can further improve ocean health. What do you recommend they do?"
                 },
                 role_ranger = {
                     "Members of the community continue to value your input as someone who helps protect the ocean. They want to further improve ocean health and again ask for your advice. What do you recommend they do?"
@@ -1409,7 +1409,7 @@ STR.Screenplay = {
                         "People should carpool and/or use the bus to go to work and school."
                     },
                     debrief_text = {
-                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
@@ -1418,7 +1418,7 @@ STR.Screenplay = {
                         "People should upgrade their car radios and seat cushions to make their cars more comfortable."
                     },
                     debrief_text = {
-                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emmissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
@@ -1427,7 +1427,7 @@ STR.Screenplay = {
                         "People should use more taxis and buy rides to get to work and school."
                     },
                     debrief_text = {
-                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
@@ -1516,7 +1516,7 @@ STR.Screenplay = {
                         "To learn more check out these great resources from NOAA! After reviewing your outcomes you will be returned to this option screen. "
                     },
                     debrief_text = {
-                        "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, seperate web page. Click 'Continue' to go back to the end game options screen. "
+                        "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, separate web page. Click 'Continue' to go back to the end game options screen. "
                     }, --#TODO add NOAA link here
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
@@ -1821,7 +1821,7 @@ end
 function STR:Get_Total_Choices()
 
     -- gets number of total choices that have a player decision 
-    -- this will be demoninator in 'final grade' tally/score
+    -- this will be denominator in 'final grade' tally/score
 
     local num_player_questions = 0
 
@@ -1838,7 +1838,7 @@ end
 -- Setup
 function STR:GameOrder_CreateTable()
 
-    -- get table with form {{stage_name_key = v_stagename, substage_name_key = v_substageame}, {}}
+    -- get table with form {{stage_name_key = v_stagename, substage_name_key = v_substagename}, {}}
 
     local full_order_tbl = {}
     local full_order_i = 0
