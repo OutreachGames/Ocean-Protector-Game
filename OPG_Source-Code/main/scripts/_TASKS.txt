@@ -5,7 +5,7 @@
     --   show OA effect with timer in screenplay module
     -- add time delay to next stage progression as option
 
-    -- pause menu has black 1x1 gui square over screen
+    -- pause menu has black 1x1 gui square over screen?
 
     -- add bunch of new lines to make popup hud gauge large then add images 
     --   for example, coastal acidification close up then shown in ocean scene

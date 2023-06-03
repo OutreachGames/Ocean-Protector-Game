@@ -936,7 +936,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You've upgraded your engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Fewer trips result in less short-term goal points, but more OA points, and more sustainability points leading to more goal points. "
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -955,7 +954,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You've increased the number of trips you take on your boat. This earns you slightly more money, but also has cost a lot of money by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "More trips results in more short-term goal points, but less OA points and less sustainability points leading to less goal points. "
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
@@ -974,7 +972,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You've chosen to keep your boat and the number of trips the same as before. The amount of money you spend and earn remains the same.  The amount of carbon dioxide that your boat emits also remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "No change to OA points or sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
@@ -1014,7 +1011,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced, which has helped keep many other groups of life throughout the ocean healthy and balanced. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -1033,7 +1029,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, this does not work out because other ocean life is caught in the nets and disturbed. Also, the extra boat trips increase carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "This requires more boat usage and CO2 emissions and is not feasible to physically remove much phytoplankton and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
@@ -1081,7 +1076,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Best option to minimize coastal OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -1091,7 +1085,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
-                    -- "This causes more coastal OA. OA points and sustainability points decrease." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
@@ -1101,7 +1094,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Travelling far from shore also uses more fuel, which increases carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view).. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
-                    -- "This causes more coastal OA. OA points and sustainability points decrease." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
             },
@@ -1149,7 +1141,6 @@ STR.Screenplay = {
                             "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral have also slightly decreased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                         }
                     },
-                    -- "These organisms help retain a balanced ecosystem, which has many benefits including helping buffer from coastal OA. Leads to more OA points and more sustainability points. "
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -1168,7 +1159,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "You have chosen to try and block off parts of the ocean. Unfortunately, creating physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "This requires more boat usage and CO2 emissions and may even block and damage ecosystem connections. It does not have large benefits to reducing OA. Less OA points and less sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
@@ -1187,13 +1177,12 @@ STR.Screenplay = {
                     debrief_text = {
                         "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Not that effective and does not have large benefits to reducing OA. Unchanged OA points sustainability points."
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
         },
 
-        decision_role_05 = { -- Patnerships and Community I (city council I)
+        decision_role_05 = { -- Partnerships and Community I (city council for citizens)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1217,8 +1206,7 @@ STR.Screenplay = {
                     debrief_text = {
                         "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Very useful option which decreases coastal OA. More OA points and more sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
                     display_text = {
@@ -1227,8 +1215,7 @@ STR.Screenplay = {
                     debrief_text = {
                         "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Not useful option which increases runoff and coastal OA. Less OA points and less sustainability points." 
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 },
                 user_choice_3 = {
                     display_text = {
@@ -1237,13 +1224,12 @@ STR.Screenplay = {
                     debrief_text = {
                         "The council has followed your advice to build a large convention center. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "By itself this will not make a large change in CO2 emissions but increases runoff and over timer adds more fossil fuel emissions. Unchanged OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
         },
 
-        decision_role_06 = { -- Patnerships and Community II (farmer friends)
+        decision_role_06 = { -- Partnerships and Community II (farmer friends)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1267,7 +1253,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Very useful option which decreases nutrient runoff and fossil fuel emissions, which reduces OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -1277,7 +1262,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "The farmers followed your advice to buy larger tractors. It turns out this has increased carbon dioxide emissions. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Likely will somewhat increase runoff and result in slightly less OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
@@ -1287,13 +1271,12 @@ STR.Screenplay = {
                     debrief_text = {
                         "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "By itself this will not make a large change in CO2 emissions and but may result in more nutrient runoff. Will not affect largely affect OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
         },
 
-        decision_role_07 = { -- Community Education I (community members I)
+        decision_role_07 = { -- Community Education I (community members water use)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1307,43 +1290,40 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                STR.CV.hint_text_defaults.hint_lower_emissions[1]
+                "Reducing the amount of excess water and energy use helps reduce carbon dioxide emissions and helps decrease nutrient pollution runoff into the ocean. "
             },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
-                        "People should carpool and/or use the bus to go to work and school."
+                        "People should conserve water and energy when possible, such as not leaving on faucets or appliances if they are not using them."
                     },
                     debrief_text = {
-                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less enery has reduced the amount of carbon dioxide emmissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Most useful option, as it reduces CO2 emissions. Also has bonus of saving people money! More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
                     display_text = {
-                        "People should upgrade their car radios and seat cushions to make their cars more comfortable."
+                        "People should buy many house plants and place them throughout their homes and workplaces."
                     },
                     debrief_text = {
-                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emmissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
                     display_text = {
-                        "People should use more taxis and buy rides to get to work and school."
+                        "People should water their lawns and wash their cars more frequently."
                     },
                     debrief_text = {
-                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Least useful option, as it increases CO2 emissions. Also has negative effect of costing people more money. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
         },
 
-        decision_role_08 = { -- Patnerships and Community III (city council II)
+        decision_role_08 = { -- Partnerships and Community III (city council for businesses)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1367,7 +1347,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Very useful option which decreases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
@@ -1377,7 +1356,6 @@ STR.Screenplay = {
                     debrief_text = {
                         "The council has followed your advice support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Least useful option which increases emissions and OA. More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 },
                 user_choice_3 = {
@@ -1387,13 +1365,12 @@ STR.Screenplay = {
                     debrief_text = {
                         "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "By itself this will not make a large change in CO2 emissions given slight change in power use and will not affect OA points or sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
         },
 
-        decision_role_09 = { -- Community Education II (community members I)
+        decision_role_09 = { -- Community Education II (community members transportation use)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1407,37 +1384,34 @@ STR.Screenplay = {
                 },
             },
             hint_text = {
-                "Reducing the amount of excess water and energy use helps reduce carbon dioxide emissions and helps decrease nutrient pollution runoff into the ocean. "
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
             answer_options = {
                 user_choice_1 = {
                     display_text = {
-                        "People should conserve water and energy when possible, such as not leaving on faucets or appliances if they are not using them."
+                        "People should carpool and/or use the bus to go to work and school."
                     },
                     debrief_text = {
-                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less enery has reduced the amount of carbon dioxide emmissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Most useful option, as it reduces CO2 emissions and overlaps with reducing runoff. Also has bonus of saving people money! More OA points and more sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
                     display_text = {
-                        "People should buy many house plants and place them throughout their homes and workplaces."
+                        "People should upgrade their car radios and seat cushions to make their cars more comfortable."
                     },
                     debrief_text = {
-                        "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emmissions in the area remains the same. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Not a particularly useful option, as it increases CO2 emissions. Also does cost people some money. No change in OA points or sustainability pointss." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
                     display_text = {
-                        "People should water their lawns and wash their cars more frequently."
+                        "People should use more taxis and buy rides to get to work and school."
                     },
                     debrief_text = {
-                        "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emmissions in the area. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
-                    -- "Least useful option, as it increases CO2 emissions and runoff. Also has negative effect of costing people money. Less OA points and less sustainability points." 
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
