@@ -168,12 +168,12 @@ local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override
 		-- override current value instead of insert new one
 		new_entry_i_index = num_items
 		self.player_data_tbl.item_data_tbl[item_key][new_entry_i_index].item_tracker_score = new_value
-		print("TRK: overriding player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_i_index).."> \n")
+		--print("TRK: overriding player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_i_index).."> \n")
 	else
 		-- insert new value
 		new_entry_i_index = num_items + 1
 		self.player_data_tbl.item_data_tbl[item_key][new_entry_i_index] = {item_tracker_score = new_value}
-		print("TRK: adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_i_index).."> \n")
+		--print("TRK: adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_i_index).."> \n")
 	end
 
 end
@@ -2086,7 +2086,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 
 	if stage_key == nil or substage_key == nil then
-		print("TRK: Game loop is completed! \n")
+		--print("TRK: Game loop is completed! \n")
 		return
 	end
 
@@ -2109,7 +2109,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 	self.gameplay_loop_completion_type_primary = stage_type
 	self.gameplay_loop_completion_type_secondary = stage_type
 
-	print("  TRK: Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
+	--print("  TRK: Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
 
 	if stage_type == st.class_click_items then
 		-- setup clicking on items
