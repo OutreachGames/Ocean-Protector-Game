@@ -185,16 +185,6 @@ local function SimpleToggleHelper(self, controller_node, enabled_setting, run_si
 
 end
 
-local function HealthColor(hp_percent)
-
-	local n = hp_percent * 100
-	local R = (255 * n) / 100
-	local G = (255 * (100 - n)) / 100
-
-	return vmath.vector4(R/255, G/255, 0, 1)
-
-end
-
 
 -- HUD Screen: Data (Section 1)
 local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
@@ -346,8 +336,6 @@ local function Screen_Data_TrackerUpdate(self, item_name)
 		local new_size = gui.get_size(progress_node)
 		new_size.x = EXT:math_round(max_size.x * new_health_value, 0)
 		gui.set_size(progress_node, new_size)
-		-- set color
-		gui.set_color(progress_node, HealthColor(new_health_value))
 	end
 
 end
@@ -392,8 +380,6 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 			local label_text = constant.specified_bar_labels[i]
 			gui.set_text(label_node, label_text or "")
 			set_visible = true
-			-- also set bar color
-			gui.set_color(progress_node, HealthColor(new_health_value))
 		else
 			set_visible = false
 		end
@@ -410,6 +396,7 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 		-- visibility accordingly
 		gui.set_visible(label_node, set_visible)
 		gui.set_visible(progress_node, set_visible)
+
 
 	end
 
