@@ -21,7 +21,9 @@ local CV_gameplay_loop = {
 
 local CV_Bar_Old = vmath.vector4(0.80, 0.80, 0.80, 1)
 local CV_Bar_Current = vmath.vector4(1.0, 1.0, 1.0, 1)
-
+local CV_Color_White = vmath.vector4(1.0, 1.0, 1.0, 1)
+local CV_Color_Red_Full = vmath.vector4(0.8, 0, 0, 1)
+local CV_Color_Red_Flicker = vmath.vector4(0.5, 0, 0, 0.7)
 
 -- functions
 
@@ -251,6 +253,80 @@ local function PlayerData_Get_Item_Entry_I(self, item_key, i_key)
 	i_key = i_key or #item_tbl
 
 	return item_tbl[i_key]
+
+end
+
+-- HUD Screen: Highlighter
+local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
+
+	-- reset Highlighter screen of HUD
+
+	-- default args
+	if enabled_setting == nil then
+		enabled_setting = false
+	end
+
+	if highlight_what == nil then
+		highlight_what = "key_reset"
+	end
+
+	local constant = self.hud_highlighter_constant
+	local new_setup = constant.highlight_setup[highlight_what]
+
+	if new_setup == nil then
+		print("Error: function 'Screen Highlight Reset' provided with unrecognized highlight type key <"..tostring(highlight_what)..">")
+	end
+
+	local new_size = new_setup.l_size
+	local new_position = new_setup.l_position
+
+	-- set enabled status
+	local controller_node = gui.get_node(constant.node_controller)
+
+	-- reset tracking table
+	self.hud_highlighter_dynamic.screen_isactive = enabled_setting
+
+	-- #TODO: update HUD highlighter
+	-- set highlighter size and position depending on what highlighting
+	-- also set animation for blinking and set tint
+
+	if enabled_setting then
+		gui.set_enabled(controller_node, true)
+		gui.set_color(controller_node, CV_Color_Red_Full)
+		gui.animate(controller_node, "color", CV_Color_Red_Flicker, gui.EASING_LINEAR, 0.50, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+		gui.set_position(controller_node, new_position)
+		gui.set_size(controller_node, new_size)
+	else
+		gui.cancel_animation(controller_node, "color")
+		gui.set_color(controller_node, CV_Color_White)
+		gui.set_position(controller_node, new_position)
+		gui.set_size(controller_node, new_size)
+		gui.set_enabled(controller_node, false)
+	end
+
+end
+
+local function Screen_Highlighter_Initialize(self, enabled_status)
+
+	-- set constants and setup dynamic values and components
+
+	local basename = "hud_highlighter"
+
+	self.hud_highlighter_constant = nil
+	self.hud_highlighter_dynamic = nil
+
+	-- set constants
+	self.hud_highlighter_constant = {
+		hud_basename = basename,
+		node_controller = basename .. "/gui_frame_core",
+		highlight_setup = {
+			key_reset = {l_position = vmath.vector3(0,0,0), l_size = vmath.vector3(0,0,0)}
+		}
+	}
+
+	-- set dynamics
+	self.hud_highlighter_dynamic = {}
+	Screen_Highlighter_Reset(self, enabled_status)
 
 end
 
@@ -2405,6 +2481,7 @@ local function Game_First_Initialization(self)
 	-- need to initialize player table first though so HUD screen initialization works
 	PlayerData_Reset(self)
 
+	Screen_Highlighter_Initialize(self, enabled_setting)
 	Screen_Goals_Initialize(self, enabled_setting)
 	Screen_Decision_Initialize(self, enabled_setting)
 	Screen_Popup_Initialize(self, enabled_setting)
