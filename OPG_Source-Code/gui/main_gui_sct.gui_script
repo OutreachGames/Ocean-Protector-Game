@@ -286,7 +286,6 @@ local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 	-- reset tracking table
 	self.hud_highlighter_dynamic.screen_isactive = enabled_setting
 
-	-- #TODO: update HUD highlighter
 	-- set highlighter size and position depending on what highlighting
 	-- also set animation for blinking and set tint
 
@@ -319,6 +318,7 @@ local function Screen_Highlighter_Initialize(self, enabled_status)
 	self.hud_highlighter_constant = {
 		hud_basename = basename,
 		node_controller = basename .. "/gui_frame_core",
+		-- #TODO: update HUD highlighter
 		highlight_setup = {
 			key_reset = {l_position = vmath.vector3(0,0,0), l_size = vmath.vector3(0,0,0)}
 		}

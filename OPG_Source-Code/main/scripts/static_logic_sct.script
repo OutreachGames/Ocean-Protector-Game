@@ -15,15 +15,25 @@ go.property("Obj_Item_Enum", -1)
 go.property("Obj_Subitem_Enum", -1)
 go.property("Obj_Selected_Sprite_Option", 1)
 go.property("Obj_Wave_Sprite_FlipH", false)
-go.property("Obj_Tint_R", 1)
-go.property("Obj_Tint_G", 1)
-go.property("Obj_Tint_B", 1)
+go.property("Obj_OG_Tint_R", 1)
+go.property("Obj_OG_Tint_G", 1)
+go.property("Obj_OG_Tint_B", 1)
+go.property("Obj_OG_Scale_Float", 1)
+
+-- locals for easy tuning
+--local color_white = EXT.vec4_white
+local color_black = EXT.vec4_black
 
 
 -- functions
 local function OnExpire(self)
 
-	msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
+	local function func_expire_update(self)
+		msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
+	end
+
+	local fadeout_time = 0.50
+	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, color_black, go.EASING_LINEAR, fadeout_time, 0, func_expire_update)
 
 end
 
@@ -39,12 +49,15 @@ local function GO_Setup(self)
 	end
 
 	-- now tint
-	go.set("#sprite", "tint", vmath.vector4(self.Obj_Tint_R, self.Obj_Tint_G, self.Obj_Tint_B, 1))
+	go.set("#sprite", "tint", vmath.vector4(self.Obj_OG_Tint_R, self.Obj_OG_Tint_G, self.Obj_OG_Tint_B, 1))
 
 	-- flip if specified
 	if self.Obj_Wave_Sprite_FlipH then
 		sprite.set_hflip("#sprite", true)
 	end
+
+	-- save original scale and color 
+	self.Obj_OG_Scale_Float = go.get_scale().x
 
 end
 

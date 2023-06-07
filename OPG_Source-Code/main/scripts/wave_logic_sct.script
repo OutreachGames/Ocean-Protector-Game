@@ -18,9 +18,9 @@ go.property("Obj_Wave_Movment_Y_Use", false)
 go.property("Obj_Wave_Movment_Y_Time", 2)
 go.property("Obj_Wave_Movment_Y_Scale", 0.60)
 go.property("Obj_Wave_Sprite_FlipH", false)
-go.property("Obj_Tint_R", 1)
-go.property("Obj_Tint_G", 1)
-go.property("Obj_Tint_B", 1)
+go.property("Obj_OG_Tint_R", 1)
+go.property("Obj_OG_Tint_G", 1)
+go.property("Obj_OG_Tint_B", 1)
 go.property("Obj_PlayParticleFX", false)
 
 
@@ -82,7 +82,7 @@ local function Wave_Setup(self)
 	end
 
 	-- now tint
-	go.set("#sprite", "tint", vmath.vector4(self.Obj_Tint_R, self.Obj_Tint_G, self.Obj_Tint_B, 1))
+	go.set("#sprite", "tint", vmath.vector4(self.Obj_OG_Tint_R, self.Obj_OG_Tint_G, self.Obj_OG_Tint_B, 1))
 
 	-- flip if specified
 	if self.Obj_Wave_Sprite_FlipH then

@@ -2,6 +2,10 @@
 
 local EXT = {}
 
+EXT.vec4_white = vmath.vector4(1, 1, 1, 1)
+EXT.vec4_black = vmath.vector4(0, 0, 0, 0)
+EXT.vec3_up = vmath.vector3(0, 1, 0)
+
 ---Get sign of a number
 ---@param n number Value to get the sign of
 ---@return number -1 if negative, 1 if positive, and 0 if 0

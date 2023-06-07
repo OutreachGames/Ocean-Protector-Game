@@ -531,9 +531,9 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 				Obj_Wave_Movment_X_Direction = wave_direction,
 				Obj_Wave_Movment_X_Time = movex_time,
 				Obj_Wave_Movment_X_Multiplier = 0.2, -- only valid if x direction == 0
-				Obj_Tint_R = tint[1],
-				Obj_Tint_G = tint[2],
-				Obj_Tint_B = tint[3]
+				Obj_OG_Tint_R = tint[1],
+				Obj_OG_Tint_G = tint[2],
+				Obj_OG_Tint_B = tint[3]
 			}
 		}
 
@@ -637,9 +637,9 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 				Obj_Wave_Movment_X_Time = movetime,
 				Obj_Wave_Movment_X_Multiplier = 2.0*sign, -- only valid if x direction == 0
 				Obj_Wave_Sprite_FlipH = math.random(0,1) == 1,
-				Obj_Tint_R = tint[1],
-				Obj_Tint_G = tint[2],
-				Obj_Tint_B = tint[3],
+				Obj_OG_Tint_R = tint[1],
+				Obj_OG_Tint_G = tint[2],
+				Obj_OG_Tint_B = tint[3],
 				Obj_PlayParticleFX = is_raining
 			}
 		}
@@ -747,9 +747,9 @@ local function Spawn_Waves(self, wave_direction, is_raining)
 				Obj_Wave_Movment_Y_Time = 2.5,
 				Obj_Wave_Movment_Y_Scale = y_scale,
 				Obj_Wave_Sprite_FlipH = fliph,
-				Obj_Tint_R = tint[1],
-				Obj_Tint_G = tint[2],
-				Obj_Tint_B = tint[3]
+				Obj_OG_Tint_R = tint[1],
+				Obj_OG_Tint_G = tint[2],
+				Obj_OG_Tint_B = tint[3]
 			}
 		}
 

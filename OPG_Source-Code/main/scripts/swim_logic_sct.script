@@ -43,11 +43,11 @@ local CV_Anim_Look_Track = 2
 local CV_Anim_Float_Hash = hash("anim_idle_FacingLeft")
 local CV_Anim_Float_Track = 3
 
-local CV_UP_Vector = vmath.vector3(0, 1, 0)
+local CV_UP_Vector = EXT.vec3_up
 local CV_AnimBlend_Time = 0.5
 local CV_Buffer_Time = 0.05
 local CV_Deadzone_Radius = 5
-local CV_ZERO_VEC4 = vmath.vector4(0)
+local CV_ZERO_VEC4 = EXT.vec4_0
 
 local CV_Timer_Keys = {
 	start_key = "start_key",
@@ -332,7 +332,7 @@ local function On_Death(self)
 	local function func_decompose(self)
 
 		-- create a decomposition go object, parent it to this go
-		-- then delete created decomp object when done
+		-- then delete created decomposition object when done
 		local scale = self.Obj_DecompEffect_Scale
 
 		--local base_dimensions = INFO:Get_Subitem_Value(self.Obj_Item_Enum, self.Obj_Subitem_Enum, "object_dimensions")

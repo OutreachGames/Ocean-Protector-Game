@@ -27,6 +27,8 @@ go.property("Obj_BaseGrid_Y_Coordinate", 0)
 -- locals for easy access
 local CV_x_threshold_appear = -810
 local CV_x_threshold_disappear = -545
+local color_white = EXT.vec4_white
+local color_black = EXT.vec4_black
 
 local CV_type_to_sprite = {
 	--0 is type algae
@@ -59,7 +61,15 @@ local CV_type_to_sprite = {
 --functions
 local function OnExpire(self)
 
-	msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
+	-- do not actually send back expire report message for micro, 
+	-- since we are not actually deleting the game objects
+	-- and instead recycling them
+	--msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
+
+	-- instead fade out sprite then reset once sprite gets recycled
+	local fadeout_time = 0.25
+	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, color_black, go.EASING_LINEAR, fadeout_time, 0)
+	self.color_needs_reset = true
 
 end
 
@@ -85,7 +95,10 @@ local function UpdateSprite(self)
 	sprite.play_flipbook("#sprite", sprite_animation)
 
 	-- now tint for transparency according to health
-	go.set("#sprite", "tint", vmath.vector4(1, 1, 1, 1))
+	if self.color_needs_reset then
+		go.set("#sprite", "tint", color_white)
+		self.color_needs_reset = false
+	end
 
 	self.Sprite_Width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x"))
 
@@ -115,7 +128,7 @@ local function ResetSpawn(self)
 	UpdateSprite(self)
 
 	-- send on it's way, with completed call back doing this all again but at new position
-	-- whereever go is, move to x_threshold_disappear + radius*1.2 
+	-- where ever GO is, move to x_threshold_disappear + radius*1.2 
 	-- once done reposition back to x_threshold_appear - radius*1.2
 
 	local current_pos = go.get(".", "position.x")
