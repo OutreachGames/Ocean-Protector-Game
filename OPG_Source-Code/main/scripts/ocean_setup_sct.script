@@ -1765,11 +1765,19 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
 
-	-- 0. Fade out
+
+	-- 1. setup:
+	--   1a. fade out
+	--   1b. reset swimmers to state where changes will be noticeable (for example, 50% health)
+	--   1c. fade in
+	-- 2. highlight region and order update (use oa_outcome_tbl)
+	--   2a. highlight micro and request health update or highlight ocean top and run OA (also still request health update)
+	--   2b. highlight static and request update
+	--   2c. highlight swimmers and request update
+	-- 3. send message back to gui that OA effects are done
+
 		local fader_time = 0.5
 		msg.post("main:/hud#gui", HSH.msg_request_fade_out, {minfo_fade_duration = fader_time})
-
-	-- 1. reset swimmers to state where changes will be noticeable (for example, 50% health)
 
 		-- reset swimmer spawn keys
 		for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
@@ -1778,6 +1786,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 
 		-- add swimmers back in at 50% population
 		timer.delay(CV_Animal_Reset_Time, false, function()
+
 			local reset_health_val = 0.5
 			local skip_reset = true
 			local spawn_offscreen = false
@@ -1785,19 +1794,35 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 			for _,v_info in pairs(self.helper_spawn_lists_swimmers) do
 				Setup_Animal(self, v_info.l_item_name, v_info.l_subitem_name, reset_health_val, skip_reset, spawn_offscreen, go_auto_patrol)
 			end
+
+			-- Fade back in 
+			msg.post("main:/hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
+
+			-- run through OA effects 
+			local stage_over_plankton_or_oa = 5
+			local stage_over_ocean_floor = 5
+			local stage_over_ocean_mid = 5
+			timer.delay(fader_time*1.5, false, function()
+
+				-- highlight plankton or OA and request update and coastal OA if needed
+
+				timer.delay(stage_over_plankton_or_oa, false, function()
+
+					-- highlight ocean floor and request update
+
+					timer.delay(stage_over_ocean_floor, false, function()
+
+						-- highlight ocean middle and request update
+
+						timer.delay(stage_over_ocean_mid, false, function()
+
+							-- report that OA effects are done
+							msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
+						end)
+					end)
+				end)
+			end)
 		end)
-
-	-- 2. Fade back in 
-
-
-	-- 3. highlight region and order update (use oa_outcome_tbl)
-	--   3a. highlight micro and request health update or highlight ocean top and run OA (also still request health update)
-	--   3b. highlight static and request update
-	--   3c. highlight swimmers and request update
-
-
-	-- 4. send message back to gui that OA effects are done
-		msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
 
 end
 
