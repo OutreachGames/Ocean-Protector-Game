@@ -19,6 +19,8 @@ go.property("Obj_OG_Tint_R", 1)
 go.property("Obj_OG_Tint_G", 1)
 go.property("Obj_OG_Tint_B", 1)
 go.property("Obj_OG_Scale_Float", 1)
+go.property("Obj_Current_Health", 1)
+
 
 -- locals for easy tuning
 --local color_white = EXT.vec4_white
@@ -34,6 +36,13 @@ local function OnExpire(self)
 
 	local fadeout_time = 0.50
 	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, color_black, go.EASING_LINEAR, fadeout_time, 0, func_expire_update)
+
+end
+
+local function On_UpdateHealth(self, health_val)
+
+	-- #TODO update static based on health value
+
 
 end
 
@@ -59,6 +68,8 @@ local function GO_Setup(self)
 	-- save original scale and color 
 	self.Obj_OG_Scale_Float = go.get_scale().x
 
+	On_UpdateHealth(self)
+
 end
 
 
@@ -78,6 +89,8 @@ function on_message(self, message_id, message, sender)
 
 	if message_id == HSH.msg_order_expire_start then
 		OnExpire(self)
+	elseif message_id == HSH.msg_order_update_health then
+		On_UpdateHealth(self, message.minfo_new_health_value)
 	end
 
 end

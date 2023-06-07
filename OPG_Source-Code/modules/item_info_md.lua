@@ -42,7 +42,6 @@ INFO.item_info = {
 
 	-- reminders:
 	--   'object_dimensions' means we can click on it
-	--   'is_spawn_flipped' is dynamically created
 	--   'spawn_position_grid_dynamic' is dynamically created, and needs to be manually set for static subitems
 	--   'spawn_x_max' is dynamically created based on max count of spawn needed
 

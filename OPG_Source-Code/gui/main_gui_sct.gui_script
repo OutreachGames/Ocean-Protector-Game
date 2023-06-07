@@ -2527,6 +2527,8 @@ function on_message(self, message_id, message, sender)
 		PlayerData_RunScoreInput(self, message.minfo_item_score_update_tbl, message.minfo_overrides_instead_of_inserts, message.minfo_was_best_choice)
 	elseif message_id == HSH.msg_request_special_case_action then
 		On_SpecialAction(self, message.minfo_special_case_key)
+	elseif message_id == HSH.msg_report_oa_outcomes_done then
+		--#TODO 
 	end
 
 end

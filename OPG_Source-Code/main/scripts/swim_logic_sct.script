@@ -399,7 +399,7 @@ local function Movement_Stop_Run(self, delay, anims_to_cancel, do_pingpong_check
 		self.currently_active_run_time_end = -1
 
 		-- send message to controller that run is done
-		msg.post("/level_controller", HSH.msg_report_swim_run_completed, {minfo_spawn_keys_subitem_list_key = self.spawn_keys_subitem_list_key or ""})
+		msg.post("/level_controller", HSH.msg_report_swim_run_completed, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
 
 		if kill_when_stopped then
 			On_Death(self)
@@ -652,7 +652,7 @@ local function Movement_Start_Run(self, target_pos, on_init)
 
 	self.currently_active_run_type = CV_Status_Type.start_run_active
 
-	msg.post("/level_controller", HSH.msg_report_swim_run_started, {minfo_spawn_keys_subitem_list_key = self.spawn_keys_subitem_list_key or ""})
+	msg.post("/level_controller", HSH.msg_report_swim_run_started, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
 
 	Toggle_MovingAnimation(self, "spine_is_moving", CV_AnimBlend_Time)
 	Movement_SetTime_Start(self)
@@ -898,20 +898,12 @@ end
 function on_message(self, message_id, message, sender)
 
 	if message_id == HSH.msg_order_swim_to_pos then
-		-- set subgroup list name if that was added to message
-		if message.minfo_spawn_keys_subitem_list_key ~= nil then
-			self.spawn_keys_subitem_list_key = message.minfo_spawn_keys_subitem_list_key
-		end
 		-- start swimming to new position
 		On_Message_StartMovement(self, {x = message.minfo_swim_to_x, y = message.minfo_swim_to_y}, message.minfo_stop_is_instant, message.minfo_is_on_init)
 
 	elseif message_id == HSH.msg_order_stop_swim then
 		-- cease swimming with gradual stop
 		On_Message_StopMovement(self, message.minfo_stop_is_instant)
-
-	elseif message_id == HSH.msg_set_subitem_list_key then
-		-- set which group this object belongs to
-		self.spawn_keys_subitem_list_key = message.minfo_spawn_keys_subitem_list_key
 
 	elseif message_id == HSH.msg_order_expire_start then
 		OnExpire(self, message.minfo_stop_is_instant)

@@ -17,9 +17,10 @@ go.property("Obj_Rotation_Speed_Max", 15)
 go.property("Obj_Spawn_Weight_0Algae", 20)
 go.property("Obj_Spawn_Weight_1Diatom", 40)
 go.property("Obj_Spawn_Weight_2Dinoflag", 40)
-go.property("Obj_Health_0Algae", 30)
-go.property("Obj_Health__1Diatom", 30)
-go.property("Obj_Health__2Dinoflag", 30)
+--go.property("Obj_Health__0Algae", 30)
+--go.property("Obj_Health__1Diatom", 30)
+--go.property("Obj_Health__2Dinoflag", 30)
+go.property("Obj_Current_Health", 1)
 go.property("Obj_Spawn_Type_Current_Index", 0)
 go.property("Obj_BaseGrid_Y_Height", 40)
 go.property("Obj_BaseGrid_Y_Coordinate", 0)
@@ -37,6 +38,8 @@ local CV_type_to_sprite = {
 	typ_algae = {
 		sprite_options = {"algae_1", "algae_2", "algae_3"},
 		index_type = 0,
+		spawn_percent_health_0 = 90,
+		spawn_percent_health_100 = 10,
 		prop_weight_key = "Obj_Spawn_Weight_0Algae",
 		use_random_flip = true,
 		use_random_rotation = true
@@ -44,6 +47,8 @@ local CV_type_to_sprite = {
 	typ_diatom = {
 		sprite_options = {"diatom_1", "diatom_2", "diatom_3"},
 		index_type = 1,
+		spawn_percent_health_0 = 5,
+		spawn_percent_health_100 = 45,
 		prop_weight_key = "Obj_Spawn_Weight_1Diatom",
 		use_random_flip = true,
 		use_random_rotation = true
@@ -51,6 +56,8 @@ local CV_type_to_sprite = {
 	type_dinoflag = {
 		sprite_options = {"dinoflag_1", "dinoflag_2", "dinoflag_3"},
 		index_type = 2,
+		spawn_percent_health_0 = 5,
+		spawn_percent_health_100 = 45,
 		prop_weight_key = "Obj_Spawn_Weight_2Dinoflag",
 		use_random_flip = false,
 		use_random_rotation = true
@@ -70,6 +77,18 @@ local function OnExpire(self)
 	local fadeout_time = 0.25
 	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, color_black, go.EASING_LINEAR, fadeout_time, 0)
 	self.color_needs_reset = true
+
+end
+
+local function On_UpdateHealth(self, health_val)
+
+	-- use new health to update spawn percentages
+
+	self.Obj_Current_Health = health_val
+
+	for _,v in pairs(CV_type_to_sprite) do
+		self[v.prop_weight_key] = EXT:Lerp(v.spawn_percent_health_0, v.spawn_percent_health_100, health_val)
+	end
 
 end
 
@@ -124,6 +143,9 @@ local function ResetSpawn(self)
 	-- sets type of phytoplankton along with sprite and current type
 	-- also orders to move 
 
+	-- update health which sets sprite probabilities
+	On_UpdateHealth(self, self.Obj_Current_Health)
+
 	-- choose and set type
 	UpdateSprite(self)
 
@@ -168,6 +190,8 @@ function on_message(self, message_id, message, sender)
 
 	if message_id == HSH.msg_order_expire_start then
 		OnExpire(self)
+	elseif message_id == HSH.msg_order_update_health then
+		On_UpdateHealth(self, message.minfo_new_health_value)
 	end
 
 end

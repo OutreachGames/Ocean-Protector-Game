@@ -15,6 +15,20 @@ function EXT:math_sign(n)
 
 end
 
+---Performs a linear interpolation from the start number to the end number
+---@param val_start number Starting value (value if delta = 0)
+---@param val_end number Ending value (value if delta = 1)
+---@param delta number Percentage to lerp from starting to end value
+---@return number lerped number
+function EXT:Lerp( val_start, val_end, delta)
+
+	if ( delta > 1 ) then return val_end end
+	if ( delta < 0 ) then return val_start end
+
+	return val_start + ( val_end - val_start ) * delta
+
+end
+
 ---Pick random sign
 ---@return number either -1 or 1
 function EXT:math_random_sign()
