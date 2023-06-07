@@ -260,7 +260,7 @@ local function Items_Set_Color_Tracking(self, item_name, needs_to_be_clicked)
 
 	-- set color in data view for color and bar
 
-	--"hud_data/group_item_ph/gnode_controller"
+	--example: "hud_data/group_item_ph/gnode_controller"
 	local hudinfo = self.hud_data_constant
 	local item_base_groupname = hudinfo.goo_group_names[item_name]
 	if item_base_groupname == nil then
@@ -538,7 +538,7 @@ local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert
 		--print("Update score for new entry for "..tostring(k_itemname).." is <"..tostring(update_score).."> \n")
 
 		-- only update if not nil
-		-- remember, do not return or break since it breakds the loop matching
+		-- remember, do not return or break since it breaks the loop matching
 		if update_score ~= nil then
 			-- new value is previous + delta 
 			-- clamp new entry between 0 and 1 so that next entry might have a visible positive effect
@@ -1582,7 +1582,7 @@ local function Screen_Data_Initialize(self, enabled_status)
 	}
 
 	-- add goto graph button strings
-	-- also disable goto buttons and overall items until gameplay adds/reveals them
+	-- also disable goto buttons and overall items until game-play adds/reveals them
 	for k,v in pairs(CV_item_groups) do
 		local name = basename .. v.group_name
 		self.hud_data_constant.goo_group_names[k] = name
@@ -2071,7 +2071,7 @@ end
 -- HUD Process: Game Loop
 local function GameLogic_Progress(self, i_stage_addition)
 
-	-- setups and runs next gameplay event
+	-- setups and runs next game-play event
 
 	if i_stage_addition == nil then
 		i_stage_addition = 1
@@ -2229,7 +2229,7 @@ local function Screen_MainMenu_Input(self, action_id, action)
 end
 
 
--- HUD Process: More Gameplay
+-- HUD Process: More Game-play
 local function GamePauseToggle_Internal(self)
 
 	-- pause by setting game update factor to 0

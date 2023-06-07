@@ -96,7 +96,7 @@ INFO.item_info = {
             --   and pH internal setting of -0.5 would match well with 2020 8.05 (range of 0.4 so half is 0.2, so 8.2->8.1)
             --   would require internal pH changes to be not as big as other animal health changes 
             --   b/c from 2020 to 2060 player would not be able to get to lowest pH of 7.8, only 7.9
-            --   also player would not be able to get back to highest level which would be frustrating in gameplay and 
+            --   also player would not be able to get back to highest level which would be frustrating in game-play and 
             --   also not align well with goal of game which is to inspire and show solutions are possible
             -- 7.90 to 8.10 would allow for setting everything being able to go back up to starting position and have it make sense
             --   otherwise code logic cap is needed, so for example pH does not go magically back up to 8.2
@@ -137,9 +137,9 @@ INFO.item_info = {
         },
         item_is_alive = true,
 		--Notes:
-		--  diatom (static and silicic), dinoflagellate (moving and some calcaerous), algae strand or blob too perhaps (also static)
-		--  some coccolithophore, which get smaller, there are some calcaerous dinoflagellates too which could also decrease
-		--  diatom (20-200 um) dionflagellate (15-400 um)
+		--  diatom (static and silicic), dinoflagellate (moving and some calcareous), algae strand or blob too perhaps (also static)
+		--  some coccolithophore, which get smaller, there are some calcareous dinoflagellates too which could also decrease
+		--  diatom (20-200 um) dinoflagellate (15-400 um)
 		--  overall very species dependent
 		--  "https://oceanservice.noaa.gov/facts/plankton.html"
 		--  Plankton are a special case b/c the individual numbers would be too great to count.
@@ -160,7 +160,7 @@ INFO.item_info = {
                 object_scale_base = CV_Default_Base_Scale,
                 object_rotation_speed_base = 10,
                 object_translation_speed_base = 18,
-                --sprite_options = {}, --phytoplankton uses it's own unqiue system
+                --sprite_options = {}, --phytoplankton uses it's own unique system
                 use_click_by_bounding_box = { x = {-800, -550}, y = {40, 160}},
                 info_url = "https://oceanservice.noaa.gov/facts/phyto.html"
             }
@@ -582,7 +582,7 @@ end
 function INFO:Calculate_Decompositon_Scale(item_enum, subitem_enum, go_scale)
 
     -- get width and height of subitem, then scale by scale
-    -- then scale that to width of decomp particle fx
+    -- then scale that to width of decomposition particle fx
 
     local obj_dimensions = self:Get_Subitem_Value(item_enum, subitem_enum, "object_dimensions")
 
