@@ -181,15 +181,16 @@ INFO.item_info = {
                 subitem_enum = 1,
                 spawn_list_key = "item_coral__subitem_bulb",
                 spawn_coll_factory = "spawner_coral_bulb#collectionfactory",
-                spawn_max_count = 3,
+                spawn_max_count = 4,
                 object_dimensions = { x = 296, y = 242 }, --compiled sprite/spine dimensions
                 object_scale_base = 1,
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
                 static_spawner_tbl = {
-                    {-687, -314, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
-                    {-337, -459, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
-                    {686, -266, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --top
+                    {-713, -230, CV_Base_Z_Items+0.1, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
+                    {535, -227, CV_Base_Z_Items+0.1, flip_sprite = false, rotation_z_euler = 13, sprite_selection_i = 2}, --mid
+                    {-533, -236, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = -5, sprite_selection_i = 1}, --mid
+                    {702, -206, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 2}, --mid
                 },
                 sprite_options = {"coral_bulb_1", "coral_bulb_2"}
             },
@@ -203,9 +204,9 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral",
                 static_spawner_tbl = {
-                    {77, -321, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
-                    {286, -267, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --top
-                    {611, -452, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
+                    {-308, -176, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = -4, sprite_selection_i = 1}, --top
+                    {-40, -377, CV_Base_Z_Items+0.20, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --bottom
+                    {635, -386, CV_Base_Z_Items+0.20, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_horn_1", "coral_horn_2"}
             },
@@ -213,15 +214,16 @@ INFO.item_info = {
                 subitem_enum = 3,
                 spawn_list_key = "item_coral__subitem_pillar",
                 spawn_coll_factory = "spawner_coral_pillar#collectionfactory",
-                spawn_max_count = 3,
+                spawn_max_count = 4,
                 object_dimensions = { x = 260, y = 330 }, --compiled sprite/spine dimensions
                 object_scale_base = 1,
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
                 static_spawner_tbl = {
-                    {-465, -293, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
-                    {-92, -442, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
-                    {347, -446, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
+                    {249, -170, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --top
+                    {-274, -346, CV_Base_Z_Items+0.20, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
+                    {129, -187, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 3, sprite_selection_i = 2}, --top
+                    {262, -346, CV_Base_Z_Items+0.20, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_pillar_1", "coral_pillar_2"}
             }
@@ -243,30 +245,36 @@ INFO.item_info = {
                 subitem_enum = 1,
                 spawn_list_key = "item_mollusks__subitem_oyster",
                 spawn_coll_factory = "spawner_mollusks_oyster#collectionfactory",
-                spawn_max_count = 18,
+                spawn_max_count = 24,
                 object_dimensions = { x = 41, y = 54 }, --compiled sprite/spine dimensions
                 object_scale_base = 1,
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
                 static_spawner_tbl = {
-                    {-546, -417, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --1
-                    {-529, -409, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --2
-                    {-500, -418, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --3
-                    {-233, -274, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --4
-                    {-249, -278, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --5
-                    {-222, -285, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --6
-                    {-190, -291, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --7
-                    {143, -280, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --8
-                    {171, -281, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --9
-                    {193, -282, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --10
-                    {438, -256, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --11
-                    {458, -246, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --12
-                    {481, -263, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --13
-                    {502, -243, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --14
-                    {125, -452, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --15
-                    {97, -444, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --16
-                    {153, -445, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --17
-                    {182, -443, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --18
+                    {-546, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 50}, --1
+                    {-516, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = false, rotation_z_euler = 0}, --2
+                    {-488, -420, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = -25}, --3
+                    {-419, -285, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 20}, --4
+                    {-398, -279, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0}, --5
+                    {-373, -287, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = -22}, --6
+                    {-166, -446, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = 16}, --7
+                    {-141, -452, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = 0}, --8
+                    {-116, -445, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0}, --9
+                    {51, -450, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 40}, --10
+                    {81, -450, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = 0}, --11
+                    {105, -442, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0}, --12
+                    {132, -446, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = -30}, --13
+                    {365, -436, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = 20}, --14
+                    {396, -442, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = 0}, --15
+                    {423, -440, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0}, --16
+                    {447, -448, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = -25}, --17
+                    {470, -438, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 25}, --18
+                    {497, -437, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = 0}, --19
+                    {522, -442, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0}, --20
+                    {550, -444, CV_Base_Z_Items+0.2, flip_sprite = false, rotation_z_euler = -45}, --21
+                    {357, -302, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 20}, --22
+                    {385, -298, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 0}, --23
+                    {406, -292, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = -20} --24
                 },
             },
             subitem_conch = {

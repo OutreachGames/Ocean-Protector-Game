@@ -1,7 +1,7 @@
 name: "ocean_level"
 scale_along_z: 0
 embedded_instances {
-  id: "coral_bulb_0"
+  id: "coral_bulb_1"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -41,7 +41,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_bulb_1"
+  id: "coral_bulb_2"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -81,7 +81,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_bulb_2"
+  id: "coral_bulb_3"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -121,7 +121,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_bulb_3"
+  id: "coral_bulb_4"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -161,7 +161,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_horn_0"
+  id: "coral_horn_1"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -201,7 +201,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_horn_1"
+  id: "coral_horn_2"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -241,7 +241,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_horn_2"
+  id: "coral_horn_3"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -281,7 +281,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_pillar_1"
+  id: "coral_pillar_2"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -321,7 +321,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_pillar_2"
+  id: "coral_pillar_3"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -361,7 +361,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_pillar_3"
+  id: "coral_pillar_4"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -401,7 +401,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_0"
+  id: "oyster_1"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -441,7 +441,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_1"
+  id: "oyster_2"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -481,7 +481,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_2"
+  id: "oyster_3"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -521,7 +521,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_3"
+  id: "oyster_4"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -561,7 +561,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_4"
+  id: "oyster_5"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -601,7 +601,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_5"
+  id: "oyster_6"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -641,7 +641,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_6"
+  id: "oyster_7"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -681,7 +681,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_7"
+  id: "oyster_8"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -721,7 +721,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_8"
+  id: "oyster_9"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -761,7 +761,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_9"
+  id: "oyster_10"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -791,8 +791,8 @@ embedded_instances {
   rotation {
     x: 0.0
     y: 0.0
-    z: 0.34652957
-    w: 0.93803906
+    z: 0.34202015
+    w: 0.9396926
   }
   scale3 {
     x: -1.0
@@ -801,7 +801,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_10"
+  id: "oyster_11"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -841,7 +841,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_11"
+  id: "oyster_12"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -881,7 +881,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_12"
+  id: "oyster_13"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -921,7 +921,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_13"
+  id: "oyster_14"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -961,7 +961,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "coral_pillar_0"
+  id: "coral_pillar_1"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1001,7 +1001,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_14"
+  id: "oyster_15"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1041,7 +1041,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_15"
+  id: "oyster_16"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1081,7 +1081,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_16"
+  id: "oyster_17"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1121,7 +1121,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_17"
+  id: "oyster_18"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1161,7 +1161,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_18"
+  id: "oyster_19"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1201,7 +1201,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_19"
+  id: "oyster_20"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1241,7 +1241,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_20"
+  id: "oyster_21"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1281,7 +1281,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_21"
+  id: "oyster_22"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1321,7 +1321,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_22"
+  id: "oyster_23"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1361,7 +1361,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "oyster_23"
+  id: "oyster_24"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
@@ -1452,7 +1452,7 @@ embedded_instances {
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
-  "    y: -153.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"

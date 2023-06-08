@@ -1070,7 +1070,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 			Obj_Item_Enum = s_item.item_enum,
 			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Wave_Sprite_FlipH = flip_h,
-			Obj_Selected_Sprite_Option = sprite_selection_i,
+			Obj_Selected_Sprite_Option = sprite_selection,
 			Obj_Current_Health = health_val or 1.0
 		}
 	}
@@ -1701,13 +1701,13 @@ local function ResetDynamicGrids(self)
 
 		local cells_tbl = {}
 		for i=1,max_count_value do
-			local x = static_tbl[i][1]
-			local y = static_tbl[i][2]
-			local z = static_tbl[i][3] + (i*0.001) + Get_Z_from_Y(y, 0.1)
-			local flip = static_tbl.flip_sprite
-			local rot_z = static_tbl.rotation_z_euler or 0
-			local sprite_i = static_tbl.sprite_selection_i or 1
-			--#TODO
+			local info = static_tbl[i]
+			local x = info[1]
+			local y = info[2]
+			local z = info[3] + (i*0.001) + Get_Z_from_Y(y, 0.1)
+			local flip = info.flip_sprite
+			local rot_z = info.rotation_z_euler or 0
+			local sprite_i = info.sprite_selection_i or 1
 			cells_tbl[i] = {x = x, y = y, z = z, i_index = i, flip_sprite = flip, rotation_z_euler = rot_z, sprite_selection_i = sprite_i}
 		end
 
