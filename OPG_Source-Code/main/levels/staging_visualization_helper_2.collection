@@ -24,8 +24,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -713.0
-    y: -230.0
+    x: -720.0
+    y: -237.0
     z: -0.35
   }
   rotation {
@@ -64,15 +64,15 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 535.0
-    y: -227.0
+    x: 223.0
+    y: -215.0
     z: -0.35
   }
   rotation {
     x: 0.0
     y: 0.0
-    z: 0.11320321
-    w: 0.9935719
+    z: 0.06975647
+    w: 0.9975641
   }
   scale3 {
     x: 1.0
@@ -104,15 +104,15 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -533.0
-    y: -236.0
+    x: -560.0
+    y: -242.0
     z: -0.35
   }
   rotation {
     x: 0.0
     y: 0.0
-    z: -0.043619387
-    w: 0.99904823
+    z: -0.026176948
+    w: 0.99965733
   }
   scale3 {
     x: -1.0
@@ -144,8 +144,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 702.0
-    y: -206.0
+    x: 385.0
+    y: -204.0
     z: -0.35
   }
   rotation {
@@ -344,15 +344,15 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 129.0
-    y: -187.0
+    x: 580.0
+    y: -201.0
     z: -0.5
   }
   rotation {
     x: 0.0
     y: 0.0
-    z: 0.026176948
-    w: 0.99965733
+    z: 0.043619387
+    w: 0.99904823
   }
   scale3 {
     x: 1.0
@@ -984,8 +984,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 249.0
-    y: -170.0
+    x: 699.0
+    y: -177.0
     z: -0.5
   }
   rotation {
