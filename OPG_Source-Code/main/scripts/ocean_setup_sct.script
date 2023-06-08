@@ -1164,11 +1164,11 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	-- set spawn position, possibly offscreen
 	local spanwn_pos = vmath.vector3(waypoint1_pos_x, waypoint1_pos_y, pos_tbl.z)
 	if spawn_offscreen then
-		--#TODO deal with new swimmers joining school in random position
-		--  find way to deal with swimming in from offscreen to join current direction of school, 
-		--  or stop all school at wp1
-		--  also find way to get offscreen swimmer caught up with school but then slowed down
-		--  might be easiest to just reset everyone at wp1 and do not order to move?
+		-- deal with new swimmers joining school in random position
+		--   find way to deal with swimming in from offscreen to join current direction of school, 
+		--   or stop all school at wp1
+		--   also find way to get offscreen swimmer caught up with school but then slowed down
+		--   actually it's easiest to just reset everyone at wp1 and do not order to move
 		-- also find closest waypoint to offscreen
 		local distance_to_offscreen_left = math.abs(waypoint1_pos_x - RES.Boundary_X[1])
 		local distance_to_offscreen_right = math.abs(waypoint1_pos_x - RES.Boundary_X[2])
@@ -1315,13 +1315,12 @@ local function Setup_Animal(self, item_name, subitem_name, new_health, skip_rese
 		Spawned_ResetAll(self, subitem_tbl.spawn_list_key, true)
 	end
 
-	local flip_h
+	local flip_h = self.dynamic_spawn_sides[subitem_tbl.spawn_list_key]
 	local logic_typ = subitem_tbl.object_logic_type
 
 	if INFO:Logic_is_Swimmer(logic_typ) then
 
 		--spawn in swimmers
-		flip_h = math.random(0,1) == 0
 		local num_swimmers = math.max(1, math.ceil(health_val*max_number_to_spawn))
 		for i=1,num_swimmers do
 			Spawn_Animal_Swimmer(self, item_name, subitem_name, i, spawn_offscreen, flip_h, go_auto_patrol)
@@ -1343,6 +1342,8 @@ local function Setup_Animal(self, item_name, subitem_name, new_health, skip_rese
 				end
 			end
 
+			-- note that flips for static are hard set and consistent 
+			-- depending on which i it is
 			if num_opts > 1 and i == max_number_to_spawn then
 				flip_h = true
 			end
@@ -1671,8 +1672,9 @@ local function ResetDynamicGrids(self)
 	-- since they only really need calculated once
 
 	self.dynamic_grids = nil
-
+	self.dynamic_spawn_sides = nil
 	self.dynamic_grids = {}
+	self.dynamic_spawn_sides = {}
 
 	-- setup some helper functions
 	-- easy grid for swimmers
@@ -1729,13 +1731,14 @@ local function ResetDynamicGrids(self)
 
 	end
 
-	-- run compiled spawning
+	-- run compiled grid setup
 	for k_item, v_item in pairs(INFO.item_info) do
 
 		if INFO:Logic_is_Alive(k_item) then
-			for k_subitem, v_subitem in pairs(v_item.subitem_info) do
-				local keyname = v_subitem.spawn_list_key
-				self.dynamic_grids[keyname] = {}
+			for _, v_subitem in pairs(v_item.subitem_info) do
+				local spawnlist_keyname = v_subitem.spawn_list_key
+				self.dynamic_grids[spawnlist_keyname] = {}
+				local flip_side = false
 
 				-- get count to spawn
 				local max_spawn_possible = v_subitem.spawn_max_count
@@ -1744,14 +1747,18 @@ local function ResetDynamicGrids(self)
 				if max_spawn_possible ~= nil and max_spawn_possible > 0 then
 
 					if INFO:Logic_is_Swimmer(v_subitem.object_logic_type) then
-						self.dynamic_grids[keyname] = func_grid_swimmers(v_subitem)
+						--swimmers are the ones with dynamic starting sides
+						flip_side = (math.random(0,1) == 1)
+						self.dynamic_grids[spawnlist_keyname] = func_grid_swimmers(v_subitem)
 					elseif INFO:Logic_is_Static(v_subitem.object_logic_type) then
-						self.dynamic_grids[keyname] = func_grid_static(v_subitem)
+						self.dynamic_grids[spawnlist_keyname] = func_grid_static(v_subitem)
 					elseif INFO:Logic_is_Micro(v_subitem.object_logic_type) then
-						self.dynamic_grids[keyname] = func_grid_swimmers(v_subitem, {x=0.2, y=0.0}, 0.01)
+						self.dynamic_grids[spawnlist_keyname] = func_grid_swimmers(v_subitem, {x=0.2, y=0.0}, 0.01)
 					end
 
 				end
+
+				self.dynamic_spawn_sides[spawnlist_keyname] = flip_side
 			end
 		end
 
@@ -1791,7 +1798,9 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 			local skip_reset = true
 			local spawn_offscreen = false
 			local go_auto_patrol = false
-			for _,v_info in pairs(self.helper_spawn_lists_swimmers) do
+			for k_spawnlist_name,v_info in pairs(self.helper_spawn_lists_swimmers) do
+				--randomize side so fish don't always appear on same side
+				self.dynamic_spawn_sides[k_spawnlist_name] = (math.random(0,1) == 1)
 				Setup_Animal(self, v_info.l_item_name, v_info.l_subitem_name, reset_health_val, skip_reset, spawn_offscreen, go_auto_patrol)
 			end
 
