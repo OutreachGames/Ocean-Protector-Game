@@ -22,7 +22,7 @@ go.property("Obj_Rotation_Easing_Options", 6)
 go.property("Obj_Resting_Euler_Z", 90)
 go.property("Obj_On_Force_Stop_Slowdown_Distance", 50)
 go.property("Obj_On_Done_Loop_Waypoints", false)
-go.property("Obj_Flip_Time", 0.4)
+go.property("Obj_Flip_Time", 0.8)  -- recall flip time incorporates random delay then actual flip time
 go.property("Obj_Use_Float_Animation", true)
 go.property("Obj_Death_Effect_Type", -1)
 go.property("Obj_Formation_Position_Index", 1)
@@ -307,14 +307,16 @@ local function On_Death(self)
 	-- extra visual effect if specified
 	if self.Obj_Death_Effect_Type == 1 then
 		-- once stopped, flip upside down and start to sink
-		local extra_flip_delay = 0
-		extra_sink_delay = extra_flip_delay + self.Obj_Flip_Time
+		local rand = math.random(0, 50)/100
+		local extra_flip_delay = self.Obj_Flip_Time * rand
+		local flip_time = self.Obj_Flip_Time * (1 - rand)
+		extra_sink_delay = extra_flip_delay + flip_time
 		extra_sink_time = 5
 		local self_pos = go.get_position()
 		local float_down_y = self_pos.y - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.8)
 		local float_down_x = self_pos.x - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.1)
 
-		go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -self.scale_magnitude, go.EASING_INOUTEXPO, self.Obj_Flip_Time, extra_flip_delay)
+		go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -self.scale_magnitude, go.EASING_INOUTEXPO, flip_time, extra_flip_delay)
 		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, float_down_y, GetRandomEasing(2), extra_sink_time, extra_sink_delay)
 		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, float_down_x, GetRandomEasing(2), extra_sink_time*0.5, extra_sink_delay)
 	end
@@ -626,7 +628,10 @@ local function Movement_Start_Run(self, target_pos, on_init)
 		-- run flip
 		goal_y_scale = -1 * goal_y_scale
 		if flip_duration > 0 then
-			go.animate(".", "scale.y", go.PLAYBACK_ONCE_FORWARD, goal_y_scale, go.EASING_INOUTEXPO, flip_duration)
+			local rand_percent = math.random(0, 50)/100
+			local flip_delay = flip_duration * rand_percent
+			local flip_time = flip_duration * (1 - rand_percent)
+			go.animate(".", "scale.y", go.PLAYBACK_ONCE_FORWARD, goal_y_scale, go.EASING_INOUTEXPO, flip_time, flip_delay)
 		else
 			go.set(".", "scale.y", goal_y_scale)
 		end

@@ -1089,10 +1089,12 @@ end
 
 local function Animal_Order_GoTo(self, go_id, swimto_x, swimto_y, on_init)
 
+	-- default is to go to waypoint 2
+	-- and to not be on_init
+
 	local start_swimming_info = {
-		minfo_swim_to_x = swimto_x,
-		minfo_swim_to_y = swimto_y,
-		-- also set subgroup list name with this message for convenience
+		minfo_swim_to_x = swimto_x or go.get(go_id, "Obj_Waypoint_2_X"),
+		minfo_swim_to_y = swimto_y or go.get(go_id, "Obj_Waypoint_2_Y"),
 		minfo_stop_is_instant = false,
 		minfo_is_on_init = on_init --used for instant face to waypoint
 	}
@@ -1198,7 +1200,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 			Obj_On_Force_Stop_Slowdown_Distance = slowdown_distance,
 			Obj_On_Done_Loop_Waypoints = true,
 			-- give some minor variation in flip time in case they all flip at once
-			Obj_Flip_Time = 0.4 * rand_base * 2,
+			Obj_Flip_Time = 0.6 * rand_base * 2, -- recall flip time incorporates random delay then actual flip time
 			Obj_Formation_Position_Index = i_position_in_grid,
 			Obj_Waypoint_1_X = waypoint1_pos_x,
 			Obj_Waypoint_1_Y = waypoint1_pos_y,
