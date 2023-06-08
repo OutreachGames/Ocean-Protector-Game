@@ -24,7 +24,7 @@ collection_instances {
   collection: "/main/classes/coral_bulb.collection"
   position {
     x: -687.0
-    y: -314.0
+    y: -235.0
     z: 1.0
   }
   rotation {
@@ -44,7 +44,7 @@ collection_instances {
   collection: "/main/classes/coral_horn.collection"
   position {
     x: 77.0
-    y: -321.0
+    y: -269.0
     z: 0.5
   }
   rotation {
@@ -64,7 +64,7 @@ collection_instances {
   collection: "/main/classes/coral_pillar.collection"
   position {
     x: -456.0
-    y: -293.0
+    y: -191.0
     z: 0.5
   }
   rotation {
@@ -344,7 +344,7 @@ collection_instances {
   collection: "/main/classes/coral_horn.collection"
   position {
     x: 286.0
-    y: -267.0
+    y: -196.0
     z: 0.4
   }
   rotation {
@@ -364,7 +364,7 @@ collection_instances {
   collection: "/main/classes/coral_pillar.collection"
   position {
     x: -92.0
-    y: -442.0
+    y: -350.0
     z: 1.0
   }
   rotation {
@@ -384,7 +384,7 @@ collection_instances {
   collection: "/main/classes/coral_bulb.collection"
   position {
     x: -337.0
-    y: -459.0
+    y: -397.0
     z: 0.5
   }
   rotation {
@@ -404,7 +404,7 @@ collection_instances {
   collection: "/main/classes/coral_bulb.collection"
   position {
     x: 686.0
-    y: -266.0
+    y: -206.0
     z: 1.0
   }
   rotation {
@@ -424,7 +424,7 @@ collection_instances {
   collection: "/main/classes/coral_pillar.collection"
   position {
     x: 347.0
-    y: -446.0
+    y: -348.0
     z: 1.0
   }
   rotation {
@@ -444,7 +444,7 @@ collection_instances {
   collection: "/main/classes/coral_horn.collection"
   position {
     x: 611.0
-    y: -452.0
+    y: -385.0
     z: 1.0
   }
   rotation {
