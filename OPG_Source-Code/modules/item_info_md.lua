@@ -220,9 +220,9 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
                 static_spawner_tbl = {
-                    {249, -170, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --top
+                    {310, -200, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --top
                     {-274, -346, CV_Base_Z_Items+0.20, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
-                    {129, -187, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 3, sprite_selection_i = 2}, --top
+                    {190, -215, CV_Base_Z_Items-0.15, flip_sprite = false, rotation_z_euler = 3, sprite_selection_i = 2}, --top
                     {262, -346, CV_Base_Z_Items+0.20, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_pillar_1", "coral_pillar_2"}
