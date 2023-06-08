@@ -187,9 +187,9 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
                 static_spawner_tbl = {
-                    {-687, -314, CV_Base_Z_Items+0.1}, --mid
-                    {-337, -459, CV_Base_Z_Items+0.2}, --bottom
-                    {686, -266, CV_Base_Z_Items-0.15} --top
+                    {-687, -314, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
+                    {-337, -459, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
+                    {686, -266, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --top
                 },
                 sprite_options = {"coral_bulb_1", "coral_bulb_2"}
             },
@@ -203,9 +203,9 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral",
                 static_spawner_tbl = {
-                    {77, -321, CV_Base_Z_Items+0.1}, --mid
-                    {286, -267, CV_Base_Z_Items-0.15}, --top
-                    {611, -452, CV_Base_Z_Items+0.2} --bottom
+                    {77, -321, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
+                    {286, -267, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --top
+                    {611, -452, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_horn_1", "coral_horn_2"}
             },
@@ -219,9 +219,9 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
                 static_spawner_tbl = {
-                    {-465, -293, CV_Base_Z_Items+0.1}, --mid
-                    {-92, -442, CV_Base_Z_Items+0.2}, --bottom
-                    {347, -446, CV_Base_Z_Items+0.2} --bottom
+                    {-465, -293, CV_Base_Z_Items+0.1, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
+                    {-92, -442, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
+                    {347, -446, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_pillar_1", "coral_pillar_2"}
             }
@@ -249,26 +249,25 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
                 static_spawner_tbl = {
-                    {-546, -417, CV_Base_Z_Buoy + 0.05}, --1
-                    {-529, -409, CV_Base_Z_Buoy + 0.05}, --2
-                    {-500, -418, CV_Base_Z_Buoy + 0.05}, --3
-                    {-233, -274, CV_Base_Z_Items-0.15}, --4
-                    {-249, -278, CV_Base_Z_Items-0.15}, --5
-                    {-222, -285, CV_Base_Z_Items-0.15}, --6
-                    {-190, -291, CV_Base_Z_Items-0.15}, --7
-                    {143, -280, CV_Base_Z_Items-0.15}, --8
-                    {171, -281, CV_Base_Z_Items-0.15}, --9
-                    {193, -282, CV_Base_Z_Items-0.15}, --10
-                    {438, -256, CV_Base_Z_Items-0.15}, --11
-                    {458, -246, CV_Base_Z_Items-0.15}, --12
-                    {481, -263, CV_Base_Z_Items-0.15}, --13
-                    {502, -243, CV_Base_Z_Items-0.15}, --14
-                    {125, -452, CV_Base_Z_Items+0.2}, --15
-                    {97, -444, CV_Base_Z_Items+0.2}, --16
-                    {153, -445, CV_Base_Z_Items+0.2}, --17
-                    {182, -443, CV_Base_Z_Items+0.2} --18
+                    {-546, -417, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --1
+                    {-529, -409, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --2
+                    {-500, -418, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --3
+                    {-233, -274, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --4
+                    {-249, -278, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --5
+                    {-222, -285, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --6
+                    {-190, -291, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --7
+                    {143, -280, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --8
+                    {171, -281, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --9
+                    {193, -282, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --10
+                    {438, -256, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --11
+                    {458, -246, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --12
+                    {481, -263, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --13
+                    {502, -243, CV_Base_Z_Items-0.15, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --14
+                    {125, -452, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --15
+                    {97, -444, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --16
+                    {153, -445, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1}, --17
+                    {182, -443, CV_Base_Z_Items+0.2, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --18
                 },
-                random_rotation_range = {0,5}
             },
             subitem_conch = {
                 subitem_enum = 2,

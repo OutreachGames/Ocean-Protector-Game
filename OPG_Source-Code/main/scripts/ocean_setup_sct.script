@@ -1043,7 +1043,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 
 end
 
-local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_grid, sprite_selection, flip_h, health_val)
+local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_grid, health_val)
 
 	-- spawn a static individual
 	local s_item = INFO.item_info[item_name]
@@ -1055,13 +1055,9 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 	--local obj_dimensions = subitem_tbl.object_dimensions
 	local pos_tbl = GetDynamicGrid_IEntry(self, spawn_list_key_name, i_position_in_grid)
 
-	local rand_rot_range = subitem_tbl.random_rotation_range
-	local rot = nil
-	if rand_rot_range ~= nil then
-		--add slight random rotations following +- range
-		local euler_z = EXT:Random_Magnitude(rand_rot_range[1], rand_rot_range[2]) or 0
-		rot = vmath.quat_rotation_z(math.rad(euler_z))
-	end
+	local flip_h = pos_tbl.flip_sprite
+	local sprite_selection = pos_tbl.sprite_selection_i
+	local rot = vmath.quat_rotation_z(math.rad(pos_tbl.rotation_z_euler))
 
 	local rand_base = (math.random(90,100)/100)
 	local scale = subitem_tbl.object_scale_base * rand_base
@@ -1074,7 +1070,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 			Obj_Item_Enum = s_item.item_enum,
 			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Wave_Sprite_FlipH = flip_h,
-			Obj_Selected_Sprite_Option = sprite_selection,
+			Obj_Selected_Sprite_Option = sprite_selection_i,
 			Obj_Current_Health = health_val or 1.0
 		}
 	}
@@ -1330,27 +1326,9 @@ local function Setup_Animal(self, item_name, subitem_name, new_health, skip_rese
 
 	elseif INFO:Logic_is_Static(logic_typ) then
 
-		--setup sprite types and flip
-		local opts = subitem_tbl.sprite_options or {1}
-		local num_opts = #opts
-
-		--spawn in
+		--spawn in, recall dynamic grid takes care of sprite flipping and setting
 		for i=1,max_number_to_spawn do
-			local sprite_selection = 1
-			local is_even = (i % 2 == 0)
-			if num_opts > 1 then
-				if is_even then
-					sprite_selection = 2
-				end
-			end
-
-			-- note that flips for static are hard set and consistent 
-			-- depending on which i it is
-			if num_opts > 1 and i == max_number_to_spawn then
-				flip_h = true
-			end
-
-			Spawn_Animal_Static(self, item_name, subitem_name, i, sprite_selection, flip_h, health_val)
+			Spawn_Animal_Static(self, item_name, subitem_name, i, health_val)
 		end
 
 	elseif INFO:Logic_is_Micro(logic_typ) then
@@ -1726,7 +1704,11 @@ local function ResetDynamicGrids(self)
 			local x = static_tbl[i][1]
 			local y = static_tbl[i][2]
 			local z = static_tbl[i][3] + (i*0.001) + Get_Z_from_Y(y, 0.1)
-			cells_tbl[i] = {x = x, y = y, z = z, i_index = i}
+			local flip = static_tbl.flip_sprite
+			local rot_z = static_tbl.rotation_z_euler or 0
+			local sprite_i = static_tbl.sprite_selection_i or 1
+			--#TODO
+			cells_tbl[i] = {x = x, y = y, z = z, i_index = i, flip_sprite = flip, rotation_z_euler = rot_z, sprite_selection_i = sprite_i}
 		end
 
 		return cells_tbl
