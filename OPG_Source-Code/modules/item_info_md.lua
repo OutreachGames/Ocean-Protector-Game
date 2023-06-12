@@ -79,7 +79,6 @@ INFO.item_info = {
         }
 	},
 
-    --#TODO add Y-axis label options (Poor, Fair, Excellent) or use range if none defined
 	item_ph = {
         item_enum = 1,
         gui_info = {
@@ -197,7 +196,8 @@ INFO.item_info = {
                     {-560, -242, CV_Base_Middle, flip_sprite = true, rotation_z_euler = -3, sprite_selection_i = 1}, --mid
                     {385, -204, CV_Base_Top, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 2}, --top
                 },
-                sprite_options = {"coral_bulb_1", "coral_bulb_2"}
+                sprite_options = {"coral_bulb_1", "coral_bulb_2"},
+                tint_fully_healthy = {r=1, g=1, b=1, a=1}
             },
             subitem_horn = {
                 subitem_enum = 2,
@@ -213,7 +213,8 @@ INFO.item_info = {
                     {-40, -377, CV_Base_Bottom, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --bottom
                     {635, -386, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
-                sprite_options = {"coral_horn_1", "coral_horn_2"}
+                sprite_options = {"coral_horn_1", "coral_horn_2"},
+                tint_fully_healthy = {r=1, g=1, b=1, a=1}
             },
             subitem_pillar = {
                 subitem_enum = 3,
@@ -230,7 +231,8 @@ INFO.item_info = {
                     {580, -225, CV_Base_Top, flip_sprite = false, rotation_z_euler = 5, sprite_selection_i = 2}, --top
                     {262, -346, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
-                sprite_options = {"coral_pillar_1", "coral_pillar_2"}
+                sprite_options = {"coral_pillar_1", "coral_pillar_2"},
+                tint_fully_healthy = {r=1, g=1, b=1, a=1}
             }
         }
 	},
@@ -255,6 +257,7 @@ INFO.item_info = {
                 object_scale_base = 1,
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
+                tint_fully_healthy = {r=1, g=1, b=1, a=1},
                 static_spawner_tbl = {
                     {-546, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 50}, --1
                     {-516, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = false, rotation_z_euler = 0}, --2
@@ -610,6 +613,18 @@ function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
     --returns i-based table of strings of possible sprite options if set
 
     return self:Get_Subitem_Value(item_enum, subitem_enum, "sprite_options")
+
+end
+
+function INFO:Get_Healthiest_Tint(item_enum, subitem_enum)
+
+    local tint = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_healthy")
+
+    if tint == nil then
+        return {r=1,g=1,b=1,a=1}
+    else
+        return tint
+    end
 
 end
 

@@ -275,6 +275,7 @@ local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 
 	if new_setup == nil then
 		print("Error: function 'Screen Highlight Reset' provided with unrecognized highlight type key <"..tostring(highlight_what)..">")
+		return
 	end
 
 	local new_size = new_setup.l_size

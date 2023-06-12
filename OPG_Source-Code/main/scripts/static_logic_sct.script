@@ -39,10 +39,21 @@ local function OnExpire(self)
 
 end
 
-local function On_UpdateHealth(self, health_val)
+local function On_UpdateHealth(self, health_val, visual_update)
+
+	-- set tint of sprite according to health value, default is 1
+
+	health_val= health_val or 1
 
 	-- #TODO update static based on health value
+	local healthiest_tint = INFO:Get_Healthiest_Tint(self.Obj_Item_Enum, self.Obj_Subitem_Enum)
 
+	if visual_update then
+		-- animate tint and scale
+		-- only change scale if new scale different than old scale
+	else
+		-- just sent tint and scale
+	end
 
 end
 
