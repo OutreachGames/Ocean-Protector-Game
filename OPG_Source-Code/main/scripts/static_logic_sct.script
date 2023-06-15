@@ -88,9 +88,6 @@ local function GO_Setup(self)
 		sprite.play_flipbook("#sprite", opts[self.Obj_Selected_Sprite_Option])
 	end
 
-	-- now tint
-	go.set("#sprite", "tint", vmath.vector4(self.Obj_OG_Tint_R, self.Obj_OG_Tint_G, self.Obj_OG_Tint_B, 1))
-
 	-- flip if specified
 	if self.Obj_Wave_Sprite_FlipH then
 		sprite.set_hflip("#sprite", true)
