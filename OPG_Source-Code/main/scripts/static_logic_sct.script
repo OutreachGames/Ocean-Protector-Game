@@ -48,7 +48,6 @@ local function On_UpdateHealth(self, health_val, visual_update)
 	-- update static based on health value
 	local new_tint_v4 = INFO:Get_Health_Tint_Vector4(self.Obj_Item_Enum, self.Obj_Subitem_Enum, health_val)
 
-	-- #TODO update more here?
 	-- following could work, but ends up with too many sprites, and too strong of drop shadows
 		-- if getting larger
 		--	 set scale of top sprite to 0.8 and alpha to 0.0
@@ -62,7 +61,8 @@ local function On_UpdateHealth(self, health_val, visual_update)
 		--		bottom sprite already set
 
 		--prevent full 0 scale
-		local new_scale = visual_update
+		local new_scale = health_val
+		-- 	#TODO scale the scale within reasonable bounds?
 		if new_scale <= 0 then
 			new_scale = 0.001
 		end
