@@ -60,9 +60,13 @@ local function On_UpdateHealth(self, health_val, visual_update)
 		--	 top sprite gradually shrinks and gets 0 alpha
 		--		bottom sprite already set
 
-		--prevent full 0 scale
-		local new_scale = health_val
-		-- 	#TODO scale the scale within reasonable bounds?
+		-- get new scale
+		-- scale the scale within reasonable bounds
+		local scale_highest = 1.0
+		local scale_lowest = 0.7
+		local new_scale = EXT:Lerp(scale_lowest, scale_highest, health_val)
+
+		-- failsafe to prevent 0 scale
 		if new_scale <= 0 then
 			new_scale = 0.001
 		end
