@@ -2,6 +2,7 @@
 
 -- dependencies
 local RES = require ("modules.screen_res_md")
+local EXT = require("modules.extend_md")
 
 -- constants for easy tuning
 local CV_Base_Z_Buoy = 0.15
@@ -197,7 +198,8 @@ INFO.item_info = {
                     {385, -204, CV_Base_Top, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 2}, --top
                 },
                 sprite_options = {"coral_bulb_1", "coral_bulb_2"},
-                tint_fully_healthy = {r=1, g=1, b=1, a=1}
+                tint_fully_healthy = {r = 255/255, g = 240/255, b = 190/255, a = 1},
+                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1}
             },
             subitem_horn = {
                 subitem_enum = 2,
@@ -214,7 +216,8 @@ INFO.item_info = {
                     {635, -386, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_horn_1", "coral_horn_2"},
-                tint_fully_healthy = {r=1, g=1, b=1, a=1}
+                tint_fully_healthy = {r = 255/255, g = 210/255, b = 150/255, a = 1},
+                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1}
             },
             subitem_pillar = {
                 subitem_enum = 3,
@@ -232,7 +235,8 @@ INFO.item_info = {
                     {262, -346, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_pillar_1", "coral_pillar_2"},
-                tint_fully_healthy = {r=1, g=1, b=1, a=1}
+                tint_fully_healthy = {r = 255/255, g = 210/255, b = 180/255, a = 1},
+                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1}
             }
         }
 	},
@@ -257,7 +261,8 @@ INFO.item_info = {
                 object_scale_base = 1,
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
-                tint_fully_healthy = {r=1, g=1, b=1, a=1},
+                tint_fully_healthy = {r = 1, g = 1, b = 1, a = 1},
+                tint_fully_sick = {r = 0.5, g = 0.5, b = 0.5, a = 1},
                 static_spawner_tbl = {
                     {-546, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 50}, --1
                     {-516, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = false, rotation_z_euler = 0}, --2
@@ -616,15 +621,17 @@ function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
 
 end
 
-function INFO:Get_Healthiest_Tint(item_enum, subitem_enum)
+function INFO:Get_Health_Tint_Vector4(item_enum, subitem_enum, health_val)
 
-    local tint = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_healthy")
+    local tint_healthy = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_healthy") or {r=1, g=1, b=1, a=1}
+    local tint_sick = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_sick") or {r=0, g=0, b=0, a=0}
 
-    if tint == nil then
-        return {r=1,g=1,b=1,a=1}
-    else
-        return tint
-    end
+    local new_tint = {}
+    for k,v in pairs(tint_healthy) do
+		new_tint[k] = EXT:Lerp(tint_sick[k], tint_healthy[k], health_val)
+	end
+
+    return vmath.vector4(new_tint.r, new_tint.g, new_tint.b, new_tint.a)
 
 end
 

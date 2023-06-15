@@ -15,9 +15,6 @@ go.property("Obj_Item_Enum", -1)
 go.property("Obj_Subitem_Enum", -1)
 go.property("Obj_Selected_Sprite_Option", 1)
 go.property("Obj_Wave_Sprite_FlipH", false)
-go.property("Obj_OG_Tint_R", 1)
-go.property("Obj_OG_Tint_G", 1)
-go.property("Obj_OG_Tint_B", 1)
 go.property("Obj_OG_Scale_Float", 1)
 go.property("Obj_Current_Health", 1)
 
@@ -41,19 +38,42 @@ end
 
 local function On_UpdateHealth(self, health_val, visual_update)
 
-	-- set tint of sprite according to health value, default is 1
+	-- set tint of sprite according to health value, default is 1 (full health)
 
-	health_val= health_val or 1
+	health_val = health_val or 1
 
-	-- #TODO update static based on health value
-	local healthiest_tint = INFO:Get_Healthiest_Tint(self.Obj_Item_Enum, self.Obj_Subitem_Enum)
+	-- save previous health
+	local current_health = self.Obj_Current_Health
+
+	-- update static based on health value
+	local new_tint_v4 = INFO:Get_Health_Tint_Vector4(self.Obj_Item_Enum, self.Obj_Subitem_Enum, health_val)
+
+	-- #TODO update more here
+
+	--if getting larger
+	--	set scale of top sprite to 0.8 and alpha to 0.0
+	--	set scale of bottom sprite to 0.8 and alpha to 1.0
+	--	top sprite gradually grows and gets full alpha
+	--		bottom sprite then set
+
+	--if getting smaller
+	--	set scale of top sprite to 1.0 and alpha to 1.0
+	--	set scale of bottom sprite to 0.8 and alpha to 1.0
+	--	top sprite gradually shrinks and gets 0 alpha
+	--		bottom sprite already set
 
 	if visual_update then
 		-- animate tint and scale
 		-- only change scale if new scale different than old scale
+		local duration = 1.5
+		go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, new_tint_v4, go.EASING_LINEAR, duration)
 	else
 		-- just sent tint and scale
+		go.set("#sprite", "tint", new_tint_v4)
 	end
+
+	-- update to current health
+	self.Obj_Current_Health = health_val
 
 end
 
@@ -77,6 +97,7 @@ local function GO_Setup(self)
 	end
 
 	-- save original scale and color 
+	self.Obj_Current_Health = 1
 	self.Obj_OG_Scale_Float = go.get_scale().x
 
 	On_UpdateHealth(self)
