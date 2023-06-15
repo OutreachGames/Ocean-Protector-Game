@@ -48,28 +48,35 @@ local function On_UpdateHealth(self, health_val, visual_update)
 	-- update static based on health value
 	local new_tint_v4 = INFO:Get_Health_Tint_Vector4(self.Obj_Item_Enum, self.Obj_Subitem_Enum, health_val)
 
-	-- #TODO update more here
+	-- #TODO update more here?
+	-- following could work, but ends up with too many sprites, and too strong of drop shadows
+		-- if getting larger
+		--	 set scale of top sprite to 0.8 and alpha to 0.0
+		--	 set scale of bottom sprite to 0.8 and alpha to 1.0
+		--	 top sprite gradually grows and gets full alpha
+		--		bottom sprite then set
+		-- if getting smaller
+		--	 set scale of top sprite to 1.0 and alpha to 1.0
+		--	 set scale of bottom sprite to 0.8 and alpha to 1.0
+		--	 top sprite gradually shrinks and gets 0 alpha
+		--		bottom sprite already set
 
-	--if getting larger
-	--	set scale of top sprite to 0.8 and alpha to 0.0
-	--	set scale of bottom sprite to 0.8 and alpha to 1.0
-	--	top sprite gradually grows and gets full alpha
-	--		bottom sprite then set
-
-	--if getting smaller
-	--	set scale of top sprite to 1.0 and alpha to 1.0
-	--	set scale of bottom sprite to 0.8 and alpha to 1.0
-	--	top sprite gradually shrinks and gets 0 alpha
-	--		bottom sprite already set
+		--prevent full 0 scale
+		local new_scale = visual_update
+		if new_scale <= 0 then
+			new_scale = 0.001
+		end
 
 	if visual_update then
 		-- animate tint and scale
 		-- only change scale if new scale different than old scale
 		local duration = 1.5
 		go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, new_tint_v4, go.EASING_LINEAR, duration)
+		go.animate(".", "scale", go.PLAYBACK_ONCE_FORWARD, new_scale, go.EASING_LINEAR, duration)
 	else
 		-- just sent tint and scale
 		go.set("#sprite", "tint", new_tint_v4)
+		go.set_scale(new_scale)
 	end
 
 	-- update to current health
