@@ -1751,7 +1751,7 @@ local function ResetDynamicGrids(self)
 
 end
 
-local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
+local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in form { item_plankton = {health_value_previous, health_value_new} }
 
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
@@ -1760,10 +1760,12 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 	-- update helper functions --#TODO add highlighters for each update function
 	local function update_plankton()
 
-		local spawn_list_key = INFO.item_info.item_plankton.subitem_info.subitem_phytoplankton.spawn_list_key
+		local plankton_info = INFO.item_info.item_plankton
+		local spawn_list_key = plankton_info.subitem_info.subitem_phytoplankton.spawn_list_key
 		local key_list = self.spawned_objects_list[spawn_list_key]
 		if key_list ~= nil then
-			local new_health = 0 --#TODO
+			local item_keyname = "item_plankton"
+			local new_health = oa_outcome_tbl[item_keyname].health_value_new
 			for k_gourl, _ in pairs(key_list) do
 				msg.post(k_gourl, HSH.msg_order_update_health, {minfo_new_health_value = new_health})
 			end
@@ -1774,11 +1776,14 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 
 	local function update_ocean_floor()
 		--#TODO
+		-- all static (all corals, oysters)
+		-- some swimmers (crabs and conches)
 	end
 
 
 	local function update_ocean_water()
 		--#TODO
+		-- most swimmers (all fish, shrimp)
 	end
 
 

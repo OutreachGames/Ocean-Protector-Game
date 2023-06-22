@@ -174,9 +174,32 @@ local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 
 end
 
+local function PlayerData_IsValid(self, opt_id_tag)
+
+	-- validity fail safes
+	local ply_data = self.player_data_tbl
+	if ply_data == nil then
+		print("Error: function 'Player Data Run Score Input' tried to run when the player data table did not exist. Optional ID tag <"..tostring(opt_id_tag)..">\n")
+		return false
+	end
+
+	local items_data = ply_data.item_data_tbl
+	if items_data == nil then
+		print("Error: function 'Player Data Run Score Input' tried to run when the items data table did not exist. Optional ID tag <"..tostring(opt_id_tag)..">\n")
+		return false
+	end
+
+	return true
+
+end
+
 local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override_instead_insert)
 
 	-- adds an i-based entry to player save table for given item key 
+
+	if not PlayerData_IsValid(self, "Player Data Update Score Tracker") then
+		return
+	end
 
 	local num_items = #self.player_data_tbl.item_data_tbl[item_key]
 
@@ -209,12 +232,7 @@ end
 
 local function PlayerData_Get_ItemTable(self, item_key)
 
-	if self.player_data_tbl == nil then
-		print("Error: unable to get entry in player data table because player data table does not exist \n")
-		return nil
-	end
-	if self.player_data_tbl.item_data_tbl == nil then
-		print("Error: unable to get entry in item data table of player data table because item data table does not exist \n")
+	if not PlayerData_IsValid(self, "Player Data Get Item Table") then
 		return nil
 	end
 
@@ -246,12 +264,20 @@ local function PlayerData_Get_Item_Entry_I(self, item_key, i_key)
 
 	local item_tbl = PlayerData_Get_ItemTable(self, item_key)
 	if item_tbl == nil then
+		-- redundant error message but that's okay
 		print("Error: there is no entry in player data table for key <"..tostring(item_key).."> returning nil. ")
 		return nil
 	end
 
 	-- default i-key is last in list
-	i_key = i_key or #item_tbl
+	local num_opts = #item_tbl
+	i_key = i_key or num_opts
+
+	-- allow for negative values 
+	-- (ie -1 would be second to last value in list)
+	if i_key < 0 then
+		i_key = num_opts + i_key
+	end
 
 	return item_tbl[i_key]
 
@@ -599,15 +625,20 @@ local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert
 
 	-- takes a table with item keys and new delta scores and updates item scores in player save table accordingly
 
+	-- validity fail safes
+	if not PlayerData_IsValid(self, "Player Data Run Score Input") then
+		return
+	end
+
 	-- add to best choice tally if needed
 	if was_best_choice then
 		PlayerData_Update_SumBestChoices(self)
 	end
 
 	-- do this by looping through things we can track and checking if they match what is in table with same string key
-	for k_itemname,_ in pairs(self.player_data_tbl.item_data_tbl) do
+	for k_itemname,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
 		-- get previous entry
-		local previous_entry = PlayerData_Get_Item_Entry_I(self, k_itemname) or {}
+		local previous_entry = v_item_tracker_tbl[#v_item_tracker_tbl] or {}
 		local previous_score = previous_entry.item_tracker_score or 0
 
 		-- get new delta by matching our known trackers with the score update table provided to function
@@ -2214,12 +2245,27 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 
 	elseif stage_type == st.class_observe_outcomes then
-		-- observe outcomes	
-		-- send message to run outcomes 
+		-- observe outcomes
+		-- send message to run outcomes
 		-- this script will get a message back once that outcome effect is done
 		-- and at that point request a game progress
-		local oa_outcome_tbl = {} --#TODO
-		msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, oa_outcome_tbl)
+		-- get previous and current values for items into table and send it
+		if PlayerData_IsValid(self, "Observe Items Setup") then
+			-- setup outcomes table
+			local oa_outcome_tbl = {}
+			for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
+				if v_item_tracker_tbl ~= nil then
+					local tracker_list_length = #v_item_tracker_tbl
+					if tracker_list_length >= 2 then
+						oa_outcome_tbl[k_item_name] = {
+							health_value_previous = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score,
+							health_value_new = v_item_tracker_tbl[tracker_list_length].item_tracker_score }
+					end
+				end
+			end
+			-- send message to start 
+			msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, oa_outcome_tbl)
+		end
 
 	end
 
