@@ -300,6 +300,19 @@ embedded_instances {
   "default_animation: \\\"Asset_TopWater\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
+  "slice9 {\\n"
+  "  x: 2.0\\n"
+  "  y: 0.0\\n"
+  "  z: 2.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size {\\n"
+  "  x: 1600.0\\n"
+  "  y: 63.0\\n"
+  "  z: 0.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size_mode: SIZE_MODE_MANUAL\\n"
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
@@ -598,6 +611,19 @@ embedded_instances {
   "default_animation: \\\"Asset_Sky\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
+  "slice9 {\\n"
+  "  x: 2.0\\n"
+  "  y: 0.0\\n"
+  "  z: 2.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size {\\n"
+  "  x: 1600.0\\n"
+  "  y: 234.0\\n"
+  "  z: 0.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size_mode: SIZE_MODE_MANUAL\\n"
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
@@ -1418,8 +1444,8 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: -149.0\n"
+  "    x: -673.0\n"
+  "    y: 89.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1497,8 +1523,8 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
+  "    x: -673.0\n"
+  "    y: 98.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1510,8 +1536,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -673.0
-    y: 89.0
+    x: 0.0
+    y: 0.0
     z: -1.0
   }
   rotation {
@@ -1620,6 +1646,92 @@ embedded_instances {
     x: 0.0
     y: 0.0
     z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "background_water_bottom_rest"
+  data: "embedded_components {\n"
+  "  id: \"sprite_lower\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"tile_set: \\\"/asset_links/textures.atlas\\\"\\n"
+  "default_animation: \\\"Asset_Bottom_Water_lower\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "blend_mode: BLEND_MODE_ALPHA\\n"
+  "slice9 {\\n"
+  "  x: 2.0\\n"
+  "  y: 0.0\\n"
+  "  z: 2.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size {\\n"
+  "  x: 1600.0\\n"
+  "  y: 477.0\\n"
+  "  z: 0.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size_mode: SIZE_MODE_MANUAL\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: -212.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"sprite_upper\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"tile_set: \\\"/asset_links/textures.atlas\\\"\\n"
+  "default_animation: \\\"Asset_Bottom_Water_upper\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "blend_mode: BLEND_MODE_ALPHA\\n"
+  "slice9 {\\n"
+  "  x: 2.0\\n"
+  "  y: 0.0\\n"
+  "  z: 2.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size {\\n"
+  "  x: 1348.0\\n"
+  "  y: 126.0\\n"
+  "  z: 0.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size_mode: SIZE_MODE_MANUAL\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 127.0\n"
+  "    y: 89.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: -0.95
   }
   rotation {
     x: 0.0
