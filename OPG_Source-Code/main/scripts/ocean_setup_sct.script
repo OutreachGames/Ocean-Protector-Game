@@ -1782,6 +1782,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 			local skip_reset = true
 			local spawn_offscreen = false
 			local go_auto_patrol = false
+
 			for k_spawnlist_name,v_info in pairs(self.helper_spawn_lists_swimmers) do
 				--randomize side so fish don't always appear on same side
 				self.dynamic_spawn_sides[k_spawnlist_name] = (math.random(0,1) == 1)
@@ -1795,6 +1796,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 			local stage_over_plankton_or_oa = 5
 			local stage_over_ocean_floor = 5
 			local stage_over_ocean_mid = 5
+
 			timer.delay(fader_time*1.5, false, function()
 
 				-- highlight plankton or OA and request update and coastal OA if needed
@@ -1811,6 +1813,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 
 							-- report that OA effects are done
 							msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
+
 						end)
 					end)
 				end)

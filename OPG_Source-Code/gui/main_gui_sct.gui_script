@@ -10,6 +10,7 @@ local INFO = require("modules.item_info_md")
 
 -- constants
 local CV_Current_Save_Version = 0.1
+local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
 
 local CV_item_groups = {}
 
@@ -1935,9 +1936,9 @@ local function On_GO_Item_Clicked_Requested(self, action_id, action)
 	-- if valid ocean click then check if for item selecting or just something simple like bubbles
 
 	if On_GO_Items_Clicked_Basic_Valid(self) then
-		msg.post("ocean_level:/level_controller", HSH.msg_request_go_clicked, {minfo_action = action})
+		msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_go_clicked, {minfo_action = action})
 	else
-		msg.post("ocean_level:/level_controller", HSH.msg_request_make_bubbles, {minfo_action = action})
+		msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_make_bubbles, {minfo_action = action})
 	end
 
 end
@@ -2211,6 +2212,15 @@ local function GameLogic_Progress(self, i_stage_addition)
 		local reset_values = true
 		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
 
+
+	elseif stage_type == st.class_observe_outcomes then
+		-- observe outcomes	
+		-- send message to run outcomes 
+		-- this script will get a message back once that outcome effect is done
+		-- and at that point request a game progress
+		local oa_outcome_tbl = {} --#TODO
+		msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, oa_outcome_tbl)
+
 	end
 
 end
@@ -2353,13 +2363,13 @@ end
 
 local function OceanScene_ChangeWeather(self, is_raining, wave_direction, run_coastal_oa_when_done)
 
-	msg.post("ocean_level:/level_controller", HSH.msg_request_change_weather, {minfo_is_raining=is_raining, minfo_wave_direction=wave_direction, minfo_run_coastal_oa_too = run_coastal_oa_when_done})
+	msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_change_weather, {minfo_is_raining=is_raining, minfo_wave_direction=wave_direction, minfo_run_coastal_oa_too = run_coastal_oa_when_done})
 
 end
 
 local function OceanScene_RunCoastalOA(self, percent_coastal_oa_to_hide)
 
-	msg.post("ocean_level:/level_controller", HSH.msg_request_run_coastal_oa, {minfo_percent_coastal_oa_hide = percent_coastal_oa_to_hide})
+	msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_run_coastal_oa, {minfo_percent_coastal_oa_hide = percent_coastal_oa_to_hide})
 
 end
 
@@ -2382,6 +2392,12 @@ local function On_SpecialAction(self, special_action_name)
 		-- function 'On Game Progress' checks this value then loads goals if it is on
 		PlayerData_Set_Special(self, "special_setup_goals_hud_enabled", true)
 	end
+
+end
+
+local function On_OutcomeEffects_Done(self)
+
+	GameLogic_Progress(self, 1)
 
 end
 
@@ -2529,7 +2545,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_request_special_case_action then
 		On_SpecialAction(self, message.minfo_special_case_key)
 	elseif message_id == HSH.msg_report_oa_outcomes_done then
-		--#TODO 
+		On_OutcomeEffects_Done(self)
 	end
 
 end

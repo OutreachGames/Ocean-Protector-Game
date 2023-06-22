@@ -95,7 +95,8 @@ STR.CV = {
     goal_completed_types = {
         class_new_information = 1,
         class_decisison = 2,
-        class_click_items = 3
+        class_click_items = 3,
+        class_observe_outcomes = 4
     },
 
     debrief_decision_view = {
@@ -407,7 +408,7 @@ STR.Screenplay = {
             debrief_text = "This increase in ocean acidity over time is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 
-        user_lesson_16 = {
+        user_lesson_16a = {
             goal_text = "Follow information prompts.",
             display_text = "Ocean acidification hurts life throughout our oceans, including us. "..n..n.."For example, many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes."..n..n,
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
@@ -418,6 +419,10 @@ STR.Screenplay = {
                 local override_rather_than_insert = true
                 STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases, nil, override_rather_than_insert)
             end
+        },
+
+        user_lesson_16b = {
+            goal_text = "Observe changes to ocean life.",
         },
 
         -- Show animation of determinantal effects 
