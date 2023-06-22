@@ -885,9 +885,13 @@ local function SetStatic_Weather(self, is_raining)
 	-- run
 	go.set("background_sky_ocean#sprite", "tint", tint_sky or vmath1)
 	go.set("background_water_top#sprite", "tint", tint_watertop or vmath1)
+
 	go.set("background_water_bottom_full_window#sprite", "tint", tint_waterbottom or vmath1)
 	go.set("background_water_bottom_full_pane_base#sprite", "tint", tint_waterbottom or vmath1)
 	go.set("background_water_bottom_full_pane_hider#sprite", "tint", tint_waterbottom or vmath1)
+
+	go.set("background_water_bottom_rest#sprite_lower", "tint", tint_waterbottom or vmath1)
+	go.set("background_water_bottom_rest#sprite_upper", "tint", tint_waterbottom or vmath1)
 
 	msg.post("background_sun#sprite", str_set)
 	msg.post("background_water_light#rays_bottom", str_set)

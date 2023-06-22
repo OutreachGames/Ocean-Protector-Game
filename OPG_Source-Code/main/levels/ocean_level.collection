@@ -1591,8 +1591,8 @@ embedded_instances {
   "material: \\\"/builtins/fonts/label.material\\\"\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 116.0\n"
+  "    x: -673.0\n"
+  "    y: 128.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1604,8 +1604,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -673.0
-    y: 15.0
+    x: 0.0
+    y: 0.0
     z: -0.81
   }
   rotation {
