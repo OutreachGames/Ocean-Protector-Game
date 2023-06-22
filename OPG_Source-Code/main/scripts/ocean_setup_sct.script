@@ -194,7 +194,7 @@ local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_
     local x_range = math.abs(x_max - x_min)
     local y_range = math.abs(y_max - y_min)
 
-    -- get max number of whole cells with thesx and y ranges
+    -- get max number of whole cells with these x and y ranges
     local number_cells_in_x_axis = math.floor(x_range/cell_width)
     local number_cells_in_y_axis = math.floor(y_range/cell_height)
     local total_number_cells = number_cells_in_x_axis * number_cells_in_y_axis
@@ -214,7 +214,7 @@ local function GetGridPoints(range_tbl, cellsize_tbl, required_num, rand_offset_
 		if extra_needed_cells > num_per_addition then
 			extra_columns = math.ceil(extra_needed_cells/num_per_addition)
 		end
-		-- add these values and recalcuate
+		-- add these values and recalculate
 		number_cells_in_x_axis = number_cells_in_x_axis + extra_columns
 		total_number_cells = number_cells_in_x_axis * number_cells_in_y_axis
 	end
@@ -351,9 +351,10 @@ local function Spawned_ResetAll(self, spawn_list_key, delete_gos)
 	-- reset all spawned objects from given list key
 
 	-- if there have been objects spawned then delete and clear them all
-	if self.spawned_objects_list[spawn_list_key] ~= nil then
+	local key_list = self.spawned_objects_list[spawn_list_key]
+	if key_list ~= nil then
 		if self.spawned_objects_sum[spawn_list_key] > 0 then
-			for k_gourl, _ in pairs(self.spawned_objects_list[spawn_list_key]) do
+			for k_gourl, _ in pairs(key_list) do
 				if delete_gos then
 					go.delete(k_gourl)
 				else
@@ -1752,9 +1753,33 @@ end
 
 local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 
-	-- #TODO add dynamic outcomes
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
+
+
+	-- update helper functions --#TODO add highlighters for each update function
+	local function update_plankton()
+
+		local spawn_list_key = INFO.item_info.item_plankton.subitem_info.subitem_phytoplankton.spawn_list_key
+		local key_list = self.spawned_objects_list[spawn_list_key]
+		if key_list ~= nil then
+			local new_health = 0 --#TODO
+			for k_gourl, _ in pairs(key_list) do
+				msg.post(k_gourl, HSH.msg_order_update_health, {minfo_new_health_value = new_health})
+			end
+		end
+
+	end
+
+
+	local function update_ocean_floor()
+		--#TODO
+	end
+
+
+	local function update_ocean_water()
+		--#TODO
+	end
 
 
 	-- 1. setup:
@@ -1800,14 +1825,17 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl)
 			timer.delay(fader_time*1.5, false, function()
 
 				-- highlight plankton or OA and request update and coastal OA if needed
+				update_plankton()
 
 				timer.delay(stage_over_plankton_or_oa, false, function()
 
 					-- highlight ocean floor and request update
+					update_ocean_floor()
 
 					timer.delay(stage_over_ocean_floor, false, function()
 
 						-- highlight ocean middle and request update
+						update_ocean_water()
 
 						timer.delay(stage_over_ocean_mid, false, function()
 
