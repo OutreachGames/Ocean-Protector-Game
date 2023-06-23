@@ -2252,18 +2252,21 @@ local function GameLogic_Progress(self, i_stage_addition)
 		-- get previous and current values for items into table and send it
 		if PlayerData_IsValid(self, "Observe Items Setup") then
 			-- setup outcomes table
-			local oa_outcome_tbl = {}
+			local oa_outcome_tbl = {
+				minfo_oa_outcome_item_health_values = {},
+				minfo_oa_outcome_reset_swimmers = STR:Get_Swimmers_are_Resetting(stage_key, substage_key) or true
+			}
 			for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
 				if v_item_tracker_tbl ~= nil then
 					local tracker_list_length = #v_item_tracker_tbl
 					if tracker_list_length >= 2 then
-						oa_outcome_tbl[k_item_name] = {
+						oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
 							health_value_previous = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score,
 							health_value_new = v_item_tracker_tbl[tracker_list_length].item_tracker_score }
 					end
 				end
 			end
-			-- send message to start 
+			-- send message to start
 			msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, oa_outcome_tbl)
 		end
 

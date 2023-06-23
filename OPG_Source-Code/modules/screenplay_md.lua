@@ -422,6 +422,8 @@ STR.Screenplay = {
         },
 
         user_lesson_16b = {
+            goal_completed_type = STR.CV.goal_completed_types.class_observe_outcomes,
+            run_swimmer_reset_before_oa_outcome = false,
             goal_text = "Observe changes to ocean life.",
         },
 
@@ -1566,6 +1568,20 @@ function STR:Get_Completion_Type(stage_key, substage_key)
     end
 
     return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type) or self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_completed_type_default)
+
+end
+
+
+-- Observe Outcomes
+function STR:Get_Swimmers_are_Resetting(stage_key, substage_key)
+
+    -- gets if swimmers should be reset for noticeable visualization
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].run_swimmer_reset_before_oa_outcome)
 
 end
 
