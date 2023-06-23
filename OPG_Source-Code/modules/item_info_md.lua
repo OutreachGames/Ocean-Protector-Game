@@ -580,10 +580,10 @@ function INFO:Get_ItemSubItem_Names_from_Enum(item_enum, subitem_enum)
     local item_name, subitem_name
 
     for k_item_name,v_item_info in pairs(self.item_info) do
-        if v_item_info.item_enum == item_enum then
+        if (v_item_info.item_enum == item_enum) or (item_name == item_enum) then
             item_name = k_item_name
             for k_subitem_name, v_subitem_info in pairs(v_item_info.subitem_info) do
-                if v_subitem_info.subitem_enum == subitem_enum then
+                if (v_subitem_info.subitem_enum == subitem_enum) or (k_subitem_name == subitem_enum)then
                     subitem_name = k_subitem_name
                     break
                 end

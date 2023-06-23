@@ -1760,17 +1760,12 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
 
+	local function update_micro_or_static(item_name, subitem_name)
 
-	-- update helper functions --#TODO add highlighters for each update function
-	local function update_plankton()
-
-		-- update plankton, these use health update message
-		local plankton_info = INFO.item_info.item_plankton
-		local spawn_list_key = plankton_info.subitem_info.subitem_phytoplankton.spawn_list_key
+		local spawn_list_key = INFO:Get_Spawn_List_Key(item_name, subitem_name)
 		local key_list = self.spawned_objects_list[spawn_list_key]
 		if key_list ~= nil then
-			local item_keyname = "item_plankton"
-			local new_health = oa_outcome_tbl[item_keyname].health_value_new
+			local new_health = oa_outcome_tbl[item_name].health_value_new
 			for k_gourl, _ in pairs(key_list) do
 				msg.post(k_gourl, HSH.msg_order_update_health, {minfo_new_health_value = new_health})
 			end
@@ -1778,17 +1773,59 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 
 	end
 
+	local function update_swimmer(item_name, subitem_name)
+
+		local spawn_list_key = INFO:Get_Spawn_List_Key(item_name, subitem_name)
+		local key_list = self.spawned_objects_list[spawn_list_key]
+		if key_list ~= nil then
+			--#TODO
+		end
+
+	end
+
+	-- update helper functions --#TODO add highlighters for each update function
+	local function update_plankton()
+
+		-- update plankton, which uses health update message
+		update_micro_or_static("item_plankton", "subitem_phytoplankton")
+
+	end
+
 
 	local function update_ocean_floor()
-		--#TODO
-		-- all static (all corals, oysters), these use health update message
-		-- some swimmers (crabs and conches), these use kill or add
+
+		-- update all static (all corals, oysters), which use health update message
+		-- update some swimmers (crabs and conches), which use kill or add
+
+		-- coral
+		local item_coral = INFO.item_info.item_coral
+		for k_subitem_coral_name, _ in pairs(item_coral.subitem_info) do
+			update_micro_or_static("item_coral", k_subitem_coral_name)
+		end
+
+		-- oysters
+		update_micro_or_static("item_mollusks", "subitem_oyster")
+
+		--conches
+		update_swimmer("item_mollusks", "subitem_conch")
+
+		--crabs
+		update_swimmer("item_crustaceans", "subitem_crab")
 	end
 
 
 	local function update_ocean_water()
-		--#TODO
-		-- most swimmers (all fish, shrimp), these use kill or add
+		-- update most swimmers (all fish, shrimp), which use kill or add
+
+		--shrimp
+		update_swimmer("item_crustaceans", "subitem_shrimp")
+
+		--fish
+		local item_fish = INFO.item_info.item_fish
+		for k_subitem_fish_name, _ in pairs(item_fish.subitem_info) do
+			update_swimmer("item_fish", k_subitem_fish_name)
+		end
+
 	end
 
 
@@ -1828,26 +1865,34 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 			msg.post("main:/hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
 
 			-- run through OA effects 
-			local stage_over_plankton_or_oa = 5
-			local stage_over_ocean_floor = 5
-			local stage_over_ocean_mid = 5
+			local stage_done_plankton_or_oa = 5
+			local stage_done_ocean_floor = 5
+			local stage_done_ocean_mid = 12 -- give time for new swimmers to join formation before ordering school to patrol
 
 			timer.delay(fader_time*1.5, false, function()
 
 				-- highlight plankton or OA and request update and coastal OA if needed
 				update_plankton()
 
-				timer.delay(stage_over_plankton_or_oa, false, function()
+				timer.delay(stage_done_plankton_or_oa, false, function()
 
 					-- highlight ocean floor and request update
 					update_ocean_floor()
 
-					timer.delay(stage_over_ocean_floor, false, function()
+					timer.delay(stage_done_ocean_floor, false, function()
 
 						-- highlight ocean middle and request update
 						update_ocean_water()
 
-						timer.delay(stage_over_ocean_mid, false, function()
+						timer.delay(stage_done_ocean_mid, false, function()
+
+							-- also send message to all animals to start auto patrol
+							for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
+								local key_list = self.spawned_objects_list[k_spawnlistkey]
+								for k_gourl, _ in pairs(key_list) do
+									Animal_Order_GoTo(self, k_gourl) --default is waypoint 2
+								end
+							end
 
 							-- report that OA effects are done
 							msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
