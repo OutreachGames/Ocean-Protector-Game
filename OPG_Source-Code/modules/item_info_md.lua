@@ -635,6 +635,22 @@ function INFO:Get_Base_Scale(item_enum, subitem_enum)
 
 end
 
+function INFO:Get_Health_Scale(item_enum, subitem_enum, health_val)
+
+    local scale_health_0 = self:Get_Subitem_Value(item_enum, subitem_enum, "scale_fully_sick") or 0.001
+    local scale_health_1 = self:Get_Subitem_Value(item_enum, subitem_enum, "scale_fully_healthy") or 1
+
+	local new_scale = EXT:Lerp(scale_health_0, scale_health_1, health_val)
+
+	-- failsafe to prevent 0 scale
+	if new_scale <= 0 then
+		new_scale = 0.001
+	end
+
+    return new_scale
+
+end
+
 function INFO:Get_Health_Tint_Vector4(item_enum, subitem_enum, health_val)
 
     local tint_healthy = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_healthy") or {r=1, g=1, b=1, a=1}

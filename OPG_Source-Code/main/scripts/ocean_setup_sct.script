@@ -1076,9 +1076,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Wave_Sprite_FlipH = flip_h,
 			Obj_Selected_Sprite_Option = sprite_selection,
-			Obj_Current_Health = health_val or 1.0,
-			Obj_Scale_Health_1 = subitem_tbl.scale_fully_healthy,
-			Obj_Scale_Health_0 = subitem_tbl.scale_fully_sick
+			Obj_Current_Health = health_val or 1.0
 		}
 	}
 

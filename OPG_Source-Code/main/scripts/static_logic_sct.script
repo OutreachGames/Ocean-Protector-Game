@@ -18,12 +18,6 @@ go.property("Obj_Wave_Sprite_FlipH", false)
 go.property("Obj_OG_Scale_Float", 1)
 go.property("Obj_Current_Health", 1)
 
-go.property("Obj_Scale_Health_1", 1)
-go.property("Obj_Scale_Health_0", 0.6)
-
--- locals for easy tuning
-local color_black = EXT.vec4_black
-
 
 -- functions
 local function OnExpire(self)
@@ -33,7 +27,7 @@ local function OnExpire(self)
 	end
 
 	local fadeout_time = 0.50
-	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, color_black, go.EASING_LINEAR, fadeout_time, 0, func_expire_update)
+	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, EXT.vec4_black, go.EASING_LINEAR, fadeout_time, 0, func_expire_update)
 
 end
 
@@ -71,16 +65,13 @@ local function On_UpdateHealth(self, health_val, visual_update)
 		-- ie., it can never get bigger than 100% or smaller than 60% of original size
 		--   so 0.5 health would be 80% size, and show tint change
 		-- setting to a middle value than changing it to new health 
-		-- to maximize visual change probably won't work well since these are stationary?
-	local new_scale = EXT:Lerp(self.Obj_Scale_Health_0, self.Obj_Scale_Health_1, health_val)
-
-	-- failsafe to prevent 0 scale
-	if new_scale <= 0 then
-		new_scale = 0.001
-	end
+		-- to maximize visual change probably won't work well since these are stationary 
+		-- since players will kinda remember what the previous size was 
+		-- also gradual, small changes are more real-world accurate this way
 
 	-- size it to original scale
-	new_scale = new_scale * self.Obj_OG_Scale_Float
+	-- recall randomized OG scale will allow varying sizes
+	local new_scale = INFO:Get_Health_Scale(self.Obj_Item_Enum, self.Obj_Subitem_Enum, health_val) * self.Obj_OG_Scale_Float
 
 	if visual_update then
 		-- animate tint and scale
