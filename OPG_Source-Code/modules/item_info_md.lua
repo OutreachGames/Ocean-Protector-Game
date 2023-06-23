@@ -199,7 +199,9 @@ INFO.item_info = {
                 },
                 sprite_options = {"coral_bulb_1", "coral_bulb_2"},
                 tint_fully_healthy = {r = 255/255, g = 240/255, b = 190/255, a = 1},
-                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1}
+                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
+                scale_fully_healthy = 1.0,
+                scale_fully_sick = 0.6
             },
             subitem_horn = {
                 subitem_enum = 2,
@@ -217,7 +219,9 @@ INFO.item_info = {
                 },
                 sprite_options = {"coral_horn_1", "coral_horn_2"},
                 tint_fully_healthy = {r = 255/255, g = 210/255, b = 150/255, a = 1},
-                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1}
+                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
+                scale_fully_healthy = 1.0,
+                scale_fully_sick = 0.6
             },
             subitem_pillar = {
                 subitem_enum = 3,
@@ -236,7 +240,9 @@ INFO.item_info = {
                 },
                 sprite_options = {"coral_pillar_1", "coral_pillar_2"},
                 tint_fully_healthy = {r = 255/255, g = 210/255, b = 180/255, a = 1},
-                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1}
+                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
+                scale_fully_healthy = 1.0,
+                scale_fully_sick = 0.6
             }
         }
 	},
@@ -263,6 +269,8 @@ INFO.item_info = {
                 info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
                 tint_fully_healthy = {r = 1, g = 1, b = 1, a = 1},
                 tint_fully_sick = {r = 0.5, g = 0.5, b = 0.5, a = 1},
+                scale_fully_healthy = 1.0,
+                scale_fully_sick = 0.85,
                 static_spawner_tbl = {
                     {-546, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 50}, --1
                     {-516, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = false, rotation_z_euler = 0}, --2
@@ -618,6 +626,12 @@ function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
     --returns i-based table of strings of possible sprite options if set
 
     return self:Get_Subitem_Value(item_enum, subitem_enum, "sprite_options")
+
+end
+
+function INFO:Get_Base_Scale(item_enum, subitem_enum)
+
+    return self:Get_Subitem_Value(item_enum, subitem_enum, "object_scale_base") or CV_Default_Base_Scale
 
 end
 

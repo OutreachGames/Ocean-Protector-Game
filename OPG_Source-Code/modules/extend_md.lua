@@ -2,7 +2,9 @@
 
 local EXT = {}
 
-EXT.vec4_white = vmath.vector4(1, 1, 1, 1)
+EXT.vec4_white_a100 = vmath.vector4(1, 1, 1, 1)
+EXT.vec4_white_a90 = vmath.vector4(0.9, 0.9, 0.9, 0.9)
+EXT.vec4_white_a80 = vmath.vector4(0.8, 0.8, 0.8, 0.8)
 EXT.vec4_black = vmath.vector4(0, 0, 0, 0)
 EXT.vec3_up = vmath.vector3(0, 1, 0)
 

@@ -1076,7 +1076,9 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 			Obj_Subitem_Enum = subitem_tbl.subitem_enum,
 			Obj_Wave_Sprite_FlipH = flip_h,
 			Obj_Selected_Sprite_Option = sprite_selection,
-			Obj_Current_Health = health_val or 1.0
+			Obj_Current_Health = health_val or 1.0,
+			Obj_Scale_Health_1 = subitem_tbl.scale_fully_healthy,
+			Obj_Scale_Health_0 = subitem_tbl.scale_fully_sick
 		}
 	}
 
@@ -1764,6 +1766,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 	-- update helper functions --#TODO add highlighters for each update function
 	local function update_plankton()
 
+		-- update plankton, these use health update message
 		local plankton_info = INFO.item_info.item_plankton
 		local spawn_list_key = plankton_info.subitem_info.subitem_phytoplankton.spawn_list_key
 		local key_list = self.spawned_objects_list[spawn_list_key]
@@ -1780,14 +1783,14 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 
 	local function update_ocean_floor()
 		--#TODO
-		-- all static (all corals, oysters)
-		-- some swimmers (crabs and conches)
+		-- all static (all corals, oysters), these use health update message
+		-- some swimmers (crabs and conches), these use kill or add
 	end
 
 
 	local function update_ocean_water()
 		--#TODO
-		-- most swimmers (all fish, shrimp)
+		-- most swimmers (all fish, shrimp), these use kill or add
 	end
 
 

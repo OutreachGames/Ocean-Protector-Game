@@ -28,8 +28,13 @@ go.property("Obj_BaseGrid_Y_Coordinate", 0)
 -- locals for easy access
 local CV_x_threshold_appear = -810
 local CV_x_threshold_disappear = -545
-local color_white = EXT.vec4_white
-local color_black = EXT.vec4_black
+local CV_color_high = EXT.vec4_white_a100
+local CV_scale_high = 1
+local CV_color_mid = EXT.vec4_white_a90
+local CV_scale_mid = 0.90
+local CV_color_low = EXT.vec4_white_a80
+local CV_scale_low = 0.80
+local CV_color_black = EXT.vec4_black
 
 local CV_type_to_sprite = {
 	--0 is type algae
@@ -38,8 +43,8 @@ local CV_type_to_sprite = {
 	typ_algae = {
 		sprite_options = {"algae_1", "algae_2", "algae_3"},
 		index_type = 0,
-		spawn_percent_health_0 = 90,
-		spawn_percent_health_100 = 10,
+		spawn_percent_if_item_health_0 = 90,
+		spawn_percent_if_item_health_100 = 10,
 		prop_weight_key = "Obj_Spawn_Weight_0Algae",
 		use_random_flip = true,
 		use_random_rotation = true
@@ -47,8 +52,8 @@ local CV_type_to_sprite = {
 	typ_diatom = {
 		sprite_options = {"diatom_1", "diatom_2", "diatom_3"},
 		index_type = 1,
-		spawn_percent_health_0 = 5,
-		spawn_percent_health_100 = 45,
+		spawn_percent_if_item_health_0 = 5,
+		spawn_percent_if_item_health_100 = 45,
 		prop_weight_key = "Obj_Spawn_Weight_1Diatom",
 		use_random_flip = true,
 		use_random_rotation = true
@@ -56,8 +61,8 @@ local CV_type_to_sprite = {
 	type_dinoflag = {
 		sprite_options = {"dinoflag_1", "dinoflag_2", "dinoflag_3"},
 		index_type = 2,
-		spawn_percent_health_0 = 5,
-		spawn_percent_health_100 = 45,
+		spawn_percent_if_item_health_0 = 5,
+		spawn_percent_if_item_health_100 = 45,
 		prop_weight_key = "Obj_Spawn_Weight_2Dinoflag",
 		use_random_flip = false,
 		use_random_rotation = true
@@ -75,19 +80,79 @@ local function OnExpire(self)
 
 	-- instead fade out sprite then reset once sprite gets recycled
 	local fadeout_time = 0.25
-	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, color_black, go.EASING_LINEAR, fadeout_time, 0)
-	self.color_needs_reset = true
+	go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, CV_color_black, go.EASING_LINEAR, fadeout_time)
+
+	self.object_needs_reset = true
 
 end
 
-local function On_UpdateHealth(self, health_val)
+local function Visual_HealthUpdate(self, old_health, new_health)
+
+	self.object_needs_reset = true
+
+	-- optional change transparency slightly and scale slightly
+
+	-- update if healthier or sicker and maybe depends on micro type
+	local anim_duration = 0.25
+
+	local scale_multi
+	local new_tint
+	local is_algae = self.Obj_Spawn_Type_Current_Key == CV_type_to_sprite.typ_algae.index_type
+
+	if new_health > old_health then
+		-- getting more healthy
+		if is_algae then
+			new_tint = CV_color_low
+			scale_multi = CV_scale_low
+		else
+			new_tint = CV_color_high
+			scale_multi = CV_scale_high
+		end
+	elseif new_health < old_health then
+		-- getting less healthy
+		if is_algae then
+			new_tint = CV_color_high
+			scale_multi = CV_scale_high
+		else
+			new_tint = CV_color_low
+			scale_multi = CV_scale_low
+		end
+	--else
+		-- no change
+	end
+
+	if scale_multi ~= nil and new_tint ~= nil then
+		local new_scale = self.Obj_OG_Scale_Float * scale_multi
+		go.animate(".", "scale", go.PLAYBACK_ONCE_FORWARD, new_scale, go.EASING_LINEAR, anim_duration)
+		go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, new_tint, go.EASING_LINEAR, anim_duration)
+	end
+
+end
+
+local function On_UpdateHealth(self, new_health, on_init)
 
 	-- use new health to update spawn percentages
+	-- and update visuals of current pass
 
-	self.Obj_Current_Health = health_val
+	local old_health = self.Obj_Current_Health
+	self.Obj_Current_Health = new_health
+
+	-- early out if equal and not needing to initialize
+	if old_health == new_health and not on_init then
+		return
+	end
 
 	for _,v in pairs(CV_type_to_sprite) do
-		self[v.prop_weight_key] = EXT:Lerp(v.spawn_percent_health_0, v.spawn_percent_health_100, health_val)
+
+		-- update spawn percentage chances
+		self[v.prop_weight_key] = EXT:Lerp(v.spawn_percent_if_item_health_0, v.spawn_percent_if_item_health_100, new_health)
+
+		-- run visual update
+		-- add expire if new spawn percent < 30?
+		-- if expiring might not even see it in window and expire animation may clip into resetting position?
+		-- maybe change tint to slightly transparent and slightly smaller?
+		Visual_HealthUpdate(self, old_health, new_health)
+
 	end
 
 end
@@ -109,14 +174,26 @@ local function UpdateSprite(self)
 	--updates sprite type and tracking data
 
 	local meta_info = CV_type_to_sprite[selected_typ_key]
-	local sprite_animation = EXT:Random_fromTable(meta_info.sprite_options)
+	self.Obj_Selected_Sprite_Option = math.random(1, #meta_info.sprite_options)
+	local sprite_animation = meta_info.sprite_options[self.Obj_Selected_Sprite_Option]
 
 	sprite.play_flipbook("#sprite", sprite_animation)
 
-	-- now tint for transparency according to health
-	if self.color_needs_reset then
-		go.set("#sprite", "tint", color_white)
-		self.color_needs_reset = false
+	-- reset color and scale for new pass
+	if self.object_needs_reset then
+		--cancel any animations
+		go.cancel_animations("#sprite")
+		go.cancel_animations(".")
+
+		-- reset color
+		go.set("#sprite", "tint", CV_color_mid)
+
+		-- reset scale within random range
+		self.Obj_OG_Scale_Float = INFO:Get_Base_Scale(self.Obj_Item_Enum, self.Obj_Subitem_Enum) * (math.random(75,100)/100)
+		go.set_scale(self.Obj_OG_Scale_Float*CV_scale_mid)
+
+		-- save reset is done
+		self.object_needs_reset = false
 	end
 
 	self.Sprite_Width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x"))
@@ -138,13 +215,16 @@ local function UpdateSprite(self)
 
 end
 
-local function ResetSpawn(self)
+local function ResetSpawn(self, on_init)
 
 	-- sets type of phytoplankton along with sprite and current type
 	-- also orders to move 
 
-	-- update health which sets sprite probabilities
-	On_UpdateHealth(self, self.Obj_Current_Health)
+	-- update health which sets sprite probabilities if initializing
+	-- otherwise we will manually call health update
+	if on_init then
+		On_UpdateHealth(self, self.Obj_Current_Health)
+	end
 
 	-- choose and set type
 	UpdateSprite(self)
@@ -182,7 +262,8 @@ end
 
 function init(self)
 
-	ResetSpawn(self)
+	self.Obj_OG_Scale_Float = go.get_scale().x
+	ResetSpawn(self, true)
 
 end
 

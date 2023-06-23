@@ -18,9 +18,10 @@ go.property("Obj_Wave_Sprite_FlipH", false)
 go.property("Obj_OG_Scale_Float", 1)
 go.property("Obj_Current_Health", 1)
 
+go.property("Obj_Scale_Health_1", 1)
+go.property("Obj_Scale_Health_0", 0.6)
 
 -- locals for easy tuning
---local color_white = EXT.vec4_white
 local color_black = EXT.vec4_black
 
 
@@ -45,6 +46,11 @@ local function On_UpdateHealth(self, health_val, visual_update)
 	-- save previous health
 	local current_health = self.Obj_Current_Health
 
+	-- if new health equals current health then early out
+	if current_health == health_val then
+		return
+	end
+
 	-- update static based on health value
 	local new_tint_v4 = INFO:Get_Health_Tint_Vector4(self.Obj_Item_Enum, self.Obj_Subitem_Enum, health_val)
 
@@ -62,14 +68,19 @@ local function On_UpdateHealth(self, health_val, visual_update)
 
 		-- get new scale
 		-- scale the scale within reasonable bounds
-		local scale_highest = 1.0
-		local scale_lowest = 0.7
-		local new_scale = EXT:Lerp(scale_lowest, scale_highest, health_val)
+		-- ie., it can never get bigger than 100% or smaller than 60% of original size
+		--   so 0.5 health would be 80% size, and show tint change
+		-- setting to a middle value than changing it to new health 
+		-- to maximize visual change probably won't work well since these are stationary?
+	local new_scale = EXT:Lerp(self.Obj_Scale_Health_0, self.Obj_Scale_Health_1, health_val)
 
-		-- failsafe to prevent 0 scale
-		if new_scale <= 0 then
-			new_scale = 0.001
-		end
+	-- failsafe to prevent 0 scale
+	if new_scale <= 0 then
+		new_scale = 0.001
+	end
+
+	-- size it to original scale
+	new_scale = new_scale * self.Obj_OG_Scale_Float
 
 	if visual_update then
 		-- animate tint and scale
