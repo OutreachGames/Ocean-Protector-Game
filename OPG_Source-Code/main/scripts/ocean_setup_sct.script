@@ -1760,6 +1760,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
 
+	local reset_health_val_swimmers = 0.5
+
 	local function update_micro_or_static(item_name, subitem_name)
 
 		local spawn_list_key = INFO:Get_Spawn_List_Key(item_name, subitem_name)
@@ -1768,6 +1770,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 			local new_health = oa_outcome_tbl[item_name].health_value_new
 			for k_gourl, _ in pairs(key_list) do
 				msg.post(k_gourl, HSH.msg_order_update_health, {minfo_new_health_value = new_health})
+				-- recall static and micro gos each internally track their own health
+				-- so the script will know what the overall delta is from this new value and the self current value
 			end
 		end
 
@@ -1779,6 +1783,11 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 		local key_list = self.spawned_objects_list[spawn_list_key]
 		if key_list ~= nil then
 			--#TODO
+			local new_health = oa_outcome_tbl[item_name].health_value_new
+			local old_health = oa_outcome_tbl[item_name].health_value_previous
+			-- recall, we need to externally track the previous and new health 
+			-- b/c gos are added and deleted with swimmers and b/c health is reset to middle value for visualization
+			
 		end
 
 	end
@@ -1850,7 +1859,6 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 		-- add swimmers back in at 50% population
 		timer.delay(CV_Animal_Reset_Time, false, function()
 
-			local reset_health_val = 0.5
 			local skip_reset = true
 			local spawn_offscreen = false
 			local go_auto_patrol = false
@@ -1858,7 +1866,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl) --oa_outcome_tbl in fo
 			for k_spawnlist_name,v_info in pairs(self.helper_spawn_lists_swimmers) do
 				--randomize side so fish don't always appear on same side
 				self.dynamic_spawn_sides[k_spawnlist_name] = (math.random(0,1) == 1)
-				Setup_Animal(self, v_info.l_item_name, v_info.l_subitem_name, reset_health_val, skip_reset, spawn_offscreen, go_auto_patrol)
+				Setup_Animal(self, v_info.l_item_name, v_info.l_subitem_name, reset_health_val_swimmers, skip_reset, spawn_offscreen, go_auto_patrol)
 			end
 
 			-- Fade back in 
