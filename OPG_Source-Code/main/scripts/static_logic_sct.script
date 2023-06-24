@@ -76,13 +76,13 @@ local function On_UpdateHealth(self, health_val, visual_update, skip_early_retur
 	if visual_update then
 		-- animate tint and scale
 		-- only change scale if new scale different than old scale
-		local duration = 1.5
+		local duration = 2.5
 		go.animate("#sprite", "tint", go.PLAYBACK_ONCE_FORWARD, new_tint_v4, go.EASING_LINEAR, duration)
-		go.animate(".", "scale", go.PLAYBACK_ONCE_FORWARD, new_scale, go.EASING_LINEAR, duration)
+		--go.animate(".", "scale", go.PLAYBACK_ONCE_FORWARD, new_scale, go.EASING_LINEAR, duration)
 	else
 		-- just sent tint and scale
 		go.set("#sprite", "tint", new_tint_v4)
-		go.set_scale(new_scale)
+		--go.set_scale(new_scale)
 	end
 
 	-- update to current health
