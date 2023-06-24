@@ -1093,6 +1093,11 @@ local function Animal_Order_GoTo(self, go_id, swimto_x, swimto_y, on_init)
 	-- default is to go to waypoint 2
 	-- and to not be on_init
 
+	-- early out if invalid
+	if not go.exists(go_id) then
+		return
+	end
+
 	local start_swimming_info = {
 		minfo_swim_to_x = swimto_x or go.get(go_id, "Obj_Waypoint_2_X"),
 		minfo_swim_to_y = swimto_y or go.get(go_id, "Obj_Waypoint_2_Y"),
@@ -1941,7 +1946,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 			-- failsafe check, make sure we never have 0 of item
 			if number_subtracted >= num_i then
-				print("Warning: too many numbers to subtract <"..number_subtracted.."> out of total list <"..num_i.."> for subitm <"..subitem_name..">, reducing by 1\n")
+				--print("Warning: too many numbers to subtract <"..number_subtracted.."> out of total list <"..num_i.."> for subitem <"..subitem_name..">, reducing by 1\n")
 				number_subtracted = num_i - 1
 			end
 
@@ -2071,10 +2076,12 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 						timer.delay(full_ocean_mid_done, false, function()
 
 							-- also send message to all animals to start auto patrol
-							for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
-								local key_list = self.spawned_objects_list[k_spawnlistkey]
-								for k_gourl, _ in pairs(key_list) do
-									Animal_Order_GoTo(self, k_gourl) --default is waypoint 2
+							if run_swimmer_reset then
+								for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
+									local key_list = self.spawned_objects_list[k_spawnlistkey]
+									for k_gourl, _ in pairs(key_list) do
+										Animal_Order_GoTo(self, k_gourl) --default is waypoint 2
+									end
 								end
 							end
 

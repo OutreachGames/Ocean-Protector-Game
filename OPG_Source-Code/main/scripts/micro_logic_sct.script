@@ -93,7 +93,7 @@ local function Visual_HealthUpdate(self, old_health, new_health)
 	-- optional change transparency slightly and scale slightly
 
 	-- update if healthier or sicker and maybe depends on micro type
-	local anim_duration = 0.25
+	local anim_duration = 1.0
 
 	local scale_multi
 	local new_tint

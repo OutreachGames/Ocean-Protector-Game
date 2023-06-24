@@ -300,8 +300,9 @@ local function On_Death(self)
 
 	Toggle_MovingAnimation(self, "spine_is_dead")
 
-	-- setup time variables
-	local extra_sink_delay = 0
+	-- setup time variables give some randomness to sink delay, 
+	--  which is used to calculate sink and decomposition and fade out
+	local extra_sink_delay =  math.random(0, 1000)/1000
 	local extra_sink_time = 0
 
 	-- extra visual effect if specified
@@ -353,6 +354,7 @@ local function On_Death(self)
 
 	end
 
+	-- run decomposition
 	local decomp_delay = fadeout_delay
 	timer.delay(decomp_delay, false, func_decompose)
 
