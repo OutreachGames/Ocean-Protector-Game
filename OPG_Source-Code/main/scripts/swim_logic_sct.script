@@ -47,7 +47,7 @@ local CV_UP_Vector = EXT.vec3_up
 local CV_AnimBlend_Time = 0.5
 local CV_Buffer_Time = 0.05
 local CV_Deadzone_Radius = 5
-local CV_ZERO_VEC4 = EXT.vec4_0
+local CV_ZERO_VEC4 = EXT.vec4_black
 
 local CV_Timer_Keys = {
 	start_key = "start_key",

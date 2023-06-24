@@ -319,7 +319,7 @@ local function Set_Sea_Particles(self, toggle_on, clear_instant)
 
 end
 
-local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
+local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go, is_instant)
 
 	-- delete go object
 	if delete_go then
@@ -333,7 +333,7 @@ local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go)
 		-- for example, do not delete go until animation done
 		-- but remove from tracker list
 		-- so we can add more swimmers without incorrectly hitting max amount
-		msg.post(go_id, HSH.msg_order_expire_start)
+		msg.post(go_id, HSH.msg_order_expire_start, {minfo_stop_is_instant=is_instant})
 	end
 
 	-- remove from list if it was on list
@@ -1480,7 +1480,7 @@ end
 
 local function Get_Item_Clicked_On(self, screen_pos)
 
-	-- returns string key for item family that was clicked on, or nil/"" if no item family was clicked
+	-- sends message for item that was clicked on, or nil/"" if no item was clicked
 
 	local world_pos = CAM.screen_to_world(nil, vmath.vector3(screen_pos.x, screen_pos.y, 0))
 
@@ -1752,8 +1752,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	-- also send messages to static and micro to update
 
 	local stage_done_plankton_or_oa = 5
-	local stage_done_ocean_floor = 5
-	local stage_done_ocean_mid = 5
+	local stage_done_ocean_benthic = 5
+	local stage_done_ocean_pelagic = 5
 	-- ^^ give time for new swimmers to join formation before ordering school to patrol
 	-- also update this time if no swimmers are needed to add or subtract
 
@@ -1941,7 +1941,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 			-- failsafe check, make sure we never have 0 of item
 			if number_subtracted >= num_i then
-				print("Error: too many numbers to subtract <"..number_subtracted.."> out of total list <"..num_i..">\n")
+				print("Warning: too many numbers to subtract <"..number_subtracted.."> out of total list <"..num_i.."> for subitm <"..subitem_name..">, reducing by 1\n")
 				number_subtracted = num_i - 1
 			end
 
@@ -1950,7 +1950,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 				local rand_tbl = EXT:Table_Shuffle(remove_options)
 				for i=1,number_subtracted do
 					local go_url = rand_tbl[i]
-					Spawned_RemoveObject(self, item_name, subitem_name, go_url)
+					Spawned_RemoveObject(self, spawn_list_name, go_url, false, true)
 				end
 			end
 
@@ -2007,13 +2007,13 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 			number_subtracted = number_subtracted + fish_subtracted
 		end
 
-		-- return amount of time to wait
+		-- return amount of extra time to wait (added to stage_done_ocean_pelagic)
 		if number_added > 0 then
 			-- wait for joins
-			return 16
+			return 10
 		elseif number_subtracted > 0 then
 			-- wait for decays
-			return 8
+			return 3
 		else
 			return 0
 		end
@@ -2038,8 +2038,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 			fader_time = 0.5
 			reset_time = CV_Animal_Reset_Time
 		else
-			fader_time = 0.2
-			reset_time = 0.1
+			fader_time = 0.01
+			reset_time = 0.01
 		end
 
 		start_reset_swimmers(fader_time)
@@ -2062,11 +2062,11 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 					-- highlight ocean floor and request update
 					update_ocean_floor()
 
-					timer.delay(stage_done_ocean_floor, false, function()
+					timer.delay(stage_done_ocean_benthic, false, function()
 
 						-- highlight ocean middle and request update
 						local extra_swimmer_catch_up_time = update_ocean_water()
-						local full_ocean_mid_done = stage_done_ocean_mid + extra_swimmer_catch_up_time
+						local full_ocean_mid_done = stage_done_ocean_pelagic + extra_swimmer_catch_up_time
 
 						timer.delay(full_ocean_mid_done, false, function()
 
