@@ -56,7 +56,7 @@ function EXT:math_clamp(value, min, max)
 
 end
 
----Rounds to neareset specified decimal point, or integer for default ot 0 decimal points
+---Rounds to nearest specified decimal point, or integer for default ot 0 decimal points
 ---@param input_number number|string Value to round
 ---@param numDecimalPlaces number Number of decimal places to round to, default is none
 ---@return number rounded number
@@ -82,7 +82,7 @@ end
 
 ---Checks if value equals one of the array options
 ---@param val number|string value to check against options
----@param array table flast list of i options
+---@param array table flat list of i options
 ---@return boolean true if match found, false if otherwise
 function EXT:equalAny(val, array)
 
@@ -105,7 +105,7 @@ end
 
 ---Checks if string is present in at least one of the array options
 ---@param str string value to check against options
----@param array table flast list of i options
+---@param array table flat list of i options
 ---@return boolean true if match found, false if otherwise
 function EXT:string_findAny(str, array)
 
@@ -128,7 +128,7 @@ end
 
 ---Checks if string equals one of the array options
 ---@param str string value to check against options
----@param array table flast list of i options
+---@param array table flat list of i options
 ---@return boolean true if match found, false if otherwise
 function EXT:string_equalAny(str, array)
 

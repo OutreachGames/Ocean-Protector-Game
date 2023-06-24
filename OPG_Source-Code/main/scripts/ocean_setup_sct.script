@@ -1237,15 +1237,6 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 		Animal_Order_GoTo(self, new_collection[HSH.STR_go], swimto_x, swimto_y, true)
 	end
 
-	-- #TODO remove when done testing
-	--[[
-	timer.delay(1, false, function ()
-		if math.random(0,6) == 0 then
-			Remove_Object_Generic(self, item_name, subitem_name, new_collection[HSH.STR_go], false)
-		end
-	end)
-	--]]
-
 end
 
 local function Spawn_Animal_Micro(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen, health_val)
@@ -1760,29 +1751,110 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
 
-	local reset_health_val_swimmers = 0.6
-	-- ^^ reset should be somewhat reflective of previous health for item?
-	-- if previous health 0.2 and new health 0.1, visual should be 0.6 to 0.2
-	-- if previous health 0.2 and new health 0.3, visual should be 0.2 to 0.6 or 0.6 to 1.0
-	-- if previous health 0.7 and new health 0.6, visual should be 0.7 to 0.3 or 0.6 to 0.2 or 1.0 to 0.6
-	-- if previous health 0.7 and new health 0.8, visual should be 0.6 to 1.0
-
 	local stage_done_plankton_or_oa = 5
 	local stage_done_ocean_floor = 5
-	local stage_done_ocean_mid = 12
+	local stage_done_ocean_mid = 5
 	-- ^^ give time for new swimmers to join formation before ordering school to patrol
 	-- also update this time if no swimmers are needed to add or subtract
 
-	-- if swimmer health same do nothing and do not reset to 50%
-	-- if swimmer health going up
-	--   want swimmer count to go up by at least 40% for noticeable visual effect
-	--   if health > 0.5 (reset) then set to reset and then run effect up to 40%
-	--   if health <= 0.5 (reset) then run effect up to 40%
+	local function start_reset_swimmers(screen_fader_time)
+
+		-- start swimmer resetting to maximize visual change
+
+		if run_swimmer_reset then
+			msg.post("main:/hud#gui", HSH.msg_request_fade_out, {minfo_fade_duration = screen_fader_time})
+
+			-- reset swimmer spawn keys
+			for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
+				Spawned_ResetAll(self, k_spawnlistkey, true)
+			end
+		end
+
+	end
+
+	local function finish_reset_swimmers(screen_fader_time)
+
+		-- reset swimmers to maximize visual change
+
+		-- ^^ reset should be somewhat reflective of previous health for item?
+		-- if previous health 0.2 and new health 0.1, visual should be 0.6 to 0.2
+		-- if previous health 0.2 and new health 0.3, visual should be 0.2 to 0.6 or 0.6 to 1.0
+		--   then next time, 0.3 to 0.4 will be 0.6 to 1.0 in both above cases? or drop it back down to previous value?
+		-- if previous health 0.7 and new health 0.6, visual should be 0.7 to 0.3 or 0.6 to 0.2 or 1.0 to 0.6
+		-- if previous health 0.7 and new health 0.8, visual should be 0.6 to 1.0
+		-- still has potential to be large difference between previous and reset fade
+
+		-- priority should be having the final value match whatever the actual health is
+		-- example: was 1.0 -> now 0.5: starts at 1 and goes down to 0.5
+		--   0.5 -> 0.6: starts at 0.2 and goes up to 0.6
+		--   0.5 -> 0.4: starts at 0.8 and goes down to 0.4
+		-- formula is: reset is final/new value +- visual change 
+		-- downside is from previous to reset at fade it could change a lot and would depend on answer
+		-- also having new value be low and then going only slightly higher may not look like much
+		--   for example, 0.15 -> 0.25: starts at 0 (0.25 - 0.4 -> -0.15, clamped at 0) and goes to 0.25
+		-- benefit is it matches reality, just like the static and micro
+
+		-- or priority is starting reset matches previous value and new value is just some visual change from that
+		-- downside is does not match reality and still has potential to be large difference between previous and reset fade
+
+		-- or priority is always at 0.6 for reset and goes to 1 or 0.2 if up or down
+		-- upside is always get effect that is very noticeable
+		-- downside is does not match reality and still has potential to be large difference between previous and reset fade
+
+		-- if swimmer health same do nothing and do not reset to 50%
+		-- if swimmer health going up
+		--   want swimmer count to go up by at least 40% for noticeable visual effect
+		--   if health > 0.5 (reset) then set to reset and then run effect up to 40%
+		--   if health <= 0.5 (reset) then run effect up to 40%
+
+		if not run_swimmer_reset then return end
+
+		-- what percent population should visual change alter (for example, visual changer is 40%)
+		local reset_health_delta = 0.4
+
+		local skip_reset = true
+		local spawn_offscreen = false
+		local go_auto_patrol = false
+
+		for k_spawnlist_name,v_info in pairs(self.helper_spawn_lists_swimmers) do
+			-- randomize side so fish don't always appear on same side
+			self.dynamic_spawn_sides[k_spawnlist_name] = (math.random(0,1) == 1)
+
+			-- calculate reset value based on new value, delta change, and visualization size
+			local item_name = v_info.l_item_name
+			local new_health = oa_outcome_tbl[item_name].health_value_new
+			local old_health = oa_outcome_tbl[item_name].health_value_previous
+
+			-- get population health for visual change
+			local reset_health_val
+			if new_health > old_health then
+				-- got more healthy
+				reset_health_val = new_health - reset_health_delta
+			elseif new_health < old_health then
+				-- got less healthy
+				reset_health_val = new_health + reset_health_delta
+			--else
+				-- remained same
+				reset_health_val = new_health
+			end
+
+			-- reminder, animal setup already forces there to be at least 1 animal
+
+			-- spawn subitems with updated population health
+			Setup_Animal(self, item_name, v_info.l_subitem_name, reset_health_val, skip_reset, spawn_offscreen, go_auto_patrol)
+		end
+
+		-- Fade back in 
+		msg.post("main:/hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = screen_fader_time})
+
+	end
 
 	local function update_micro_or_static(item_name, subitem_name)
 
-		local spawn_list_key = INFO:Get_Spawn_List_Key(item_name, subitem_name)
-		local key_list = self.spawned_objects_list[spawn_list_key]
+		-- update health of a micro of static subitem
+
+		local spawn_list_name = INFO.item_info[item_name].subitem_info[subitem_name].spawn_list_key
+		local key_list = self.spawned_objects_list[spawn_list_name]
 		if key_list ~= nil then
 			local new_health = oa_outcome_tbl[item_name].health_value_new
 			for k_gourl, _ in pairs(key_list) do
@@ -1796,18 +1868,90 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 	local function update_swimmer(item_name, subitem_name)
 
-		local spawn_list_key = INFO:Get_Spawn_List_Key(item_name, subitem_name)
-		local key_list = self.spawned_objects_list[spawn_list_key]
-		if key_list ~= nil then
-			--#TODO
-			local new_health = oa_outcome_tbl[item_name].health_value_new
-			local old_health = oa_outcome_tbl[item_name].health_value_previous
-			-- recall, we need to externally track the previous and new health 
-			-- b/c gos are added and deleted with swimmers and b/c health is reset to middle value for visualization
-			if new_health ~= old_health then
+		-- update health of a swimmer subitem
 
-			end
+		-- setup
+		local s_item = INFO.item_info[item_name]
+		local subitem_tbl = s_item.subitem_info[subitem_name]
+
+		local spawn_list_name = subitem_tbl.spawn_list_key
+		local key_list = self.spawned_objects_list[spawn_list_name]
+
+		-- early out if invalid
+		if key_list == nil then
+			return 0, 0
 		end
+
+		-- calculate amount to change
+		local number_added, number_subtracted = 0, 0
+
+		local new_health = oa_outcome_tbl[item_name].health_value_new
+		-- recall, we need to externally track the previous and new health 
+		-- b/c gos are added and deleted with swimmers and b/c health is reset to middle value for visualization
+		-- recall if delta change equals 0 ('old' == 'new') then the reset health also equals 'new'
+
+		-- get current health of spawned animals
+		local current_count = self.spawned_objects_sum[spawn_list_name]
+		local max_count = subitem_tbl.spawn_max_count
+		local current_health = EXT:math_round(current_count/max_count, 4)
+
+		-- get amount needed to add or subtract (use math.ceil for maximum effect)
+		local delta_change = new_health - current_health
+		local delta_count_change = EXT:math_sign(delta_change) * math.ceil(math.abs(delta_change) * subitem_tbl.spawn_max_count)
+
+		-- early out if:
+		--   if change count + current_count > max_count then do not add
+		--   if change count + current_count < 0 then do not add
+		local final_count_possible = delta_change + current_count
+		if (final_count_possible > max_count) or (final_count_possible <= 0) then
+			return 0, 0
+		end
+
+		-- finally actually spawn or remove animals
+		-- also record amount for wait time updating
+		if delta_count_change > 0 then
+			-- add
+			number_added = math.abs(delta_count_change)
+			local spawn_offscreen = true
+			local is_spawn_flipped = self.dynamic_spawn_sides[spawn_list_name]
+
+			-- go through number and add 
+			for i=1,number_added do
+				local i_position_in_grid = current_count + i
+				Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen, is_spawn_flipped)
+			end
+
+		elseif delta_count_change < 0 then
+			-- subtract
+			number_subtracted = math.abs(delta_count_change)
+
+			-- go through go list and add gos to a i table 
+			-- then pick index and remove randomly
+			local remove_options = {}
+			local num_i = 0
+			for k_go_url, _ in pairs(key_list) do
+				num_i = num_i + 1
+				remove_options[num_i] = k_go_url
+			end
+
+			-- failsafe check, make sure we never have 0 of item
+			if number_subtracted >= num_i then
+				print("Error: too many numbers to subtract <"..number_subtracted.."> out of total list <"..num_i..">\n")
+				number_subtracted = num_i - 1
+			end
+
+			-- shuffle table and remove first entries (makes it a random removal overall)
+			if number_subtracted >= 1 then
+				local rand_tbl = EXT:Table_Shuffle(remove_options)
+				for i=1,number_subtracted do
+					local go_url = rand_tbl[i]
+					Spawned_RemoveObject(self, item_name, subitem_name, go_url)
+				end
+			end
+
+		end
+
+		return number_added, number_subtracted
 
 	end
 
@@ -1839,6 +1983,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 		--crabs
 		update_swimmer("item_crustaceans", "subitem_crab")
+
+		-- recall conch and crab timing not needed to track since they do not go in formation
 	end
 
 
@@ -1846,12 +1992,25 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 		-- update most swimmers (all fish, shrimp), which use kill or add
 
 		--shrimp
-		update_swimmer("item_crustaceans", "subitem_shrimp")
+		local number_added, number_subtracted = update_swimmer("item_crustaceans", "subitem_shrimp")
 
 		--fish
 		local item_fish = INFO.item_info.item_fish
 		for k_subitem_fish_name, _ in pairs(item_fish.subitem_info) do
-			update_swimmer("item_fish", k_subitem_fish_name)
+			local fish_added, fish_subtracted = update_swimmer("item_fish", k_subitem_fish_name)
+			number_added = number_added + fish_added
+			number_subtracted = number_subtracted + fish_subtracted
+		end
+
+		-- return amount of time to wait
+		if number_added > 0 then
+			-- wait for joins
+			return 16
+		elseif number_subtracted > 0 then
+			-- wait for decays
+			return 8
+		else
+			return 0
 		end
 
 	end
@@ -1871,17 +2030,6 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 		local reset_time
 
 		if run_swimmer_reset then
-			msg.post("main:/hud#gui", HSH.msg_request_fade_out, {minfo_fade_duration = fader_time})
-
-			-- reset swimmer spawn keys
-			for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
-				Spawned_ResetAll(self, k_spawnlistkey, true)
-			end
-		end
-
-		-- if resetting add swimmers back in at reset population (for example, 50% health)
-
-		if run_swimmer_reset then
 			fader_time = 0.5
 			reset_time = CV_Animal_Reset_Time
 		else
@@ -1889,22 +2037,13 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 			reset_time = 0.1
 		end
 
+		start_reset_swimmers(fader_time)
+
+		-- if resetting add swimmers back in at reset population (for example, 50% health)
+
 		timer.delay(reset_time, false, function()
 
-			if run_swimmer_reset then
-				local skip_reset = true
-				local spawn_offscreen = false
-				local go_auto_patrol = false
-
-				for k_spawnlist_name,v_info in pairs(self.helper_spawn_lists_swimmers) do
-					--randomize side so fish don't always appear on same side
-					self.dynamic_spawn_sides[k_spawnlist_name] = (math.random(0,1) == 1)
-					Setup_Animal(self, v_info.l_item_name, v_info.l_subitem_name, reset_health_val_swimmers, skip_reset, spawn_offscreen, go_auto_patrol)
-				end
-
-				-- Fade back in 
-				msg.post("main:/hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
-			end
+			finish_reset_swimmers(fader_time)
 
 			-- run through OA effects 
 
@@ -1921,9 +2060,10 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 					timer.delay(stage_done_ocean_floor, false, function()
 
 						-- highlight ocean middle and request update
-						update_ocean_water()
+						local extra_swimmer_catch_up_time = update_ocean_water()
+						local full_ocean_mid_done = stage_done_ocean_mid + extra_swimmer_catch_up_time
 
-						timer.delay(stage_done_ocean_mid, false, function()
+						timer.delay(full_ocean_mid_done, false, function()
 
 							-- also send message to all animals to start auto patrol
 							for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
