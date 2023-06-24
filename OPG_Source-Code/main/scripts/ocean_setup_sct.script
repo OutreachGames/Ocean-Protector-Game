@@ -1132,12 +1132,13 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 		obj_translate_speed_base = obj_translate_speed_base * (math.random(60,120)/100)
 	end
 	local pos_tbl = GetDynamicGrid_IEntry(self, spawn_list_key_name, i_position_in_grid)
-	local anim_multi = subitem_tbl.object_anim_multi or {moving = 1, idle = 0.5, extra = 0.5}
-	local anim_multi_moving = anim_multi.moving or 1
-	local anim_multi_idle = anim_multi.idle or 0.5
-	local anim_multi_extra = anim_multi.extra or 0.5
+	local anim_multi = subitem_tbl.object_anim_multi or {rate_moving = 1, rate_idle = 0.5, rate_float = 1.0, rate_extra = 0.5}
+	local anim_multi_moving = anim_multi.rate_moving or 1
+	local anim_multi_idle = anim_multi.rate_idle or 0.02
+	local anim_multi_float = anim_multi.rate_float or 0.5
+	local anim_multi_extra = anim_multi.rate_extra or 0.5
 	anim_multi_moving = anim_multi_moving * (math.random(80,110)/100)
-	anim_multi_idle = anim_multi_idle * (math.random(80,110)/100)
+	anim_multi_float = anim_multi_float * (math.random(80,110)/100)
 	anim_multi_extra = anim_multi_extra * (math.random(80,110)/100)
 
 	local easing_opts = subitem_tbl.movement_easing_options or {move_go = 1, move_stop = 2}
@@ -1215,6 +1216,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 			Obj_Death_Effect_Type = death_type,
 			Obj_Anim_Multi_Moving = anim_multi_moving,
 			Obj_Anim_Multi_Idle = anim_multi_idle,
+			Obj_Anim_Multi_Float = anim_multi_float,
 			Obj_Anim_Multi_Extra = anim_multi_extra,
 			Obj_TranslationGo_Easing_Options = easing_move_go,
 			Obj_TranslationStop_Easing_Options = easing_move_stop

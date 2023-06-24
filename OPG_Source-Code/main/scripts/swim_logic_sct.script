@@ -30,9 +30,10 @@ go.property("Obj_Waypoint_1_X", 0)
 go.property("Obj_Waypoint_1_Y", 0)
 go.property("Obj_Waypoint_2_X", 0)
 go.property("Obj_Waypoint_2_Y", 0)
-go.property("Obj_Anim_Multi_Idle", 0.6)
+go.property("Obj_Anim_Multi_Float", 0.6)
 go.property("Obj_Anim_Multi_Extra", 0.6)
 go.property("Obj_Anim_Multi_Moving", 1.8)
+go.property("Obj_Anim_Multi_Idle", 1.0)
 go.property("Obj_DecompEffect_Scale", 1.0)
 
 -- local hashes and constants for easy tuning
@@ -173,12 +174,14 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 	-- toggle spine animation to idle or moving
 
 	-- set swim rate depending on movement
+	local dead_rate = 0.001
 
 	local speed_options = {
 		spine_is_moving = self.Obj_Anim_Multi_Moving,
-		spine_is_idle = self.Obj_Anim_Multi_Moving*0.6,
-		spine_is_dead = 0.001
+		spine_is_idle = self.Obj_Anim_Multi_Idle,
+		spine_is_dead = dead_rate
 	}
+
 	local swim_rate = speed_options[speed_type_string_key]
 	if swim_rate == nil then
 		print("Error, invalid string key passed to function Toggle Moving Animation, assuming 1\n")
@@ -186,16 +189,21 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 	end
 
 	-- set look and float rate regardless of movement status, 
-	-- mainly just using this as a convienent way to randomize so not always the same 
+	-- mainly just using this as a convenient way to randomize so not always the same 
 	-- floating gives sense of floating in water, 
 	-- so want somewhat similar values regardless of movement 
 	-- b/c that will show all objects going through same water current
-	local float_rate = self.Obj_Anim_Multi_Idle
+	local float_rate = self.Obj_Anim_Multi_Float
 	local look_rate = self.Obj_Anim_Multi_Extra
+
+	if speed_type_string_key == "spine_is_dead" then
+		float_rate = dead_rate
+		look_rate = dead_rate
+	end
 
 	blend_time = blend_time or CV_AnimBlend_Time
 
-	-- run swimming/breathing
+	-- run swimming
 	spine.play_anim("#spinemodel", CV_Anim_Swim_Hash, go.PLAYBACK_LOOP_FORWARD,
 		{ blend_duration = blend_time, playback_rate = swim_rate, track = CV_Anim_Swim_Track}
 	)
@@ -203,7 +211,7 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 	spine.play_anim("#spinemodel", CV_Anim_Look_Hash, go.PLAYBACK_LOOP_FORWARD,
 		{ blend_duration = blend_time, playback_rate = look_rate, track = CV_Anim_Look_Track}
 	)
-	-- run floating/idle
+	-- run floating/breathing
 	if self.Obj_Use_Float_Animation then
 		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD,
 			{ blend_duration = blend_time, playback_rate = float_rate, track = CV_Anim_Float_Track}
@@ -306,6 +314,7 @@ local function On_Death(self)
 	local extra_sink_time = 0
 
 	-- extra visual effect if specified
+	--#TODO fix particles with improper z value
 	if self.Obj_Death_Effect_Type == 1 then
 		-- once stopped, flip upside down and start to sink
 		local rand = math.random(0, 50)/100
