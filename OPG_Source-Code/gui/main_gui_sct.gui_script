@@ -2254,7 +2254,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 			-- setup outcomes table
 			local oa_outcome_tbl = {
 				minfo_oa_outcome_item_health_values = {},
-				minfo_oa_outcome_reset_swimmers = STR:Get_Swimmers_are_Resetting(stage_key, substage_key) or true
+				minfo_oa_outcome_reset_swimmers = STR:Get_Swimmers_are_Resetting(stage_key, substage_key)
 			}
 			for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
 				if v_item_tracker_tbl ~= nil then
