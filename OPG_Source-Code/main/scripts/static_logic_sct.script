@@ -31,7 +31,7 @@ local function OnExpire(self)
 
 end
 
-local function On_UpdateHealth(self, health_val, visual_update)
+local function On_UpdateHealth(self, health_val, visual_update, skip_early_return)
 
 	-- set tint of sprite according to health value, default is 1 (full health)
 
@@ -41,7 +41,7 @@ local function On_UpdateHealth(self, health_val, visual_update)
 	local current_health = self.Obj_Current_Health
 
 	-- if new health equals current health then early out
-	if current_health == health_val then
+	if (not skip_early_return) and (current_health == health_val) then
 		return
 	end
 
@@ -110,7 +110,7 @@ local function GO_Setup(self)
 	self.Obj_Current_Health = 1
 	self.Obj_OG_Scale_Float = go.get_scale().x
 
-	On_UpdateHealth(self)
+	On_UpdateHealth(self, 1, false, true)
 
 end
 
@@ -132,7 +132,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == HSH.msg_order_expire_start then
 		OnExpire(self)
 	elseif message_id == HSH.msg_order_update_health then
-		On_UpdateHealth(self, message.minfo_new_health_value)
+		On_UpdateHealth(self, message.minfo_new_health_value, true)
 	end
 
 end
