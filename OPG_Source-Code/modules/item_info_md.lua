@@ -201,7 +201,7 @@ INFO.item_info = {
                 tint_fully_healthy = {r = 255/255, g = 240/255, b = 190/255, a = 1},
                 tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
                 scale_fully_healthy = 1.0,
-                scale_fully_sick = 0.9
+                scale_fully_sick = 0.85
             },
             subitem_horn = {
                 subitem_enum = 2,
@@ -221,7 +221,7 @@ INFO.item_info = {
                 tint_fully_healthy = {r = 255/255, g = 210/255, b = 150/255, a = 1},
                 tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
                 scale_fully_healthy = 1.0,
-                scale_fully_sick = 0.9
+                scale_fully_sick = 0.85
             },
             subitem_pillar = {
                 subitem_enum = 3,
@@ -242,7 +242,7 @@ INFO.item_info = {
                 tint_fully_healthy = {r = 255/255, g = 210/255, b = 180/255, a = 1},
                 tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
                 scale_fully_healthy = 1.0,
-                scale_fully_sick = 0.9
+                scale_fully_sick = 0.85
             }
         }
 	},
@@ -270,7 +270,7 @@ INFO.item_info = {
                 tint_fully_healthy = {r = 1, g = 1, b = 1, a = 1},
                 tint_fully_sick = {r = 0.5, g = 0.5, b = 0.5, a = 1},
                 scale_fully_healthy = 1.0,
-                scale_fully_sick = 0.95,
+                scale_fully_sick = 0.90,
                 static_spawner_tbl = {
                     {-546, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 50}, --1
                     {-516, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = false, rotation_z_euler = 0}, --2

@@ -196,9 +196,11 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 	local float_rate = self.Obj_Anim_Multi_Float
 	local look_rate = self.Obj_Anim_Multi_Extra
 
+	-- update a few aspects if special case of dying
 	if speed_type_string_key == "spine_is_dead" then
 		float_rate = dead_rate
 		look_rate = dead_rate
+		blend_time = 0.2
 	end
 
 	blend_time = blend_time or CV_AnimBlend_Time
@@ -314,7 +316,7 @@ local function On_Death(self)
 	local extra_sink_time = 0
 
 	-- extra visual effect if specified
-	--#TODO fix particles with improper z value
+
 	if self.Obj_Death_Effect_Type == 1 then
 		-- once stopped, flip upside down and start to sink
 		local rand = math.random(0, 50)/100
@@ -343,6 +345,8 @@ local function On_Death(self)
 
 	local function func_decompose(self)
 
+		--#TODO fix particles with improper z value
+		if true then return end
 		-- create a decomposition go object, parent it to this go
 		-- then delete created decomposition object when done
 		local scale = self.Obj_DecompEffect_Scale
