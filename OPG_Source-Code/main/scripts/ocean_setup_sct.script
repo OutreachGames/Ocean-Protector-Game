@@ -1822,8 +1822,13 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 			-- calculate reset value based on new value, delta change, and visualization size
 			local item_name = v_info.l_item_name
-			local new_health = oa_outcome_tbl[item_name].health_value_new
-			local old_health = oa_outcome_tbl[item_name].health_value_previous
+			local oa_item_tbl = oa_outcome_tbl[item_name]
+			local new_health = oa_item_tbl.health_value_new
+			if oa_item_tbl == nil then
+				print("Error: Checking within function 'Finish Reset Swimmers' OA Table does not have key <"..tostring(item_name)..">\n")
+				return
+			end
+			local old_health = oa_item_tbl.health_value_previous
 
 			-- get population health for visual change
 			local reset_health_val

@@ -2259,11 +2259,19 @@ local function GameLogic_Progress(self, i_stage_addition)
 			for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
 				if v_item_tracker_tbl ~= nil then
 					local tracker_list_length = #v_item_tracker_tbl
+					local new_val = v_item_tracker_tbl[tracker_list_length].item_tracker_score
+					local previous_val
+					-- add previous and new values
 					if tracker_list_length >= 2 then
-						oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
-							health_value_previous = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score,
-							health_value_new = v_item_tracker_tbl[tracker_list_length].item_tracker_score }
+						previous_val = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score
+					else
+						previous_val = 1
 					end
+					-- save to table for message passing
+					oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
+						health_value_previous = previous_val,
+						health_value_new = new_val
+					}
 				end
 			end
 			-- send message to start
