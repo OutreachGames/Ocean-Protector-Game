@@ -1999,11 +1999,14 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 		-- oysters
 		update_micro_or_static("item_mollusks", "subitem_oyster")
 
+		local death_ignore_stop = true
+		local death_instant_stop = false
+
 		--conches
-		update_swimmer("item_mollusks", "subitem_conch")
+		update_swimmer("item_mollusks", "subitem_conch", death_ignore_stop, death_instant_stop)
 
 		--crabs
-		update_swimmer("item_crustaceans", "subitem_crab")
+		update_swimmer("item_crustaceans", "subitem_crab", death_ignore_stop, death_instant_stop)
 
 		-- recall conch and crab timing not needed to track since they do not go in formation
 	end

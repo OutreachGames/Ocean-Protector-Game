@@ -268,7 +268,7 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
                 tint_fully_healthy = {r = 1, g = 1, b = 1, a = 1},
-                tint_fully_sick = {r = 0.5, g = 0.5, b = 0.5, a = 1},
+                tint_fully_sick = {r = 0.6, g = 0.6, b = 0.6, a = 1},
                 scale_fully_healthy = 1.0,
                 scale_fully_sick = 0.90,
                 static_spawner_tbl = {
