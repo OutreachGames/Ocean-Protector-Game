@@ -1093,7 +1093,7 @@ local function Spawn_Animal_Static(self, item_name, subitem_name, i_position_in_
 
 end
 
-local function Animal_Order_GoTo(self, go_id, swimto_x, swimto_y, on_init)
+local function Animal_Order_GoTo(self, go_id, swimto_x, swimto_y, on_init, stop_is_instant)
 
 	-- default is to go to waypoint 2
 	-- and to not be on_init
@@ -1106,7 +1106,7 @@ local function Animal_Order_GoTo(self, go_id, swimto_x, swimto_y, on_init)
 	local start_swimming_info = {
 		minfo_swim_to_x = swimto_x or go.get(go_id, "Obj_Waypoint_2_X"),
 		minfo_swim_to_y = swimto_y or go.get(go_id, "Obj_Waypoint_2_Y"),
-		minfo_stop_is_instant = false,
+		minfo_stop_is_instant = stop_is_instant,
 		minfo_is_on_init = on_init --used for instant face to waypoint
 	}
 
@@ -1246,7 +1246,9 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	end
 
 	if spawn_offscreen or go_autopatrol then
-		Animal_Order_GoTo(self, new_collection[HSH.STR_go], swimto_x, swimto_y, true)
+		local on_init = true
+		local instant_stop = true
+		Animal_Order_GoTo(self, new_collection[HSH.STR_go], swimto_x, swimto_y, on_init, instant_stop)
 	end
 
 end
