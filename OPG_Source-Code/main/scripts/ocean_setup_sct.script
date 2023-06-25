@@ -319,7 +319,7 @@ local function Set_Sea_Particles(self, toggle_on, clear_instant)
 
 end
 
-local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go, is_instant)
+local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go, ignore_stop_before_death, instant_stop_before_death)
 
 	-- delete go object
 	if delete_go then
@@ -333,7 +333,9 @@ local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go, is_i
 		-- for example, do not delete go until animation done
 		-- but remove from tracker list
 		-- so we can add more swimmers without incorrectly hitting max amount
-		msg.post(go_id, HSH.msg_order_expire_start, {minfo_stop_is_instant=is_instant})
+		-- ignore stop allows translation to continue as death occurs
+		-- instant stop stops instantly before death, otherwise comes to gradual stop then dies
+		msg.post(go_id, HSH.msg_order_expire_start, {minfo_ignore_stop_before_death=ignore_stop_before_death, minfo_instant_stop_before_death=instant_stop_before_death})
 	end
 
 	-- remove from list if it was on list
@@ -358,7 +360,10 @@ local function Spawned_ResetAll(self, spawn_list_key, delete_gos)
 				if delete_gos then
 					go.delete(k_gourl)
 				else
-					Spawned_RemoveObject(self, spawn_list_key, k_gourl, false)
+					local delete_go = false
+					local ignore_stop = false
+					local instant_stop = true
+					Spawned_RemoveObject(self, spawn_list_key, k_gourl, delete_go, ignore_stop, instant_stop)
 				end
 			end
 		end
@@ -1145,7 +1150,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	local easing_move_go = easing_opts.move_go or 1
 	local easing_move_stop = easing_opts.move_stop or 2
 
-	local death_type = subitem_tbl.object_death_type or -1
+	local death_type = subitem_tbl.extra_death_effect or -1
 
 	-- prepare properties
 	-- smaller blurrier ones be in back? size range represents age, not really distance from camera..
@@ -1622,7 +1627,10 @@ end
 
 local function ExpireObjectCheck(self, spawn_list_key, go_id)
 
-	Spawned_RemoveObject(self, spawn_list_key, go_id, true)
+	local delete_go = true
+	local ignore_stop = false
+	local instant_stop = false
+	Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go, ignore_stop, instant_stop)
 
 end
 
@@ -1878,7 +1886,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 	end
 
-	local function update_swimmer(item_name, subitem_name)
+	local function update_swimmer(item_name, subitem_name, death_ignore_stop, death_instant_stop)
 
 		-- update health of a swimmer subitem
 
@@ -1953,11 +1961,12 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 			end
 
 			-- shuffle table and remove first entries (makes it a random removal overall)
+			local delete_go = false
 			if number_subtracted >= 1 then
 				local rand_tbl = EXT:Table_Shuffle(remove_options)
 				for i=1,number_subtracted do
 					local go_url = rand_tbl[i]
-					Spawned_RemoveObject(self, spawn_list_name, go_url, false, true)
+					Spawned_RemoveObject(self, spawn_list_name, go_url, delete_go, death_ignore_stop, death_instant_stop)
 				end
 			end
 
@@ -2008,8 +2017,10 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 		--fish
 		local item_fish = INFO.item_info.item_fish
+		local fish_death_ignore_stop = true
+		local fish_death_instant_stop = false
 		for k_subitem_fish_name, _ in pairs(item_fish.subitem_info) do
-			local fish_added, fish_subtracted = update_swimmer("item_fish", k_subitem_fish_name)
+			local fish_added, fish_subtracted = update_swimmer("item_fish", k_subitem_fish_name, fish_death_ignore_stop, fish_death_instant_stop)
 			number_added = number_added + fish_added
 			number_subtracted = number_subtracted + fish_subtracted
 		end

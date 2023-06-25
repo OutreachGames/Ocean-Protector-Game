@@ -34,6 +34,7 @@ go.property("Obj_Anim_Multi_Float", 0.6)
 go.property("Obj_Anim_Multi_Extra", 0.6)
 go.property("Obj_Anim_Multi_Moving", 1.8)
 go.property("Obj_Anim_Multi_Idle", 1.0)
+go.property("Obj_Anim_Multi_Death", 0.4)
 go.property("Obj_DecompEffect_Scale", 1.0)
 
 -- local hashes and constants for easy tuning
@@ -43,6 +44,8 @@ local CV_Anim_Look_Hash = hash("anim_extra_FacingLeft")
 local CV_Anim_Look_Track = 2
 local CV_Anim_Float_Hash = hash("anim_idle_FacingLeft")
 local CV_Anim_Float_Track = 3
+local CV_Anim_Death_Hash = hash("anim_death_FacingLeft")
+local CV_Anim_Death_Track = 4
 
 local CV_UP_Vector = EXT.vec3_up
 local CV_AnimBlend_Time = 0.5
@@ -197,7 +200,8 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 	local look_rate = self.Obj_Anim_Multi_Extra
 
 	-- update a few aspects if special case of dying
-	if speed_type_string_key == "spine_is_dead" then
+	local special_case_dying = speed_type_string_key == "spine_is_dead"
+	if special_case_dying then
 		float_rate = dead_rate
 		look_rate = dead_rate
 		blend_time = 0.2
@@ -218,6 +222,20 @@ local function Toggle_MovingAnimation(self, speed_type_string_key, blend_time)
 		spine.play_anim("#spinemodel", CV_Anim_Float_Hash, go.PLAYBACK_LOOP_FORWARD,
 			{ blend_duration = blend_time, playback_rate = float_rate, track = CV_Anim_Float_Track}
 		)
+	end
+
+	-- special case of dying
+	-- wait until all animations blended to slow, then run death
+	local function func_full_death(self)
+		local death_rate = self.Obj_Anim_Multi_Death * math.random(80,120)/100
+		spine.cancel("#spinemodel")
+		spine.play_anim("#spinemodel", CV_Anim_Death_Hash, go.PLAYBACK_ONCE_FORWARD,
+			{ blend_duration = blend_time, playback_rate = death_rate, track = CV_Anim_Death_Track}
+		)
+	end
+
+	if special_case_dying then
+		timer.delay(blend_time+0.1, false, func_full_death)
 	end
 
 end
@@ -303,85 +321,26 @@ end
 
 local function On_Death(self)
 
-	-- stop moving, flip upside down then fade away and delete go object
+	-- run death animation then delete
 
 	-- set alive to false after the stop movement message
 	self.is_alive = false
 
+	-- give time for death animation to play
+	local delete_time = 5
 	Toggle_MovingAnimation(self, "spine_is_dead")
 
-	-- setup time variables give some randomness to sink delay, 
-	--  which is used to calculate sink and decomposition and fade out
-	local extra_sink_delay =  math.random(0, 1000)/1000
-	local extra_sink_time = 0
-
-	-- extra visual effect if specified
-
+	-- extra fade out visual effect if specified
 	if self.Obj_Death_Effect_Type == 1 then
-		-- once stopped, flip upside down and start to sink
-		local rand = math.random(0, 50)/100
-		local extra_flip_delay = self.Obj_Flip_Time * rand
-		local flip_time = self.Obj_Flip_Time * (1 - rand)
-		extra_sink_delay = extra_flip_delay + flip_time
-		extra_sink_time = 5
-		local self_pos = go.get_position()
-		local float_down_y = self_pos.y - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.8)
-		local float_down_x = self_pos.x - (self.Obj_On_Force_Stop_Slowdown_Distance * 0.1)
-
-		go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, -self.scale_magnitude, go.EASING_INOUTEXPO, flip_time, extra_flip_delay)
-		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, float_down_y, GetRandomEasing(2), extra_sink_time, extra_sink_delay)
-		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG, float_down_x, GetRandomEasing(2), extra_sink_time*0.5, extra_sink_delay)
+		local fadeout_delay = 1
+		local fadeout_duration = delete_time - fadeout_delay
+		go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, go.EASING_LINEAR, fadeout_duration, fadeout_delay)
 	end
-
-	-- while starting death, begin fade out
-	local fadeout_delay = extra_sink_delay + (extra_sink_time*0.4)
-	local fadeout_time = 0.5
-	local fadeout_easing = go.EASING_LINEAR
-	go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, fadeout_easing, fadeout_time, fadeout_delay)
-
-	-- once fade out mostly done then play decomposition particles
-	-- save function to fade, trigger decomposition, and GO deletion
-	local particle_helper
-
-	local function func_decompose(self)
-
-		--#TODO fix particles with improper z value
-		if true then return end
-		-- create a decomposition go object, parent it to this go
-		-- then delete created decomposition object when done
-		local scale = self.Obj_DecompEffect_Scale
-
-		--local base_dimensions = INFO:Get_Subitem_Value(self.Obj_Item_Enum, self.Obj_Subitem_Enum, "object_dimensions")
-		--print("base_dimensions.x: "..base_dimensions.x..", self.scale_magnitude: "..self.scale_magnitude..", self.Obj_DecompEffect_Scale: "..self.Obj_DecompEffect_Scale)
-		local rot = vmath.quat_rotation_z(math.rad(0))
-		local decomp_collection = collectionfactory.create("ocean_level:/spawner_decomposition_large#collectionfactory", go.get_position(), rot, nil, scale)
-
-		--save and parent to this go
-		particle_helper = decomp_collection[HSH.STR_go]
-		msg.post(particle_helper, "set_parent", { parent_id = go.get_id(), keep_world_transform = 1 })
-
-		--trigger effect
-		local decomp_id = msg.url("ocean_level", particle_helper, "particlefx")
-		particlefx.play(decomp_id)
-		--print("particle fx euler z "..go.get(particle_helper, "euler.z"))
-
-	end
-
-	-- run decomposition
-	local decomp_delay = fadeout_delay
-	timer.delay(decomp_delay, false, func_decompose)
-
-	local delete_time = decomp_delay + fadeout_time + 5
 
 	local function func_delete(self)
 
 		--tell level manager to delete go and clear tracker table entry
 		msg.post("/level_controller", HSH.msg_reported_expire_done, {minfo_spawn_list_key = INFO:Get_Spawn_List_Key(self.Obj_Item_Enum, self.Obj_Subitem_Enum)})
-
-		--delete decomposition particle helper if we used it
-		if particle_helper ~= nil then
-			go.delete(particle_helper)
-		end
 
 	end
 
@@ -872,10 +831,14 @@ local function On_Message_StopMovement(self, is_instant, kill_when_stopped)
 
 end
 
-local function OnExpire(self, is_instant)
+local function OnExpire(self, ignore_stop_before_death, instant_stop_before_death)
 
 	local kill_when_stopped = true
-	On_Message_StopMovement(self, is_instant, kill_when_stopped)
+	if ignore_stop_before_death then
+		On_Death(self)
+	else
+		On_Message_StopMovement(self, instant_stop_before_death, kill_when_stopped)
+	end
 
 end
 
@@ -926,7 +889,7 @@ function on_message(self, message_id, message, sender)
 		On_Message_StopMovement(self, message.minfo_stop_is_instant)
 
 	elseif message_id == HSH.msg_order_expire_start then
-		OnExpire(self, message.minfo_stop_is_instant)
+		OnExpire(self, message.minfo_ignore_stop_before_death, message.minfo_instant_stop_before_death)
 	end
 
 end

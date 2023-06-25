@@ -313,6 +313,7 @@ INFO.item_info = {
                 object_translation_speed_base = 3,
                 object_translation_speed_can_vary = true,
                 object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
                 object_anim_multi = {rate_idle = 0.4, rate_moving = 0.8, rate_float = 0.4},
                 movement_easing_options = {move_go=5, move_stop=5},
                 info_url = "https://www.fisheries.noaa.gov/species/queen-conch"
@@ -343,7 +344,6 @@ INFO.item_info = {
                 object_rotation_speed_base = 60,
                 object_translation_speed_base = 40,
                 object_logic_type = CV_Logic_Type_Swimmer,
-                object_death_type = 1,
                 object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.5},
                 movement_easing_options = {move_go=1, move_stop=2},
                 info_url = "https://www.fisheries.noaa.gov/species/western-atlantic-bluefin-tuna"
@@ -361,7 +361,6 @@ INFO.item_info = {
                 object_rotation_speed_base = 50,
                 object_translation_speed_base = 30,
                 object_logic_type = CV_Logic_Type_Swimmer,
-                object_death_type = 1,
                 object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.8},
                 movement_easing_options = {move_go=1, move_stop=2},
                 info_url = "https://www.fisheries.noaa.gov/species/bluefish"
@@ -379,7 +378,6 @@ INFO.item_info = {
                 object_rotation_speed_base = 40,
                 object_translation_speed_base = 20,
                 object_logic_type = CV_Logic_Type_Swimmer,
-                object_death_type = 1,
                 object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.7},
                 movement_easing_options = {move_go=1, move_stop=2},
                 info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
@@ -413,6 +411,7 @@ INFO.item_info = {
                 object_translation_speed_base = 8,
                 object_translation_speed_can_vary = true,
                 object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
                 object_anim_multi = {rate_idle = 0.001, rate_moving = 1.0, rate_float = 0.6, rate_extra = 0.6}, --recall extra and float are just claws
                 movement_easing_options = {move_go=5, move_stop=5},
                 info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
@@ -431,6 +430,7 @@ INFO.item_info = {
                 object_rotation_speed_base = 40,
                 object_translation_speed_base = 15,
                 object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
                 object_anim_multi = {rate_idle = 0.5, rate_moving = 1.2, rate_float = 0.5}, --recall idle is moving with current
                 movement_easing_options = {move_go=2, move_stop=2},
                 info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
