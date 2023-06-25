@@ -1999,8 +1999,9 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 		-- oysters
 		update_micro_or_static("item_mollusks", "subitem_oyster")
 
-		local death_ignore_stop = true
-		local death_instant_stop = false
+		-- on seafloor so stop, and stop quickly so effect is viewable
+		local death_ignore_stop = false
+		local death_instant_stop = true
 
 		--conches
 		update_swimmer("item_mollusks", "subitem_conch", death_ignore_stop, death_instant_stop)
@@ -2015,6 +2016,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	local function update_ocean_water()
 		-- update most swimmers (all fish, shrimp), which use kill or add
 
+		-- swimming, so do not stop since we want momentum to continue when dying
 		local death_ignore_stop = true
 		local death_instant_stop = false
 
