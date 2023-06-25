@@ -1150,7 +1150,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 	local easing_move_go = easing_opts.move_go or 1
 	local easing_move_stop = easing_opts.move_stop or 2
 
-	local death_type = subitem_tbl.extra_death_effect or -1
+	local extra_death_type = subitem_tbl.extra_death_effect or -1
 
 	-- prepare properties
 	-- smaller blurrier ones be in back? size range represents age, not really distance from camera..
@@ -1218,7 +1218,7 @@ local function Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in
 			Obj_Waypoint_1_Y = waypoint1_pos_y,
 			Obj_Waypoint_2_X = waypoint2_pos_x,
 			Obj_Waypoint_2_Y = waypoint2_pos_y,
-			Obj_Death_Effect_Type = death_type,
+			Obj_Extra_Death_Effect_Type = extra_death_type,
 			Obj_Anim_Multi_Moving = anim_multi_moving,
 			Obj_Anim_Multi_Idle = anim_multi_idle,
 			Obj_Anim_Multi_Float = anim_multi_float,
