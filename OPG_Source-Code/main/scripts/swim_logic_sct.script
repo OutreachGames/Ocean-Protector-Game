@@ -661,15 +661,18 @@ local function Movement_Start_Run(self, target_pos, on_init)
 
 	local duration_rotate_start
 	local rotate_start_easing, translate_easing
+	local translation_multi
 
 	if offscreen_and_init then
 		duration_rotate_start = 0.1
 		rotate_start_easing = GetRandomEasing(4) --smooth in out directions
 		translate_easing = GetRandomEasing(4) --smooth in out directions
+		translation_multi = 2
 	else
 		duration_rotate_start = Get_Duration_Rotate(self.Obj_Rotation_Speed_Max, go.get(".", "euler.z"), ang_to_target_deg, self.Obj_Rotation_Speed_Min)
 		rotate_start_easing = GetRandomEasing(self.Obj_Rotation_Easing_Options)
 		translate_easing = GetRandomEasing(self.Obj_TranslationGo_Easing_Options)
+		translation_multi = 1
 	end
 
 	-- rotate to target orientation
@@ -677,7 +680,7 @@ local function Movement_Start_Run(self, target_pos, on_init)
 	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, ang_to_target_deg, rotate_start_easing, duration_rotate_start, next_anim_delay)
 
 	-- translate to target position
-	local duration_translate_to = Get_Duration_Translate(self.Obj_Translation_Speed_Max, go.get_position(), target_pos_vector)
+	local duration_translate_to = Get_Duration_Translate(self.Obj_Translation_Speed_Max*translation_multi, go.get_position(), target_pos_vector)
 	next_anim_delay = next_anim_delay + duration_rotate_start * 0.3 --recall start swimming takes a while to get going due to easing
 	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, target_pos_vector, translate_easing, duration_translate_to, next_anim_delay)
 
