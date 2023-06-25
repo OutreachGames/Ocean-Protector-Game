@@ -313,7 +313,6 @@ INFO.item_info = {
                 object_translation_speed_base = 3,
                 object_translation_speed_can_vary = true,
                 object_logic_type = CV_Logic_Type_Swimmer,
-                extra_death_effect = 1,
                 object_anim_multi = {rate_idle = 0.4, rate_moving = 0.8, rate_float = 0.4},
                 movement_easing_options = {move_go=5, move_stop=5},
                 info_url = "https://www.fisheries.noaa.gov/species/queen-conch"

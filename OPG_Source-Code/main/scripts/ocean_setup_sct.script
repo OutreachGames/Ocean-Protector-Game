@@ -2012,15 +2012,16 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	local function update_ocean_water()
 		-- update most swimmers (all fish, shrimp), which use kill or add
 
+		local death_ignore_stop = true
+		local death_instant_stop = false
+
 		--shrimp
-		local number_added, number_subtracted = update_swimmer("item_crustaceans", "subitem_shrimp")
+		local number_added, number_subtracted = update_swimmer("item_crustaceans", "subitem_shrimp", death_ignore_stop, death_instant_stop)
 
 		--fish
 		local item_fish = INFO.item_info.item_fish
-		local fish_death_ignore_stop = true
-		local fish_death_instant_stop = false
 		for k_subitem_fish_name, _ in pairs(item_fish.subitem_info) do
-			local fish_added, fish_subtracted = update_swimmer("item_fish", k_subitem_fish_name, fish_death_ignore_stop, fish_death_instant_stop)
+			local fish_added, fish_subtracted = update_swimmer("item_fish", k_subitem_fish_name, death_ignore_stop, death_instant_stop)
 			number_added = number_added + fish_added
 			number_subtracted = number_subtracted + fish_subtracted
 		end
