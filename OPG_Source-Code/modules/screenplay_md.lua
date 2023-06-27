@@ -1166,17 +1166,17 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Create large fishing net barriers and try and block off the parts of the ocean where you fish."
+                            "Create large fishing net barriers and try to completely block off the parts of the ocean where you fish."
                         },
                         role_ranger = {
-                            "Create large barriers with nets around the marine park and try and seclude this area."
+                            "Create large barriers with nets around the marine park and try to completely block off this area."
                         },
                         role_guide = {
-                            "Create large barriers with nets and try and block off the part of the ocean that you run tours through."
+                            "Create large barriers with nets and try to completely block off the part of the ocean that you run tours through."
                         },
                     },
                     debrief_text = {
-                        "You have chosen to try and block off parts of the ocean. Unfortunately, creating physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to try and block off parts of the ocean. Unfortunately, creating large physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "..STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
                     },
                     outcome_result_func = function ()
                         local was_best_choice = false
