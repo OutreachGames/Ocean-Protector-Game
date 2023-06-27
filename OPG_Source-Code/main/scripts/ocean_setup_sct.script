@@ -1978,8 +1978,11 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 	end
 
-	-- update helper functions --#TODO add highlighters for each update function
+	-- update helper functions
 	local function update_plankton()
+
+		-- trigger highlighter
+		msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_plankton"})
 
 		-- update plankton, which uses health update message
 		update_micro_or_static("item_plankton", "subitem_phytoplankton")
@@ -1991,6 +1994,9 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 		-- update all static (all corals, oysters), which use health update message
 		-- update some swimmers (crabs and conches), which use kill or add
+
+		-- trigger highlighter
+		msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_benthic"})
 
 		-- coral
 		local item_coral = INFO.item_info.item_coral
@@ -2017,6 +2023,9 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 	local function update_ocean_water()
 		-- update most swimmers (all fish, shrimp), which use kill or add
+
+		-- trigger highlighter
+		msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_pelagic"})
 
 		-- swimming, so do not stop since we want momentum to continue when dying
 		local death_ignore_stop = true
@@ -2107,6 +2116,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 							end
 
 							-- report that OA effects are done
+							-- recall this message will also disable highlighter
 							msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
 
 						end)

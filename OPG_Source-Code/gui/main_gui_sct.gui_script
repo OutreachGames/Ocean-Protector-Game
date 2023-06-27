@@ -293,8 +293,10 @@ local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 		enabled_setting = false
 	end
 
+	local is_reset
 	if highlight_what == nil then
-		highlight_what = "key_reset"
+		is_reset = true
+		highlight_what = "show_key_reset"
 	end
 
 	local constant = self.hud_highlighter_constant
@@ -318,11 +320,21 @@ local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 	-- also set animation for blinking and set tint
 
 	if enabled_setting then
+
 		gui.set_enabled(controller_node, true)
-		gui.set_color(controller_node, CV_Color_Red_Full)
-		gui.animate(controller_node, "color", CV_Color_Red_Flicker, gui.EASING_LINEAR, 0.50, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+		gui.cancel_animation(controller_node, "color")
 		gui.set_position(controller_node, new_position)
 		gui.set_size(controller_node, new_size)
+		gui.set_color(controller_node, CV_Color_Red_Full)
+
+		if is_reset then
+			gui.set_visible(controller_node, false)
+			gui.set_color(controller_node, CV_Color_White)
+		else
+			gui.set_visible(controller_node, true)
+			gui.animate(controller_node, "color", CV_Color_Red_Flicker, gui.EASING_LINEAR, 0.50, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+		end
+
 	else
 		gui.cancel_animation(controller_node, "color")
 		gui.set_color(controller_node, CV_Color_White)
@@ -346,9 +358,12 @@ local function Screen_Highlighter_Initialize(self, enabled_status)
 	self.hud_highlighter_constant = {
 		hud_basename = basename,
 		node_controller = basename .. "/gui_frame_core",
-		-- #TODO: update HUD highlighter
+		-- specify HUD highlighter areas
 		highlight_setup = {
-			key_reset = {l_position = vmath.vector3(0,0,0), l_size = vmath.vector3(0,0,0)}
+			show_key_reset = {l_position = vmath.vector3(0, 0, 0), l_size = vmath.vector3(32, 32, 0)},
+			show_area_plankton = {l_position = vmath.vector3(127, 538, 0), l_size = vmath.vector3(278, 180, 0)},
+			show_area_benthic = {l_position = vmath.vector3(800, 142, 0), l_size = vmath.vector3(1620, 320, 0)},
+			show_area_pelagic = {l_position = vmath.vector3(800, 336, 0), l_size = vmath.vector3(1620, 310, 0)}
 		}
 	}
 
@@ -2454,6 +2469,7 @@ end
 
 local function On_OutcomeEffects_Done(self)
 
+	Screen_Highlighter_Reset(self)
 	GameLogic_Progress(self, 1)
 
 end
@@ -2603,6 +2619,8 @@ function on_message(self, message_id, message, sender)
 		On_SpecialAction(self, message.minfo_special_case_key)
 	elseif message_id == HSH.msg_report_oa_outcomes_done then
 		On_OutcomeEffects_Done(self)
+	elseif message_id == HSH.msg_request_update_highlighter then
+		Screen_Highlighter_Reset(self, true, message.minfo_hud_highlighter_type)
 	end
 
 end

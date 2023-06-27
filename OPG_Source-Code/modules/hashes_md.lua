@@ -22,6 +22,7 @@ local HASH = {
     msg_report_go_clicked = hash("msg_report_go_clicked"),
     msg_request_oa_outcomes_started = hash("msg_request_oa_outcomes_started"),
     msg_report_oa_outcomes_done = hash("msg_report_oa_outcomes_done"),
+    msg_request_update_highlighter = hash("msg_request_update_highlighter"),
     msg_request_game_progress = hash("msg_request_game_progress"),
     msg_request_game_repeat = hash("msg_request_game_repeat"),
     msg_report_game_progressed = hash("msg_report_game_progressed"),
