@@ -218,7 +218,7 @@ INFO.item_info = {
                     {635, -386, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_horn_1", "coral_horn_2"},
-                tint_fully_healthy = {r = 255/255, g = 210/255, b = 150/255, a = 1},
+                tint_fully_healthy = {r = 255/255, g = 200/255, b = 140/255, a = 1},
                 tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
                 scale_fully_healthy = 1.0,
                 scale_fully_sick = 0.85
