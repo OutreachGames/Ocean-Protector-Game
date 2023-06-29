@@ -192,10 +192,10 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/lobed-star-coral",
                 static_spawner_tbl = {
-                    {-720, -237, CV_Base_Middle, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
-                    {223, -215, CV_Base_Top, flip_sprite = false, rotation_z_euler = 8, sprite_selection_i = 2}, --top
-                    {-560, -242, CV_Base_Middle, flip_sprite = true, rotation_z_euler = -3, sprite_selection_i = 1}, --mid
-                    {385, -204, CV_Base_Top, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 2}, --top
+                    {-720, -308, CV_Base_Middle, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 1}, --mid
+                    {223, -270, CV_Base_Top, flip_sprite = false, rotation_z_euler = 8, sprite_selection_i = 2}, --top
+                    {-560, -312, CV_Base_Middle, flip_sprite = true, rotation_z_euler = -3, sprite_selection_i = 1}, --mid
+                    {385, -268, CV_Base_Top, flip_sprite = true, rotation_z_euler = 5, sprite_selection_i = 2}, --top
                 },
                 sprite_options = {"coral_bulb_1", "coral_bulb_2"},
                 tint_fully_healthy = {r = 255/255, g = 240/255, b = 190/255, a = 1},
@@ -213,9 +213,9 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral",
                 static_spawner_tbl = {
-                    {-308, -176, CV_Base_Top, flip_sprite = false, rotation_z_euler = -4, sprite_selection_i = 1}, --top
-                    {-40, -377, CV_Base_Bottom, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --bottom
-                    {635, -386, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
+                    {-371, -242, CV_Base_Top, flip_sprite = false, rotation_z_euler = -4, sprite_selection_i = 1}, --top
+                    {-40, -443, CV_Base_Bottom, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --bottom
+                    {635, -441, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_horn_1", "coral_horn_2"},
                 tint_fully_healthy = {r = 255/255, g = 200/255, b = 140/255, a = 1},
@@ -233,10 +233,10 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/pillar-coral",
                 static_spawner_tbl = {
-                    {699, -200, CV_Base_Top, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --top
-                    {-274, -346, CV_Base_Bottom, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
-                    {580, -225, CV_Base_Top, flip_sprite = false, rotation_z_euler = 5, sprite_selection_i = 2}, --top
-                    {262, -346, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
+                    {721, -299, CV_Base_Top, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --top
+                    {-274, -450, CV_Base_Bottom, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 1}, --bottom
+                    {595, -309, CV_Base_Top, flip_sprite = false, rotation_z_euler = 5, sprite_selection_i = 2}, --top
+                    {262, -454, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_pillar_1", "coral_pillar_2"},
                 tint_fully_healthy = {r = 255/255, g = 210/255, b = 180/255, a = 1},
