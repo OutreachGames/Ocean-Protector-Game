@@ -23,8 +23,8 @@ local CV_gameplay_loop = {
 local CV_Bar_Old = vmath.vector4(0.80, 0.80, 0.80, 1)
 local CV_Bar_Current = vmath.vector4(1.0, 1.0, 1.0, 1)
 local CV_Color_White = vmath.vector4(1.0, 1.0, 1.0, 1)
-local CV_Color_Red_Full = vmath.vector4(0.8, 0, 0, 1)
-local CV_Color_Red_Flicker = vmath.vector4(0.5, 0, 0, 0.7)
+local CV_Color_Red_Full = vmath.vector4(1.0, 0.4, 0.4, 1)
+local CV_Color_Red_Flicker = vmath.vector4(0.8, 0.2, 0.2, 0.3)
 
 -- functions
 
@@ -332,7 +332,7 @@ local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 			gui.set_color(controller_node, CV_Color_White)
 		else
 			gui.set_visible(controller_node, true)
-			gui.animate(controller_node, "color", CV_Color_Red_Flicker, gui.EASING_LINEAR, 0.50, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+			gui.animate(controller_node, "color", CV_Color_Red_Flicker, gui.EASING_LINEAR, 1.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
 		end
 
 	else

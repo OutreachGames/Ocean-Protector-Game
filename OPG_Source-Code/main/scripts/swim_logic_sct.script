@@ -602,9 +602,8 @@ local function Movement_Start_Run(self, target_pos, on_init)
 		-- run flip
 		goal_y_scale = -1 * goal_y_scale
 		if flip_duration > 0 then
-			local rand_percent = math.random(0, 50)/100
-			local flip_delay = flip_duration * rand_percent
-			local flip_time = flip_duration * (1 - rand_percent)
+			local flip_delay = flip_duration + (flip_duration * math.random(-75, 75)/100)
+			local flip_time = flip_duration + (flip_duration * math.random(-75, 75)/100)
 			go.animate(".", "scale.y", go.PLAYBACK_ONCE_FORWARD, goal_y_scale, go.EASING_INOUTEXPO, flip_time, flip_delay)
 		else
 			go.set(".", "scale.y", goal_y_scale)

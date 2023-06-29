@@ -1774,22 +1774,30 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	-- ^^ give time for new swimmers to join formation before ordering school to patrol
 	-- also update this time if no swimmers are needed to add or subtract
 
-	local function start_reset_swimmers(screen_fader_time)
+	local function reset_swimmers_start(screen_fader_time)
 
 		-- start swimmer resetting to maximize visual change
 
 		if run_swimmer_reset then
 			msg.post("main:/hud#gui", HSH.msg_request_fade_out, {minfo_fade_duration = screen_fader_time})
+		end
+
+	end
+
+	local function reset_swimmers_mid()
+
+		if run_swimmer_reset then
 
 			-- reset swimmer spawn keys
 			for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
 				Spawned_ResetAll(self, k_spawnlistkey, true)
 			end
+
 		end
 
 	end
 
-	local function finish_reset_swimmers(screen_fader_time)
+	local function reset_swimmers_end(screen_fader_time)
 
 		-- reset swimmers to maximize visual change
 
@@ -2068,62 +2076,76 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 
 		local fader_time
 		local reset_time
+		local reset_buffer
 
 		if run_swimmer_reset then
 			fader_time = 0.5
+			reset_buffer = 0.1
 			reset_time = CV_Animal_Reset_Time
 		else
 			fader_time = 0.01
 			reset_time = 0.01
+			reset_buffer = 0.01
 		end
 
-		start_reset_swimmers(fader_time)
+		-- if resetting then fade out, remove all, spawn in new base, fade in, then finally run added or removed
 
-		-- if resetting add swimmers back in at reset population (for example, 50% health)
+		-- fade out
+		reset_swimmers_start(fader_time)
 
-		timer.delay(reset_time, false, function()
+		timer.delay(fader_time + reset_buffer, false, function()
 
-			finish_reset_swimmers(fader_time)
+			-- now that faded out remove all
+			reset_swimmers_mid()
 
-			-- run through OA effects 
+			-- if resetting add swimmers back in at reset population (for example, 50% health)
 
-			timer.delay(fader_time*1.5, false, function()
+			timer.delay(fader_time + reset_buffer + reset_time, false, function()
 
-				-- highlight plankton or OA and request update and coastal OA if needed
-				update_plankton()
+				-- reset to base and fade back in
+				reset_swimmers_end(fader_time)
 
-				timer.delay(stage_done_plankton_or_oa, false, function()
+				-- once faded back in, run through OA effects, including adding or removing
+				timer.delay(fader_time*1.5, false, function()
 
-					-- highlight ocean floor and request update
-					update_ocean_floor()
+					-- highlight plankton or OA and request update and coastal OA if needed
+					update_plankton()
 
-					timer.delay(stage_done_ocean_benthic, false, function()
+					timer.delay(stage_done_plankton_or_oa, false, function()
 
-						-- highlight ocean middle and request update
-						local extra_swimmer_catch_up_time = update_ocean_water()
-						local full_ocean_mid_done = stage_done_ocean_pelagic + extra_swimmer_catch_up_time
+						-- highlight ocean floor and request update
+						update_ocean_floor()
 
-						timer.delay(full_ocean_mid_done, false, function()
+						timer.delay(stage_done_ocean_benthic, false, function()
 
-							-- also send message to all animals to start auto patrol
-							if run_swimmer_reset then
-								for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
-									local key_list = self.spawned_objects_list[k_spawnlistkey]
-									for k_gourl, _ in pairs(key_list) do
-										Animal_Order_GoTo(self, k_gourl) --default is waypoint 2
+							-- highlight ocean middle and request update
+							local extra_swimmer_catch_up_time = update_ocean_water()
+							local full_ocean_mid_done = stage_done_ocean_pelagic + extra_swimmer_catch_up_time
+
+							timer.delay(full_ocean_mid_done, false, function()
+
+								-- also send message to all animals to start auto patrol
+								if run_swimmer_reset then
+									for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
+										local key_list = self.spawned_objects_list[k_spawnlistkey]
+										for k_gourl, _ in pairs(key_list) do
+											Animal_Order_GoTo(self, k_gourl) --default is waypoint 2
+										end
 									end
 								end
-							end
 
-							-- report that OA effects are done
-							-- recall this message will also disable highlighter
-							msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
+								-- report that OA effects are done
+								-- recall this message will also disable highlighter
+								msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
 
+							end)
 						end)
 					end)
 				end)
 			end)
+
 		end)
+
 
 end
 
