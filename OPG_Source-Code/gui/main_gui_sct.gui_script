@@ -2377,15 +2377,15 @@ local function Screen_MainMenu_Input(self, action_id, action)
 		local run_sizer = false
 		Screen_MainMenu_Reset(self, false, run_sizer)
 
-		--#TODO add functionality
+		--#TODO add actual functionality eventually
+		GameLogic_Progress(self, 1)
 		--print("Game resumed!")
 
 	end
 
 	MY_GOO.button_simple(hudinfo.goo_game_new_name, action_id, action, func_new_game)
 
-	--#TODO add resume game functionality
-	--MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
+	MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
 
 end
 

@@ -2,7 +2,6 @@
 
     -- add front that can move through quickly as option to coastal OA, 
     --   also has clouds that hit sun and add timed ocean water color and sky fade
-    --   show OA effect with timer in screenplay module
     -- add time delay to next stage progression as option
 
     -- pause menu has black 1x1 gui square over screen?
@@ -14,9 +13,6 @@
     -- inject view items and click items after each decision
     --   in other words add stages after each decision to say "now lets view how this looks in our ocean scene"
     --   stages consist of 1) view timer, 2) click items, then 3) popup with summary
-    -- add dynamic response to OA updates in real time
-    --   make sure to never kill all of animal, otherwise no clicking will be possible and game will get stuck
-    --   need to make percent changes more dramatic than actual number, since 0.05 change means like 1 fish...
 
     -- also add summary debrief after clicking on items in each stage 
     --   no extra HUD screen with outcome question since it takes up too much space and player needs to be able to see things
