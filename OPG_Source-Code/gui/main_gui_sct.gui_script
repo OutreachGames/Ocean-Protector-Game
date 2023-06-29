@@ -362,8 +362,8 @@ local function Screen_Highlighter_Initialize(self, enabled_status)
 		highlight_setup = {
 			show_key_reset = {l_position = vmath.vector3(0, 0, 0), l_size = vmath.vector3(32, 32, 0)},
 			show_area_plankton = {l_position = vmath.vector3(127, 538, 0), l_size = vmath.vector3(278, 180, 0)},
-			show_area_benthic = {l_position = vmath.vector3(800, 142, 0), l_size = vmath.vector3(1620, 320, 0)},
-			show_area_pelagic = {l_position = vmath.vector3(800, 336, 0), l_size = vmath.vector3(1620, 310, 0)}
+			show_area_benthic = {l_position = vmath.vector3(800, 183, 0), l_size = vmath.vector3(1620, 390, 0)},
+			show_area_pelagic = {l_position = vmath.vector3(800, 370, 0), l_size = vmath.vector3(1620, 400, 0)}
 		}
 	}
 
