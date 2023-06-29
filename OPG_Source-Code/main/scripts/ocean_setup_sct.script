@@ -2075,78 +2075,78 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	--   2c. highlight swimmers and request update
 	-- 3. send message back to gui that OA effects are done
 
-		-- setup more timer values
-		local fader_time
-		local reset_time
-		local reset_buffer
+	-- setup more timer values
+	local fader_time
+	local reset_time
+	local reset_buffer
 
-		if run_swimmer_reset then
-			fader_time = 0.5
-			reset_buffer = 0.1
-			reset_time = CV_Animal_Reset_Time
-		else
-			fader_time = 0.01
-			reset_time = 0.01
-			reset_buffer = 0.01
-		end
+	if run_swimmer_reset then
+		fader_time = 0.5
+		reset_buffer = 0.1
+		reset_time = CV_Animal_Reset_Time
+	else
+		fader_time = 0.01
+		reset_time = 0.01
+		reset_buffer = 0.01
+	end
 
-		-- if resetting then fade out, remove all, spawn in new base, fade in, then finally run added or removed
+	-- if resetting then fade out, remove all, spawn in new base, fade in, then finally run added or removed
 
-		-- fade out
-		reset_swimmers_start(fader_time)
+	-- fade out
+	reset_swimmers_start(fader_time)
 
-		timer.delay(fader_time + reset_buffer, false, function()
+	timer.delay(fader_time + reset_buffer, false, function()
 
-			-- now that faded out remove all
-			reset_swimmers_mid()
+		-- now that faded out remove all
+		reset_swimmers_mid()
 
-			-- if resetting add swimmers back in at reset population (for example, 50% health)
+		-- if resetting add swimmers back in at reset population (for example, 50% health)
 
-			timer.delay(fader_time + reset_buffer + reset_time, false, function()
+		timer.delay(fader_time + reset_buffer + reset_time, false, function()
 
-				-- reset to base and fade back in
-				reset_swimmers_end(fader_time)
+			-- reset to base and fade back in
+			reset_swimmers_end(fader_time)
 
-				-- once faded back in, run through OA effects, including adding or removing
-				timer.delay(fader_time*1.5, false, function()
+			-- once faded back in, run through OA effects, including adding or removing
+			timer.delay(fader_time*1.5, false, function()
 
-					-- highlight plankton or OA and request update and coastal OA if needed
-					update_plankton()
+				-- highlight plankton or OA and request update and coastal OA if needed
+				update_plankton()
 
-					timer.delay(stage_done_plankton_or_oa, false, function()
+				timer.delay(stage_done_plankton_or_oa, false, function()
 
-						-- highlight ocean floor and request update
-						update_ocean_floor()
+					-- highlight ocean floor and request update
+					update_ocean_floor()
 
-						timer.delay(stage_done_ocean_benthic, false, function()
+					timer.delay(stage_done_ocean_benthic, false, function()
 
-							-- highlight ocean middle and request update
-							local extra_swimmer_catch_up_time = update_ocean_water()
-							local full_ocean_mid_done = stage_done_ocean_pelagic + extra_swimmer_catch_up_time
+						-- highlight ocean middle and request update
+						local extra_swimmer_catch_up_time = update_ocean_water()
+						local full_ocean_mid_done = stage_done_ocean_pelagic + extra_swimmer_catch_up_time
 
-							timer.delay(full_ocean_mid_done, false, function()
+						timer.delay(full_ocean_mid_done, false, function()
 
-								-- also send message to all animals to start auto patrol
-								if run_swimmer_reset then
-									for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
-										local key_list = self.spawned_objects_list[k_spawnlistkey]
-										for k_gourl, _ in pairs(key_list) do
-											Animal_Order_GoTo(self, k_gourl) --default is waypoint 2
-										end
+							-- also send message to all animals to start auto patrol
+							if run_swimmer_reset then
+								for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
+									local key_list = self.spawned_objects_list[k_spawnlistkey]
+									for k_gourl, _ in pairs(key_list) do
+										Animal_Order_GoTo(self, k_gourl) --default is waypoint 2
 									end
 								end
+							end
 
-								-- report that OA effects are done
-								-- recall this message will also disable highlighter
-								msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
+							-- report that OA effects are done
+							-- recall this message will also disable highlighter
+							msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
 
-							end)
 						end)
 					end)
 				end)
 			end)
-
 		end)
+
+	end)
 
 
 end
