@@ -3,7 +3,7 @@ scale_along_z: 0
 embedded_instances {
   id: "go"
   data: "components {\n"
-  "  id: \"micro_logic_sct\"\n"
+  "  id: \"script\"\n"
   "  component: \"/main/scripts/micro_logic_sct.script\"\n"
   "  position {\n"
   "    x: 0.0\n"

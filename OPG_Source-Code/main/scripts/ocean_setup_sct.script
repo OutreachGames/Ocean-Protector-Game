@@ -1103,9 +1103,10 @@ local function Animal_Order_GoTo(self, go_id, swimto_x, swimto_y, on_init, stop_
 		return
 	end
 
+	local go_url = msg.url(nil, go_id, "script")
 	local start_swimming_info = {
-		minfo_swim_to_x = swimto_x or go.get(go_id, "Obj_Waypoint_2_X"),
-		minfo_swim_to_y = swimto_y or go.get(go_id, "Obj_Waypoint_2_Y"),
+		minfo_swim_to_x = swimto_x or go.get(go_url, "Obj_Waypoint_2_X"),
+		minfo_swim_to_y = swimto_y or go.get(go_url, "Obj_Waypoint_2_Y"),
 		minfo_stop_is_instant = stop_is_instant,
 		minfo_is_on_init = on_init --used for instant face to waypoint
 	}
@@ -1768,7 +1769,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
 
-	local stage_done_plankton_or_oa = 5
+	local stage_done_plankton_or_oa = 3
 	local stage_done_ocean_benthic = 5
 	local stage_done_ocean_pelagic = 5
 	-- ^^ give time for new swimmers to join formation before ordering school to patrol
@@ -2074,6 +2075,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset) --o
 	--   2c. highlight swimmers and request update
 	-- 3. send message back to gui that OA effects are done
 
+		-- setup more timer values
 		local fader_time
 		local reset_time
 		local reset_buffer
