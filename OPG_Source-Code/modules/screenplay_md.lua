@@ -915,7 +915,7 @@ STR.Screenplay = {
         },
         --]]
 
-        decision_role_01 = { -- Personal CO2 Reduction
+        decision_role_01a = { -- Personal CO2 Reduction
             question_prompt = {
                 "",
                 role_captain = {
@@ -989,7 +989,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_02 = { -- Biologic Connection I (phytoplankton)
+        decision_role_02a = { -- Biologic Connection I (phytoplankton)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1064,7 +1064,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_03 = { -- Personal Nutrient Pollution Reduction
+        decision_role_03a = { -- Personal Nutrient Pollution Reduction
             question_prompt = {
                 "",
                 role_captain = {
@@ -1111,7 +1111,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_04 = { -- Biologic Connection II (reef)
+        decision_role_04a = { -- Biologic Connection II (reef)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1208,7 +1208,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_05 = { -- Partnerships and Community I (city council for citizens)
+        decision_role_05a = { -- Partnerships and Community I (city council for citizens)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1255,7 +1255,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_06 = { -- Partnerships and Community II (farmer friends)
+        decision_role_06a = { -- Partnerships and Community II (farmer friends)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1302,7 +1302,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_07 = { -- Community Education I (community members water use)
+        decision_role_07a = { -- Community Education I (community members water use)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1349,7 +1349,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_08 = { -- Partnerships and Community III (city council for businesses)
+        decision_role_08a = { -- Partnerships and Community III (city council for businesses)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1396,7 +1396,7 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_09 = { -- Community Education II (community members transportation use)
+        decision_role_09a = { -- Community Education II (community members transportation use)
             question_prompt = {
                 "",
                 role_captain = {
@@ -1848,8 +1848,8 @@ function STR:Get_Total_Choices()
 
     local num_player_questions = 0
 
-    for k_substagename,_ in pairs(STR.Screenplay.s05_decisions_character_role or {}) do
-        if string.find(k_substagename, "default") == nil then
+    for k_substagename,v_substage_tbl in pairs(STR.Screenplay.s05_decisions_character_role or {}) do
+        if string.find(k_substagename, "default") == nil and v_substage_tbl.question_prompt ~= nil and v_substage_tbl.answer_options ~= nil == nil then
             num_player_questions = num_player_questions + 1
         end
     end
