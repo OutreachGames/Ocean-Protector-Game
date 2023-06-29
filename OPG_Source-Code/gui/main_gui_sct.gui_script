@@ -680,9 +680,76 @@ local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert
 
 end
 
+local function DynamicText_DecisionSummary(self)
+
+	-- get dynamic text for decision summary
+
+	local n = "\n"
+	local indent = "  "
+
+	-- make table that has delta change, most recent and second most recent
+    local items_delta = {}
+    for k_itemname,_ in pairs(CV_item_groups) do
+        local val_change_start = PlayerData_Get_Item_Entry_I(self, "item_ph", -1).item_tracker_score
+        local val_change_end = PlayerData_Get_Item_Entry_I(self, "item_ph").item_tracker_score
+        local val_delta = val_change_end - val_change_start
+        local percent_delta = (val_delta/val_change_start)
+        items_delta[k_itemname] = percent_delta
+    end
+
+	-- make function to get text descriptions of change
+	local function func_get_delta_text(percent_delta)
+
+		local magnitude_text
+
+		if percent_delta > 0 then
+			magnitude_text = "Increased"
+		elseif percent_delta < 0 then
+			magnitude_text = "Decreased"
+		else
+			magnitude_text = "Remained Relatively Stable"
+		end
+
+		return magnitude_text
+
+	end
+
+
+	--#TODO also add summary debrief after clicking on items in each stage 
+	--   no extra HUD screen with outcome question since it takes up too much space and player needs to be able to see things
+	--   (Decision Outcome Summary: Decision: CO2 emissions or Nutrient Pollution: Ocean Acidity: Ocean Life Health: Your Success: )
+	--     integrate that if levels already as bad or as good as possible, too
+	--   'Click 'Continue' to move to next decision'
+	-- add message scroll back (just a link to a PDF page with notes all written out, and add this to message along with link at bottom to click to open page )
+
+    local txt_ph = "Change in Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)
+
+    -- ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
+    local txt_ocean_life = "Change in Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
+
+    -- human
+    local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.player_data_tbl.character_role_key))..": "
+    local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
+
+    local text_tbl = {
+        txt_ph,
+		"",
+        txt_ocean_life,
+		"",
+		txt_your_success,
+		n
+    }
+
+    return table.concat(text_tbl, n)
+
+end
+
 local function DynamicText_FinalDebrief(self)
 
+	-- get dynamic text for final debrief
+
     local n = "\n"
+	local indent = "  "
 
     -- make table that has all final - initial values for all items
     local items_delta = {}
@@ -694,6 +761,7 @@ local function DynamicText_FinalDebrief(self)
         items_delta[k_itemname] = percent_delta
     end
 
+	-- make function to get text descriptions of change
     local function func_get_delta_text(percent_delta, special_acidity_case)
 
         -- get net change 
@@ -743,7 +811,6 @@ local function DynamicText_FinalDebrief(self)
     end
 
     -- pH
-	local indent = "  "
 	--local txt_co2 = "Average Annual Carbon Dioxide Emissions: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
     local txt_ph = "Average Annual Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)..n..indent..func_get_delta_text(items_delta.item_ph, true)
@@ -808,8 +875,10 @@ local function TranslateHelperText(self, hashed_text_key)
 
 	if hashed_text_key == HSH.helper_outcome_final_debrief then
 		return DynamicText_FinalDebrief(self), "Outcome Summary"
+	elseif hashed_text_key == HSH.helper_outcome_decision_summary then
+		return DynamicText_DecisionSummary(self), "Decision Summary"
 	else
-		return ""
+		return nil, nil
 	end
 
 end
@@ -2253,10 +2322,18 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 	elseif stage_type == st.class_new_information then
 		-- setup new information
-		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
+		local popup_text_body, pop_textbody_isdynamic = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
+		local popup_text_title
 		local run_sizer = true
 		local reset_values = true
-		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
+
+		if pop_textbody_isdynamic then
+			popup_text_body, popup_text_title = TranslateHelperText(self, popup_text_body)
+		else
+			popup_text_title = "New Information"
+		end
+
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title)
 
 
 	elseif stage_type == st.class_observe_outcomes then

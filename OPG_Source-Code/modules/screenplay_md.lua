@@ -104,20 +104,49 @@ STR.CV = {
         "\n\nLet's observe how that decision affects our ocean scene. \n\n\n",
     },
 
-    debrief_decision_click = {
-        --"The effects of our decision are underway ..." 
-        "Now let's measure and record the status of each group in our data tracker. Click 'Continue' then click on a member of each group to measure it. ",
-    },
-
-    dynamic_text_updater = {
-        outcome_final_debrief = HSH.helper_outcome_final_debrief
-    },
-
     hint_text_defaults = {
         hint_lower_emissions = {
             "Making energy efficent decisions will help reduce emissions of carbon dioxide gas, which will help decrease ocean acidification. "
         }
-    }
+    },
+
+    oa_outcome_observe_tbl = {
+
+        goal_completed_type = STR.CV.goal_completed_types.class_observe_outcomes,
+        run_swimmer_reset_before_oa_outcome = true,
+        goal_text = "Observe changes to ocean life."
+
+    },
+
+    oa_outcome_record_tbl = {
+
+        goal_completed_type = STR.CV.goal_completed_types.class_click_items,
+        goal_text = "Document how each ocean group has changed following your decision.",
+        display_text = "Let's document and record the status of each group following your newest decision. Remember, click 'Continue' then click on a member of each group to measure it. ",
+        show_hud_data_popup = true,
+        allow_duplicate_clicks = true,
+        enable_item_in_data_hud_onclick = false,
+        enable_goto_in_data_hud_onclick = false,
+        debrief_text = {
+            "",
+            item_ph = "",
+            item_plankton = "",
+            item_coral = "",
+            item_mollusks = "",
+            item_fish = "",
+            item_crustaceans = "",
+            item_humans = ""
+        }
+
+    },
+
+    oa_outcome_summary_tbl = {
+
+        goal_text = "Review summary of outcomes from your decision.",
+        displaytext_is_dynamic = true,
+        display_text = HSH.helper_outcome_decision_summary,
+
+    },
 
 }
 
@@ -424,7 +453,7 @@ STR.Screenplay = {
         user_lesson_16b = {
             goal_completed_type = STR.CV.goal_completed_types.class_observe_outcomes,
             run_swimmer_reset_before_oa_outcome = false,
-            goal_text = "Observe changes to ocean life.",
+            goal_text = STR.CV.oa_outcome_view_goal_text,
         },
 
         -- Show animation of determinantal effects 
@@ -438,8 +467,8 @@ STR.Screenplay = {
 
         user_lesson_17 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
-            goal_text = "Examine how each ocean group has changed under more acidic conditions in our ocean scene.",
-            display_text = "Identify how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. \n\n\n",
+            goal_text = "Document how each ocean group has changed under more acidic conditions in our ocean scene.",
+            display_text = "Document how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. \n\n\n",
             show_hud_data_popup = true,
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = false,
@@ -915,7 +944,10 @@ STR.Screenplay = {
         },
         --]]
 
-        decision_role_01a = { -- Personal CO2 Reduction
+        -- OVERALL: stages consist of 1) view timer, 2) click items, then 3) popup with summary
+
+        -- Personal CO2 Reduction
+        decision_role_01a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -989,7 +1021,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_02a = { -- Biologic Connection I (phytoplankton)
+        decision_role_01b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_01c = STR.CV.oa_outcome_record_tbl,
+        decision_role_01d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Biologic Connection I (phytoplankton)
+        decision_role_02a = { 
             question_prompt = {
                 "",
                 role_captain = {
@@ -1064,7 +1102,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_03a = { -- Personal Nutrient Pollution Reduction
+        decision_role_02b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_02c = STR.CV.oa_outcome_record_tbl,
+        decision_role_02d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Personal Nutrient Pollution Reduction
+        decision_role_03a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -1111,7 +1155,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_04a = { -- Biologic Connection II (reef)
+        decision_role_03b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_03c = STR.CV.oa_outcome_record_tbl,
+        decision_role_03d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Biologic Connection II (reef)
+        decision_role_04a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -1208,7 +1258,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_05a = { -- Partnerships and Community I (city council for citizens)
+        decision_role_04b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_04c = STR.CV.oa_outcome_record_tbl,
+        decision_role_04d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Partnerships and Community I (city council for citizens)
+        decision_role_05a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -1255,7 +1311,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_06a = { -- Partnerships and Community II (farmer friends)
+        decision_role_05b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_05c = STR.CV.oa_outcome_record_tbl,
+        decision_role_05d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Partnerships and Community II (farmer friends)
+        decision_role_06a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -1302,7 +1364,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_07a = { -- Community Education I (community members water use)
+        decision_role_06b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_06c = STR.CV.oa_outcome_record_tbl,
+        decision_role_06d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Community Education I (community members water use)
+        decision_role_07a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -1349,7 +1417,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_08a = { -- Partnerships and Community III (city council for businesses)
+        decision_role_07b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_07c = STR.CV.oa_outcome_record_tbl,
+        decision_role_07d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Partnerships and Community III (city council for businesses)
+        decision_role_08a = { 
             question_prompt = {
                 "",
                 role_captain = {
@@ -1396,7 +1470,13 @@ STR.Screenplay = {
             },
         },
 
-        decision_role_09a = { -- Community Education II (community members transportation use)
+        decision_role_08b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_08c = STR.CV.oa_outcome_record_tbl,
+        decision_role_08d = STR.CV.oa_outcome_summary_tbl,
+
+
+        -- Community Education II (community members transportation use)
+        decision_role_09a = { 
             question_prompt = {
                 "",
                 role_captain = {
@@ -1443,6 +1523,11 @@ STR.Screenplay = {
             },
         },
 
+        decision_role_09b = STR.CV.oa_outcome_observe_tbl,
+        decision_role_09c = STR.CV.oa_outcome_record_tbl,
+        decision_role_09d = STR.CV.oa_outcome_summary_tbl,
+
+
     },
 
     s06_new_information_end = {
@@ -1474,7 +1559,7 @@ STR.Screenplay = {
         user_lesson_21a = {
             goal_text = "Review outcomes of your decisions. ",
             display_text = "You have completed your work! Let's analyze the final health of each group of life in our ocean scene. ",
-            debrief_text = STR.CV.dynamic_text_updater.outcome_final_debrief,
+            debrief_text = HSH.helper_outcome_final_debrief,
             debrief_is_dynamic = true,
             extra_text = nil
         },
@@ -1506,7 +1591,7 @@ STR.Screenplay = {
                         "Review the outcomes of your decisions again. After reviewing your outcomes you will be returned to this option screen. "
                     },
                     debrief_text = {
-                        STR.CV.dynamic_text_updater.outcome_final_debrief
+                        HSH.helper_outcome_final_debrief
                     },
                     debrief_is_dynamic = true,
                     repeat_question_decision = true,
@@ -1606,10 +1691,12 @@ function STR:Get_NewInfo_Text_Body(stage_key, substage_key)
     -- gets body text to display
 
     if not self:ValidCheck(stage_key, substage_key) then
-        return nil
+        return nil, nil
     end
 
-    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].display_text)
+    local info = self.Screenplay[stage_key][substage_key]
+
+    return self:GetString_from_Tbl_or_Value(info.display_text), info.displaytext_is_dynamic
 
 end
 
@@ -1618,7 +1705,7 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
     -- gets body text to display
 
     if not self:ValidCheck(stage_key, substage_key) then
-        return nil
+        return nil, nil
     end
 
     local info = self.Screenplay[stage_key][substage_key]

@@ -57,7 +57,8 @@ local HASH = {
     msg_builtin_set_timestep = hash("set_time_step"),
 
     -- other 
-    helper_outcome_final_debrief = hash("helper_outcome_final_debrief")
+    helper_outcome_final_debrief = hash("helper_outcome_final_debrief"),
+    helper_outcome_decision_summary = hash("helper_outcome_decision_summary")
 
 }
 
