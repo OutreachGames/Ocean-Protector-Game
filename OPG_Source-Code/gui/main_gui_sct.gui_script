@@ -718,7 +718,7 @@ local function DynamicText_DecisionSummary(self)
 	--#TODO also add summary debrief after clicking on items in each stage 
 	--   no extra HUD screen with outcome question since it takes up too much space and player needs to be able to see things
 	--   (Decision Outcome Summary: Decision: CO2 emissions or Nutrient Pollution: Ocean Acidity: Ocean Life Health: Your Success: )
-	--     integrate that if levels already as bad or as good as possible, too
+	--     integrate that if levels already as bad or as good as possible, too? thought we want to match graphs, too
 	--   'Click 'Continue' to move to next decision'
 	-- add message scroll back (just a link to a PDF page with notes all written out, and add this to message along with link at bottom to click to open page )
 
@@ -732,12 +732,15 @@ local function DynamicText_DecisionSummary(self)
     local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
 
     local text_tbl = {
+		"Summary of outcomes from your decision:",
+		n,
         txt_ph,
 		"",
         txt_ocean_life,
 		"",
 		txt_your_success,
-		n
+		n,
+		"When ready, click 'Continue' to move on."
     }
 
     return table.concat(text_tbl, n)
