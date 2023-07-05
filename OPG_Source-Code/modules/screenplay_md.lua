@@ -15,6 +15,13 @@ local CV_Delta_Up = 0.06
 local CV_Delta_Zero = 0
 local CV_Delta_Down = -0.04
 
+local CV_goal_types = {
+    new_information = 1,
+    decisison = 2,
+    click_items = 3,
+    observe_outcomes = 4
+}
+
 -- module 
 local STR = {}
 
@@ -94,10 +101,10 @@ STR.CV = {
     },
 
     goal_completed_types = {
-        class_new_information = 1,
-        class_decisison = 2,
-        class_click_items = 3,
-        class_observe_outcomes = 4
+        class_new_information = CV_goal_types.new_information,
+        class_decisison = CV_goal_types.decisison,
+        class_click_items = CV_goal_types.new_information,
+        class_observe_outcomes = CV_goal_types.observe_outcomes
     },
 
     debrief_decision_view = {
@@ -113,7 +120,7 @@ STR.CV = {
 
     oa_outcome_observe_tbl = {
 
-        goal_completed_type = STR.CV.goal_completed_types.class_observe_outcomes,
+        goal_completed_type = CV_goal_types.observe_outcomes,
         run_swimmer_reset_before_oa_outcome = true,
         goal_text = "Observe changes to ocean life."
 
@@ -121,7 +128,7 @@ STR.CV = {
 
     oa_outcome_record_tbl = {
 
-        goal_completed_type = STR.CV.goal_completed_types.class_click_items,
+        goal_completed_type = CV_goal_types.observe_outcomes,
         goal_text = "Document how each ocean group has changed following your decision.",
         display_text = "Let's document and record the status of each group following your newest decision. Remember, click 'Continue' then click on a member of each group to measure it. ",
         show_hud_data_popup = true,

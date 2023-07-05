@@ -2006,7 +2006,10 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_begining)
 		special_setup_item_boat_present = false,
 		special_setup_item_buoy_present = false,
 		most_recent_decision_choice_key = "",
-		decision_data_tbl = {},
+		-- set first and second value as dummy entry so it lines up with score tracker
+		-- b/c decision trackers are only added if player decision was made, 
+		-- and first entry in health trackers are full health and initial negative health
+		decision_data_tbl = {{}, {}},
 		item_data_tbl = {},
 		item_hud_status = {}
 	}
@@ -2022,12 +2025,6 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_begining)
 
 		PlayerData_UpdateHUDTracker(self, k_itemname, false, false)
 	end
-
-	-- set first and second value as dummy entry so it lines up with score tracker
-	-- b/c decision trackers are only added if player decision was made, 
-	-- and first entry in health trackers are full health and initial negative health
-	PlayerData_UpdateDecisionTracker(self)
-	PlayerData_UpdateDecisionTracker(self)
 
 	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
 	-- the init function initializes the plot and data screens, 
