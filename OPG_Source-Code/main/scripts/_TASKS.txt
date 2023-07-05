@@ -10,17 +10,6 @@
     --   for example, coastal acidification close up then shown in ocean scene
     --   for example, include diagram of CO2 mixing with ocean and increasing acidity, then also show in ocean scene
 
-    -- inject view items and click items after each decision
-    --   in other words add stages after each decision to say "now lets view how this looks in our ocean scene"
-    --   stages consist of 1) view timer, 2) click items, then 3) popup with summary
-
-    -- also add summary debrief after clicking on items in each stage 
-    --   no extra HUD screen with outcome question since it takes up too much space and player needs to be able to see things
-    --   (Decision Outcome Summary: Decision: CO2 emissions or Nutrient Pollution: Ocean Acidity: Ocean Life Health: Your Success: )
-    --     integrate that if levels already as bad or as good as possible, too
-    --   'Click 'Continue' to move to next decision'
-    -- add message scroll back (just a link to a PDF page with notes all written out, and add this to message along with link at bottom to click to open page )
-
     -- maybe at last decision it tallies up all decisions and if all correct it sets to highest? (just as failsafe to ensure players can get max)?
 
     -- add save mechanic (ie fast-forward to i key method with choices saved) along with hooking up load button and adding 4 digit code

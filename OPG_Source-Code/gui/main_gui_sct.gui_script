@@ -143,12 +143,6 @@ local function PlayerData_Set_Character(self, role_key)
 
 end
 
-local function PlayerData_Set_Special(self, data_key, set_value)
-
-	self.player_data_tbl[data_key] = set_value
-
-end
-
 local function PlayerData_Update_SumBestChoices(self, value, override)
 
 	value = value or 1
@@ -162,7 +156,7 @@ end
 
 local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 
-	-- #TODO add save to file here
+	-- #TODO add 'self.player_data_tbl' save to file here
 	-- so game saves after each stage
 
 	new_ikey = new_ikey or 1
@@ -193,9 +187,47 @@ local function PlayerData_IsValid(self, opt_id_tag)
 
 end
 
-local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override_instead_insert)
+local function PlayerData_UpdateDecisionTracker(self, stage_key, substage_key, choice_key, override_instead_insert)
+
+	-- adds an i-based entry to player save table for given decision choice
+	-- needs to match up with item tracker scores (self.player_data_tbl.item_data_tbl)
+
+	if not PlayerData_IsValid(self, "Player Data Update Score Tracker") then
+		return
+	end
+
+	local num_items = #self.player_data_tbl.decision_data_tbl
+	local new_entry_i_index = num_items
+
+	-- setup defaults
+	local current_stage_key, current_substage_key = Get_Current_Stage_and_Substage(self)
+	local current_choice_key = self.player_data_tbl.most_recent_decision_choice_key
+
+	stage_key = stage_key or current_stage_key
+	substage_key = substage_key or current_substage_key
+	choice_key = choice_key or current_choice_key
+
+	-- set or override values
+	if override_instead_insert then
+		new_entry_i_index = num_items
+		self.player_data_tbl.decision_data_tbl[new_entry_i_index].selection_stage_key = stage_key
+		self.player_data_tbl.decision_data_tbl[new_entry_i_index].selection_substage_key = substage_key
+		self.player_data_tbl.decision_data_tbl[new_entry_i_index].selection_choice_key = choice_key
+	else
+		new_entry_i_index = num_items + 1
+		self.player_data_tbl.decision_data_tbl[new_entry_i_index] = {
+			selection_stage_key = stage_key,
+			selection_substage_key = substage_key,
+			selection_choice_key = choice_key
+		}
+	end
+
+end
+
+local function PlayerData_UpdateScoreTracker(self, item_key, delta_value, new_value, override_instead_insert)
 
 	-- adds an i-based entry to player save table for given item key 
+	-- needs to match up with decision tracker scores (self.player_data_tbl.decision_data_tbl)
 
 	if not PlayerData_IsValid(self, "Player Data Update Score Tracker") then
 		return
@@ -207,12 +239,13 @@ local function PlayerData_UpdateScoreTracker(self, item_key, new_value, override
 	if override_instead_insert then
 		-- override current value instead of insert new one
 		new_entry_i_index = num_items
+		self.player_data_tbl.item_data_tbl[item_key][new_entry_i_index].item_tracker_delta = new_value
 		self.player_data_tbl.item_data_tbl[item_key][new_entry_i_index].item_tracker_score = new_value
 		--print("TRK: overriding player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_i_index).."> \n")
 	else
 		-- insert new value
 		new_entry_i_index = num_items + 1
-		self.player_data_tbl.item_data_tbl[item_key][new_entry_i_index] = {item_tracker_score = new_value}
+		self.player_data_tbl.item_data_tbl[item_key][new_entry_i_index] = {item_tracker_delta = delta_value, item_tracker_score = new_value}
 		--print("TRK: adding new player data entry for item key <"..item_key.."> with value <"..tostring(new_value).."> and number index of <"..tostring(new_entry_i_index).."> \n")
 	end
 
@@ -636,7 +669,7 @@ local function QuestionScores_GetFinalPercent(self)
 
 end
 
-local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert, was_best_choice)
+local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert, was_best_choice, was_player_choice)
 
 	-- takes a table with item keys and new delta scores and updates item scores in player save table accordingly
 
@@ -650,6 +683,11 @@ local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert
 		PlayerData_Update_SumBestChoices(self)
 	end
 
+	-- save to decision tracker if needed
+	if was_player_choice then
+		PlayerData_UpdateDecisionTracker(self, nil, nil, nil, override_instead_insert)
+	end
+
 	-- do this by looping through things we can track and checking if they match what is in table with same string key
 	for k_itemname,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
 		-- get previous entry
@@ -657,21 +695,21 @@ local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert
 		local previous_score = previous_entry.item_tracker_score or 0
 
 		-- get new delta by matching our known trackers with the score update table provided to function
-		local update_score = score_tbl[k_itemname] or score_tbl[1]
+		local delta_score = score_tbl[k_itemname] or score_tbl[1]
 
-		--print("Update score for new entry for "..tostring(k_itemname).." is <"..tostring(update_score).."> \n")
+		--print("Update score for new entry for "..tostring(k_itemname).." is <"..tostring(delta_score).."> \n")
 
 		-- only update if not nil
 		-- remember, do not return or break since it breaks the loop matching
-		if update_score ~= nil then
+		if delta_score ~= nil then
 			-- new value is previous + delta 
 			-- clamp new entry between 0 and 1 so that next entry might have a visible positive effect
 			-- IE if we did not clamp this may happened:
 			--   new value gets -1.2 so that even a positive action next time does not show any benefit
 			--   also visible bars are already clamped between 0 and 1 anyway
-			local new_value = EXT:math_clamp(previous_score + update_score, 0, 1)
+			local new_value = EXT:math_clamp(previous_score + delta_score, 0, 1)
 
-			PlayerData_UpdateScoreTracker(self, k_itemname, new_value, override_instead_insert)
+			PlayerData_UpdateScoreTracker(self, k_itemname, delta_score, new_value, override_instead_insert)
 
 			-- update hud data trackers done on click
 		end
@@ -690,11 +728,7 @@ local function DynamicText_DecisionSummary(self)
 	-- make table that has delta change, most recent and second most recent
     local items_delta = {}
     for k_itemname,_ in pairs(CV_item_groups) do
-        local val_change_start = PlayerData_Get_Item_Entry_I(self, "item_ph", -1).item_tracker_score
-        local val_change_end = PlayerData_Get_Item_Entry_I(self, "item_ph").item_tracker_score
-        local val_delta = val_change_end - val_change_start
-        local percent_delta = (val_delta/val_change_start)
-        items_delta[k_itemname] = percent_delta
+        items_delta[k_itemname] = PlayerData_Get_Item_Entry_I(self, k_itemname).item_tracker_delta
     end
 
 	-- make function to get text descriptions of change
@@ -715,24 +749,45 @@ local function DynamicText_DecisionSummary(self)
 	end
 
 
-	--#TODO also add summary debrief after clicking on items in each stage 
-	--   no extra HUD screen with outcome question since it takes up too much space and player needs to be able to see things
-	--   (Decision Outcome Summary: Decision: CO2 emissions or Nutrient Pollution: Ocean Acidity: Ocean Life Health: Your Success: )
-	--     integrate that if levels already as bad or as good as possible, too? thought we want to match graphs, too
-	--   'Click 'Continue' to move to next decision'
-	-- add message scroll back (just a link to a PDF page with notes all written out, and add this to message along with link at bottom to click to open page )
+	-- add summary debrief after clicking on items in each stage 
+	-- no extra HUD screen with outcome question since it takes up too much space and player needs to be able to see things
+	-- add message scroll back?
+	-- for example, just a link to a PDF page with notes all written out, 
+	-- and add this to message along with link at bottom to click to open page
 
+	-- failsafe check for list length, by the time player decisions have rolled around 
+	-- these should be equal in length and stay that way
+	local length_decision_items = #self.player_data_tbl.decision_data_tbl
+	local length_ph_trck = #self.player_data_tbl.item_data_tbl.item_ph
+	if length_decision_items ~= length_ph_trck then
+		print("Error: length_decision_items <"..tostring(length_decision_items).."> is not eual to length_ph_trck <"..tostring(length_ph_trck)..">\n")
+	end
+
+	-- get text for decision reminder
+	local decision_info = self.player_data_tbl.decision_data_tbl[length_decision_items]
+	local stage_key = decision_info.selection_stage_key
+	local substage_key = decision_info.selection_substage_key
+	local choice_key = decision_info.selection_choice_key
+	local character_role = self.player_data_tbl.character_role_key
+
+	local decision_debrief = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_role, choice_key, true)
+	local decision_reminder = "Reminder of your decision:"..n..decision_debrief
+
+	-- get text for pH change
     local txt_ph = "Change in Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
-    -- ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
+    -- get text for ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
     local txt_ocean_life = "Change in Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
-    -- human
-    local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.player_data_tbl.character_role_key))..": "
+    -- get text for human
+    local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(character_role))..": "
     local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
 
+	-- compile
     local text_tbl = {
-		"Summary of outcomes from your decision:",
+		decision_reminder,
+		n,
+		" You have observed and documented the effects of this decision, which are summarized below. ",
 		n,
         txt_ph,
 		"",
@@ -813,19 +868,22 @@ local function DynamicText_FinalDebrief(self)
 
     end
 
-    -- pH
-	--local txt_co2 = "Average Annual Carbon Dioxide Emissions: "..n..indent..func_get_delta_text(items_delta.item_ph)
+	-- get text for co2
+	-- #TODO add or keep excluded? (uncomment in compile table if adding back in)
+	-- already mention in recommendations how to reduce...
+	local txt_co2 = "Average Annual Carbon Dioxide Emmissions and Nutrient Pollution:"..n..indent..func_get_delta_text(-items_delta.item_ph)
 
+	-- get text for pH
     local txt_ph = "Average Annual Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)..n..indent..func_get_delta_text(items_delta.item_ph, true)
 
-    -- ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
+    -- get text for ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
     local txt_ocean_life = "Average Health of Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
-    -- human
+    -- get text for human
     local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.player_data_tbl.character_role_key))..": "
     local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
 
-    -- recommendation text
+    -- get text for recommendation
     local final_score = QuestionScores_GetFinalPercent(self)
     local txt_recomendations
 
@@ -834,37 +892,40 @@ local function DynamicText_FinalDebrief(self)
     local try_again_txt
 	if not self.final_debrief_shown then
 		self.final_debrief_shown = true
-		try_again_txt = "\n\nYou will soon have an option to rerun the game, too. "
+		try_again_txt = "You will soon have an option to rerun the game, too. "
 	else
-		try_again_txt = "\n\nDon't forget, you can rerun the game, too. "
+		try_again_txt = "Don't forget, you can rerun the game, too. "
 	end
 
     -- recall that many questions have 0 change, so while they may not help as much they also do not hinder as much
     if final_score == 100 then
-        txt_recomendations = "Fantastic work with the questions. Every choice you made "..good_suffix.." As you have shown,"..reminder_suffix..try_again_txt
+        txt_recomendations = "Fantastic work with the questions. Every choice you made "..good_suffix.." As you have shown,"..reminder_suffix
     elseif final_score > 70 then
-        txt_recomendations = "Very good work with the questions. Most of the choices you made "..good_suffix.." A few of the other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix..try_again_txt
+        txt_recomendations = "Very good work with the questions. Most of the choices you made "..good_suffix.." A few of the other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix
     elseif final_score > 40 then
-        txt_recomendations = "Good work with the questions. Many of the choices you made "..good_suffix.." Other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix..try_again_txt
+        txt_recomendations = "Good work with the questions. Many of the choices you made "..good_suffix.." Other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix
     else
 		--"It can be tricky to know what the best choice might be for each question. " --might be too much reading
-        txt_recomendations = "Good effort with the questions. Even if ocean health and your character goals may not have improved, it is still very useful to learn about how different choices lead to different outcomes. Remember,"..reminder_suffix..try_again_txt
+        txt_recomendations = "Good effort with the questions. Even if ocean health and your character goals may not have improved, it is still very useful to learn about how different choices lead to different outcomes. Remember,"..reminder_suffix
     end
 
+	-- compile
     local text_tbl = {
-        --"Summary of Decision Outcomes:",
+        --"Summary of Decision Outcomes:", -- in HUD frame title now
         --"",
+		txt_recomendations,
+		"",
         "Percentage of decisions with most optimal choices: "..n..indent..string.format("%.0f", (final_score*100)).."% "..n,
         -- ^possibly remove/comment out?
         --"Summary of changes over time:",
+		--txt_co2, "",
         txt_ph,
 		"",
         txt_ocean_life,
 		"",
         txt_your_success,
-        n,
-        "Recomendations: ",
-		txt_recomendations
+		"",
+		try_again_txt
     }
 
     return table.concat(text_tbl, n)
@@ -947,7 +1008,7 @@ local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
 	self.hud_goals_dynamic.screen_isactive = enabled_setting
 
 	if enabled_setting and not self.player_data_tbl.special_setup_goals_hud_enabled then
-		PlayerData_Set_Special(self, "special_setup_goals_hud_enabled", true)
+		self.player_data_tbl.special_setup_goals_hud_enabled = true
 	end
 
 end
@@ -1168,7 +1229,7 @@ local function Screen_Popup_Input(self, action_id, action)
 				-- if debrief of new_info then run new_info completion function if any exists before just progressing. 
 				-- this is b/c the event type we came from to this stage 
 				-- is not a new_info and already had it's outcome func ran 
-				--#TODO update here with additional types, might not always want to run progress
+				-- update here with additional types as needed, might not always want to run progress
 				local progress_to_next_stage = false
 
 				if Loop_CompletionType_is_Primary(self, new_info_loop_type) then
@@ -1442,9 +1503,10 @@ local function Screen_Decision_Input(self, action_id, action)
 
 		--^ need to have tracker as off so if plot checks it properly knows what the status is
 		-- if plot thinks decisions is still on it can re-enable decision 
-		--#TODO save the values to a master table before clearing them!
+		-- save the values to a master table before clearing them!
 		local i = self.hud_decision_dynamic.goo_option_selected
 		local answer_string_key = self.hud_decision_dynamic.answer_choice_keys[i]
+		self.player_data_tbl.most_recent_decision_choice_key = answer_string_key
 
 		local run_sizer = false
 		local reset_values = true
@@ -1744,7 +1806,7 @@ local function Screen_Data_Reset(self, enabled_setting, disable_items_for_starti
 	Screen_Data_TrackerUpdate(self)
 
 	if enabled_setting and not self.player_data_tbl.special_setup_data_hud_enabled then
-		PlayerData_Set_Special(self, "special_setup_data_hud_enabled", true)
+		self.player_data_tbl.special_setup_data_hud_enabled = true
 	end
 
 end
@@ -1943,6 +2005,8 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_begining)
 		special_setup_data_hud_enabled = false,
 		special_setup_item_boat_present = false,
 		special_setup_item_buoy_present = false,
+		most_recent_decision_choice_key = "",
+		decision_data_tbl = {},
 		item_data_tbl = {},
 		item_hud_status = {}
 	}
@@ -1954,11 +2018,16 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_begining)
 		self.player_data_tbl.item_data_tbl[k_itemname] = {}
 		self.player_data_tbl.item_hud_status[k_itemname] = {}
 
-		PlayerData_UpdateScoreTracker(self, k_itemname, 1.0)
+		PlayerData_UpdateScoreTracker(self, k_itemname, 1.0, 1.0)
 
 		PlayerData_UpdateHUDTracker(self, k_itemname, false, false)
-
 	end
+
+	-- set first and second value as dummy entry so it lines up with score tracker
+	-- b/c decision trackers are only added if player decision was made, 
+	-- and first entry in health trackers are full health and initial negative health
+	PlayerData_UpdateDecisionTracker(self)
+	PlayerData_UpdateDecisionTracker(self)
 
 	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
 	-- the init function initializes the plot and data screens, 
@@ -2532,9 +2601,9 @@ local function On_SpecialAction(self, special_action_name)
 	if special_action_name == "special_setup_first_boat" or special_action_name == "special_setup_pH_buoy" then
 		msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = special_action_name})
 		if special_action_name == "special_setup_first_boat" then
-			PlayerData_Set_Special(self, "special_setup_item_boat_present", true)
+			self.player_data_tbl.special_setup_item_boat_present = true
 		elseif special_action_name == "special_setup_pH_buoy" then
-			PlayerData_Set_Special(self, "special_setup_item_buoy_present", true)
+			self.player_data_tbl.special_setup_item_buoy_present = true
 		end
 	elseif special_action_name == "special_setup_coastal_oa_1" then
 		local is_raining = true
@@ -2544,7 +2613,7 @@ local function On_SpecialAction(self, special_action_name)
 		timer.delay(5, false, GamePause_On)
 	elseif special_action_name == "special_setup_start_goals_gauge" then
 		-- function 'On Game Progress' checks this value then loads goals if it is on
-		PlayerData_Set_Special(self, "special_setup_goals_hud_enabled", true)
+		self.player_data_tbl.special_setup_goals_hud_enabled = true
 	end
 
 end
@@ -2696,7 +2765,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_set_player_character_role then
 		PlayerData_Set_Character(self, message.minfo_role_name)
 	elseif message_id == HSH.msg_update_item_value then
-		PlayerData_RunScoreInput(self, message.minfo_item_score_update_tbl, message.minfo_overrides_instead_of_inserts, message.minfo_was_best_choice)
+		PlayerData_RunScoreInput(self, message.minfo_item_score_update_tbl, message.minfo_overrides_instead_of_inserts, message.minfo_was_best_choice, message.minfo_was_player_choice)
 	elseif message_id == HSH.msg_request_special_case_action then
 		On_SpecialAction(self, message.minfo_special_case_key)
 	elseif message_id == HSH.msg_report_oa_outcomes_done then
