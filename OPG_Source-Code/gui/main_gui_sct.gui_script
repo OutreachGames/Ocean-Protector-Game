@@ -869,8 +869,8 @@ local function DynamicText_FinalDebrief(self)
     end
 
 	-- get text for co2
-	-- #TODO add or keep excluded? (uncomment in compile table if adding back in)
-	-- already mention in recommendations how to reduce...
+	-- add or keep excluded? (uncomment in compile table if adding back in)
+	-- already mention in recommendations how to reduce, so keep out for now?...
 	local txt_co2 = "Average Annual Carbon Dioxide Emmissions and Nutrient Pollution:"..n..indent..func_get_delta_text(-items_delta.item_ph)
 
 	-- get text for pH
@@ -2325,7 +2325,8 @@ local function Close_All_Center_Screens(self)
 		Screen_Plot_Reset(self, enabled_status, run_sizing)
 	end
 
-	-- #TODO minimize data screen?
+	-- data screen side bar?
+	-- leave open for now, but close when running OA effects?
 
 end
 
@@ -2437,6 +2438,10 @@ local function GameLogic_Progress(self, i_stage_addition)
 					}
 				end
 			end
+			-- #TODO hide data screen?
+			-- then open back up after OA done? 
+			-- or just do not bother and assume player will set how they want
+
 			-- send message to start
 			msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, oa_outcome_tbl)
 		end
@@ -2572,15 +2577,6 @@ local function GamePause_Off(self)
 
 end
 
-local function GamePauseToggle_Input(self, action_id, action)
-
-	--#TODO remove when done testing
-	if action_id == HSH.control_down and action.released then
-		GamePauseToggle_Internal(self)
-	end
-
-end
-
 local function OceanScene_ChangeWeather(self, is_raining, wave_direction, run_coastal_oa_when_done)
 
 	msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_change_weather, {minfo_is_raining=is_raining, minfo_wave_direction=wave_direction, minfo_run_coastal_oa_too = run_coastal_oa_when_done})
@@ -2596,21 +2592,30 @@ end
 local function On_SpecialAction(self, special_action_name)
 
 	if special_action_name == "special_setup_first_boat" or special_action_name == "special_setup_pH_buoy" then
+
+		-- setup boat or buoy
 		msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = special_action_name})
 		if special_action_name == "special_setup_first_boat" then
 			self.player_data_tbl.special_setup_item_boat_present = true
 		elseif special_action_name == "special_setup_pH_buoy" then
 			self.player_data_tbl.special_setup_item_buoy_present = true
 		end
+
 	elseif special_action_name == "special_setup_coastal_oa_1" then
+
+		-- run coastal OA
 		local is_raining = true
 		local run_coastal_oa_when_done = true
 		OceanScene_ChangeWeather(self, is_raining, INFO:Get_BaseWave_Direction(), run_coastal_oa_when_done)
 		--start but then pause the game 
 		timer.delay(5, false, GamePause_On)
+
 	elseif special_action_name == "special_setup_start_goals_gauge" then
+
+		-- set goals
 		-- function 'On Game Progress' checks this value then loads goals if it is on
 		self.player_data_tbl.special_setup_goals_hud_enabled = true
+
 	end
 
 end
@@ -2624,9 +2629,13 @@ end
 
 local function GameHandleButtonInput(self, action_id, action)
 
-	--#TODO remove when done testing
+	-- testing controls and actions, currently early out since not using
 
-	if not action.released then return end
+	if not action.released or true then return end
+
+	if action_id == HSH.control_down and action.released then
+		GamePauseToggle_Internal(self)
+	end
 
 	--change weather
 	if action_id == HSH.control_right or action_id == HSH.control_left then
@@ -2786,6 +2795,5 @@ function on_input(self, action_id, action)
 	On_GO_Item_Clicked_Requested(self, action_id, action)
 
 	GameHandleButtonInput(self, action_id, action)
-	GamePauseToggle_Input(self, action_id, action)
 
 end
