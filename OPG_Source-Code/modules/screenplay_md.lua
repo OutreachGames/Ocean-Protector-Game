@@ -1621,7 +1621,7 @@ STR.Screenplay = {
                         "To learn more check out these great resources from NOAA! After reviewing your outcomes you will be returned to this option screen. "
                     },
                     debrief_text = {
-                        "Click this link to go to NOAA's site to lean more: "..n..n.."Note, this will open a new, separate web page. Click 'Continue' to go back to the end game options screen. "
+                        "Click this link to go to NOAA's site to lean more: https://oceanacidification.noaa.gov/"..n..n.."Note, this will open a new, separate web page. Click 'Continue' to go back to the end game options screen. "
                     }, --#TODO add NOAA link here
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
