@@ -520,7 +520,264 @@ STR.Screenplay = {
 
     },
 
+    s02_decisions_quiz = {
 
+        goal_text_default = {
+            "Work through review questions."
+        },
+
+        goal_completed_type_default = {
+            STR.CV.goal_completed_types.class_decisison
+        },
+
+        key_basename_default = "decision_quiz_",
+
+        decision_quiz_01 = {
+            question_prompt = { 
+                "Burning fossil fuels reduces large amounts of a gas called ____."
+            },
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "oxygen"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "carbon dioxide"
+                    },
+                    debrief_text = {
+                        "Correct! Burning fossil fuels releases very high amounts of carbon dioxide gas into the atmosphere."
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "ozone"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_4 = {
+                    display_text = {
+                        "helium"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
+        },
+
+        decision_quiz_02 = {
+            question_prompt = { 
+                "True or false? Burning fossil fuels leads to ocean acidification."
+            },
+            prevent_option_randomization = true,
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "True"
+                    },
+                    debrief_text = {
+                        "This is true. Burning fossil fuels releases carbon dioxide gas. Much of this gas is absorbed by our oceans, which triggers chemical changes that make the water more acidic."
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "False"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
+        },
+
+        decision_quiz_03 = {
+            question_prompt = { 
+                "In addition to burning fossil fuels, _____ can also cause the water in our oceans to become more acidic."
+            },
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "noise pollution"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "nutrient pollution"
+                    },
+                    debrief_text = {
+                        "Correct! Nutrient pollution can be caused by using too much fertilizer, dumping wastewater, and other sources. If this polluted water makes its way to the ocean and can cause a chain reaction that makes the ocean water near our coasts more acidic."
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "light pollution"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_4 = {
+                    display_text = {
+                        "gamma pollution"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
+        },
+
+        decision_quiz_04 = {
+            question_prompt = { 
+                "A decrease in the pH of water means the water becomes ________."
+            },
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "warmer"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "more acidic"
+                    },
+                    debrief_text = {
+                        "Correct! If pH of water decreases that shows the acidity of the water has increased."
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "less acidic"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_4 = {
+                    display_text = {
+                        "colder"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
+        },
+
+        decision_quiz_05 = {
+            question_prompt = { 
+                "Ocean acidification harms which of the following groups?"
+            },
+            prevent_option_randomization = true,
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "Plankton and Coral"
+                    },
+                    debrief_text = {
+                        "This is true, but there is a more correct answer, so try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "Mollusks and Crustaceans"
+                    },
+                    debrief_text = {
+                        "This is true, but there is a more correct answer, so try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "Fish and Humans"
+                    },
+                    debrief_text = {
+                        "This is true, but there is a more correct answer, so try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_4 = {
+                    display_text = {
+                        "All of the groups listed here."
+                    },
+                    debrief_text = {
+                        "Correct! Ocean acidification harms plant and animal life throughout the ocean, including humans. As humans we rely on our oceans for food, ways to make a living, and even medicines."
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
+        },
+
+        decision_quiz_06 = {
+            question_prompt = { 
+                "True or false? There are steps we can all take to reduce ocean acidification."
+            },
+            prevent_option_randomization = true,
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "True"
+                    },
+                    debrief_text = {
+                        "True! There are many steps each of us can take to help reduce ocean acidification. Continue with this program to make some of those decisions yourself!"
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+                user_choice_2 = {
+                    display_text = {
+                        "False"
+                    },
+                    debrief_text = {
+                        "Unfortunately that is not correct, but try again!"
+                    },
+                    repeat_question_decision = true,
+                    outcome_result_func = STR.CV.outcome_functions.option_empty
+                },
+            },
+        }
+
+    },
 
     s03_new_information_middle = {
 
