@@ -1793,9 +1793,9 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	local stage_done_ocean_pelagic
 
 	if show_highlighter then
-		stage_done_plankton_or_oa = 3
-		stage_done_ocean_benthic = 4
-		stage_done_ocean_pelagic = 5
+		stage_done_plankton_or_oa = 2
+		stage_done_ocean_benthic = 3
+		stage_done_ocean_pelagic = 4
 	else
 		stage_done_plankton_or_oa = 1
 		stage_done_ocean_benthic = 1
@@ -2088,7 +2088,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		-- return amount of extra time to wait (added to stage_done_ocean_pelagic)
 		if number_added > 0 then
 			-- wait for joins
-			return 6
+			return 4
 		elseif number_subtracted > 0 then
 			-- wait for decays
 			return 1

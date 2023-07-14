@@ -757,14 +757,15 @@ local function DynamicText_DecisionSummary(self)
 
 	-- failsafe check for list length, by the time player decisions have rolled around 
 	-- these should be equal in length and stay that way
-	local length_decision_items = #self.player_data_tbl.decision_data_tbl
+	local decision_tbl = self.player_data_tbl.decision_data_tbl
+	local length_decision_items = #decision_tbl
 	local length_ph_trck = #self.player_data_tbl.item_data_tbl.item_ph
 	if length_decision_items ~= length_ph_trck then
-		print("Error: length_decision_items <"..tostring(length_decision_items).."> is not eual to length_ph_trck <"..tostring(length_ph_trck)..">\n")
+		print("Error: length_decision_items <"..tostring(length_decision_items).."> is not equal to length_ph_trck <"..tostring(length_ph_trck)..">\n")
 	end
 
 	-- get text for decision reminder
-	local decision_info = self.player_data_tbl.decision_data_tbl[length_decision_items]
+	local decision_info = decision_tbl[length_decision_items]
 	local stage_key = decision_info.selection_stage_key
 	local substage_key = decision_info.selection_substage_key
 	local choice_key = decision_info.selection_choice_key
@@ -787,7 +788,7 @@ local function DynamicText_DecisionSummary(self)
     local text_tbl = {
 		decision_reminder,
 		n,
-		" You have observed and documented the effects of this decision, which are summarized below. ",
+		"You have observed and documented the effects of this decision, which are summarized below. ",
 		n,
         txt_ph,
 		"",
@@ -2014,10 +2015,10 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_begining)
 		special_setup_item_boat_present = false,
 		special_setup_item_buoy_present = false,
 		most_recent_decision_choice_key = "",
-		-- set first and second value as dummy entry so it lines up with score tracker
+		-- set first value as dummy entry so it lines up with score tracker
 		-- b/c decision trackers are only added if player decision was made, 
-		-- and first entry in health trackers are full health and initial negative health
-		decision_data_tbl = {{}, {}},
+		-- and first entry in health trackers are initial negative health
+		decision_data_tbl = {{}},
 		item_data_tbl = {},
 		item_hud_status = {}
 	}
