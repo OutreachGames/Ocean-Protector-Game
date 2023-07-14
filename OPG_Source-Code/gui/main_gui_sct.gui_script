@@ -2645,7 +2645,6 @@ end
 local function GameHandleButtonInput(self, action_id, action)
 
 	-- testing controls and actions, currently early out since not using
-
 	if not action.released or true then return end
 
 	if action_id == HSH.control_down and action.released then
