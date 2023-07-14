@@ -1424,8 +1424,8 @@ local function Boat_Change_Character(self, boat_subitem_name)
 	end
 
 	-- request new boat 
-	-- use subitem name instead of role so we do not need to 
-	--   require STR to use role to subitem converter
+	-- use subitem name instead of role so 
+	-- we do not need to require STR to use role to subitem converter
 	Spawn_Boat(self, boat_subitem_name)
 
 end
@@ -1509,11 +1509,19 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 	local function add_to_tbl(item_name, go_id, subitem_name)
 
-		match_sum = match_sum + 1
-		match_item_key[item_name] = true
+		-- only add it to take if the z value is higher or if distance is shorter
+		-- fine to just track all of them, not that expensive...?
 
-		--only add it to take if the z value is higher or if distance is shorter?
-		--fine to just track all of them, not that expensive...
+		local this_z_val = go.get_position(go_id).z
+		local prev_z_val = match_item_key[item_name] or -99
+		if this_z_val <= prev_z_val then
+			return
+		else
+			match_item_key[item_name] = this_z_val
+		end
+
+		-- add to table
+		match_sum = match_sum + 1
 
 		local pos = go.get_position(go_id)
 		match_id_tbl[match_sum] = {

@@ -978,7 +978,7 @@ local function Screen_Goals_Reset(self, enabled_setting, run_sizing, text)
 		local str_length = #shown_text
 
 		-- 220ish is base with 2 lines and 330ish is with 5 lines, 100/3
-		local line_per_extra_y = 28
+		local line_per_extra_y = 32
 		local min_frame_y = 220
 		local str_length_per_line = 15
 		local base_num_lines = 2
@@ -1767,6 +1767,14 @@ local function Screen_Plot_Input(self, action_id, action)
 		local run_sizer = false
 		Screen_Plot_Reset(self, false, run_sizer)
 
+		if Loop_CompletionType_is_Primary(self, STR.CV.goal_completed_types.class_click_items) then
+			if self.items_all_clicked then
+				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
+				STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+				msg.post(".", HSH.msg_request_game_progress)
+			end
+		end
+
 		--print("Exit Button was pressed")
 
 	end
@@ -2221,7 +2229,7 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 				valid_item_clicked = item_name
 				clicked_unique_tbl[item_name] = true
 
-				needs_clicked_item.item_was_clicked = true
+				self.items_that_need_clicked_list[item_name].item_was_clicked = true
 
 				if self.items_that_were_clicked_sum < self.items_that_need_clicked_sum then
 					self.items_that_were_clicked_sum = self.items_that_were_clicked_sum + 1
@@ -2239,7 +2247,7 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 				end
 			end
 		else
-			--not on needs clicked list 
+			-- not on the 'needs clicked' list 
 			not_allowed_click = item_name
 			clicked_unique_tbl[item_name] = true
 		end

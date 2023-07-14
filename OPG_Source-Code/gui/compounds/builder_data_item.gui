@@ -69,10 +69,11 @@ nodes {
   custom_type: 0
   enabled: true
   visible: false
+  material: ""
 }
 nodes {
   position {
-    x: 0.0
+    x: -10.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -135,10 +136,11 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
-    x: 208.0
+    x: 214.0
     y: 20.0
     z: 0.0
     w: 1.0
@@ -235,6 +237,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -336,6 +339,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -396,6 +400,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -455,6 +460,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: false
+  material: ""
 }
 nodes {
   position {
@@ -518,7 +524,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 254.0
+    x: 262.0
     y: 36.0
     z: 0.0
     w: 1.0
@@ -556,6 +562,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 layers {
   name: "gui_layer_below"

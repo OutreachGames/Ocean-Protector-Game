@@ -19,6 +19,7 @@ local CV_Default_Base_Scale = 0.9
 local CV_Logic_Type_Swimmer = 1
 local CV_Logic_Type_Static = 2
 local CV_Logic_Type_Micro = 3
+local CV_Logic_Type_Boat = 4
 local CV_Effect_Decomp_Dimensions = {x = 300, y = 80}
 local CV_Base_Wave_Direction = 1
 
@@ -463,9 +464,9 @@ INFO.item_info = {
                 subitem_guide = "Tour Success"
             },
             plot_helper_text = {
-                subitem_captain = "Remember: your fishing success relies on healthy ocean life",
-                subitem_ranger = "Remember: your success relies on keeping ocean life healthy",
-                subitem_guide = "Remember: your tour success relies on healthy ocean life"
+                subitem_captain = "Remember: fishing success relies on healthy ocean life",
+                subitem_ranger = "Remember: success relies on keeping ocean life healthy",
+                subitem_guide = "Remember: tour success relies on healthy ocean life"
             },
         },
         item_is_alive = true,
@@ -473,6 +474,7 @@ INFO.item_info = {
             subitem_ranger = {
                 spawn_list_key = "item_human__subitem_ranger",
                 spawn_coll_factory = "spawner_human_ranger#collectionfactory",
+                object_logic_type = CV_Logic_Type_Boat,
                 spawn_y_range = {204, 204},
                 spawn_x_min = RES.Boundary_X[1]-300,
                 spawn_z_base = 0,
@@ -481,6 +483,7 @@ INFO.item_info = {
             subitem_captain = {
                 spawn_list_key = "item_human__subitem_captain",
                 spawn_coll_factory = "spawner_human_captain#collectionfactory",
+                object_logic_type = CV_Logic_Type_Boat,
                 spawn_y_range = {204, 204},
                 spawn_x_min = RES.Boundary_X[1]-300,
                 spawn_z_base = 0,
@@ -489,6 +492,7 @@ INFO.item_info = {
             subitem_guide = {
                 spawn_list_key = "item_human__subitem_guide",
                 spawn_coll_factory = "spawner_human_guide#collectionfactory",
+                object_logic_type = CV_Logic_Type_Boat,
                 spawn_y_range = {204, 204},
                 spawn_x_min = RES.Boundary_X[1]-300,
                 spawn_z_base = 0,
