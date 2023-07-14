@@ -775,10 +775,10 @@ local function DynamicText_DecisionSummary(self)
 	local decision_reminder = "Reminder of your decision:"..n..decision_debrief
 
 	-- get text for pH change
-    local txt_ph = "Change in Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)
+    local txt_ph = "Change in Average Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
     -- get text for ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
-    local txt_ocean_life = "Change in Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
+    local txt_ocean_life = "Change in Health of Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
 
     -- get text for human
     local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(character_role))..": "
@@ -788,7 +788,7 @@ local function DynamicText_DecisionSummary(self)
     local text_tbl = {
 		decision_reminder,
 		n,
-		"You have observed and documented the effects of this decision, which are summarized below. ",
+		"You have observed and documented the effects of your decision, which are summarized below. ",
 		n,
         txt_ph,
 		"",
