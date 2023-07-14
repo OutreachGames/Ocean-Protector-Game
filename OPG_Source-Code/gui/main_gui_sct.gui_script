@@ -1457,7 +1457,7 @@ local function Screen_Decision_Input(self, action_id, action)
 			gui.set_color(gui.get_node(Hud_info.node_submit_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
 
 			-- visually highlight which choice was selected
-			local other_nodes = {1, 2, 3}
+			local other_nodes = {1, 2, 3, 4}
 			other_nodes[index] = nil
 
 			-- note that trying to use the bright white makes text darker actually
