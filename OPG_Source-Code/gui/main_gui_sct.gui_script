@@ -2063,9 +2063,8 @@ end
 -- HUD Process: Observe Items (Section 2)
 local function On_GO_Item_Click_Labeled(self, screen_pos, unique_tbl)
 
-	-- play sound and label of what was clicked on regardless
+	-- play sound and show label of what was clicked on regardless
 	sound.play("sound_controller#sound_button_1", {delay = 0, gain = 0.5, pan = 0, speed = 1.0})
-	local clicked_label_node = gui.get_node("gnode_clicked_label")
 
 	local labels_i_list = {}
 	local num_unique = 0
@@ -2074,6 +2073,12 @@ local function On_GO_Item_Click_Labeled(self, screen_pos, unique_tbl)
 		labels_i_list[num_unique] = CV_item_groups[k_itemname].object_clicked_label
 	end
 
+	-- failsafe out
+	if num_unique <= 0 then
+		return
+	end
+
+	-- show label
 	local label_txt = ""
 	if num_unique == 1 then
 		label_txt = labels_i_list[1]
@@ -2084,6 +2089,7 @@ local function On_GO_Item_Click_Labeled(self, screen_pos, unique_tbl)
 		label_txt = label_txt .. " & " .. labels_i_list[num_unique]
 	end
 
+	local clicked_label_node = gui.get_node("gnode_clicked_label")
 	gui.set_text(clicked_label_node, label_txt)
 	gui.set_position(clicked_label_node, vmath.vector3(screen_pos.x, screen_pos.y, 0))
 
