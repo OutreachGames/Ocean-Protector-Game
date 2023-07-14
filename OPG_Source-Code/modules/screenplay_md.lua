@@ -103,7 +103,7 @@ STR.CV = {
     goal_completed_types = {
         class_new_information = CV_goal_types.new_information,
         class_decisison = CV_goal_types.decisison,
-        class_click_items = CV_goal_types.new_information,
+        class_click_items = CV_goal_types.click_items,
         class_observe_outcomes = CV_goal_types.observe_outcomes
     },
 
