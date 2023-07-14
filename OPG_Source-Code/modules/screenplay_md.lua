@@ -128,7 +128,7 @@ STR.CV = {
 
     oa_outcome_record_tbl = {
 
-        goal_completed_type = CV_goal_types.observe_outcomes,
+        goal_completed_type = CV_goal_types.click_items,
         goal_text = "Document how each ocean group has changed following your decision.",
         display_text = "Let's document and record the status of each group following your newest decision. Remember, click 'Continue' then click on a member of each group to measure it. ",
         show_hud_data_popup = true,
@@ -150,6 +150,7 @@ STR.CV = {
 
     oa_outcome_summary_tbl = {
 
+        goal_completed_type = CV_goal_types.new_information,
         goal_text = "Review summary of outcomes from your decision.",
         displaytext_is_dynamic = true,
         display_text = HSH.helper_outcome_decision_summary,

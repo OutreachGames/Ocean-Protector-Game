@@ -391,7 +391,7 @@ local function Spawned_AddObject(self, spawn_list_key, go_id)
 	local current_count = self.spawned_objects_sum[spawn_list_key]
 
 	if current_count == nil then
-		print("Warning: Add Spawned Object provided with non-initalized spawn type key "..spawn_list_key..", initializing now...\n")
+		print("Note: Add Spawned Object provided with non-initalized spawn type key "..spawn_list_key..", initializing now...\n")
 		Spawned_ResetAll(self, spawn_list_key, true)
 		current_count = 0
 	end
@@ -1558,10 +1558,6 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 				-- go through list and get position and scale and check distance
 				local spawn_tbl = self.spawned_objects_list[v_subitem_info.spawn_list_key]
-				if spawn_tbl == nil then
-					print("Warning, spawn_tbl with key <"..tostring(v_subitem_info.spawn_list_key).."> is nil...\n")
-					spawn_tbl = {}
-				end
 
 				--first check if can just do whole bounding box check 
 				local bb = v_subitem_info.use_click_by_bounding_box
@@ -1569,7 +1565,7 @@ local function Get_Item_Clicked_On(self, screen_pos)
 					if (world_pos.x >= bb.x[1] and world_pos.x <= bb.x[2]) and (world_pos.y >= bb.y[1] and world_pos.y <= bb.y[2]) then
 						add_to_tbl(k_item_name, nil, k_subitem_name)
 					end
-				else
+				elseif spawn_tbl ~= nil then
 					local subitems_clicked = false
 					for k_goid, _ in pairs(spawn_tbl) do
 						if not subitems_clicked and in_bounding_box(world_pos, k_goid, object_dimensions) then
