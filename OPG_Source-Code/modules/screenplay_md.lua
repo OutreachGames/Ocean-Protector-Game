@@ -341,7 +341,7 @@ STR.Screenplay = {
 
         user_lesson_09 = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gase mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.\n\n",
+            display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gas mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.\n\n",
             debrief_text = nil,
             extra_text = nil
         },
@@ -401,7 +401,7 @@ STR.Screenplay = {
         user_lesson_14 = {
             goal_text = "Follow information prompts.",
             display_text = "We use the pH scale to measure how acidic or basic something is. \n\nThe pH scale runs from 0 to 14, with 7 being a neutral pH. \n\nValues above 7 are basic, or alkaline. Values below 7 are acidic.\n\n",
-            debrief_text = "pH is measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic a pH of 7. \n\n",
+            debrief_text = "Values of pH are measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic than a pH of 7. \n\n",
             extra_text = nil,
         },
 
@@ -442,7 +442,7 @@ STR.Screenplay = {
 
         user_lesson_15c = {
             goal_text = "Follow information prompts.",
-            display_text = "When we compare the pH of today's oceans to pH measurements of the past there is a distinct different."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
+            display_text = "When we compare the pH of today's oceans to pH measurements of the past there is a distinct difference."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
             debrief_text = "This increase in ocean acidity over time is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 

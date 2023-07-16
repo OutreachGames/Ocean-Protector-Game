@@ -6,6 +6,13 @@
 
     -- pause menu has black 1x1 gui square over screen?
 
+    -- add open URL button https://defold.com/ref/sys/#sys.open_url:url-[attributes]
+    -- local success = sys.open_url("http://www.defold.com", {target = "_blank"})
+        -- if not success then
+            -- could not open the url...
+        -- end
+    -- https://www.outreachgames.org/OceanProtector/custom_web_files/Student_Helper_Sheet.pdf
+
     -- add bunch of new lines to make popup hud gauge large then add images 
     --   for example, coastal acidification close up then shown in ocean scene
     --   for example, include diagram of CO2 mixing with ocean and increasing acidity, then also show in ocean scene
