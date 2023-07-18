@@ -77,6 +77,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: false
+  material: ""
 }
 nodes {
   position {
@@ -179,6 +180,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -215,7 +217,7 @@ nodes {
   blend_mode: BLEND_MODE_ALPHA
   text: "This is new information."
   font: "font_body_bold"
-  id: "gnode_info_text"
+  id: "gnode_info_text_main"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_NW
@@ -245,6 +247,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -354,6 +357,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -413,6 +417,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -515,6 +520,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 nodes {
   position {
@@ -582,6 +588,7 @@ nodes {
   custom_type: 0
   enabled: true
   visible: true
+  material: ""
 }
 layers {
   name: "gui_layer_below"

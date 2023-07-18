@@ -7252,8 +7252,8 @@ nodes {
 }
 nodes {
   position {
-    x: -123.0
-    y: -128.0
+    x: -127.0
+    y: -124.0
     z: 0.0
     w: 1.0
   }
@@ -7270,7 +7270,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 246.0
+    x: 254.0
     y: 370.0
     z: 0.0
     w: 1.0
@@ -13751,7 +13751,7 @@ nodes {
   blend_mode: BLEND_MODE_ALPHA
   text: "This is new information."
   font: "font_body_bold"
-  id: "hud_newinfo/gnode_info_text"
+  id: "hud_newinfo/gnode_info_text_main"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_NW

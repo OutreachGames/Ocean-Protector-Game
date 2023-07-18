@@ -1158,7 +1158,7 @@ local function Screen_Popup_Initialize(self, enabled_status)
 		hud_basename = basename,
 		node_controller = basename .. "/gnode_controller",
 		node_text_title = basename .. "/group_header/gui_frame_text",
-		node_text_body = basename .. "/gnode_info_text",
+		node_text_body = basename .. "/gnode_info_text_main",
 		node_frame_body = basename .. "/group_body/gui_frame_core",
 		node_continue_frame = basename .. "/group_button_submit/gui_button_core",
 		node_continue_text = basename .. "group_button_submit/gui_button_label",
