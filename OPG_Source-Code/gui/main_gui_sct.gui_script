@@ -723,7 +723,7 @@ local function DynamicText_DecisionSummary(self)
 	-- get dynamic text for decision summary
 
 	local n = "\n"
-	local indent = "  "
+	local indent = "    "
 
 	-- make table that has delta change, most recent and second most recent
     local items_delta = {}
@@ -808,7 +808,7 @@ local function DynamicText_FinalDebrief(self)
 	-- get dynamic text for final debrief
 
     local n = "\n"
-	local indent = "  "
+	local indent = "    "
 
     -- make table that has all final - initial values for all items
     local items_delta = {}
@@ -872,10 +872,10 @@ local function DynamicText_FinalDebrief(self)
 	-- get text for co2
 	-- add or keep excluded? (uncomment in compile table if adding back in)
 	-- already mention in recommendations how to reduce, so keep out for now?...
-	local txt_co2 = "Average Annual Carbon Dioxide Emmissions and Nutrient Pollution:"..n..indent..func_get_delta_text(-items_delta.item_ph)
+	--local txt_co2 = "Average Annual Carbon Dioxide Emissions and Nutrient Pollution:"..n..indent..func_get_delta_text(-items_delta.item_ph)
 
 	-- get text for pH
-    local txt_ph = "Average Annual Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)..n..indent..func_get_delta_text(items_delta.item_ph, true)
+    local txt_ph = "Average Annual Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)..n..n..func_get_delta_text(items_delta.item_ph, true)
 
     -- get text for ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
     local txt_ocean_life = "Average Health of Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
