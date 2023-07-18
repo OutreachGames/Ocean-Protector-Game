@@ -1415,6 +1415,7 @@ local function Screen_Decision_Initialize(self, enabled_status)
 		goo_option_core_basename = "/gui_radio_core",
 		goo_submit_name = basename.."/group_button_submit",
 		goo_hint_name = basename.."/group_button_hint",
+		goo_review_sheet_name = basename.."/group_button_review_sheet",
 		node_submit_button_frame = basename.."/group_button_submit/gui_button_core",
 		node_submit_button_text = basename.."/group_button_submit/gui_button_label",
 		node_hint_subcontroller = basename .. "/gnode_hint_box_subcontroller",
@@ -1565,7 +1566,6 @@ local function Screen_Decision_Input(self, action_id, action)
 		-- toggle hint box
 
 		local hint_button_label
-		local enabled_setting
 		local controller_node = gui.get_node(Hud_info.node_hint_subcontroller)
 
 		local current_setting = self.hud_decision_dynamic.hint_box_is_open
@@ -1585,14 +1585,39 @@ local function Screen_Decision_Input(self, action_id, action)
 
 	end
 
-	MY_GOO.radiogroup("radiogroup_answer_options", action_id, action, func_radiogroup)
+	local function func_review_sheet_open(button)
 
-	if self.hud_decision_dynamic.has_hint_available then
-		MY_GOO.button_simple(Hud_info.goo_hint_name, action_id, action, func_hint_toggle)
+		-- opens review sheet PDF
+
+		-- example of using open webpage:
+		-- 	local success = sys.open_url("http://www.defold.com", {target = "_blank"})
+		-- 	if not success then
+				-- could not open the url...
+		-- 	end
+
+		sys.open_url("https://www.outreachgames.org/OceanProtector/custom_web_files/Student_Helper_Sheet.pdf")
+
 	end
 
+	MY_GOO.radiogroup("radiogroup_answer_options", action_id, action, func_radiogroup)
+
+	-- hint button
+	if self.hud_decision_dynamic.has_hint_available then
+
+		MY_GOO.button_simple(Hud_info.goo_hint_name, action_id, action, func_hint_toggle)
+
+		-- review sheet button
+		if self.hud_decision_dynamic.hint_box_is_open then
+			MY_GOO.button_simple(Hud_info.goo_review_sheet_name, action_id, action, func_review_sheet_open)
+		end
+
+	end
+
+	-- submit button
 	if self.hud_decision_dynamic.goo_sumbit_isactive then
+
 		MY_GOO.button_simple(Hud_info.goo_submit_name, action_id, action, func_submit)
+
 	end
 
 end

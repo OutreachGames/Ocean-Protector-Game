@@ -6,6 +6,18 @@
 
     -- pause menu has black 1x1 gui square over screen?
 
+    -- Note, a summary of this content will be provided as a review sheet later on.
+
+    -- a dedicated button will block things in always in bottom right, and top area already has things
+    --   exaple if we make a dedicated button:
+    --     To view a summary of the information we covered click on the 'Summary Sheet' button on the bottom right side of the screen. 
+
+    -- extra button in hint would be good, intuitive and only shows up when questions
+    --   In review questions add this as hint:
+    --     To review information we covered click the 'Review Sheet' button on the bottom right side of the screen. 
+    --   otherwise just have 
+    --     'Review Sheet' button show up
+
     -- add open URL button https://defold.com/ref/sys/#sys.open_url:url-[attributes]
     -- local success = sys.open_url("http://www.defold.com", {target = "_blank"})
         -- if not success then

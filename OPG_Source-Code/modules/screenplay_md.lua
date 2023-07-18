@@ -113,6 +113,9 @@ STR.CV = {
     },
 
     hint_text_defaults = {
+        hint_open_review_sheet = {
+            "To review information we covered click the 'Review Sheet' button below."
+        },
         hint_lower_emissions = {
             "Making energy efficent decisions will help reduce emissions of carbon dioxide gas, which will help decrease ocean acidification. "
         }
@@ -323,7 +326,7 @@ STR.Screenplay = {
 
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
-            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out.",
+            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out. \n\nNote, a summary of this content will be provided as a review sheet later on.",
             debrief_text = nil,
             extra_text = nil
         },
@@ -533,8 +536,11 @@ STR.Screenplay = {
         key_basename_default = "decision_quiz_",
 
         decision_quiz_01 = {
-            question_prompt = { 
+            question_prompt = {
                 "Burning fossil fuels reduces large amounts of a gas called ____."
+            },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_open_review_sheet[1]
             },
             answer_options = {
                 user_choice_1 = {
@@ -580,8 +586,11 @@ STR.Screenplay = {
         },
 
         decision_quiz_02 = {
-            question_prompt = { 
+            question_prompt = {
                 "True or false? Burning fossil fuels leads to ocean acidification."
+            },
+            hint_text = {
+                "Click the 'Review Sheet' button below to review how burning excess fossils fuels affects our oceans. "
             },
             prevent_option_randomization = true,
             answer_options = {
@@ -610,6 +619,9 @@ STR.Screenplay = {
         decision_quiz_03 = {
             question_prompt = { 
                 "In addition to burning fossil fuels, _____ can also cause the water in our oceans to become more acidic."
+            },
+            hint_text = {
+                "To review the two main causes of ocean acidification click the 'Review Sheet' button below."
             },
             answer_options = {
                 user_choice_1 = {
@@ -655,8 +667,11 @@ STR.Screenplay = {
         },
 
         decision_quiz_04 = {
-            question_prompt = { 
+            question_prompt = {
                 "A decrease in the pH of water means the water becomes ________."
+            },
+            hint_text = {
+                "To review the pH scale click the 'Review Sheet' button below."
             },
             answer_options = {
                 user_choice_1 = {
@@ -705,6 +720,9 @@ STR.Screenplay = {
             question_prompt = { 
                 "Ocean acidification harms which of the following groups?"
             },
+            hint_text = {
+                "Think about which groups we have examined in our ocean scene."
+            },
             prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
@@ -750,8 +768,11 @@ STR.Screenplay = {
         },
 
         decision_quiz_06 = {
-            question_prompt = { 
+            question_prompt = {
                 "True or false? There are steps we can all take to reduce ocean acidification."
+            },
+            hint_text = {
+                STR.CV.hint_text_defaults.hint_open_review_sheet[1]
             },
             prevent_option_randomization = true,
             answer_options = {
