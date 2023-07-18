@@ -905,18 +905,18 @@ STR.Screenplay = {
 
     s05_decisions_character_role = {
 
-    -- Notes about review sheet:
-        -- a dedicated button will block things in always in bottom right, and top area already has things
-        --   example if we make a dedicated button:
-        --     To view a summary of the information we covered click on the 'Summary Sheet' button on the bottom right side of the screen. 
+        -- Notes about review sheet:
+            -- a dedicated button will block things in always in bottom right, and top area already has things
+            --   example if we make a dedicated button:
+            --     To view a summary of the information we covered click on the 'Summary Sheet' button on the bottom right side of the screen. 
 
-        -- extra button in hint would be good, intuitive and only shows up when questions
-        --   In review questions add this as hint:
-        --     To review information we covered click the 'Review Sheet' button on the bottom right side of the screen. 
-        --   otherwise just have 
-        --     'Review Sheet' button show up
+            -- extra button in hint would be good, intuitive and only shows up when questions
+            --   In review questions add this as hint:
+            --     To review information we covered click the 'Review Sheet' button on the bottom right side of the screen. 
+            --   otherwise just have 
+            --     'Review Sheet' button show up
 
-        -- ATM have chosen to add review sheet button to hint and also let player know during first lesson that a review sheet will exist
+            -- ATM have chosen to add review sheet button to hint and also let player know during first lesson that a review sheet will exist
 
         -- Run role decisions
 
