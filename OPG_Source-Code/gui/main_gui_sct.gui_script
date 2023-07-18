@@ -2285,7 +2285,7 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 	end
 
 	-- run pop-up display
-	if not run_debrief and item_click_info.show_data_popup then
+	if not run_debrief and item_click_info.show_data_popup and not self.oa_outcomes_are_active then
 		-- update graph plot
 		--print("Item clicked and opening graph for <"..item_name..">. \n ")
 		Screen_Plot_Reset(self, true, true, item_name) --also runs plot update
@@ -2547,7 +2547,8 @@ local function GameLogic_Progress(self, i_stage_addition)
 			-- then open back up after OA done? 
 			-- or just do not bother and assume player will set how they want
 
-			-- send message to start
+			-- send message to start and set that OA outcomes are active so certain popup clicking does not work
+			self.oa_outcomes_are_active = true
 			msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, oa_outcome_tbl)
 		end
 
@@ -2727,6 +2728,7 @@ end
 
 local function On_OutcomeEffects_Done(self)
 
+	self.oa_outcomes_are_active = false
 	Screen_Highlighter_Reset(self)
 	GameLogic_Progress(self, 1)
 
