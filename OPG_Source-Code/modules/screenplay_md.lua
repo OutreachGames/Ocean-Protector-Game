@@ -824,7 +824,7 @@ STR.Screenplay = {
         user_lesson_19 = {
             goal_text = "Follow information prompts.",
             display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans. ",
-            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidification."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n,
+            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidification."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n..n,
             -- OLDER: 
             --  debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n,
             extra_text = nil
@@ -1068,7 +1068,7 @@ STR.Screenplay = {
 
 
         -- Biologic Connection I (phytoplankton)
-        decision_role_02a = { 
+        decision_role_02a = {
             question_prompt = {
                 "",
                 role_captain = {

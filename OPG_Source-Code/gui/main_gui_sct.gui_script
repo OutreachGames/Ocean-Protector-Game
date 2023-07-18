@@ -1092,9 +1092,9 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 
 		-- check if using dynamic special text
 		-- and override some values if so
-		--#TODO test
 		if is_dynamic then
 			size_type = "size_huge"
+			self.hud_popup_dynamic.overall_size = size_type
 
 			-- get which type of dynamic text is being used
 			local text_tbl
