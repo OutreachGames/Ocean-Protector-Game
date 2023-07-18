@@ -935,7 +935,7 @@ local function DynamicText_FinalDebrief(self)
     end
 
 	-- compile
-    local text_tbl = {
+	local text_tbl = {
 		dynamic_text_top_title = "Summary of your decisions:",
 		dynamic_text_top_value = txt_recomendations,
 
@@ -1095,23 +1095,23 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 		--#TODO test
 		if is_dynamic then
 			size_type = "size_huge"
-			body_text = " "
 
+			-- get which type of dynamic text is being used
 			local text_tbl
 
 			if body_text == HSH.helper_outcome_final_debrief then
-				title_text = "Outcome Summary"
+				title_text = "Final Summary"
 				text_tbl = DynamicText_FinalDebrief(self)
-
 			elseif body_text == HSH.helper_outcome_decision_summary then
 				title_text = "Decision Summary"
 				text_tbl = DynamicText_DecisionSummary(self)
-
 			end
+
+			-- now reset body text to blank since using dynamic text
+			body_text = " "
 
 			-- set dynamic text if specified
 			if text_tbl ~= nil then
-
 				-- enable
 				gui.set_enabled(node_controller_review, true)
 
@@ -1228,19 +1228,19 @@ local function Screen_Popup_Initialize(self, enabled_status)
 		node_controller_review = basename .. "/gnode_review_controller",
 		node_dynamic_text_tbl = {
 			-- need to match output of DynamicText_DecisionSummary and DynamicText_FinalDebrief
-			dynamic_text_top_title = basename .. "gnode_review_top_title",
-			dynamic_text_top_value = basename .. "gnode_review_top_value",
+			dynamic_text_top_title = basename .. "/gnode_review_top_title",
+			dynamic_text_top_value = basename .. "/gnode_review_top_value",
 
-			dynamic_text_ph_title = basename .. "gnode_review_ph_title",
-			dynamic_text_ph_value = basename .. "gnode_review_ph_value",
+			dynamic_text_ph_title = basename .. "/gnode_review_ph_title",
+			dynamic_text_ph_value = basename .. "/gnode_review_ph_value",
 
-			dynamic_text_life_title = basename .. "gnode_review_life_title",
-			dynamic_text_life_value = basename .. "gnode_review_life_value",
+			dynamic_text_life_title = basename .. "/gnode_review_life_title",
+			dynamic_text_life_value = basename .. "/gnode_review_life_value",
 
-			dynamic_text_you_title = basename .. "gnode_review_you_title",
-			dynamic_text_you_value = basename .. "gnode_review_you_value",
+			dynamic_text_you_title = basename .. "/gnode_review_you_title",
+			dynamic_text_you_value = basename .. "/gnode_review_you_value",
 
-			dynamic_text_end_value = basename .. "gnode_review_end"
+			dynamic_text_end_value = basename .. "/gnode_review_end"
 		}
 	}
 
