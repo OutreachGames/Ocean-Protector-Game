@@ -905,7 +905,18 @@ STR.Screenplay = {
 
     s05_decisions_character_role = {
 
-        --#TODO: add view and click stages after each choice
+    -- Notes about review sheet:
+        -- a dedicated button will block things in always in bottom right, and top area already has things
+        --   example if we make a dedicated button:
+        --     To view a summary of the information we covered click on the 'Summary Sheet' button on the bottom right side of the screen. 
+
+        -- extra button in hint would be good, intuitive and only shows up when questions
+        --   In review questions add this as hint:
+        --     To review information we covered click the 'Review Sheet' button on the bottom right side of the screen. 
+        --   otherwise just have 
+        --     'Review Sheet' button show up
+
+        -- ATM have chosen to add review sheet button to hint and also let player know during first lesson that a review sheet will exist
 
         -- Run role decisions
 
@@ -1643,7 +1654,7 @@ STR.Screenplay = {
                     },
                     debrief_text = {
                         "Click this link to go to NOAA's site to lean more: https://oceanacidification.noaa.gov/"..n..n.."Note, this will open a new, separate web page. Click 'Continue' to go back to the end game options screen. "
-                    }, --#TODO add NOAA link here
+                    }, --#TODO get NOAA link working here
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },

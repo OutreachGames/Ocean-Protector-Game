@@ -732,16 +732,24 @@ local function DynamicText_DecisionSummary(self)
     end
 
 	-- make function to get text descriptions of change
-	local function func_get_delta_text(percent_delta)
+	local function func_get_delta_text(percent_delta, is_ph)
 
 		local magnitude_text
+		local ph_extra
 
 		if percent_delta > 0 then
 			magnitude_text = "Increased"
+			ph_extra = " (water is less acidic)"
 		elseif percent_delta < 0 then
 			magnitude_text = "Decreased"
+			ph_extra = " (water is more acidic)"
 		else
 			magnitude_text = "Remained Relatively Stable"
+			ph_extra = " (water acidity has not changed)"
+		end
+
+		if is_ph then
+			magnitude_text = magnitude_text .. ph_extra
 		end
 
 		return magnitude_text
@@ -772,34 +780,37 @@ local function DynamicText_DecisionSummary(self)
 	local character_role = self.player_data_tbl.character_role_key
 
 	local decision_debrief = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_role, choice_key, true)
-	local decision_reminder = "Reminder of your decision:"..n..decision_debrief
 
 	-- get text for pH change
-    local txt_ph = "Change in Average Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)
+    local txt_ph = func_get_delta_text(items_delta.item_ph, true)
 
     -- get text for ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
-    local txt_ocean_life = "Change in Health of Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
+    local txt_ocean_life = func_get_delta_text(items_delta.item_ph)
 
     -- get text for human
     local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(character_role))..": "
-    local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
+    local txt_your_success = func_get_delta_text(items_delta.item_humans)
 
 	-- compile
     local text_tbl = {
-		decision_reminder,
-		n,
-		"You have observed and documented the effects of your decision, which are summarized below. ",
-		n,
-        txt_ph,
-		"",
-        txt_ocean_life,
-		"",
-		txt_your_success,
-		n,
-		"When ready, click 'Continue' to move on."
+		dynamic_text_top_title = "Reminder of your decision:",
+		dynamic_text_top_value = decision_debrief,
+
+		--"You have observed and documented the effects of your decision, which are summarized below. ",
+
+		dynamic_text_ph_title = "Change in Average Ocean pH:",
+		dynamic_text_ph_value = txt_ph,
+
+		dynamic_text_life_title = "Change in Health of Ocean Life:",
+		dynamic_text_life_value = txt_ocean_life,
+
+		dynamic_text_you_title = prefix_humans,
+		dynamic_text_you_value = txt_your_success,
+
+		dynamic_text_end_value = "When ready, click 'Continue' to move on."
     }
 
-    return table.concat(text_tbl, n)
+    return text_tbl
 
 end
 
@@ -821,14 +832,21 @@ local function DynamicText_FinalDebrief(self)
     end
 
 	-- make function to get text descriptions of change
-    local function func_get_delta_text(percent_delta, special_acidity_case)
+    local function func_get_delta_text(percent_delta, is_ph, extra_special_acidity_case)
 
         -- get net change 
         local net_change_text
+		local ph_suffix
+
         if percent_delta > 0.1 then
-            net_change_text = "Increased"
+			net_change_text = "Increased"
+			ph_suffix = " (water is less acidic)"
         elseif percent_delta < -0.1 then
             net_change_text = "Decreased"
+			ph_suffix = " (water is more acidic)"
+		else
+			net_change_text = "Remained Relatively Stable"
+			ph_suffix = " (water acidity has not changed)"
         end
 
         -- get size of change
@@ -847,10 +865,14 @@ local function DynamicText_FinalDebrief(self)
         if net_change_text ~= nil and magnitude_text ~= nil then
             combined_text = magnitude_text .. " " .. net_change_text
         else
-            combined_text = "Remained Relatively Stable"
+            combined_text = net_change_text
         end
 
-        if special_acidity_case then
+		if is_ph then
+			combined_text = combined_text .. ph_suffix
+		end
+
+        if extra_special_acidity_case then
 			if magnitude_text == nil then
 				magnitude_text = ""
 			else
@@ -875,14 +897,16 @@ local function DynamicText_FinalDebrief(self)
 	--local txt_co2 = "Average Annual Carbon Dioxide Emissions and Nutrient Pollution:"..n..indent..func_get_delta_text(-items_delta.item_ph)
 
 	-- get text for pH
-    local txt_ph = "Average Annual Ocean pH: "..n..indent..func_get_delta_text(items_delta.item_ph)..n..n..func_get_delta_text(items_delta.item_ph, true)
+    local txt_ph = func_get_delta_text(items_delta.item_ph, true)
+	-- maybe add extra summary sentence?
+	--txt_ph = txt_ph ..n..n..func_get_delta_text(items_delta.item_ph, false, true)
 
     -- get text for ocean life on average (yes just using pH since we want to reinforce that pH and ocean health are tied together)
-    local txt_ocean_life = "Average Health of Ocean Life: "..n..indent..func_get_delta_text(items_delta.item_ph)
+    local txt_ocean_life = func_get_delta_text(items_delta.item_ph)
 
     -- get text for human
     local prefix_humans = INFO:Get_Y_Axis_Label("item_humans", STR:Get_Subitem_from_Role(self.player_data_tbl.character_role_key))..": "
-    local txt_your_success = prefix_humans..n..indent..func_get_delta_text(items_delta.item_humans)
+    local txt_your_success = func_get_delta_text(items_delta.item_humans)
 
     -- get text for recommendation
     local final_score = QuestionScores_GetFinalPercent(self)
@@ -912,39 +936,29 @@ local function DynamicText_FinalDebrief(self)
 
 	-- compile
     local text_tbl = {
-        --"Summary of Decision Outcomes:", -- in HUD frame title now
-        --"",
-		txt_recomendations,
-		"",
-        "Percentage of decisions with most optimal choices: "..n..indent..string.format("%.0f", (final_score*100)).."% "..n,
+		dynamic_text_top_title = "Summary of your decisions:",
+		dynamic_text_top_value = txt_recomendations,
+
+        --"Percentage of decisions with most optimal choices: "..n..indent..string.format("%.0f", (final_score*100)).."% "..n,
         -- ^possibly remove/comment out?
+
         --"Summary of changes over time:",
 		--txt_co2, "",
-        txt_ph,
-		"",
-        txt_ocean_life,
-		"",
-        txt_your_success,
-		"",
-		try_again_txt
+		-- ^possibly add in?
+
+		dynamic_text_ph_title = "Average Annual Ocean pH:",
+		dynamic_text_ph_value = txt_ph,
+
+		dynamic_text_life_title = "Average Health of Ocean Life:",
+		dynamic_text_life_value = txt_ocean_life,
+
+		dynamic_text_you_title = prefix_humans,
+		dynamic_text_you_value = txt_your_success,
+
+		dynamic_text_end_value = try_again_txt
     }
 
-    return table.concat(text_tbl, n)
-
-end
-
-local function TranslateHelperText(self, hashed_text_key)
-
-	-- takes hashed text key and translates and updates it with internal logic
-	-- returns as string
-
-	if hashed_text_key == HSH.helper_outcome_final_debrief then
-		return DynamicText_FinalDebrief(self), "Outcome Summary"
-	elseif hashed_text_key == HSH.helper_outcome_decision_summary then
-		return DynamicText_DecisionSummary(self), "Decision Summary"
-	else
-		return nil, nil
-	end
+    return text_tbl
 
 end
 
@@ -1053,7 +1067,7 @@ end
 
 
 -- HUD Screen: Popup 
-local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text, size_type)
+local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text, size_type, is_dynamic)
 
 	-- reset Popup screen of HUD
 
@@ -1067,11 +1081,55 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 
 	-- set enabled status
 	local constant = self.hud_popup_constant
-	local controller_node = gui.get_node(constant.node_controller)
+	local node_controller_main = gui.get_node(constant.node_controller_main)
+	local node_controller_review = gui.get_node(constant.node_controller_review)
+
+	gui.set_enabled(node_controller_review, false)
 
 	-- enable and set text, but only if enabling
 	-- do this before sizing so text sizer can be used
 	if enabled_setting and reset_values then
+
+		-- check if using dynamic special text
+		-- and override some values if so
+		--#TODO test
+		if is_dynamic then
+			size_type = "size_huge"
+			body_text = " "
+
+			local text_tbl
+
+			if body_text == HSH.helper_outcome_final_debrief then
+				title_text = "Outcome Summary"
+				text_tbl = DynamicText_FinalDebrief(self)
+
+			elseif body_text == HSH.helper_outcome_decision_summary then
+				title_text = "Decision Summary"
+				text_tbl = DynamicText_DecisionSummary(self)
+
+			end
+
+			-- set dynamic text if specified
+			if text_tbl ~= nil then
+
+				-- enable
+				gui.set_enabled(node_controller_review, true)
+
+				-- set text using specific keys
+				for k_tblkey, v_nodename in pairs(constant.node_dynamic_text_tbl) do
+					local l_text = text_tbl[k_tblkey]
+					if l_text == nil then
+						print("Warning: Text not found for key "..k_tblkey.."\n")
+						l_text = ""
+					end
+					gui.set_text(gui.get_node(v_nodename), l_text)
+				end
+
+			end
+
+		end
+
+		-- setup body text
 		if body_text ~= nil then
 			gui.set_text(gui.get_node(constant.node_text_body), body_text)
 
@@ -1092,10 +1150,14 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			end
 
 		end
+
+		-- setup title text
 		title_text = title_text or "New Information"
 		if title_text ~= nil then
 			gui.set_text(gui.get_node(constant.node_text_title), title_text)
 		end
+
+
 	end
 
 	-- run enabling status and possibly sizing
@@ -1107,8 +1169,8 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 
 	if run_sizing then
 		if enabled_setting then
-			func_done(self, controller_node)
-			gui.set_scale(controller_node, MY_GOO.MINIMIZE)
+			func_done(self, node_controller_main)
+			gui.set_scale(node_controller_main, MY_GOO.MINIMIZE)
 
 			local y_ranges = {
 				size_small = {250, 119, 108},
@@ -1126,13 +1188,13 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			gui.set_size(node_body_text, vmath.vector3(gui.get_size(node_body_text).x, yvals[2], 0))
 			gui.set_position(node_button_frame, vmath.vector3(gui.get_position(node_button_frame).x, yvals[3], 0))
 
-			gui.animate(controller_node, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+			gui.animate(node_controller_main, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
 		else
-			--gui.set_scale(controller_node, MY_GOO.MAXIMIZE)
-			gui.animate(controller_node, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+			--gui.set_scale(node_controller_main, MY_GOO.MAXIMIZE)
+			gui.animate(node_controller_main, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
 		end
 	else
-		func_done(self, controller_node)
+		func_done(self, node_controller_main)
 	end
 
 	-- exit if not resetting answer option tracker variables
@@ -1156,13 +1218,30 @@ local function Screen_Popup_Initialize(self, enabled_status)
 	-- set constants
 	self.hud_popup_constant = {
 		hud_basename = basename,
-		node_controller = basename .. "/gnode_controller",
+		node_controller_main = basename .. "/gnode_controller",
 		node_text_title = basename .. "/group_header/gui_frame_text",
 		node_text_body = basename .. "/gnode_info_text_main",
 		node_frame_body = basename .. "/group_body/gui_frame_core",
 		node_continue_frame = basename .. "/group_button_submit/gui_button_core",
 		node_continue_text = basename .. "group_button_submit/gui_button_label",
-		goo_continue_name = basename .. "/group_button_submit"
+		goo_continue_name = basename .. "/group_button_submit",
+		node_controller_review = basename .. "/gnode_review_controller",
+		node_dynamic_text_tbl = {
+			-- need to match output of DynamicText_DecisionSummary and DynamicText_FinalDebrief
+			dynamic_text_top_title = basename .. "gnode_review_top_title",
+			dynamic_text_top_value = basename .. "gnode_review_top_value",
+
+			dynamic_text_ph_title = basename .. "gnode_review_ph_title",
+			dynamic_text_ph_value = basename .. "gnode_review_ph_value",
+
+			dynamic_text_life_title = basename .. "gnode_review_life_title",
+			dynamic_text_life_value = basename .. "gnode_review_life_value",
+
+			dynamic_text_you_title = basename .. "gnode_review_you_title",
+			dynamic_text_you_value = basename .. "gnode_review_you_value",
+
+			dynamic_text_end_value = basename .. "gnode_review_end"
+		}
 	}
 
 	-- set dynamics
@@ -1208,10 +1287,6 @@ local function Screen_Popup_Input(self, action_id, action)
 				local debrief_text, is_debrief_dynamic = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 				local debrief_title_text
 
-				if is_debrief_dynamic then
-					debrief_text, debrief_title_text = TranslateHelperText(self, debrief_text)
-				end
-
 				-- if there is debrief for this new_info screen then run it, 
 				-- otherwise finish up 
 				if debrief_text ~= nil and debrief_text ~= "" then
@@ -1219,7 +1294,7 @@ local function Screen_Popup_Input(self, action_id, action)
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					local run_sizing_debrief = true
 					local update_values_to_debrief = true
-					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text)
+					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, is_debrief_dynamic)
 				else
 					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
@@ -1531,10 +1606,6 @@ local function Screen_Decision_Input(self, action_id, action)
 				local debrief_text, is_debrief_dynamic = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, role_key, answer_string_key)
 				local debrief_title_text
 
-				if is_debrief_dynamic then
-					debrief_text, debrief_title_text = TranslateHelperText(self, debrief_text)
-				end
-
 				if Loop_StatusType_is_Main(self) and debrief_text ~= nil and debrief_text ~= "" then
 
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
@@ -1551,7 +1622,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 					local run_sizing_popup = true
 					local reset_values_popup = true
-					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, debrief_title_text or "Update")
+					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, debrief_title_text or "Update", is_debrief_dynamic)
 
 				else
 					msg.post(".", HSH.msg_request_game_progress)
@@ -2437,13 +2508,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 		local run_sizer = true
 		local reset_values = true
 
-		if pop_textbody_isdynamic then
-			popup_text_body, popup_text_title = TranslateHelperText(self, popup_text_body)
-		else
-			popup_text_title = "New Information"
-		end
-
-		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title)
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic)
 
 
 	elseif stage_type == st.class_observe_outcomes then
