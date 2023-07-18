@@ -326,7 +326,7 @@ STR.Screenplay = {
 
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
-            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out. \n\nNote, a summary of this content will be provided as a review sheet later on.",
+            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out. \n\nNote, a summary of this content will be provided as a review sheet later on. \n\n\n\n",
             debrief_text = nil,
             extra_text = nil
         },
