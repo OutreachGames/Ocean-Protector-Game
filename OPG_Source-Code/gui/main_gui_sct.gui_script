@@ -2673,12 +2673,13 @@ local function Screen_MainMenu_Initialize(self, enabled_status)
 			use_marked_text = false
 		},
 		--#TODO update game ID validity check if needed
-		game_id_must_be_valid = false
+		game_id_must_be_valid = true
 	}
 
 	-- set dynamics
 	self.hud_mainmenu_dynamic = {}
 	self.hud_mainmenu_dynamic.stage_number = 1
+	self.hud_mainmenu_dynamic.current_input_id = 0000
 
 	-- #TODO update resume game
 	self.hud_mainmenu_dynamic.resume_game_possible = false
@@ -2695,8 +2696,6 @@ local function Screen_MainMenu_Input(self, action_id, action)
 	if not self.hud_mainmenu_dynamic.screen_isactive then
 		return
 	end
-
-	local Typed_input_ID = 0000
 
 	local hudinfo = self.hud_mainmenu_constant
 
@@ -2733,7 +2732,7 @@ local function Screen_MainMenu_Input(self, action_id, action)
 
 		-- handle all the button functionality for new game ID confirmation
 
-		self.player_data_tbl.unique_id_key = Typed_input_ID or 0000
+		self.player_data_tbl.unique_id_key = self.hud_mainmenu_dynamic.current_input_id
 
 		local run_sizer = false
 		Screen_MainMenu_Reset(self, false, run_sizer)
@@ -2759,14 +2758,14 @@ local function Screen_MainMenu_Input(self, action_id, action)
 		-- game ID input 
 		local text_input = MY_GOO.input(hudinfo.goo_input_name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, hudinfo.input_config_tbl)
 		-- save game ID to use in submit game ID button
-		Typed_input_ID = text_input.text
+		local typed_input = text_input.text
 
 		-- set new game ID
 		local id_must_be_valid = hudinfo.game_id_must_be_valid
 		local allow_button_clicking
 		if id_must_be_valid then
 			-- ID must be valid, so check requirements
-			if Typed_input_ID ~= nil and #Typed_input_ID == 4 then
+			if typed_input ~= nil and #typed_input == 4 then
 				-- requirements met
 				allow_button_clicking = true
 			else
@@ -2778,16 +2777,28 @@ local function Screen_MainMenu_Input(self, action_id, action)
 			allow_button_clicking = true
 		end
 
+		-- check and set if id input changed 
+		local ids_changed
+		if self.hud_mainmenu_dynamic.current_input_id ~= typed_input then
+			self.hud_mainmenu_dynamic.current_input_id = typed_input
+			ids_changed = true
+		end
+
+		-- set colors and confirm button accordingly
 		if allow_button_clicking then
 			-- set colors as good and allow button clicking
-			gui.set_color(gui.get_node(hudinfo.node_confirm_button_frame), MY_GOO.COLOR_DEFAULT)
-			gui.set_color(gui.get_node(hudinfo.node_confirm_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
+			if ids_changed then
+				gui.set_color(gui.get_node(hudinfo.node_confirm_button_frame), MY_GOO.COLOR_DEFAULT)
+				gui.set_color(gui.get_node(hudinfo.node_confirm_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
+			end
 
 			MY_GOO.button_simple(hudinfo.goo_game_confirm_id, action_id, action, func_submit_game_id)
 		else
 			-- set colors as locked and do not allow button clicking
-			gui.set_color(gui.get_node(hudinfo.node_confirm_button_frame), MY_GOO.COLOR_LOCKED)
-			gui.set_color(gui.get_node(hudinfo.node_confirm_button_text), MY_GOO.COLOR_LOCKED)
+			if ids_changed then
+				gui.set_color(gui.get_node(hudinfo.node_confirm_button_frame), MY_GOO.COLOR_LOCKED)
+				gui.set_color(gui.get_node(hudinfo.node_confirm_button_text), MY_GOO.COLOR_LOCKED)
+			end
 		end
 
 	end
