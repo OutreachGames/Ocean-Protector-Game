@@ -132,7 +132,12 @@ local function PlayerData_Save(self)
 	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
 
 	-- save file
-	sys.save(filename, self.player_data_tbl)
+	local save_successful = sys.save(filename, self.player_data_tbl)
+	if not save_successful then
+		print("Warning: Save not successful!\n")
+	--else
+		--print("Saving player data to file!")
+	end
 
 end
 
@@ -151,12 +156,15 @@ local function PlayerData_Load(self)
 	local loaded_data = sys.load(filename)
 
 	if loaded_data ~= nil then
-		if loaded_data.save_file_version_major == CV_Current_Save_Version_Major then
+		if loaded_data.save_file_version_major >= CV_Current_Save_Version_Major then
 			-- loaded data is valid so set as player data table for lua
+			self.player_data_tbl = nil
 			self.player_data_tbl = loaded_data
+			--print("Loaded data!")
 			return true
 		else
 			-- invalid version, so no load
+			--print("Version is too old, not loading data!")
 			return false
 		end
 	else
@@ -201,9 +209,7 @@ end
 
 local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 
-	-- run 'self.player_data_tbl' save to file here
-	-- so game saves after each stage
-	PlayerData_Save(self)
+	-- update i stage then save
 
 	new_ikey = new_ikey or 1
 	if override then
@@ -211,6 +217,10 @@ local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 	else
 		self.player_data_tbl.gameplay_loop_i_key = self.player_data_tbl.gameplay_loop_i_key + new_ikey
 	end
+
+	-- run 'self.player_data_tbl' save to file here
+	-- so game saves after each stage
+	PlayerData_Save(self)
 
 end
 
