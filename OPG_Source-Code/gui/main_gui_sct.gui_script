@@ -1083,7 +1083,7 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 	local constant = self.hud_popup_constant
 	local node_controller_main = gui.get_node(constant.node_controller_main)
 	local node_controller_review = gui.get_node(constant.node_controller_review)
-	local node_hyperlink_button = gui.get_node(constant.goo_optional_hyperlink)
+	local node_hyperlink_button = gui.get_node(constant.node_optional_hyperlink)
 
 	gui.set_enabled(node_controller_review, false)
 	gui.set_enabled(node_hyperlink_button, false)
@@ -1195,6 +1195,8 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			gui.set_size(node_body_text, vmath.vector3(gui.get_size(node_body_text).x, yvals[2], 0))
 			gui.set_position(node_button_frame, vmath.vector3(gui.get_position(node_button_frame).x, yvals[3], 0))
 
+			gui.set_position(node_hyperlink_button, vmath.vector3(gui.get_position(node_hyperlink_button).x, yvals[3], 0))
+
 			gui.animate(node_controller_main, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
 		else
 			--gui.set_scale(node_controller_main, MY_GOO.MAXIMIZE)
@@ -1249,7 +1251,8 @@ local function Screen_Popup_Initialize(self, enabled_status)
 
 			dynamic_text_end_value = basename .. "/gnode_review_end"
 		},
-		goo_optional_hyperlink = basename .. "/group_button_hyperlink"
+		goo_optional_hyperlink = basename .. "/group_button_hyperlink",
+		node_optional_hyperlink = basename .. "/group_button_hyperlink/gui_button_core"
 	}
 
 	-- set dynamics
@@ -1303,7 +1306,7 @@ local function Screen_Popup_Input(self, action_id, action)
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					local run_sizing_debrief = true
 					local update_values_to_debrief = true
-					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, is_debrief_dynamic, opt_link)
+					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, nil, is_debrief_dynamic, opt_link)
 				else
 					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
