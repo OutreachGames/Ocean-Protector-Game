@@ -1227,7 +1227,7 @@ local function Screen_Popup_Initialize(self, enabled_status)
 	-- set constants
 	self.hud_popup_constant = {
 		hud_basename = basename,
-		node_controller_main = basename .. "/gnode_controller",
+		node_controller_main = basename .. "/gnode_controller_main",
 		node_text_title = basename .. "/group_header/gui_frame_text",
 		node_text_body = basename .. "/gnode_info_text_main",
 		node_frame_body = basename .. "/group_body/gui_frame_core",
@@ -2568,9 +2568,11 @@ local function GameLogic_Progress(self, i_stage_addition)
 					}
 				end
 			end
-			-- #TODO hide data screen?
+			-- hide data screen so OA changes are easier to see?
 			-- then open back up after OA done? 
 			-- or just do not bother and assume player will set how they want
+			-- also might hiding and un-hiding may distract from watching OA changes 
+			-- and OA changes and animal groups to click on will virtually always be visible to click on
 
 			-- send message to start and set that OA outcomes are active so certain popup clicking does not work
 			self.oa_outcomes_are_active = true
@@ -2594,12 +2596,25 @@ local function Screen_MainMenu_Reset(self, enabled_setting, run_sizing)
 
 	-- set enabled status
 	local constant = self.hud_mainmenu_constant
-	local controller_node = gui.get_node(constant.node_controller)
+	local controller_node = gui.get_node(constant.node_controller_main)
 
 	-- reset tracking table
 	self.hud_mainmenu_dynamic.screen_isactive = enabled_setting
 
+	-- toggle sizing
 	SimpleToggleHelper(self, controller_node, enabled_setting, run_sizing)
+
+	-- set color of resume button depending on lock status
+	if self.hud_mainmenu_dynamic.resume_game_possible then
+		gui.set_color(gui.get_node(constant.node_resume_button_frame), MY_GOO.COLOR_LOCKED)
+		gui.set_color(gui.get_node(constant.node_resume_button_text), MY_GOO.COLOR_LOCKED)
+	else
+		gui.set_color(gui.get_node(constant.node_resume_button_frame), MY_GOO.COLOR_DEFAULT)
+		gui.set_color(gui.get_node(constant.node_resume_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
+	end
+
+	--#TODO update toggle status
+	MY_GOO.input(constant.goo_input_name, gui.KEYBOARD_TYPE_DEFAULT, nil, nil, constant.input_config_tbl)
 
 end
 
@@ -2615,13 +2630,27 @@ local function Screen_MainMenu_Initialize(self, enabled_status)
 	-- set constants
 	self.hud_mainmenu_constant = {
 		hud_basename = basename,
-		node_controller = basename .. "/gnode_controller",
+		node_controller_main = basename .. "/gnode_controller_main",
 		goo_game_new_name = basename .. "/group_button_game_new",
 		goo_game_resume_name = basename .. "/group_button_game_resume",
+		node_resume_button_frame = basename .. "/group_button_game_resume/gui_button_core",
+		node_resume_button_text = basename .. "/group_button_game_resume/gui_button_label",
+		node_controller_start_menu = basename .. "/gnode_controller_start_menu",
+		node_controller_new_game = basename .. "/gnode_controller_new_game",
+		goo_input_name = basename .. "/group_input_id",
+		input_config_tbl = {
+			empty_text = "type number",
+			max_length = 4,
+			allowed_characters = "[%a%d%s]",
+			use_marked_text = false
+		}
 	}
 
 	-- set dynamics
 	self.hud_mainmenu_dynamic = {}
+	-- #TODO update resume game
+	self.hud_mainmenu_dynamic.resume_game_possible = false
+
 	Screen_MainMenu_Reset(self, enabled_status, true)
 
 end
@@ -2665,9 +2694,17 @@ local function Screen_MainMenu_Input(self, action_id, action)
 
 	end
 
+	-- new game
 	MY_GOO.button_simple(hudinfo.goo_game_new_name, action_id, action, func_new_game)
 
-	MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
+	-- resume game
+	if self.hud_mainmenu_dynamic.resume_game_possible then
+		MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
+	end
+
+	--#TODO update
+	-- game ID input 
+	MY_GOO.input(hudinfo.goo_input_name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, hudinfo.input_config_tbl)
 
 end
 

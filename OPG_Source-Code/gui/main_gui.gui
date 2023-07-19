@@ -13590,7 +13590,7 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "hud_newinfo/gnode_controller"
+  id: "hud_newinfo/gnode_controller_main"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -13648,7 +13648,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_newinfo/group_body"
-  parent: "hud_newinfo/gnode_controller"
+  parent: "hud_newinfo/gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -13769,7 +13769,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
-  parent: "hud_newinfo/gnode_controller"
+  parent: "hud_newinfo/gnode_controller_main"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -13816,7 +13816,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_newinfo/group_header"
-  parent: "hud_newinfo/gnode_controller"
+  parent: "hud_newinfo/gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -13984,7 +13984,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_newinfo/group_button_submit"
-  parent: "hud_newinfo/gnode_controller"
+  parent: "hud_newinfo/gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -14158,7 +14158,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  parent: "hud_newinfo/gnode_controller"
+  parent: "hud_newinfo/gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -15075,7 +15075,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_newinfo/group_button_hyperlink"
-  parent: "hud_newinfo/gnode_controller"
+  parent: "hud_newinfo/gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -15285,7 +15285,7 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "hud_startmenu/gnode_controller"
+  id: "hud_startmenu/gnode_controller_main"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -15343,7 +15343,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_startmenu/group_body"
-  parent: "hud_startmenu/gnode_controller"
+  parent: "hud_startmenu/gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -15444,7 +15444,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_startmenu/group_header"
-  parent: "hud_startmenu/gnode_controller"
+  parent: "hud_startmenu/gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -15582,6 +15582,65 @@ nodes {
 nodes {
   position {
     x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_startmenu/gnode_controller_start_menu"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_startmenu/gnode_controller_main"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_AUTO
+  custom_type: 0
+  enabled: true
+  visible: false
+  material: ""
+}
+nodes {
+  position {
+    x: 0.0
     y: 252.0
     z: 0.0
     w: 1.0
@@ -15612,7 +15671,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_startmenu/group_button_game_new"
-  parent: "hud_startmenu/gnode_controller"
+  parent: "hud_startmenu/gnode_controller_start_menu"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -15780,7 +15839,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "hud_startmenu/group_button_game_resume"
-  parent: "hud_startmenu/gnode_controller"
+  parent: "hud_startmenu/gnode_controller_start_menu"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -15910,6 +15969,292 @@ nodes {
   template_node_child: true
   text_leading: 1.0
   text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_startmenu/gnode_controller_new_game"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_startmenu/gnode_controller_main"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_AUTO
+  custom_type: 0
+  enabled: true
+  visible: false
+  material: ""
+}
+nodes {
+  position {
+    x: -158.0
+    y: -51.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEMPLATE
+  id: "hud_startmenu/group_input_id"
+  parent: "hud_startmenu/gnode_controller_new_game"
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  template: "/gui/components/text_input.gui"
+  template_node_child: true
+  custom_type: 0
+  enabled: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 300.0
+    y: 110.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "textures/gui_button_default"
+  id: "hud_startmenu/group_input_id/gui_input_core"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_startmenu/group_input_id"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 30.0
+    y: 30.0
+    z: 30.0
+    w: 30.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: 37.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 160.0
+    y: 40.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "<input>"
+  font: "font_header_bold"
+  id: "hud_startmenu/group_input_id/gui_input_text"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  parent: "hud_startmenu/group_input_id/gui_input_core"
+  layer: "gui_layer_text"
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  template_node_child: true
+  text_leading: 1.0
+  text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: 37.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 2.0
+    y: 40.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: ""
+  id: "hud_startmenu/group_input_id/gui_input_cursor"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "hud_startmenu/group_input_id/gui_input_core"
+  layer: "gui_layer_below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: true
+  size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
   visible: true

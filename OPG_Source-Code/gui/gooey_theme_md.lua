@@ -40,6 +40,8 @@ local SOUND_ID_BUTTON_2 = "sound_controller#sound_button_2"
 local SOUND_ID_BUTTON_3 = "sound_controller#sound_button_3"
 
 local VEC3_1 = vmath.vector3(1)
+local VEC4_1 = vmath.vector4(1)
+local VEC4_transparent = vmath.vector4(1, 1, 1, 0)
 
 -- recall Saturation was set to 200 as accenting effect in paint.net
 MYG.COLOR_LIGHT_BLUE = vmath.vector4(0.80, 0.90, 1.1, 1)
@@ -55,6 +57,8 @@ MYG.COLOR_TEXT_UNSELECTED = vmath.vector4(0.75, 0.75, 0.75, 1)
 
 MYG.COLOR_NEEDS_SELECTED = vmath.vector4(0.55, 0.55, 0.55, 1.0)
 MYG.COLOR_LOCKED = vmath.vector4(0.30, 0.30, 0.30, 1)
+
+MYG.TEXT_HELP = vmath.vector4(0.75)
 
 MYG.MINIMIZE = vmath.vector3(0.01)
 MYG.MAXIMIZE = vmath.vector3(1)
@@ -250,6 +254,39 @@ function MYG.radio(node_id, group_id, action_id, action, fn)
 end
 
 
+-- Input
+local function refresh_input(input, config, node_id, text_node_name)
+
+	local cursor = gui.get_node(node_id .. "/gui_input_cursor")
+	local text = gui.get_node(text_node_name)
+
+	if input.selected then
+		gui.set_enabled(cursor, true)
+		gui.set_position(cursor, vmath.vector3(40 + input.total_width, 0, 0))
+		gui.cancel_animation(cursor, gui.PROP_COLOR)
+		gui.set_color(cursor, VEC4_1)
+		gui.animate(cursor, gui.PROP_COLOR, VEC4_transparent, gui.EASING_LINEAR, 0.8, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+		gui.set_color(text, MYG.COLOR_TEXT_DEFAULT)
+		gui.set_scale(text, VEC3_1)
+	else
+		gui.set_enabled(cursor, false)
+		gui.cancel_animation(cursor, gui.PROP_COLOR)
+		gui.set_color(text, MYG.COLOR_TEXT_UNSELECTED)
+		gui.set_scale(text, MYG.TEXT_HELP)
+	end
+
+end
+
+function MYG.input(node_id, keyboard_type, action_id, action, config)
+
+	local text_node_name = node_id .. "/gui_input_text"
+	return GOO.input(text_node_name, keyboard_type, action_id, action, config, function(input)
+		refresh_input(input, config, node_id, text_node_name)
+	end)
+
+end
+
+
 -- Scroll bar
 local function refresh_scrollbar(scrollbar)
 
@@ -272,7 +309,7 @@ end
 function MYG.scrollbar_vertical_updatebar(scrollbar_id, y_value)
 
 	-- set fill of scroll bar line
-	-- have as seperate function so can be called with scroll_set function, too
+	-- have as separate function so can be called with scroll_set function, too
 	local progress_bar_node = gui.get_node(scrollbar_id.."/gui_scrollbar_progress")
 	local core_bar_node = gui.get_node(scrollbar_id.."/gui_scrollbar_core")
 

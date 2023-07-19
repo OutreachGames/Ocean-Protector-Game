@@ -55,7 +55,7 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
   texture: ""
-  id: "gnode_controller"
+  id: "gnode_controller_main"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -112,7 +112,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_body"
-  parent: "gnode_controller"
+  parent: "gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -235,7 +235,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
-  parent: "gnode_controller"
+  parent: "gnode_controller_main"
   layer: "gui_layer_text"
   inherit_alpha: true
   alpha: 1.0
@@ -282,7 +282,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_header"
-  parent: "gnode_controller"
+  parent: "gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -452,7 +452,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_button_submit"
-  parent: "gnode_controller"
+  parent: "gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
@@ -629,7 +629,7 @@ nodes {
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_FIT
-  parent: "gnode_controller"
+  parent: "gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   slice9 {
@@ -1548,7 +1548,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "group_button_hyperlink"
-  parent: "gnode_controller"
+  parent: "gnode_controller_main"
   layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0

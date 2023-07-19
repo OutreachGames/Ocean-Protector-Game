@@ -1654,7 +1654,7 @@ STR.Screenplay = {
                     },
                     debrief_text = {
                         "Go to NOAA's site to lean more about ocean acidification by clicking the 'Open Link' button (this will open a new, seperate webpage.)."..n..n.."Click 'Continue' to go back to the end game options screen. "
-                    }, --#TODO get NOAA link working here
+                    },
                     debrief_hyperlink_address = "https://oceanacidification.noaa.gov/",
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
