@@ -316,6 +316,7 @@ local function PlayerData_Get_Item_Entry_I(self, item_key, i_key)
 
 end
 
+
 -- HUD Screen: Highlighter
 local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 
@@ -2585,7 +2586,7 @@ end
 
 
 -- HUD Screen: Main Menu (Section 1)
-local function Screen_MainMenu_Reset(self, enabled_setting, run_sizing)
+local function Screen_MainMenu_Reset(self, enabled_setting, run_sizing, stage_num)
 
 	-- reset Main Menu screen of HUD
 
@@ -2594,27 +2595,51 @@ local function Screen_MainMenu_Reset(self, enabled_setting, run_sizing)
 		enabled_setting = false
 	end
 
+	stage_num = stage_num or 1
+
 	-- set enabled status
 	local constant = self.hud_mainmenu_constant
 	local controller_node = gui.get_node(constant.node_controller_main)
 
 	-- reset tracking table
 	self.hud_mainmenu_dynamic.screen_isactive = enabled_setting
+	self.hud_mainmenu_dynamic.stage_number = stage_num
+
+	local stage1_controller = gui.get_node(constant.node_controller_start_menu)
+	local stage2_controller = gui.get_node(constant.node_controller_new_game)
 
 	-- toggle sizing
 	SimpleToggleHelper(self, controller_node, enabled_setting, run_sizing)
 
-	-- set color of resume button depending on lock status
-	if self.hud_mainmenu_dynamic.resume_game_possible then
-		gui.set_color(gui.get_node(constant.node_resume_button_frame), MY_GOO.COLOR_LOCKED)
-		gui.set_color(gui.get_node(constant.node_resume_button_text), MY_GOO.COLOR_LOCKED)
-	else
-		gui.set_color(gui.get_node(constant.node_resume_button_frame), MY_GOO.COLOR_DEFAULT)
-		gui.set_color(gui.get_node(constant.node_resume_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
-	end
+	if stage_num == 1 then
+		-- main menu starting path
+		gui.set_enabled(stage1_controller, true)
+		gui.set_enabled(stage2_controller, false)
 
-	--#TODO update toggle status
-	MY_GOO.input(constant.goo_input_name, gui.KEYBOARD_TYPE_DEFAULT, nil, nil, constant.input_config_tbl)
+		-- set color of resume button depending on lock status
+		if self.hud_mainmenu_dynamic.resume_game_possible then
+			gui.set_color(gui.get_node(constant.node_resume_button_frame), MY_GOO.COLOR_DEFAULT)
+			gui.set_color(gui.get_node(constant.node_resume_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
+		else
+			gui.set_color(gui.get_node(constant.node_resume_button_frame), MY_GOO.COLOR_LOCKED)
+			gui.set_color(gui.get_node(constant.node_resume_button_text), MY_GOO.COLOR_LOCKED)
+		end
+
+	elseif stage_num == 2 then
+		-- new game path with game ID confirmation
+		gui.set_enabled(stage1_controller, false)
+		gui.set_enabled(stage2_controller, true)
+		MY_GOO.input(constant.goo_input_name, gui.KEYBOARD_TYPE_DEFAULT, nil, nil, constant.input_config_tbl)
+
+		if constant.game_id_must_be_valid then
+			gui.set_color(gui.get_node(constant.node_confirm_button_frame), MY_GOO.COLOR_LOCKED)
+			gui.set_color(gui.get_node(constant.node_confirm_button_text), MY_GOO.COLOR_LOCKED)
+		else
+			gui.set_color(gui.get_node(constant.node_confirm_button_frame), MY_GOO.COLOR_DEFAULT)
+			gui.set_color(gui.get_node(constant.node_confirm_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
+		end
+
+	end
 
 end
 
@@ -2637,17 +2662,24 @@ local function Screen_MainMenu_Initialize(self, enabled_status)
 		node_resume_button_text = basename .. "/group_button_game_resume/gui_button_label",
 		node_controller_start_menu = basename .. "/gnode_controller_start_menu",
 		node_controller_new_game = basename .. "/gnode_controller_new_game",
+		goo_game_confirm_id =  basename .. "/group_button_confirm_id",
+		node_confirm_button_frame = basename .. "/group_button_confirm_id/gui_button_core",
+		node_confirm_button_text = basename .. "/group_button_confirm_id/gui_button_label",
 		goo_input_name = basename .. "/group_input_id",
 		input_config_tbl = {
-			empty_text = "type number",
+			empty_text = "click to type",
 			max_length = 4,
-			allowed_characters = "[%a%d%s]",
+			allowed_characters = "[%d]",
 			use_marked_text = false
-		}
+		},
+		--#TODO update game ID validity check if needed
+		game_id_must_be_valid = false
 	}
 
 	-- set dynamics
 	self.hud_mainmenu_dynamic = {}
+	self.hud_mainmenu_dynamic.stage_number = 1
+
 	-- #TODO update resume game
 	self.hud_mainmenu_dynamic.resume_game_possible = false
 
@@ -2664,17 +2696,20 @@ local function Screen_MainMenu_Input(self, action_id, action)
 		return
 	end
 
+	local Typed_input_ID = 0000
+
 	local hudinfo = self.hud_mainmenu_constant
 
 	local function func_new_game(button)
 
-		-- handle all the button functionality
+		-- handle all the button functionality for new game
 
 		-- set that this screen is no longer interactive
 		local run_sizer = false
 		Screen_MainMenu_Reset(self, false, run_sizer)
 
-		GameLogic_Progress(self, 1)
+		-- now that cleared that open new game ID confirmation screen
+		Screen_MainMenu_Reset(self, true, true, 2)
 
 		--print("New game started!")
 
@@ -2682,29 +2717,80 @@ local function Screen_MainMenu_Input(self, action_id, action)
 
 	local function func_resume_game(button)
 
-		-- handle all the button functionality
+		-- handle all the button functionality for resume game
 
 		-- set that this screen is no longer interactive
+		--#TODO add load game functionality eventually
 		local run_sizer = false
 		Screen_MainMenu_Reset(self, false, run_sizer)
-
-		--#TODO add actual functionality eventually
 		GameLogic_Progress(self, 1)
+
 		--print("Game resumed!")
 
 	end
 
-	-- new game
-	MY_GOO.button_simple(hudinfo.goo_game_new_name, action_id, action, func_new_game)
+	local function func_submit_game_id(button)
 
-	-- resume game
-	if self.hud_mainmenu_dynamic.resume_game_possible then
-		MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
+		-- handle all the button functionality for new game ID confirmation
+
+		self.player_data_tbl.unique_id_key = Typed_input_ID or 0000
+
+		local run_sizer = false
+		Screen_MainMenu_Reset(self, false, run_sizer)
+		GameLogic_Progress(self, 1)
+
 	end
 
-	--#TODO update
-	-- game ID input 
-	MY_GOO.input(hudinfo.goo_input_name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, hudinfo.input_config_tbl)
+	-- run logic depending on stage, recall save will trigger at next screenplay stage
+	local stage_num = self.hud_mainmenu_dynamic.stage_number
+	if stage_num == 1 then
+		--default stage 1
+		-- new game
+		MY_GOO.button_simple(hudinfo.goo_game_new_name, action_id, action, func_new_game)
+
+		-- resume game
+		if self.hud_mainmenu_dynamic.resume_game_possible then
+			MY_GOO.button_simple(hudinfo.goo_game_resume_name, action_id, action, func_resume_game)
+		end
+
+	elseif stage_num == 2 then
+		-- stage 2, set game ID
+
+		-- game ID input 
+		local text_input = MY_GOO.input(hudinfo.goo_input_name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, hudinfo.input_config_tbl)
+		-- save game ID to use in submit game ID button
+		Typed_input_ID = text_input.text
+
+		-- set new game ID
+		local id_must_be_valid = hudinfo.game_id_must_be_valid
+		local allow_button_clicking
+		if id_must_be_valid then
+			-- ID must be valid, so check requirements
+			if Typed_input_ID ~= nil and #Typed_input_ID == 4 then
+				-- requirements met
+				allow_button_clicking = true
+			else
+				-- requirements not met
+				allow_button_clicking = false
+			end
+		else
+			-- ID does not care about validity so let player go
+			allow_button_clicking = true
+		end
+
+		if allow_button_clicking then
+			-- set colors as good and allow button clicking
+			gui.set_color(gui.get_node(hudinfo.node_confirm_button_frame), MY_GOO.COLOR_DEFAULT)
+			gui.set_color(gui.get_node(hudinfo.node_confirm_button_text), MY_GOO.COLOR_TEXT_DEFAULT)
+
+			MY_GOO.button_simple(hudinfo.goo_game_confirm_id, action_id, action, func_submit_game_id)
+		else
+			-- set colors as locked and do not allow button clicking
+			gui.set_color(gui.get_node(hudinfo.node_confirm_button_frame), MY_GOO.COLOR_LOCKED)
+			gui.set_color(gui.get_node(hudinfo.node_confirm_button_text), MY_GOO.COLOR_LOCKED)
+		end
+
+	end
 
 end
 
