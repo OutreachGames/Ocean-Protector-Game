@@ -9,8 +9,11 @@ local EXT = require ("modules.extend_md")
 local INFO = require("modules.item_info_md")
 
 -- constants
-local CV_Current_Save_Version = 0.1
+local CV_Current_Save_Version_Major = 1
+local CV_Current_Save_Version_Minor = 1
 local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
+local CV_Application_ID = "Ocean_Protector"
+local CV_Save_File_Name = "player_data_save_file"
 
 local CV_item_groups = {}
 
@@ -123,15 +126,17 @@ end
 -- Player Data Updating, Setting, and Getting
 local function PlayerData_Save(self)
 
-	-- saves game to file
+	-- saves 'self.player_data_tbl' to file
 
-	-- #TODO add 'self.player_data_tbl' save to file here
+	-- get path
+	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
+
+	-- save file
+	sys.save(filename, self.player_data_tbl)
 
 end
 
 local function PlayerData_Load(self)
-
-	-- #TODO add load from file and set to 'self.player_data_tbl'
 
 	-- loads player data save file into player data lua table
 	-- returns true if load successful, false if otherwise
@@ -139,9 +144,25 @@ local function PlayerData_Load(self)
 	-- load file, check 'self.player_data_tbl.save_file_version' 
 	-- if ~= to CV_Current_Save_Version then do not load
 
-	local loaded_tbl = {}
+	-- get path
+	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
 
-	return false
+	-- load file
+	local loaded_data = sys.load(filename)
+
+	if loaded_data ~= nil then
+		if loaded_data.save_file_version == CV_Current_Save_Version_Major then
+			-- loaded data is valid so set as player data table for lua
+			self.player_data_tbl = loaded_data
+			return true
+		else
+			-- invalid version, so no load
+			return false
+		end
+	else
+		-- no save file exists
+		return false
+	end
 
 end
 
@@ -2154,7 +2175,8 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 
 	self.player_data_tbl = {
 		unique_id_key = 1111,
-		save_file_version = CV_Current_Save_Version,
+		save_file_version_major = CV_Current_Save_Version_Major,
+		save_file_version_minor = CV_Current_Save_Version_Minor,
 		character_role_key = "NAN",
 		num_best_answers = 0,
 		gameplay_loop_i_key = 0,
@@ -2736,7 +2758,9 @@ local function Screen_MainMenu_Input(self, action_id, action)
 
 		-- since this is a new game clear 
 		-- we need to clear any loaded player tbl
-		PlayerData_Reset(self)
+		if self.hud_mainmenu_dynamic.resume_game_possible then
+			PlayerData_Reset(self)
+		end
 
 		-- set that this screen is no longer interactive
 		local run_sizer = false
