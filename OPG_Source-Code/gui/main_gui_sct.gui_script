@@ -1067,7 +1067,7 @@ end
 
 
 -- HUD Screen: Popup 
-local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text, size_type, is_dynamic)
+local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text, size_type, is_dynamic, op_hyperlink)
 
 	-- reset Popup screen of HUD
 
@@ -1083,8 +1083,10 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 	local constant = self.hud_popup_constant
 	local node_controller_main = gui.get_node(constant.node_controller_main)
 	local node_controller_review = gui.get_node(constant.node_controller_review)
+	local node_hyperlink_button = gui.get_node(constant.goo_optional_hyperlink)
 
 	gui.set_enabled(node_controller_review, false)
+	gui.set_enabled(node_hyperlink_button, false)
 
 	-- enable and set text, but only if enabling
 	-- do this before sizing so text sizer can be used
@@ -1116,7 +1118,7 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 				gui.set_enabled(node_controller_review, true)
 
 				-- set text using specific keys
-				for k_tblkey, v_nodename in pairs(constant.node_dynamic_text_tbl) do
+				for k_tblkey, v_nodename in pairs(constant.node_special_text_tbl) do
 					local l_text = text_tbl[k_tblkey]
 					if l_text == nil then
 						print("Warning: Text not found for key "..k_tblkey.."\n")
@@ -1157,6 +1159,11 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			gui.set_text(gui.get_node(constant.node_text_title), title_text)
 		end
 
+		-- set hyperlink button
+		if op_hyperlink ~= nil and op_hyperlink ~= "" then
+			gui.set_enabled(node_hyperlink_button, true)
+			self.hud_popup_dynamic.optional_hyperlink_address = op_hyperlink
+		end
 
 	end
 
@@ -1226,7 +1233,7 @@ local function Screen_Popup_Initialize(self, enabled_status)
 		node_continue_text = basename .. "group_button_submit/gui_button_label",
 		goo_continue_name = basename .. "/group_button_submit",
 		node_controller_review = basename .. "/gnode_review_controller",
-		node_dynamic_text_tbl = {
+		node_special_text_tbl = {
 			-- need to match output of DynamicText_DecisionSummary and DynamicText_FinalDebrief
 			dynamic_text_top_title = basename .. "/gnode_review_top_title",
 			dynamic_text_top_value = basename .. "/gnode_review_top_value",
@@ -1241,7 +1248,8 @@ local function Screen_Popup_Initialize(self, enabled_status)
 			dynamic_text_you_value = basename .. "/gnode_review_you_value",
 
 			dynamic_text_end_value = basename .. "/gnode_review_end"
-		}
+		},
+		goo_optional_hyperlink = basename .. "/group_button_hyperlink"
 	}
 
 	-- set dynamics
@@ -1262,6 +1270,7 @@ local function Screen_Popup_Input(self, action_id, action)
 	end
 
 	local Hud_info = self.hud_popup_constant
+	local hyperlink = self.hud_popup_dynamic.optional_hyperlink_address
 
 	local function func_continue(button)
 
@@ -1284,7 +1293,7 @@ local function Screen_Popup_Input(self, action_id, action)
 			if Loop_CompletionType_is_Primary(self, new_info_loop_type) and Loop_StatusType_is_Main(self) then
 
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-				local debrief_text, is_debrief_dynamic = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
+				local debrief_text, is_debrief_dynamic, opt_link = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 				local debrief_title_text
 
 				-- if there is debrief for this new_info screen then run it, 
@@ -1294,7 +1303,7 @@ local function Screen_Popup_Input(self, action_id, action)
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					local run_sizing_debrief = true
 					local update_values_to_debrief = true
-					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, is_debrief_dynamic)
+					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, is_debrief_dynamic, opt_link)
 				else
 					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
@@ -1329,7 +1338,19 @@ local function Screen_Popup_Input(self, action_id, action)
 
 	end
 
+	local function func_hyperlink(button)
+
+		sys.open_url(hyperlink)
+
+	end
+
+	-- submit button
 	MY_GOO.button_simple(Hud_info.goo_continue_name, action_id, action, func_continue)
+
+	-- optional hyperlink button
+	if hyperlink ~= nil and hyperlink ~= "" then
+		MY_GOO.button_simple(Hud_info.goo_optional_hyperlink, action_id, action, func_hyperlink)
+	end
 
 end
 
@@ -2487,10 +2508,11 @@ local function GameLogic_Progress(self, i_stage_addition)
 		local items_to_click = STR:Get_Items_to_Click(stage_key, substage_key)
 		Items_Click_Status_Reset(self, items_to_click)
 
-		local popup_text_body = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
+		local popup_text_body, pop_textbody_isdynamic, opt_hyperlink = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 		local run_sizer = true
 		local reset_values = true
-		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body)
+		local popup_text_title
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink)
 
 	elseif stage_type == st.class_decisison then
 		-- setup decision
@@ -2503,12 +2525,12 @@ local function GameLogic_Progress(self, i_stage_addition)
 
 	elseif stage_type == st.class_new_information then
 		-- setup new information
-		local popup_text_body, pop_textbody_isdynamic = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
+		local popup_text_body, pop_textbody_isdynamic, opt_hyperlink  = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 		local popup_text_title
 		local run_sizer = true
 		local reset_values = true
 
-		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic)
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink)
 
 
 	elseif stage_type == st.class_observe_outcomes then

@@ -1642,7 +1642,7 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "Go through the game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
+                        "Go through the entire game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
                     },
                     debrief_text = nil,
                     outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
@@ -1650,11 +1650,12 @@ STR.Screenplay = {
                 --#TODO think about adding option to just do another character along with quiz?
                 user_choice_3 = {
                     display_text = {
-                        "To learn more check out these great resources from NOAA! After reviewing your outcomes you will be returned to this option screen. "
+                        "To learn more about ocean acidification check out other great resources from NOAA! After viewing the NOAA link you will be able to return to this option screen. "
                     },
                     debrief_text = {
-                        "Click this link to go to NOAA's site to lean more: https://oceanacidification.noaa.gov/"..n..n.."Note, this will open a new, separate web page. Click 'Continue' to go back to the end game options screen. "
+                        "Go to NOAA's site to lean more about ocean acidification by clicking the 'Open Link' button (this will open a new, seperate webpage.)."..n..n.."Click 'Continue' to go back to the end game options screen. "
                     }, --#TODO get NOAA link working here
+                    debrief_hyperlink_address = "https://oceanacidification.noaa.gov/",
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
@@ -1734,12 +1735,12 @@ function STR:Get_NewInfo_Text_Body(stage_key, substage_key)
     -- gets body text to display
 
     if not self:ValidCheck(stage_key, substage_key) then
-        return nil, nil
+        return nil, nil, nil
     end
 
     local info = self.Screenplay[stage_key][substage_key]
 
-    return self:GetString_from_Tbl_or_Value(info.display_text), info.displaytext_is_dynamic
+    return self:GetString_from_Tbl_or_Value(info.display_text), info.displaytext_is_dynamic, info.displaytext_hyperlink_address
 
 end
 
@@ -1748,12 +1749,12 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
     -- gets body text to display
 
     if not self:ValidCheck(stage_key, substage_key) then
-        return nil, nil
+        return nil, nil, nil
     end
 
     local info = self.Screenplay[stage_key][substage_key]
 
-    return self:GetString_from_Tbl_or_Value(info.debrief_text), info.debrief_is_dynamic
+    return self:GetString_from_Tbl_or_Value(info.debrief_text), info.debrief_is_dynamic, info.debrief_hyperlink_address
 
 end
 
