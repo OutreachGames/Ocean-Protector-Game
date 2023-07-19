@@ -221,7 +221,7 @@ STR.Screenplay = {
             display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans.",
             debrief_text = "Let's observe all the life in this specific ocean scene, starting with the base of the food-web.",
             outcome_result_func = function()
-                STR.CV.outcome_functions.func_setup_special_action("special_setup_start_goals_gauge")
+                STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_start_goals_gauge)
             end,
             extra_text = nil
         },
@@ -264,7 +264,7 @@ STR.Screenplay = {
                     "Coral"..n..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet.",
                 },
                 item_fish = {
-                    "Fish"..n..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the small parrot fish and angel fish and the large tuna and grouper. All fish have some form of internal skeleton . Fish are important food for many different animals, including larger fish and humans."
+                    "Fish"..n..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the bluefish, tuna, and red snapper. All fish have some form of internal skeleton. Fish are important food for many different animals, including other fish and humans."
                 },
                 item_mollusks = {
                     "Mollusks"..n..n.."Mollusks include oysters, snails, sea slugs, and even squid and octopi. Almost all mollusks have some kind of shell material somewhere around or in their body. Mollusks help cycle nutrients and are food for many animals, including humans."
@@ -291,7 +291,7 @@ STR.Screenplay = {
             display_text = "Excellent work, we have identified the groups of life in this scene. Throughout our oceans there are thousands of types of plants and animals, far too many to all show in just this scene!",
             debrief_text = "For our example, we are going to add just one more group. Overall, this group is the highest-level consumer in the ocean.",
             outcome_result_func = function()
-                STR.CV.outcome_functions.func_setup_special_action("special_setup_first_boat")
+                STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_first_boat)
             end,
             extra_text = nil
         },
@@ -375,7 +375,7 @@ STR.Screenplay = {
             debrief_text = nil,
             outcome_result_func = function()
                 --#TODO add delay to progress function
-                --STR.CV.outcome_functions.func_setup_special_action("special_setup_coastal_oa_1")
+                --STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_coastal_oa_1)
             end,
             extra_text = nil
         },
@@ -414,7 +414,7 @@ STR.Screenplay = {
             debrief_text = nil,
             extra_text = nil,
             outcome_result_func = function()
-                STR.CV.outcome_functions.func_setup_special_action("special_setup_pH_buoy")
+                STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_pH_buoy)
                 local override_rather_than_insert = true
                 local start_vals = STR.CV.update_item_values_tbls.initial_oa_affected_values_ph
                 STR.CV.outcome_functions.func_option_outcome_dynamic(start_vals, nil, override_rather_than_insert)

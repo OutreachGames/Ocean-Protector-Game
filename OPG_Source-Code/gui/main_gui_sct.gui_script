@@ -14,6 +14,7 @@ local CV_Current_Save_Version_Minor = 1
 local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
 local CV_Application_ID = "Ocean_Protector"
 local CV_Save_File_Name = "player_data_save_file"
+local CV_Player_Role_Empty = "player_role_unselected"
 
 local CV_item_groups = {}
 
@@ -124,55 +125,6 @@ end
 
 
 -- Player Data Updating, Setting, and Getting
-local function PlayerData_Save(self)
-
-	-- saves 'self.player_data_tbl' to file
-
-	-- get path
-	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
-
-	-- save file
-	local save_successful = sys.save(filename, self.player_data_tbl)
-	if not save_successful then
-		print("Warning: Save not successful!\n")
-	--else
-		--print("Saving player data to file!")
-	end
-
-end
-
-local function PlayerData_Load(self)
-
-	-- loads player data save file into player data lua table
-	-- returns true if load successful, false if otherwise
-
-	-- load file, check 'self.player_data_tbl.save_file_version' 
-	-- if ~= to CV_Current_Save_Version then do not load
-
-	-- get path
-	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
-
-	-- load file
-	local loaded_data = sys.load(filename)
-
-	if loaded_data ~= nil then
-		if loaded_data.save_file_version_major >= CV_Current_Save_Version_Major then
-			-- loaded data is valid so set as player data table for lua
-			self.player_data_tbl = nil
-			self.player_data_tbl = loaded_data
-			--print("Loaded data!")
-			return true
-		else
-			-- invalid version, so no load
-			--print("Version is too old, not loading data!")
-			return false
-		end
-	else
-		-- no save file exists
-		return false
-	end
-
-end
 
 local function PlayerData_Set_Character(self, role_key)
 
@@ -180,7 +132,7 @@ local function PlayerData_Set_Character(self, role_key)
 
 	local human_data_label
 	if role_key == nil then
-		self.player_data_tbl.character_role_key = "none"
+		self.player_data_tbl.character_role_key = CV_Player_Role_Empty
 		human_data_label = "Humans"
 	else
 		self.player_data_tbl.character_role_key = role_key
@@ -209,7 +161,7 @@ end
 
 local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 
-	-- update i stage then save
+	-- update i stage
 
 	new_ikey = new_ikey or 1
 	if override then
@@ -217,10 +169,6 @@ local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 	else
 		self.player_data_tbl.gameplay_loop_i_key = self.player_data_tbl.gameplay_loop_i_key + new_ikey
 	end
-
-	-- run 'self.player_data_tbl' save to file here
-	-- so game saves after each stage
-	PlayerData_Save(self)
 
 end
 
@@ -309,7 +257,7 @@ end
 
 local function PlayerData_UpdateHUDTracker(self, item_key, show_item, show_goto)
 
-	local hud_tracker =  self.player_data_tbl.item_data_tbl[item_key]
+	local hud_tracker =  self.player_data_tbl.item_hud_status[item_key]
 	if show_item ~= nil then
 		hud_tracker.data_item_shown = show_item
 	end
@@ -369,6 +317,62 @@ local function PlayerData_Get_Item_Entry_I(self, item_key, i_key)
 	end
 
 	return item_tbl[i_key]
+
+end
+
+local function PlayerData_Save(self)
+
+	-- saves 'self.player_data_tbl' to file
+
+	-- get path
+	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
+
+	-- save file
+	local save_successful = sys.save(filename, self.player_data_tbl)
+	if not save_successful then
+		print("Warning: Save not successful!\n")
+	--else
+		--print("Saving player data to file with i-key "..self.player_data_tbl.gameplay_loop_i_key.."\n")
+	end
+
+end
+
+local function PlayerData_Check_MaybeLoad(self, load_saved_file)
+
+	-- loads player data save file into player data lua table
+	-- returns true if load successful, false if otherwise
+
+	-- load file, check 'self.player_data_tbl.save_file_version' 
+	-- if ~= to CV_Current_Save_Version then do not load
+
+	-- get path
+	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
+
+	-- load file
+	local loaded_data = sys.load(filename)
+
+	if loaded_data ~= nil then
+		if loaded_data.save_file_version_major >= CV_Current_Save_Version_Major then
+			-- loaded data is valid so set as player data table for lua
+			if load_saved_file then
+				self.player_data_tbl = nil
+				self.player_data_tbl = loaded_data
+
+				-- take care of special things that are saved
+				msg.post(".", HSH.msg_request_resume_catchup)
+
+			end
+			--print("Loading player data from file with i-key "..self.player_data_tbl.gameplay_loop_i_key.."\n")
+			return true
+		else
+			-- invalid version, so no load
+			--print("Version is too old, not loading data!")
+			return false
+		end
+	else
+		-- no save file exists
+		return false
+	end
 
 end
 
@@ -2174,6 +2178,51 @@ end
 
 
 --HUD Process: Reset Player Data Table
+local function PlayerData_CatchUp(self)
+
+	-- runs all catch up events that should have been triggered by this point
+
+	local t = self.player_data_tbl
+
+	-- human character
+	if t.character_role_key ~= CV_Player_Role_Empty then
+		-- already got to character choice, so use that
+		PlayerData_Set_Character(self, t.character_role_key)
+	else
+		-- not yet at character choice, so show default boat
+		if t.special_setup_item_boat_present then
+			msg.post(".", HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_setup_first_boat})
+		end
+	end
+
+	-- show goals?
+	-- t.special_setup_goals_hud_enabled just bool check at game progress
+	if t.special_setup_goals_hud_enabled and not self.hud_goals_dynamic.screen_isactive then
+		Screen_Goals_Reset(self, true)
+	end
+
+	-- show data hud? 
+	-- t.special_setup_data_hud_enabled just bool check at game progress
+	if t.special_setup_data_hud_enabled and not self.hud_data_dynamic.screen_isactive then
+		Screen_Data_Reset(self, true)
+	end
+
+	-- show buoy
+	if t.special_setup_item_buoy_present then
+		msg.post(".", HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_setup_pH_buoy})
+	end
+
+	-- show individual items in data screen
+	for k_itemname,_ in pairs(CV_item_groups) do
+		local d = t.item_hud_status[k_itemname]
+		if d ~= nil then
+			ScreenData_ToggleItem(self, k_itemname, d.data_item_shown, d.data_item_shown, false)
+			ScreenData_ToggleItem(self, k_itemname, d.data_goto_shown, false, d.data_goto_shown)
+		end
+	end
+
+end
+
 local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 
 	-- resets player data
@@ -2187,9 +2236,9 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 		unique_id_key = 1111,
 		save_file_version_major = CV_Current_Save_Version_Major,
 		save_file_version_minor = CV_Current_Save_Version_Minor,
-		character_role_key = "NAN",
 		num_best_answers = 0,
 		gameplay_loop_i_key = 0,
+		character_role_key = CV_Player_Role_Empty,
 		special_setup_goals_hud_enabled = false,
 		special_setup_data_hud_enabled = false,
 		special_setup_item_boat_present = false,
@@ -2227,7 +2276,7 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 	-- so no need to enable or disable bars since it already does it when opening bar plot
 	if update_hud_screens then
 
-		Screen_Data_Reset(self, false, back_to_begining)
+		Screen_Data_Reset(self, false, back_to_beginning)
 		-- ^^ recall data rest internally calls Screen_Data_TrackerUpdate( function 
 
 		-- not really sure how we could get to this point, since plot would have to be closed to click on restart
@@ -2529,7 +2578,7 @@ end
 
 
 -- HUD Process: Game Loop
-local function GameLogic_Progress(self, i_stage_addition)
+local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 
 	-- setups and runs next game-play event
 
@@ -2537,6 +2586,7 @@ local function GameLogic_Progress(self, i_stage_addition)
 		i_stage_addition = 1
 	end
 
+	-- update i-key
 	PlayerData_Update_I_Key_Progress(self, i_stage_addition)
 
 	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
@@ -2544,6 +2594,12 @@ local function GameLogic_Progress(self, i_stage_addition)
 	if stage_key == nil or substage_key == nil then
 		--print("TRK: Game loop is completed! \n")
 		return
+	end
+
+	-- run 'self.player_data_tbl' save to file here
+	-- so game saves after each stage
+	if run_file_save then
+		PlayerData_Save(self)
 	end
 
 	-- get and update goal text
@@ -2704,7 +2760,7 @@ local function Screen_MainMenu_Reset(self, enabled_setting, run_sizing, stage_nu
 
 end
 
-local function Screen_MainMenu_Initialize(self, enabled_status)
+local function Screen_MainMenu_Initialize(self, enabled_status, save_file_exists)
 
 	-- set constants and setup dynamic values and components
 
@@ -2740,12 +2796,9 @@ local function Screen_MainMenu_Initialize(self, enabled_status)
 	-- set dynamics
 	self.hud_mainmenu_dynamic = {}
 	self.hud_mainmenu_dynamic.stage_number = 1
-	self.hud_mainmenu_dynamic.current_input_id = 0000
+	self.hud_mainmenu_dynamic.current_input_id = self.player_data_tbl.unique_id_key
 
-	-- run load from file here if being called at initialization/resume game
-	local load_successful = PlayerData_Load(self)
-
-	self.hud_mainmenu_dynamic.resume_game_possible = load_successful
+	self.hud_mainmenu_dynamic.resume_game_possible = save_file_exists
 
 	Screen_MainMenu_Reset(self, enabled_status, true)
 
@@ -2768,6 +2821,7 @@ local function Screen_MainMenu_Input(self, action_id, action)
 
 		-- since this is a new game clear 
 		-- we need to clear any loaded player tbl
+		-- should already be clear, but just to be on safe side
 		if self.hud_mainmenu_dynamic.resume_game_possible then
 			PlayerData_Reset(self)
 		end
@@ -2788,11 +2842,19 @@ local function Screen_MainMenu_Input(self, action_id, action)
 		-- handle all the button functionality for resume game
 
 		-- set that this screen is no longer interactive
-		-- if there was a loaded game it is already loaded, 
-		-- so just progress to next stage
 		local run_sizer = false
 		Screen_MainMenu_Reset(self, false, run_sizer)
-		GameLogic_Progress(self, 1)
+
+		-- load game if preset and go to next stage
+		local stage_addition
+		if PlayerData_Check_MaybeLoad(self, true) then
+			stage_addition = 0
+		else
+			-- failsafe if somehow we got here and save file invalid
+			stage_addition = 1
+		end
+
+		GameLogic_Progress(self, stage_addition)
 
 		--print("Game resumed!")
 
@@ -2805,8 +2867,9 @@ local function Screen_MainMenu_Input(self, action_id, action)
 		self.player_data_tbl.unique_id_key = self.hud_mainmenu_dynamic.current_input_id
 
 		local run_sizer = false
+		local run_file_save = true
 		Screen_MainMenu_Reset(self, false, run_sizer)
-		GameLogic_Progress(self, 1)
+		GameLogic_Progress(self, 1, run_file_save)
 
 	end
 
@@ -2926,17 +2989,17 @@ end
 
 local function On_SpecialAction(self, special_action_name)
 
-	if special_action_name == "special_setup_first_boat" or special_action_name == "special_setup_pH_buoy" then
+	if special_action_name == HSH.special_setup_first_boat or special_action_name == HSH.special_setup_pH_buoy then
 
 		-- setup boat or buoy
 		msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = special_action_name})
-		if special_action_name == "special_setup_first_boat" then
+		if special_action_name == HSH.special_setup_first_boat then
 			self.player_data_tbl.special_setup_item_boat_present = true
-		elseif special_action_name == "special_setup_pH_buoy" then
+		elseif special_action_name == HSH.special_setup_pH_buoy then
 			self.player_data_tbl.special_setup_item_buoy_present = true
 		end
 
-	elseif special_action_name == "special_setup_coastal_oa_1" then
+	elseif special_action_name == HSH.special_setup_coastal_oa_1 then
 
 		-- run coastal OA
 		local is_raining = true
@@ -2945,7 +3008,7 @@ local function On_SpecialAction(self, special_action_name)
 		--start but then pause the game 
 		timer.delay(5, false, GamePause_On)
 
-	elseif special_action_name == "special_setup_start_goals_gauge" then
+	elseif special_action_name == HSH.special_setup_start_goals_gauge then
 
 		-- set goals
 		-- function 'On Game Progress' checks this value then loads goals if it is on
@@ -2959,7 +3022,8 @@ local function On_OutcomeEffects_Done(self)
 
 	self.oa_outcomes_are_active = false
 	Screen_Highlighter_Reset(self)
-	GameLogic_Progress(self, 1)
+	local run_file_save = true
+	GameLogic_Progress(self, 1, run_file_save)
 
 end
 
@@ -3036,7 +3100,7 @@ local function Game_RunRestart(self, reset_ply_data)
 		Run_Fader(self, true, 0.25)
 		-- wait until fully dark/hidden, then reset, then fade back in
 		timer.delay(0.35, false, function(self)
-			msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = "special_restart_game"})
+			msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_restart_game})
 			--^ above takes 0.25 seconds at least so wait a bit 
 			timer.delay(0.45, false, function(self)
 				Run_Fader(self, false, 0.25)
@@ -3063,6 +3127,7 @@ local function Game_First_Initialization(self)
 	-- need to initialize player table first though so HUD screen initialization works
 	PlayerData_Reset(self)
 
+	-- now initialize other screens and setup
 	Screen_Highlighter_Initialize(self, enabled_setting)
 	Screen_Goals_Initialize(self, enabled_setting)
 	Screen_Decision_Initialize(self, enabled_setting)
@@ -3077,9 +3142,10 @@ local function Game_First_Initialization(self)
 
 	self.gameplay_initialized = true
 
-	-- kick off first action 
-	-- this also loads player save file if one exists
-	Screen_MainMenu_Initialize(self, true)
+	-- kick off first action, which is main menu
+	-- also check if save file exists
+	local save_file_exists = PlayerData_Check_MaybeLoad(self, false)
+	Screen_MainMenu_Initialize(self, true, save_file_exists)
 
 end
 
@@ -3101,7 +3167,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_report_go_clicked then
 		On_GO_Item_Clicked_Received(self, message)
 	elseif message_id == HSH.msg_request_game_progress then
-		GameLogic_Progress(self, 1)
+		GameLogic_Progress(self, 1, true)
 	elseif message_id == HSH.msg_request_game_repeat then
 		Game_RunRestart(self, message.minfo_reset_player_save)
 	elseif message_id == HSH.msg_set_player_character_role then
@@ -3114,6 +3180,8 @@ function on_message(self, message_id, message, sender)
 		On_OutcomeEffects_Done(self)
 	elseif message_id == HSH.msg_request_update_highlighter then
 		Screen_Highlighter_Reset(self, true, message.minfo_hud_highlighter_type)
+	elseif message_id == HSH.msg_request_resume_catchup then
+		PlayerData_CatchUp(self)
 	end
 
 end

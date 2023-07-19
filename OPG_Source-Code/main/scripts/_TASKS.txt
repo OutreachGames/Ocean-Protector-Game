@@ -17,9 +17,6 @@
     --  start time, each decision click with time since decisions started
 
 
-	-- way to load in table of fish group health
-	-- way to save table of fish group health 
-    -- for saves and level transitions, save position, size, tint, and any other properties of each go (static vs moving)
     -- add button that takes screenshots of your reef?
     -- find way for boat to move with arrow keys with side view and have particle effect bubbles for movement and white sprite bars for tint selection?
     -- after selection, animation of rain or CO2 happens, 
@@ -35,14 +32,21 @@
 
     -- NOTES 
     --[[
-    make a few more times as oa decreases, and add hash time break
-    remake nutrient monitoring, change to using soaps to clean boat and disposing of waste in ocean, still repeat possible?
-
 
     firebase takes in every decision and coded functions can then be created to extract data for research purposes
-    data submitted after each decision includes ip, user specified id, game specified run number, decision question and submitted answer, time decision started, and time decisions submitted 
+    data submitted after each decision includes ip, user specified id, game specified run number, 
+    decision question and submitted answer, time decision started, and time decisions submitted 
 
     google sheets just has data for ip, user specified id, final game score (0-100), and time submitted
 
-    should questions be persistent or one-off? IE if player chooses to use a lot of gas in first question, for each question is a negative amount incorporated into each following answer outcome? Nah, this would result in a possible situation where player might have chosen lots of negatives, and when they finally get to a positive it will end up looking like 0 or negative, and that defeats the goal of the game (the goal of the game is to show, that 'Oh I made this decision and it really helped!' and that needs to always be the case, which is possible if each question is just one-off). Also, to be really persistent the game should present all questions at the same time in a different format, like a dash board. This is not very exciting and also make actually grading the thing much trickier. Also was not what was submitted to NOAA.  
-    ]]
+    should questions be persistent or one-off? 
+        IE if player chooses to use a lot of gas in first question, 
+        for each question is a negative amount incorporated into each following answer outcome? 
+        Nah, this would result in a possible situation where player might have chosen lots of negatives, 
+        and when they finally get to a positive it will end up looking like 0 or negative, 
+        and that defeats the goal of the game (the goal of the game is to show, 
+        that 'Oh I made this decision and it really helped!' and that needs to always be the case, 
+        which is possible if each question is just one-off). Also, to be really persistent 
+        the game should present all questions at the same time in a different format, like a dash board. 
+        This is not very exciting and also make actually grading the thing much trickier. Also was not what was submitted to NOAA.  
+    --]]

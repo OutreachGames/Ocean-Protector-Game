@@ -2222,11 +2222,11 @@ end
 
 local function On_SpecialAction(self, special_action_name)
 
-	if special_action_name == "special_setup_first_boat" then
+	if special_action_name == HSH.special_setup_first_boat then
 		Spawn_Boat(self)
-	elseif special_action_name == "special_setup_pH_buoy" then
+	elseif special_action_name == HSH.special_setup_pH_buoy then
 		SetupBuoy(self)
-	elseif special_action_name == "special_restart_game" then
+	elseif special_action_name == HSH.special_restart_game then
 		DynamicObject_Reset(self)
 	end
 

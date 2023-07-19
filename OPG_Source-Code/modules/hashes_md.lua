@@ -32,6 +32,7 @@ local HASH = {
     msg_update_item_value = hash("msg_update_item_value"),
     msg_pause_game_msg_sent = hash("msg_pause_game_msg_sent"),
     msg_request_run_coastal_oa = hash("msg_request_run_coastal_oa"),
+    msg_request_resume_catchup = hash("msg_request_resume_catchup"),
 
     -- controls
     control_touch = hash("touch"),
@@ -58,7 +59,13 @@ local HASH = {
 
     -- other 
     helper_outcome_final_debrief = hash("helper_outcome_final_debrief"),
-    helper_outcome_decision_summary = hash("helper_outcome_decision_summary")
+    helper_outcome_decision_summary = hash("helper_outcome_decision_summary"),
+
+    -- special 
+    special_setup_first_boat = hash("special_setup_first_boat"),
+    special_setup_pH_buoy = hash("special_setup_pH_buoy"),
+    special_setup_coastal_oa_1 = hash("special_setup_coastal_oa_1"),
+    special_setup_start_goals_gauge = hash("special_setup_start_goals_gauge")
 
 }
 
