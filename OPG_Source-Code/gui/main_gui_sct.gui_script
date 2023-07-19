@@ -151,7 +151,7 @@ local function PlayerData_Load(self)
 	local loaded_data = sys.load(filename)
 
 	if loaded_data ~= nil then
-		if loaded_data.save_file_version == CV_Current_Save_Version_Major then
+		if loaded_data.save_file_version_major == CV_Current_Save_Version_Major then
 			-- loaded data is valid so set as player data table for lua
 			self.player_data_tbl = loaded_data
 			return true
