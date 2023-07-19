@@ -15,6 +15,7 @@ local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
 local CV_Application_ID = "Ocean_Protector"
 local CV_Save_File_Name = "player_data_save_file"
 local CV_Player_Role_Empty = "player_role_unselected"
+local CV_Node_Save_Icon = "gnode_saved_icon"
 
 local CV_item_groups = {}
 
@@ -331,8 +332,23 @@ local function PlayerData_Save(self)
 	local save_successful = sys.save(filename, self.player_data_tbl)
 	if not save_successful then
 		print("Warning: Save not successful!\n")
-	--else
+	else
 		--print("Saving player data to file with i-key "..self.player_data_tbl.gameplay_loop_i_key.."\n")
+		local saved_text_icon = gui.get_node(CV_Node_Save_Icon)
+
+		local function func_end(self, node)
+			gui.set_visible(node, false)
+		end
+
+		local function func_shrink(self, node)
+			gui.animate(node, "scale", MY_GOO.MINIMIZE, gui.EASING_INSINE, 0.5, 1.25, func_end)
+		end
+
+		gui.cancel_animation(saved_text_icon, "scale")
+		gui.set_scale(saved_text_icon, MY_GOO.MINIMIZE)
+		gui.set_visible(saved_text_icon, true)
+		gui.animate(saved_text_icon, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTSINE, 0.25, 0, func_shrink)
+
 	end
 
 end
@@ -3137,6 +3153,8 @@ local function Game_First_Initialization(self)
 
 	self.num_player_affected_questions = STR:Get_Total_Choices()
 	self.gameplay_loop_order = STR:GameOrder_CreateTable()
+
+	gui.set_visible(gui.get_node(CV_Node_Save_Icon), false)
 
 	Game_RunRestart(self)
 
