@@ -917,7 +917,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_input_id"
   parent: "gnode_controller_new_game"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/components/text_input.gui"

@@ -438,7 +438,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_item_ph"
   parent: "gnode_subcontroller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_data_item.gui"
@@ -1028,7 +1028,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_item_plankton"
   parent: "gnode_subcontroller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_data_item.gui"
@@ -1618,7 +1618,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_item_coral"
   parent: "gnode_subcontroller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_data_item.gui"
@@ -2208,7 +2208,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_item_fish"
   parent: "gnode_subcontroller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_data_item.gui"
@@ -2798,7 +2798,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_item_mollusks"
   parent: "gnode_subcontroller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_data_item.gui"
@@ -3388,7 +3388,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_item_crustaceans"
   parent: "gnode_subcontroller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_data_item.gui"
@@ -3978,7 +3978,7 @@ nodes {
   type: TYPE_TEMPLATE
   id: "group_item_humans"
   parent: "gnode_subcontroller"
-  layer: ""
+  layer: "gui_layer_below"
   inherit_alpha: true
   alpha: 1.0
   template: "/gui/compounds/builder_data_item.gui"
