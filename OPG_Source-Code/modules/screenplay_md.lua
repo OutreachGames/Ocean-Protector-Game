@@ -261,7 +261,7 @@ STR.Screenplay = {
             debrief_text = {
                 "",
                 item_coral = {
-                    "Coral"..n..n.."Corals are diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet.",
+                    "Coral"..n..n.."Corals are a diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet.",
                 },
                 item_fish = {
                     "Fish"..n..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the bluefish, tuna, and red snapper. All fish have some form of internal skeleton. Fish are important food for many different animals, including other fish and humans."
@@ -288,7 +288,8 @@ STR.Screenplay = {
 
         user_lesson_04 = {
             goal_text = "Follow information prompts.",
-            display_text = "Excellent work, we have identified the groups of life in this scene. Throughout our oceans there are thousands of types of plants and animals, far too many to all show in just this scene!",
+            display_text = "Excellent work, we have identified the groups of life in this scene. If you would like to read more about the groups you idenfited then click the 'Open Link' button (this will open a new, seperate webpage). \n\nIt is also important to note that there are thousands of types of plants and animals throughout our oceans, far too many to all show in just this scene! \n\n\n",
+            displaytext_hyperlink_address = "https://www.outreachgames.org/OceanProtector/custom_web_files/Student_Bonus_Content_Sheet.pdf",
             debrief_text = "For our example, we are going to add just one more group. Overall, this group is the highest-level consumer in the ocean.",
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_first_boat)
@@ -1653,7 +1654,7 @@ STR.Screenplay = {
                         "To learn more about ocean acidification check out other great resources from NOAA! After viewing the NOAA link you will be able to return to this option screen. "
                     },
                     debrief_text = {
-                        "Go to NOAA's site to lean more about ocean acidification by clicking the 'Open Link' button (this will open a new, seperate webpage.)."..n..n.."Click 'Continue' to go back to the end game options screen. "
+                        "Go to NOAA's site to lean more about ocean acidification by clicking the 'Open Link' button (this will open a new, seperate webpage)."..n..n.."Click 'Continue' to go back to the end game options screen. "
                     },
                     debrief_hyperlink_address = "https://oceanacidification.noaa.gov/",
                     repeat_question_decision = true,

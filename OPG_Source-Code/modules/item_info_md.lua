@@ -321,6 +321,59 @@ INFO.item_info = {
         }
 	},
 
+	item_crustaceans = {
+        item_enum = 6,
+        gui_info = {
+            group_name = "/group_item_crustaceans",
+            plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
+            plot_y_axis_label = {"Crustacean Population Levels"},
+            object_clicked_label = "Crustacean",
+            data_view_label = {"Crustaceans"},
+        },
+        item_is_alive = true,
+        subitem_info = {
+            subitem_crab = {
+                subitem_enum = 1,
+                spawn_list_key = "item_crustaceans__subitem_crab",
+                spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
+                spawn_z_base = CV_Base_Z_Items +0.11 + (CV_Z_Failsafe*5),
+                spawn_y_range = {-420, -365},
+                spawn_x_min = -50,
+                spawn_max_count = 4,
+                object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
+                object_gridsize_multiplier = { x = 2.5, y = 1 },
+                object_scale_base = CV_Default_Base_Scale,
+                object_rotation_speed_base = 30,
+                object_translation_speed_base = 8,
+                object_translation_speed_can_vary = true,
+                object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
+                object_anim_multi = {rate_idle = 0.001, rate_moving = 1.0, rate_float = 0.6, rate_extra = 0.6}, --recall extra and float are just claws
+                movement_easing_options = {move_go=5, move_stop=5},
+                info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
+            },
+            subitem_shrimp = {
+                subitem_enum = 2,
+                spawn_list_key = "item_crustaceans__subitem_shrimp",
+                spawn_coll_factory = "spawner_crustaceans_shrimp#collectionfactory",
+                spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*4),
+                spawn_y_range = {-200, -100},
+                spawn_x_min = 50,
+                spawn_max_count = 10,
+                object_dimensions = { x = 108, y = 35 }, --compiled sprite/spine dimensions
+                object_gridsize_multiplier = { x = 0.8, y = 0.8 },
+                object_scale_base = CV_Default_Base_Scale,
+                object_rotation_speed_base = 40,
+                object_translation_speed_base = 15,
+                object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
+                object_anim_multi = {rate_idle = 0.5, rate_moving = 1.2, rate_float = 0.5}, --recall idle is moving with current
+                movement_easing_options = {move_go=2, move_stop=2},
+                info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
+            }
+        }
+	},
+
 	item_fish = {
         item_enum = 5,
         gui_info = {
@@ -381,59 +434,6 @@ INFO.item_info = {
                 object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.7},
                 movement_easing_options = {move_go=1, move_stop=2},
                 info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
-            }
-        }
-	},
-
-	item_crustaceans = {
-        item_enum = 6,
-        gui_info = {
-            group_name = "/group_item_crustaceans",
-            plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
-            plot_y_axis_label = {"Crustacean Population Levels"},
-            object_clicked_label = "Crustacean",
-            data_view_label = {"Crustaceans"},
-        },
-        item_is_alive = true,
-        subitem_info = {
-            subitem_crab = {
-                subitem_enum = 1,
-                spawn_list_key = "item_crustaceans__subitem_crab",
-                spawn_coll_factory = "spawner_crustaceans_crab#collectionfactory",
-                spawn_z_base = CV_Base_Z_Items +0.11 + (CV_Z_Failsafe*5),
-                spawn_y_range = {-420, -365},
-                spawn_x_min = -50,
-                spawn_max_count = 4,
-                object_dimensions = { x = 118, y = 50 }, --compiled sprite/spine dimensions
-                object_gridsize_multiplier = { x = 2.5, y = 1 },
-                object_scale_base = CV_Default_Base_Scale,
-                object_rotation_speed_base = 30,
-                object_translation_speed_base = 8,
-                object_translation_speed_can_vary = true,
-                object_logic_type = CV_Logic_Type_Swimmer,
-                extra_death_effect = 1,
-                object_anim_multi = {rate_idle = 0.001, rate_moving = 1.0, rate_float = 0.6, rate_extra = 0.6}, --recall extra and float are just claws
-                movement_easing_options = {move_go=5, move_stop=5},
-                info_url = "https://www.fisheries.noaa.gov/species/blue-crab"
-            },
-            subitem_shrimp = {
-                subitem_enum = 2,
-                spawn_list_key = "item_crustaceans__subitem_shrimp",
-                spawn_coll_factory = "spawner_crustaceans_shrimp#collectionfactory",
-                spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*4),
-                spawn_y_range = {-200, -100},
-                spawn_x_min = 50,
-                spawn_max_count = 10,
-                object_dimensions = { x = 108, y = 35 }, --compiled sprite/spine dimensions
-                object_gridsize_multiplier = { x = 0.8, y = 0.8 },
-                object_scale_base = CV_Default_Base_Scale,
-                object_rotation_speed_base = 40,
-                object_translation_speed_base = 15,
-                object_logic_type = CV_Logic_Type_Swimmer,
-                extra_death_effect = 1,
-                object_anim_multi = {rate_idle = 0.5, rate_moving = 1.2, rate_float = 0.5}, --recall idle is moving with current
-                movement_easing_options = {move_go=2, move_stop=2},
-                info_url = "https://www.fisheries.noaa.gov/species/pink-shrimp"
             }
         }
 	},
