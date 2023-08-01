@@ -1269,7 +1269,6 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 		-- set special image on or off
 		if special_image_id ~= nil then
 			gui.set_visible(node_special_image, true)
-			gui.set_texture(node_special_image, "textures")
 			gui.play_flipbook(node_special_image, special_image_id)
 		end
 
@@ -1907,7 +1906,7 @@ local function Screen_Plot_Reset(self, enabled_setting, run_sizing, item_group_k
 		return
 	end
 
-	-- get subname if human and we have chosen a character
+	-- get sub-name if human and we have chosen a character
 	local opt_subitem_name
 	if item_group_key == "item_humans" then
 		opt_subitem_name = STR:Get_Subitem_from_Role(self.player_data_tbl.character_role_key)
