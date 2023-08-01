@@ -1799,6 +1799,21 @@ function STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
 
 end
 
+function STR:Get_NewInfo_Special_Image(stage_key, substage_key)
+
+    -- gets string name of special image to display
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil, nil, nil
+    end
+
+    local info = self.Screenplay[stage_key][substage_key]
+
+    --#TODO add special images in
+    return self:GetString_from_Tbl_or_Value(info.display_special_image_id)
+
+end
+
 
 -- Items to Click
 function STR:Get_Items_to_Click(stage_key, substage_key)

@@ -1166,7 +1166,7 @@ end
 
 
 -- HUD Screen: Popup 
-local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text, size_type, is_dynamic, op_hyperlink)
+local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_values, body_text, title_text, size_type, is_dynamic, op_hyperlink, special_image_id)
 
 	-- reset Popup screen of HUD
 
@@ -1183,9 +1183,11 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 	local node_controller_main = gui.get_node(constant.node_controller_main)
 	local node_controller_review = gui.get_node(constant.node_controller_review)
 	local node_hyperlink_button = gui.get_node(constant.node_optional_hyperlink)
+	local node_special_image = gui.get_node(constant.node_special_image)
 
 	gui.set_enabled(node_controller_review, false)
 	gui.set_enabled(node_hyperlink_button, false)
+	gui.set_visible(node_special_image, false)
 
 	-- enable and set text, but only if enabling
 	-- do this before sizing so text sizer can be used
@@ -1264,6 +1266,13 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			self.hud_popup_dynamic.optional_hyperlink_address = op_hyperlink
 		end
 
+		-- set special image on or off
+		if special_image_id ~= nil then
+			gui.set_visible(node_special_image, true)
+			gui.set_texture(node_special_image, "textures")
+			gui.play_flipbook(node_special_image, special_image_id)
+		end
+
 	end
 
 	-- run enabling status and possibly sizing
@@ -1275,26 +1284,35 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 
 	if run_sizing then
 		if enabled_setting then
+			-- prep for sizing
 			func_done(self, node_controller_main)
+
 			gui.set_scale(node_controller_main, MY_GOO.MINIMIZE)
 
+			-- get and set sizing
 			local y_ranges = {
-				size_small = {250, 119, 108},
-				size_medium = {400, 258, -51},
-				size_large = {600, 468, -251},
-				size_huge = {820, 680, -465},
+				-- y values for 1) body frame, 2) body text, 3) lower buttons, 4) special image
+				size_small = {250, 119, 108, 230},
+				size_medium = {400, 258, -51, 86},
+				size_large = {600, 468, -251, -38},
+				size_huge = {820, 680, -465, -248},
 			}
 
 			local yvals = y_ranges[self.hud_popup_dynamic.overall_size]
 
+			-- get nodes
 			local node_body_frame = gui.get_node(constant.node_frame_body)
 			local node_body_text = gui.get_node(constant.node_text_body)
 			local node_button_frame = gui.get_node(constant.node_continue_frame)
+
+			-- set node sizes
 			gui.set_size(node_body_frame, vmath.vector3(gui.get_size(node_body_frame).x, yvals[1], 0))
 			gui.set_size(node_body_text, vmath.vector3(gui.get_size(node_body_text).x, yvals[2], 0))
-			gui.set_position(node_button_frame, vmath.vector3(gui.get_position(node_button_frame).x, yvals[3], 0))
 
+			-- set node positions
+			gui.set_position(node_button_frame, vmath.vector3(gui.get_position(node_button_frame).x, yvals[3], 0))
 			gui.set_position(node_hyperlink_button, vmath.vector3(gui.get_position(node_hyperlink_button).x, yvals[3], 0))
+			gui.set_position(node_special_image, vmath.vector3(gui.get_position(node_special_image).x, yvals[4], 0))
 
 			gui.animate(node_controller_main, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
 		else
@@ -1351,7 +1369,8 @@ local function Screen_Popup_Initialize(self, enabled_status)
 			dynamic_text_end_value = basename .. "/gnode_review_end"
 		},
 		goo_optional_hyperlink = basename .. "/group_button_hyperlink",
-		node_optional_hyperlink = basename .. "/group_button_hyperlink/gui_button_core"
+		node_optional_hyperlink = basename .. "/group_button_hyperlink/gui_button_core",
+		node_special_image = basename .. "/gnode_special_image"
 	}
 
 	-- set dynamics
@@ -2671,7 +2690,8 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 		local run_sizer = true
 		local reset_values = true
 		local popup_text_title
-		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink)
+		local special_image_str = STR:Get_NewInfo_Special_Image(stage_key, substage_key)
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink, special_image_str)
 
 	elseif stage_type == st.class_decisison then
 		-- setup decision
