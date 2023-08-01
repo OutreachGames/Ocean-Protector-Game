@@ -9,7 +9,7 @@ fonts {
 }
 textures {
   name: "textures"
-  texture: "/gui/gui_images.atlas"
+  texture: "/asset_links/textures.atlas"
 }
 background_color {
   x: 0.0
