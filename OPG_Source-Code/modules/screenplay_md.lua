@@ -871,7 +871,7 @@ STR.Screenplay = {
                 "Please choose a character. Each character has specific goals and does a different job. You can view this information by clicking on each character button. "
             },
             answer_options = {
-                --#TODO update character selection screen so more info can be shown?
+                --#TODO think about updating character selection screen so more info can be shown?
                 user_choice_1 = {
                     display_text = {
                         --"Fishing Boat Captain"..n..

@@ -2851,7 +2851,7 @@ local function Screen_MainMenu_Initialize(self, enabled_status, save_file_exists
 			allowed_characters = "[%d]",
 			use_marked_text = false
 		},
-		--#TODO update game ID validity check if needed
+		-- update game ID validity check if needed
 		game_id_must_be_valid = true
 	}
 
