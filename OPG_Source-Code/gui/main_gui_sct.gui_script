@@ -795,6 +795,28 @@ local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert
 
 end
 
+local function Get_Coastal_OA_Percent_Helper(self)
+
+	-- safe way of getting coastal OA percent from question choice
+
+	local decision_tbl = self.player_data_tbl.decision_data_tbl
+	local length_decision_items = #decision_tbl
+	local length_ph_trck = #self.player_data_tbl.item_data_tbl.item_ph
+	if length_decision_items ~= length_ph_trck then
+		print("Error: within 'Get Coastal OA Percent Helper' function, length_decision_items <"..tostring(length_decision_items).."> is not equal to length_ph_trck <"..tostring(length_ph_trck)..">\n")
+	end
+
+	-- get text for decision reminder
+	local decision_info = decision_tbl[length_decision_items]
+	local stage_key = decision_info.selection_stage_key
+	local substage_key = decision_info.selection_substage_key
+	local choice_key = decision_info.selection_choice_key
+	local character_role = self.player_data_tbl.character_role_key
+
+	return STR:Get_Decision_PercentCoastalOA(stage_key, substage_key, character_role, choice_key)
+
+end
+
 local function DynamicText_DecisionSummary(self)
 
 	-- get dynamic text for decision summary
@@ -846,7 +868,7 @@ local function DynamicText_DecisionSummary(self)
 	local length_decision_items = #decision_tbl
 	local length_ph_trck = #self.player_data_tbl.item_data_tbl.item_ph
 	if length_decision_items ~= length_ph_trck then
-		print("Error: length_decision_items <"..tostring(length_decision_items).."> is not equal to length_ph_trck <"..tostring(length_ph_trck)..">\n")
+		print("Error: withing 'Dynamic Text Decision Summary' function, length_decision_items <"..tostring(length_decision_items).."> is not equal to length_ph_trck <"..tostring(length_ph_trck)..">\n")
 	end
 
 	-- get text for decision reminder
@@ -2677,13 +2699,17 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 		-- and at that point request a game progress
 		-- get previous and current values for items into table and send it
 		if PlayerData_IsValid(self, "Observe Items Setup") then
-			-- setup outcomes table\
+
+			-- setup outcomes table
 			local show_highlighter = true
 			local oa_outcome_tbl = {
 				minfo_oa_outcome_item_health_values = {},
 				minfo_oa_outcome_reset_swimmers = STR:Get_Swimmers_are_Resetting(stage_key, substage_key),
-				minfo_oa_outcomes_show_highlighter = show_highlighter
+				minfo_oa_outcomes_show_highlighter = show_highlighter,
+				minfo_run_coastal_oa_percent = Get_Coastal_OA_Percent_Helper(self)
 			}
+
+			-- set previous and new health values for items
 			for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
 				if v_item_tracker_tbl ~= nil then
 					local tracker_list_length = #v_item_tracker_tbl
@@ -2702,6 +2728,7 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 					}
 				end
 			end
+
 			-- hide data screen so OA changes are easier to see?
 			-- then open back up after OA done? 
 			-- or just do not bother and assume player will set how they want

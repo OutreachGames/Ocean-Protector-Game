@@ -1183,12 +1183,14 @@ STR.Screenplay = {
                     debrief_text = {
                         "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
+                    coastal_oa_percent_to_run = 100,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
                     display_text = {
                         "Dispose of the waste in the waters far away from the shore. "
                     },
+                    coastal_oa_percent_to_run = 100,
                     debrief_text = {
                         "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Travelling far from shore also uses more fuel, which increases carbon dioxide emissions. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
@@ -1268,6 +1270,7 @@ STR.Screenplay = {
                             "Create large barriers with nets and try to completely block off the part of the ocean that you run tours through."
                         },
                     },
+                    coastal_oa_percent_to_run = 50,
                     debrief_text = {
                         "You have chosen to try and block off parts of the ocean. Unfortunately, creating large physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "
                     },
@@ -1294,6 +1297,7 @@ STR.Screenplay = {
                             "Do not alter the places you go on your ocean tours and do not add net barriers."
                         },
                     },
+                    coastal_oa_percent_to_run = 50,
                     debrief_text = {
                         "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. "
                     },
@@ -1338,6 +1342,7 @@ STR.Screenplay = {
                     display_text = {
                         "The money should be spent on creating more parking lots throughout the city."
                     },
+                    coastal_oa_percent_to_run = 100,
                     debrief_text = {
                         "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "
                     },
@@ -1347,6 +1352,7 @@ STR.Screenplay = {
                     display_text = {
                         "The money should be spent on building a large convention center in the city."
                     },
+                    coastal_oa_percent_to_run = 50,
                     debrief_text = {
                         "The council has followed your advice to build a large convention center. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution. "
                     },
@@ -1453,6 +1459,7 @@ STR.Screenplay = {
                     display_text = {
                         "People should water their lawns and wash their cars more frequently."
                     },
+                    coastal_oa_percent_to_run = 100,
                     debrief_text = {
                         "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. "
                     },
@@ -1928,6 +1935,30 @@ function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_
     end
 
     return returned_debrief, a_info_i.debrief_is_dynamic
+
+end
+
+function STR:Get_Decision_PercentCoastalOA(stage_key, substage_key, character_role, choice_key)
+
+    -- gets the percent of coastal OA to run with this choice
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local a_info_i = decision_info.answer_options[choice_key]
+
+    if a_info_i == nil then
+        print("Error decision coastal OA function was unable to find answer information for key <"..choice_key.."> \n")
+        return nil
+    end
+
+    -- get debrief text table
+    local a_info_i_coastal_oa_percent = a_info_i.coastal_oa_percent_to_run
+
+    return a_info_i_coastal_oa_percent
 
 end
 

@@ -20,6 +20,7 @@ local CV_Update_Property = {
 
 local CV_Weather_Reload_Time = 0.25
 local CV_Animal_Reset_Time = 0.25
+local CV_Total_Coastal_OA_Time = 30
 
 -- functions
 
@@ -803,7 +804,7 @@ local function SetPlanktonViewer(self, toggle_option, is_instant)
 
 end
 
-local function Run_CoastalOA(self, update_percentage_to_hide)
+local function Run_CoastalOA(self, update_percentage_to_hide) -- percent ranges from 0.0 to 1.0
 
 	-- plays particle effect for coastal acidification
 	-- make sure weather going from left to right when OACoast is running
@@ -855,7 +856,7 @@ local function Run_CoastalOA(self, update_percentage_to_hide)
 	particlefx.play("spawner_coastOA#particlefx")
 
 	-- wait until particle effects are done before being able to do again
-	local anim_duration = 30
+	local anim_duration = CV_Total_Coastal_OA_Time
 
 	local function func_set_oa(self)
 		self.coastal_oa_playing = false
@@ -1768,7 +1769,7 @@ local function ResetDynamicGrids(self)
 
 end
 
-local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, show_highlighter) --oa_outcome_tbl in form { item_plankton = {health_value_previous, health_value_new} }
+local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, show_highlighter, percent_coastal_oa_to_run) --oa_outcome_tbl in form { item_plankton = {health_value_previous, health_value_new} }
 
 	-- reset all swimmers at full count then add or kill given %
 	-- also send messages to static and micro to update
@@ -1791,6 +1792,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	local stage_done_plankton_or_oa
 	local stage_done_ocean_benthic
 	local stage_done_ocean_pelagic
+	local full_oa_done_wait = 0.1
 
 	if show_highlighter then
 		stage_done_plankton_or_oa = 2
@@ -1800,6 +1802,16 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		stage_done_plankton_or_oa = 1
 		stage_done_ocean_benthic = 1
 		stage_done_ocean_pelagic = 1
+	end
+
+	-- add extra time to plankton to do coastal OA
+	if type(percent_coastal_oa_to_run) == "number" then
+		if percent_coastal_oa_to_run > 0 then
+			-- give some time for coastal effect to start
+			stage_done_plankton_or_oa = stage_done_plankton_or_oa + CV_Total_Coastal_OA_Time/3
+		end
+	else
+		percent_coastal_oa_to_run = 0
 	end
 
 	-- ^^ give time for new swimmers to join formation before ordering school to patrol
@@ -2018,7 +2030,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	end
 
 	-- update helper functions
-	local function update_plankton()
+	local function update_plankton_or_coastal_oa()
 
 		-- trigger highlighter
 		if show_highlighter then
@@ -2027,6 +2039,17 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 		-- update plankton, which uses health update message
 		update_micro_or_static("item_plankton", "subitem_phytoplankton")
+
+		-- also do optional coastal OA
+		-- health effects can still occur with plankton even if disabling b/c of coastal OA
+		-- recall coastal OA hides plankton viewer, 
+		--  fine if some have shrank already it's likely not noticeable
+		--  and questions that use coastal OA also have co2 effects 
+		--   which can be used as justification for why plankton change before coastal OA kicks in
+		if percent_coastal_oa_to_run > 0 then
+			local percent_coastal_oa_to_hide = 1 - percent_coastal_oa_to_run
+			Run_CoastalOA(self, percent_coastal_oa_to_hide)
+		end
 
 	end
 
@@ -2130,7 +2153,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 			timer.delay(fader_time*1.5, false, function()
 
 				-- highlight plankton or OA and request update and coastal OA if needed
-				update_plankton()
+				update_plankton_or_coastal_oa()
 
 				timer.delay(stage_done_plankton_or_oa, false, function()
 
@@ -2155,9 +2178,22 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 								end
 							end
 
+							-- end OA effects when all animals done and coastal OA is done
+							-- IE if there is still time left on coastal OA then wait until it's done
+							if percent_coastal_oa_to_run > 0 then
+								local time_used = stage_done_plankton_or_oa + stage_done_ocean_benthic + full_ocean_mid_done
+								if CV_Total_Coastal_OA_Time > time_used then
+									full_oa_done_wait = CV_Total_Coastal_OA_Time - time_used
+								end
+							end
+
 							-- report that OA effects are done
 							-- recall this message will also disable highlighter
-							msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
+							timer.delay(full_oa_done_wait, false, function()
+
+								msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
+
+							end)
 
 						end)
 					end)
@@ -2260,7 +2296,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_request_special_case_action then
 		On_SpecialAction(self, message.minfo_special_case_key)
 	elseif message_id == HSH.msg_request_oa_outcomes_started then
-		On_OA_OutcomeEffects(self, message.minfo_oa_outcome_item_health_values, message.minfo_oa_outcome_reset_swimmers, message.minfo_oa_outcomes_show_highlighter)
+		On_OA_OutcomeEffects(self, message.minfo_oa_outcome_item_health_values, message.minfo_oa_outcome_reset_swimmers, message.minfo_oa_outcomes_show_highlighter, message.minfo_run_coastal_oa_percent)
 	elseif message_id == HSH.msg_set_player_character_subitem then
 		Boat_Change_Character(self, message.minfo_subitem_boat_name)
 	end
