@@ -125,6 +125,7 @@ STR.CV = {
 
         goal_completed_type = CV_goal_types.observe_outcomes,
         run_swimmer_reset_before_oa_outcome = true,
+        show_ocean_hud_highlighter = false,
         goal_text = "Observe changes to ocean life."
 
     },
@@ -466,6 +467,7 @@ STR.Screenplay = {
         user_lesson_16b = {
             goal_completed_type = STR.CV.goal_completed_types.class_observe_outcomes,
             run_swimmer_reset_before_oa_outcome = false,
+            show_ocean_hud_highlighter = true,
             goal_text = STR.CV.oa_outcome_view_goal_text,
         },
 
@@ -1719,6 +1721,18 @@ function STR:Get_Swimmers_are_Resetting(stage_key, substage_key)
     end
 
     return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].run_swimmer_reset_before_oa_outcome)
+
+end
+
+function STR:Get_Show_HUD_Highlighter(stage_key, substage_key)
+
+    -- gets if HUD highlighter box should be shown for this outcome observation
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].show_ocean_hud_highlighter)
 
 end
 

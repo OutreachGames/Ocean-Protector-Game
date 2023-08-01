@@ -2032,8 +2032,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	-- update helper functions
 	local function update_plankton_or_coastal_oa()
 
-		-- trigger highlighter
-		if show_highlighter then
+		-- trigger highlighter, but only if coastal OA is not running
+		if show_highlighter and percent_coastal_oa_to_run <= 0 then
 			msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_plankton"})
 		end
 

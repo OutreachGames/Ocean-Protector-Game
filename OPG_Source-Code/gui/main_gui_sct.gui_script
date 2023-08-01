@@ -2701,11 +2701,10 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 		if PlayerData_IsValid(self, "Observe Items Setup") then
 
 			-- setup outcomes table
-			local show_highlighter = true
 			local oa_outcome_tbl = {
 				minfo_oa_outcome_item_health_values = {},
 				minfo_oa_outcome_reset_swimmers = STR:Get_Swimmers_are_Resetting(stage_key, substage_key),
-				minfo_oa_outcomes_show_highlighter = show_highlighter,
+				minfo_oa_outcomes_show_highlighter = STR:Get_Show_HUD_Highlighter(stage_key, substage_key),
 				minfo_run_coastal_oa_percent = Get_Coastal_OA_Percent_Helper(self)
 			}
 
