@@ -289,7 +289,7 @@ STR.Screenplay = {
 
         user_lesson_04 = {
             goal_text = "Follow information prompts.",
-            display_text = "Excellent work, we have identified the groups of life in this scene. If you would like to read more about the groups you idenfited then click the 'Open Link' button (this will open a new, seperate webpage). \n\nIt is also important to note that there are thousands of types of plants and animals throughout our oceans, far too many to all show in just this scene! \n\n\n",
+            display_text = "Excellent work, we have identified the groups of life in this scene. If you would like to read more about the groups you identified then click the 'Open Link' button (this will open a new, separate webpage). \n\nIt is also important to note that there are thousands of types of plants and animals throughout our oceans, far too many to all show in just this scene! \n\n\n",
             displaytext_hyperlink_address = "https://www.outreachgames.org/OceanProtector/custom_web_files/Student_Bonus_Content_Sheet.pdf",
             debrief_text = "For our example, we are going to add just one more group. Overall, this group is the highest-level consumer in the ocean.",
             outcome_result_func = function()
@@ -322,6 +322,7 @@ STR.Screenplay = {
             display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nBillions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nIn addition, our oceans help cycle nutrients and are even a source of new medicines.\n\n",
             debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
             extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer."
+            --#TODO: special_image_id = Earth sphere with recycle arrows around oceans
         },
 
         -- Acidification Introduction
@@ -338,6 +339,7 @@ STR.Screenplay = {
         user_lesson_08 = {
             goal_text = "Follow information prompts.",
             display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories.",
+            --#TODO: special_image_id = Plane, cars, factories, houses releasing CO2
             debrief_text = nil,
             extra_text = nil
         },
@@ -347,6 +349,7 @@ STR.Screenplay = {
         user_lesson_09 = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gas mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.\n\n",
+            --#TODO: special_image_id = CO2 mixing with ocean
             debrief_text = nil,
             extra_text = nil
         },
@@ -354,6 +357,7 @@ STR.Screenplay = {
         user_lesson_10a = {
             goal_text = "Follow information prompts.",
             display_text = "Acidification can also occur due to nutrient pollution. \n\nExcess nutrient pollution can come from human sources such as fertilizers, soaps, and industrial waste.\n\n",
+            --#TODO: special_image_id = fertilizers and industrial waste?
             debrief_text = nil,
             extra_text = nil
         },
@@ -374,9 +378,10 @@ STR.Screenplay = {
         user_lesson_11 = {
             goal_text = "Follow information prompts.",
             display_text = "When it rains runoff water carries these excess nutrients to the coast and ocean. This provides unnatural amounts of nutrients to phytoplankton. ",
+            --#TODO: special_image_id = fertilizers and industrial waste running into ocean and arrow showing phytoplankton growth
             debrief_text = nil,
             outcome_result_func = function()
-                --#TODO add delay to progress function
+                --#TODO think about adding delay to progress function
                 --STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_coastal_oa_1)
             end,
             extra_text = nil
@@ -387,6 +392,7 @@ STR.Screenplay = {
         user_lesson_12 = {
             goal_text = "Follow information prompts.",
             display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decomposing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
+            --#TODO: special_image_id = phytoplankton growth, then dying releasing CO2
             debrief_text = nil,
             extra_text = nil
         },
@@ -406,6 +412,7 @@ STR.Screenplay = {
         user_lesson_14 = {
             goal_text = "Follow information prompts.",
             display_text = "We use the pH scale to measure how acidic or basic something is. \n\nThe pH scale runs from 0 to 14, with 7 being a neutral pH. \n\nValues above 7 are basic, or alkaline. Values below 7 are acidic.\n\n",
+            --#TODO: special_image_id = pH scale example
             debrief_text = "Values of pH are measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic than a pH of 7. \n\n",
             extra_text = nil,
         },
@@ -448,12 +455,14 @@ STR.Screenplay = {
         user_lesson_15c = {
             goal_text = "Follow information prompts.",
             display_text = "When we compare the pH of today's oceans to pH measurements of the past there is a distinct difference."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
+            --#TODO: special_image_id = pH decrease chart
             debrief_text = "This increase in ocean acidity over time is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 
         user_lesson_16a = {
             goal_text = "Follow information prompts.",
             display_text = "Ocean acidification hurts life throughout our oceans, including us. "..n..n.."For example, many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes."..n..n,
+            --#TODO: special_image_id = show healthy shell than degraded shell
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
             extra_text = nil,
             outcome_result_func = function()
@@ -1663,7 +1672,7 @@ STR.Screenplay = {
                         "To learn more about ocean acidification check out other great resources from NOAA! After viewing the NOAA link you will be able to return to this option screen. "
                     },
                     debrief_text = {
-                        "Go to NOAA's site to lean more about ocean acidification by clicking the 'Open Link' button (this will open a new, seperate webpage)."..n..n.."Click 'Continue' to go back to the end game options screen. "
+                        "Go to NOAA's site to learn more about ocean acidification by clicking the 'Open Link' button (this will open a new, separate webpage)."..n..n.."Click 'Continue' to go back to the end game options screen. "
                     },
                     debrief_hyperlink_address = "https://oceanacidification.noaa.gov/",
                     repeat_question_decision = true,
