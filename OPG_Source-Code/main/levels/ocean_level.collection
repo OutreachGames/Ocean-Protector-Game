@@ -262,8 +262,8 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: -673.0\n"
-  "    y: 89.0\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -275,8 +275,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
-    y: 0.0
+    x: -673.0
+    y: 89.0
     z: -1.0
   }
   rotation {
@@ -316,7 +316,7 @@ embedded_instances {
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
-  "    y: 184.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -329,7 +329,7 @@ embedded_instances {
   ""
   position {
     x: 0.0
-    y: 0.0
+    y: 184.0
     z: 0.0
   }
   rotation {
@@ -627,7 +627,7 @@ embedded_instances {
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
-  "    y: 332.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -640,7 +640,7 @@ embedded_instances {
   ""
   position {
     x: 0.0
-    y: 0.0
+    y: 332.0
     z: 0.01
   }
   rotation {
@@ -1444,8 +1444,8 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: -673.0\n"
-  "    y: 89.0\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1457,8 +1457,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
-    y: 0.0
+    x: -673.0
+    y: 89.0
     z: -0.95
   }
   rotation {
@@ -1523,8 +1523,8 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: -673.0\n"
-  "    y: 98.0\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1536,8 +1536,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
-    y: 0.0
+    x: -673.0
+    y: 98.0
     z: -1.0
   }
   rotation {
@@ -1591,8 +1591,8 @@ embedded_instances {
   "material: \\\"/builtins/fonts/label.material\\\"\\n"
   "\"\n"
   "  position {\n"
-  "    x: -673.0\n"
-  "    y: 128.0\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1604,8 +1604,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
-    y: 0.0
+    x: -673.0
+    y: 128.0
     z: -0.81
   }
   rotation {
@@ -1660,9 +1660,9 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "background_water_bottom_rest"
+  id: "background_water_bottom_lower"
   data: "embedded_components {\n"
-  "  id: \"sprite_lower\"\n"
+  "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/asset_links/textures.atlas\\\"\\n"
   "default_animation: \\\"Asset_Bottom_Water_lower\\\"\\n"
@@ -1684,7 +1684,7 @@ embedded_instances {
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
-  "    y: -212.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1694,8 +1694,28 @@ embedded_instances {
   "    w: 1.0\n"
   "  }\n"
   "}\n"
-  "embedded_components {\n"
-  "  id: \"sprite_upper\"\n"
+  ""
+  position {
+    x: 0.0
+    y: -212.0
+    z: -0.95
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "background_water_bottom_upper"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/asset_links/textures.atlas\\\"\\n"
   "default_animation: \\\"Asset_Bottom_Water_upper\\\"\\n"
@@ -1716,8 +1736,8 @@ embedded_instances {
   "size_mode: SIZE_MODE_MANUAL\\n"
   "\"\n"
   "  position {\n"
-  "    x: 127.0\n"
-  "    y: 89.0\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -1729,8 +1749,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
-    y: 0.0
+    x: 127.0
+    y: 89.0
     z: -0.95
   }
   rotation {
