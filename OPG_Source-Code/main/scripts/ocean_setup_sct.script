@@ -900,13 +900,13 @@ local function SetStatic_Weather(self, is_raining)
 	go.set("background_water_bottom_upper#sprite", "tint", tint_waterbottom or vmath1)
 
 	msg.post("background_sun#sprite", str_set)
-	msg.post("background_water_light#rays_bottom", str_set)
-	msg.post("background_water_light#rays_top", str_set)
-	msg.post("background_water_light#shade_inner", str_set)
-	msg.post("background_water_light#shade_middle", str_set)
-	msg.post("background_water_light#shade_outer", str_set)
+	msg.post("background_water_light_rays_bottom#sprite", str_set)
+	msg.post("background_water_light_rays_top#sprite", str_set)
+	msg.post("background_water_light_collision#shade_inner", str_set)
+	msg.post("background_water_light_collision#shade_middle", str_set)
+	msg.post("background_water_light_collision#shade_outer", str_set)
 
-	msg.post("background_water_light", "msg_request_reset_shadows")
+	msg.post("background_water_light_collision", "msg_request_reset_shadows")
 
 end
 
