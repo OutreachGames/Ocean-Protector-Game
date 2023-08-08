@@ -368,7 +368,8 @@ local function PlayerData_Check_MaybeLoad(self, load_saved_file)
 	local loaded_data = sys.load(filename)
 
 	if loaded_data ~= nil then
-		if loaded_data.save_file_version_major >= CV_Current_Save_Version_Major then
+		local saved_version = loaded_data.save_file_version_major or 0
+		if saved_version >= CV_Current_Save_Version_Major then
 			-- loaded data is valid so set as player data table for lua
 			if load_saved_file then
 				self.player_data_tbl = nil
