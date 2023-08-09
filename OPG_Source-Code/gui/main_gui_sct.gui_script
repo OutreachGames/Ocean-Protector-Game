@@ -2240,6 +2240,43 @@ end
 
 
 --HUD Process: Reset Player Data Table
+local function PlayerData_MakeOA_Tbl(self, stage_key, substage_key)
+
+	-- makes and returns table to use in OA outcome observations and catchup 
+
+	local oa_outcome_tbl = {
+		minfo_oa_outcome_item_health_values = {}
+	}
+
+	for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
+		if v_item_tracker_tbl ~= nil then
+			local tracker_list_length = #v_item_tracker_tbl
+			local new_val = v_item_tracker_tbl[tracker_list_length].item_tracker_score
+			local previous_val
+			-- add previous and new values
+			if tracker_list_length >= 2 then
+				previous_val = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score
+			else
+				previous_val = new_val
+			end
+			-- save to table for message passing
+			oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
+				health_value_previous = previous_val,
+				health_value_new = new_val
+			}
+		end
+	end
+
+	if stage_key ~= nil and substage_key ~= nil then
+		oa_outcome_tbl.minfo_oa_outcome_reset_swimmers = STR:Get_Swimmers_are_Resetting(stage_key, substage_key)
+		oa_outcome_tbl.minfo_oa_outcomes_show_highlighter = STR:Get_Show_HUD_Highlighter(stage_key, substage_key)
+		oa_outcome_tbl.minfo_run_coastal_oa_percent = Get_Coastal_OA_Percent_Helper(self)
+	end
+
+	return oa_outcome_tbl
+
+end
+
 local function PlayerData_CatchUp(self)
 
 	-- runs all catch up events that should have been triggered by this point
@@ -2291,30 +2328,10 @@ local function PlayerData_CatchUp(self)
 
 	-- recall static and plankton are cumulative visuals, so need to be updated to where we left off
 	-- swimmers are reset each observation event, so no need to update visuals when loading
-	local oa_outcome_tbl = {minfo_oa_outcome_item_health_values = {}}
-
-	for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
-		if v_item_tracker_tbl ~= nil then
-			local tracker_list_length = #v_item_tracker_tbl
-			local new_val = v_item_tracker_tbl[tracker_list_length].item_tracker_score
-			local previous_val
-			-- add previous and new values
-			if tracker_list_length >= 2 then
-				previous_val = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score
-			else
-				previous_val = new_val
-			end
-			-- save to table for message passing
-			oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
-				health_value_previous = previous_val,
-				health_value_new = new_val
-			}
-		end
-	end
 
 	-- send message to start and set that OA outcomes are active so certain popup clicking does not work
 	self.oa_outcomes_are_active = true
-	msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_catchup_micro_or_static, oa_outcome_tbl)
+	msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_catchup_micro_or_static, PlayerData_MakeOA_Tbl(self))
 
 end
 
@@ -2757,35 +2774,6 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 		-- and at that point request a game progress
 		-- get previous and current values for items into table and send it
 		if PlayerData_IsValid(self, "Observe Items Setup") then
-
-			-- setup outcomes table
-			local oa_outcome_tbl = {
-				minfo_oa_outcome_item_health_values = {},
-				minfo_oa_outcome_reset_swimmers = STR:Get_Swimmers_are_Resetting(stage_key, substage_key),
-				minfo_oa_outcomes_show_highlighter = STR:Get_Show_HUD_Highlighter(stage_key, substage_key),
-				minfo_run_coastal_oa_percent = Get_Coastal_OA_Percent_Helper(self)
-			}
-
-			-- set previous and new health values for items
-			for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
-				if v_item_tracker_tbl ~= nil then
-					local tracker_list_length = #v_item_tracker_tbl
-					local new_val = v_item_tracker_tbl[tracker_list_length].item_tracker_score
-					local previous_val
-					-- add previous and new values
-					if tracker_list_length >= 2 then
-						previous_val = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score
-					else
-						previous_val = 1
-					end
-					-- save to table for message passing
-					oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
-						health_value_previous = previous_val,
-						health_value_new = new_val
-					}
-				end
-			end
-
 			-- hide data screen so OA changes are easier to see?
 			-- then open back up after OA done? 
 			-- or just do not bother and assume player will set how they want
@@ -2794,7 +2782,7 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 
 			-- send message to start and set that OA outcomes are active so certain popup clicking does not work
 			self.oa_outcomes_are_active = true
-			msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, oa_outcome_tbl)
+			msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, PlayerData_MakeOA_Tbl(self, stage_key, substage_key))
 		end
 
 	end
