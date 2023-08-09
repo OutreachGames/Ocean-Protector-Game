@@ -2283,6 +2283,39 @@ local function PlayerData_CatchUp(self)
 		end
 	end
 
+	-- run static and plankton catch up
+	-- if buoy not present then still within starting range and no need to do all of this
+	if not t.special_setup_item_buoy_present then
+		return
+	end
+
+	-- recall static and plankton are cumulative visuals, so need to be updated to where we left off
+	-- swimmers are reset each observation event, so no need to update visuals when loading
+	local oa_outcome_tbl = {minfo_oa_outcome_item_health_values = {}}
+
+	for k_item_name,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
+		if v_item_tracker_tbl ~= nil then
+			local tracker_list_length = #v_item_tracker_tbl
+			local new_val = v_item_tracker_tbl[tracker_list_length].item_tracker_score
+			local previous_val
+			-- add previous and new values
+			if tracker_list_length >= 2 then
+				previous_val = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score
+			else
+				previous_val = new_val
+			end
+			-- save to table for message passing
+			oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
+				health_value_previous = previous_val,
+				health_value_new = new_val
+			}
+		end
+	end
+
+	-- send message to start and set that OA outcomes are active so certain popup clicking does not work
+	self.oa_outcomes_are_active = true
+	msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_catchup_micro_or_static, oa_outcome_tbl)
+
 end
 
 local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)

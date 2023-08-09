@@ -110,7 +110,9 @@ local function GO_Setup(self)
 	self.Obj_Current_Health = 1
 	self.Obj_OG_Scale_Float = go.get_scale().x
 
-	On_UpdateHealth(self, 1, false, true)
+	local run_visual_update = false
+	local skip_early_return = true
+	On_UpdateHealth(self, 1, run_visual_update, skip_early_return)
 
 end
 
@@ -132,7 +134,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == HSH.msg_order_expire_start then
 		OnExpire(self)
 	elseif message_id == HSH.msg_order_update_health then
-		On_UpdateHealth(self, message.minfo_new_health_value, true)
+		On_UpdateHealth(self, message.minfo_new_health_value, message.minfo_run_visual_update)
 	end
 
 end

@@ -1769,6 +1769,44 @@ local function ResetDynamicGrids(self)
 
 end
 
+local function Update_Micro_or_Static(self, item_name, subitem_name, local_oa_outcome_tbl, run_visual_change)
+
+	-- update health of a micro or static subitem
+	-- since these have cumulative visuals
+
+	local spawn_list_name = INFO.item_info[item_name].subitem_info[subitem_name].spawn_list_key
+	local key_list = self.spawned_objects_list[spawn_list_name]
+	if key_list ~= nil then
+		local item_health_info = local_oa_outcome_tbl[item_name]
+		if item_health_info ~= nil then
+			for k_gourl, _ in pairs(key_list) do
+				msg.post(k_gourl, HSH.msg_order_update_health, {minfo_new_health_value = item_health_info.health_value_new or 0.5, minfo_run_visual_update = run_visual_change})
+				-- recall static and micro gos each internally track their own health
+				-- so the script will know what the overall delta is from this new value and the self current value
+			end
+		end
+	end
+
+end
+
+local function CatchUp_Micro_or_Static(self, oa_outcome_tbl)
+
+	-- instantly catch up for static or micro since they use cumulative visuals
+
+	-- coral
+	local item_coral = INFO.item_info.item_coral
+	for k_subitem_coral_name, _ in pairs(item_coral.subitem_info) do
+		Update_Micro_or_Static(self, "item_coral", k_subitem_coral_name, oa_outcome_tbl, false)
+	end
+
+	-- plankton
+	Update_Micro_or_Static(self, "item_plankton", "subitem_phytoplankton", oa_outcome_tbl, false)
+
+	-- oysters
+	Update_Micro_or_Static(self, "item_mollusks", "subitem_oyster", oa_outcome_tbl, false)
+
+end
+
 local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, show_highlighter, percent_coastal_oa_to_run) --oa_outcome_tbl in form { item_plankton = {health_value_previous, health_value_new} }
 
 	-- reset all swimmers at full count then add or kill given %
@@ -1922,23 +1960,6 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 	end
 
-	local function update_micro_or_static(item_name, subitem_name)
-
-		-- update health of a micro of static subitem
-
-		local spawn_list_name = INFO.item_info[item_name].subitem_info[subitem_name].spawn_list_key
-		local key_list = self.spawned_objects_list[spawn_list_name]
-		if key_list ~= nil then
-			local new_health = oa_outcome_tbl[item_name].health_value_new
-			for k_gourl, _ in pairs(key_list) do
-				msg.post(k_gourl, HSH.msg_order_update_health, {minfo_new_health_value = new_health})
-				-- recall static and micro gos each internally track their own health
-				-- so the script will know what the overall delta is from this new value and the self current value
-			end
-		end
-
-	end
-
 	local function update_swimmer(item_name, subitem_name, death_ignore_stop, death_instant_stop)
 
 		-- update health of a swimmer subitem
@@ -2038,7 +2059,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		end
 
 		-- update plankton, which uses health update message
-		update_micro_or_static("item_plankton", "subitem_phytoplankton")
+		Update_Micro_or_Static(self, "item_plankton", "subitem_phytoplankton", oa_outcome_tbl, true)
 
 		-- also do optional coastal OA
 		-- health effects can still occur with plankton even if disabling b/c of coastal OA
@@ -2066,11 +2087,11 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		-- coral
 		local item_coral = INFO.item_info.item_coral
 		for k_subitem_coral_name, _ in pairs(item_coral.subitem_info) do
-			update_micro_or_static("item_coral", k_subitem_coral_name)
+			Update_Micro_or_Static(self, "item_coral", k_subitem_coral_name, oa_outcome_tbl, true)
 		end
 
 		-- oysters
-		update_micro_or_static("item_mollusks", "subitem_oyster")
+		Update_Micro_or_Static(self, "item_mollusks", "subitem_oyster", oa_outcome_tbl, true)
 
 		-- on seafloor so stop, and stop quickly so effect is viewable
 		local death_ignore_stop = false
@@ -2297,6 +2318,8 @@ function on_message(self, message_id, message, sender)
 		On_SpecialAction(self, message.minfo_special_case_key)
 	elseif message_id == HSH.msg_request_oa_outcomes_started then
 		On_OA_OutcomeEffects(self, message.minfo_oa_outcome_item_health_values, message.minfo_oa_outcome_reset_swimmers, message.minfo_oa_outcomes_show_highlighter, message.minfo_run_coastal_oa_percent)
+	elseif message_id == HSH.msg_request_oa_catchup_micro_or_static then
+		CatchUp_Micro_or_Static(self, message.minfo_oa_outcome_item_health_values)
 	elseif message_id == HSH.msg_set_player_character_subitem then
 		Boat_Change_Character(self, message.minfo_subitem_boat_name)
 	end

@@ -14,6 +14,7 @@ local HASH = {
     msg_order_swim_to_pos = hash("msg_order_swim_to_pos"),
     msg_order_stop_swim = hash("msg_order_stop_swim"),
     msg_order_update_health = hash("msg_order_update_health"),
+    msg_request_oa_catchup_micro_or_static = hash("msg_request_oa_catchup_micro_or_static"),
     msg_order_expire_start = hash("msg_order_expire_start"),
     msg_reported_expire_done = hash("msg_reported_expire_done"),
     msg_report_swim_run_started = hash("msg_report_swim_run_started"),

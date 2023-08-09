@@ -129,7 +129,7 @@ local function Visual_HealthUpdate(self, old_health, new_health)
 
 end
 
-local function On_UpdateHealth(self, new_health, on_init)
+local function On_UpdateHealth(self, new_health, run_visual_update, on_init)
 
 	-- use new health to update spawn percentages
 	-- and update visuals of current pass
@@ -151,7 +151,9 @@ local function On_UpdateHealth(self, new_health, on_init)
 		-- add expire if new spawn percent < 30?
 		-- if expiring might not even see it in window and expire animation may clip into resetting position?
 		-- maybe change tint to slightly transparent and slightly smaller?
-		Visual_HealthUpdate(self, old_health, new_health)
+		if run_visual_update then
+			Visual_HealthUpdate(self, old_health, new_health)
+		end
 
 	end
 
@@ -221,9 +223,11 @@ local function ResetSpawn(self, on_init)
 	-- also orders to move 
 
 	-- update health which sets sprite probabilities if initializing
+	-- (recall we recycle GOs, so on init is just when game first loads)
 	-- otherwise we will manually call health update
 	if on_init then
-		On_UpdateHealth(self, self.Obj_Current_Health)
+		local run_visual_update = false
+		On_UpdateHealth(self, self.Obj_Current_Health, run_visual_update, on_init)
 	end
 
 	-- choose and set type
@@ -262,8 +266,11 @@ end
 
 function init(self)
 
+	-- recall we recycle GOs, so on init is just when game first loads
+
 	self.Obj_OG_Scale_Float = go.get_scale().x
-	ResetSpawn(self, true)
+	local on_init = true
+	ResetSpawn(self, on_init)
 
 end
 
@@ -272,7 +279,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == HSH.msg_order_expire_start then
 		OnExpire(self)
 	elseif message_id == HSH.msg_order_update_health then
-		On_UpdateHealth(self, message.minfo_new_health_value)
+		On_UpdateHealth(self, message.minfo_new_health_value, message.minfo_run_visual_update)
 	end
 
 end
