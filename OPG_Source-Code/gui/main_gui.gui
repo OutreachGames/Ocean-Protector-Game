@@ -74,7 +74,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  layer: "gui_layer_text"
+  layer: "gui_layer_click"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -16687,6 +16687,9 @@ nodes {
   enabled: true
   visible: true
   material: ""
+}
+layers {
+  name: "gui_layer_click"
 }
 layers {
   name: "gui_layer_below"
