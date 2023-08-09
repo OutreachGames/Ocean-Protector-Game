@@ -1509,8 +1509,8 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 		-- always disable hint box and hint button
 		-- will enable below if enabling screen
 		gui.set_text(gui.get_node(constant.node_hint_button_text), "Show Hint")
-		local hint_frame = gui.get_node(constant.node_hint_button_frame)
-		gui.set_enabled(hint_frame, false)
+		local hint_button_frame = gui.get_node(constant.node_hint_button_frame)
+		gui.set_enabled(hint_button_frame, false)
 		gui.set_enabled(gui.get_node(constant.node_hint_subcontroller), false)
 
 		-- get which buttons to enable/disable when starting up/enabling
@@ -1539,8 +1539,13 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 			-- enable hint button if hint present
 			-- also set hint text now, too
 			if has_hint then
-				gui.set_enabled(hint_frame, true)
-				gui.set_position(hint_frame, vmath.vector3(-current_pos_button.x, pos_update.submit_position_y, 0))
+
+				local hint_button_pos = vmath.vector3(-current_pos_button.x, pos_update.submit_position_y, 0)
+				local hint_txt_controller_node = gui.get_node(constant.node_hint_subcontroller)
+
+				gui.set_enabled(hint_button_frame, true)
+				gui.set_position(hint_button_frame, hint_button_pos)
+				gui.set_position(hint_txt_controller_node, hint_button_pos)
 				gui.set_text(gui.get_node(constant.node_hint_body_text), hint_text)
 			end
 
