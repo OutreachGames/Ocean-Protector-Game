@@ -477,7 +477,7 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_observe_outcomes,
             run_swimmer_reset_before_oa_outcome = false,
             show_ocean_hud_highlighter = true,
-            goal_text = STR.CV.oa_outcome_view_goal_text,
+            goal_text = "Observe how acidification has changed ocean life.",
         },
 
         -- Show animation of determinantal effects 
