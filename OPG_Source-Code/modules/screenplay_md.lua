@@ -1818,7 +1818,6 @@ function STR:Get_NewInfo_Special_Image(stage_key, substage_key)
 
     local info = self.Screenplay[stage_key][substage_key]
 
-    --#TODO add special images in
     return self:GetString_from_Tbl_or_Value(info.display_special_image_id)
 
 end
