@@ -126,8 +126,76 @@ end
 
 
 -- Player Data Updating, Setting, and Getting
+local function PlayerData_IsValid(self, opt_id_tag)
 
-local function PlayerData_CloudRecord(self, stage_key, substage_key, choice_key)
+	-- validity fail safes
+	local ply_data = self.player_data_tbl
+	if ply_data == nil then
+		print("Error: the player data table does not exist. Optional ID tag <"..tostring(opt_id_tag)..">\n")
+		return false
+	end
+
+	local items_data = ply_data.item_data_tbl
+	if items_data == nil then
+		print("Error: the item data table within the player data table does not exist. Optional ID tag <"..tostring(opt_id_tag)..">\n")
+		return false
+	end
+
+	return true
+
+end
+
+local function PlayerData_CloudRecord(self)
+
+	-- #TODO function to send report to cloud database
+
+	-- error checking
+	if not PlayerData_IsValid(self, "check_for_cloud_reporting") then
+		return
+	end
+
+	-- variable setup
+	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
+
+	if stage_key == nil or substage_key == nil then
+		--print("TRK: Game loop is not in valid state! \n")
+		return
+	end
+
+	local ply = self.player_data_tbl
+	local id = ply.unique_id_key or 0000
+	local character_role = ply.character_role_key or ""
+	local choice_key = ply.most_recent_decision_choice_key or ""
+	local duration = socket.gettime() - (self.game_logic_time_start or 0)
+
+	local current_score
+	local total_answers = ply.num_total_answers
+	if total_answers > 0 then
+		current_score = ply.num_best_answers/total_answers
+	else
+		current_score = "NA"
+	end
+
+	-- recall choice keys are listed from best to worst, 
+	-- so for individual entry can see easily which choice was selected
+
+	-- if decision then get extra data
+	local decision_str, choice_str
+	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
+	if stage_type == STR.CV.goal_completed_types.class_decisison then
+		decision_str = STR:Get_Decision_Cloud_String(stage_key, substage_key, character_role) or ""
+		choice_str = STR:Get_Choice_Cloud_String(stage_key, substage_key, character_role, choice_key) or ""
+	else
+		decision_str = ""
+		choice_str = ""
+	end
+
+	print("Sending analytics to cloud database!\n")
+
+	local cloud_send_tbl = {
+		id, stage_key, substage_key, decision_str, character_role, duration, current_score, choice_key, choice_str
+		-- save player ID, stage key, substage key, duration, cloud_string or NA, secondary_key, secondary_cloud_string or NA
+	}
 
 end
 
@@ -164,6 +232,17 @@ local function PlayerData_Update_SumBestChoices(self, value, override)
 
 end
 
+local function PlayerData_Update_SumTotalChoices(self, value, override)
+
+	value = value or 1
+	if override then
+		self.player_data_tbl.num_total_answers = value
+	else
+		self.player_data_tbl.num_total_answers = self.player_data_tbl.num_total_answers + value
+	end
+
+end
+
 local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 
 	-- update i stage
@@ -174,25 +253,6 @@ local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 	else
 		self.player_data_tbl.gameplay_loop_i_key = self.player_data_tbl.gameplay_loop_i_key + new_ikey
 	end
-
-end
-
-local function PlayerData_IsValid(self, opt_id_tag)
-
-	-- validity fail safes
-	local ply_data = self.player_data_tbl
-	if ply_data == nil then
-		print("Error: function 'Player Data Run Score Input' tried to run when the player data table did not exist. Optional ID tag <"..tostring(opt_id_tag)..">\n")
-		return false
-	end
-
-	local items_data = ply_data.item_data_tbl
-	if items_data == nil then
-		print("Error: function 'Player Data Run Score Input' tried to run when the items data table did not exist. Optional ID tag <"..tostring(opt_id_tag)..">\n")
-		return false
-	end
-
-	return true
 
 end
 
@@ -742,11 +802,16 @@ end
 -- HUD Process: Update Items 
 local function QuestionScores_GetFinalPercent(self)
 
-	if self.num_player_affected_questions <= 0 then
+	local affected_total = self.num_player_affected_questions
+	if affected_total <= 0 then
 		-- edge case used in development testing where we removed all questions
 		return 0
 	else
-		return self.player_data_tbl.num_best_answers/self.num_player_affected_questions
+		local checked_total = self.player_data_tbl.num_total_answers
+		if affected_total ~= checked_total then
+			print("Warning: player_data_tbl.num_total_answers of "..tostring(checked_total).." is not equal to self.num_player_affected_questions "..tostring(affected_total)..".\n")
+		end
+		return self.player_data_tbl.num_best_answers/affected_total
 	end
 
 end
@@ -760,13 +825,13 @@ local function PlayerData_RunScoreInput(self, score_tbl, override_instead_insert
 		return
 	end
 
-	-- add to best choice tally if needed
-	if was_best_choice then
-		PlayerData_Update_SumBestChoices(self)
-	end
-
 	-- save to decision tracker if needed
 	if was_player_choice then
+		PlayerData_Update_SumTotalChoices(self)
+		-- add to best choice tally if needed
+		if was_best_choice then
+			PlayerData_Update_SumBestChoices(self)
+		end
 		PlayerData_UpdateDecisionTracker(self, nil, nil, nil, override_instead_insert)
 	end
 
@@ -2353,13 +2418,14 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 		save_file_version_major = CV_Current_Save_Version_Major,
 		save_file_version_minor = CV_Current_Save_Version_Minor,
 		num_best_answers = 0,
+		num_total_answers = 0,
 		gameplay_loop_i_key = 0,
+		most_recent_decision_choice_key = "", --this saves choice, while loop i key above saves stage/substage keys
 		character_role_key = CV_Player_Role_Empty,
 		special_setup_goals_hud_enabled = false,
 		special_setup_data_hud_enabled = false,
 		special_setup_item_boat_present = false,
 		special_setup_item_buoy_present = false,
-		most_recent_decision_choice_key = "",
 		-- set first value as dummy entry so it lines up with score tracker
 		-- b/c decision trackers are only added if player decision was made, 
 		-- and first entry in health trackers are initial negative health
@@ -2369,6 +2435,7 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 	}
 
 	PlayerData_Update_SumBestChoices(self, 0, true)
+	PlayerData_Update_SumTotalChoices(self, 0, true)
 
 	-- go through item keys and initialize table and add first entry of fully healthy
 	for k_itemname,_ in pairs(CV_item_groups) do
@@ -2698,11 +2765,16 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 
 	-- setups and runs next game-play event
 
+	-- record previous progress to cloud analytics reporting before advancing
+	PlayerData_CloudRecord(self)
+
+	-- set that new start time
+	self.game_logic_time_start = socket.gettime()
+
+	-- update i-key
 	if i_stage_addition == nil then
 		i_stage_addition = 1
 	end
-
-	-- update i-key
 	PlayerData_Update_I_Key_Progress(self, i_stage_addition)
 
 	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
@@ -2714,6 +2786,8 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 
 	-- run 'self.player_data_tbl' save to file here
 	-- so game saves after each stage
+	-- we have reached this stage so now save, 
+	-- do not save before reaching this stage otherwise we will have to replay stage when loading
 	if run_file_save then
 		PlayerData_Save(self)
 	end
@@ -3206,7 +3280,10 @@ end
 local function Game_First_Initialization(self)
 
 	-- randomize random generator
-	math.randomseed(socket.gettime())
+	local current_time = socket.gettime()
+	math.randomseed(current_time)
+
+	self.game_logic_time_start = current_time
 
 	MY_GOO.acquire_input()
 

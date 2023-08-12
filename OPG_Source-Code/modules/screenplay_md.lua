@@ -1029,6 +1029,9 @@ STR.Screenplay = {
 
         -- OVERALL: stages consist of 1) view timer, 2) click items, then 3) popup with summary
 
+        -- recall choice keys are listed from best to worst, 
+        -- so for individual entry can see easily which choice was selected
+
         -- Personal CO2 Reduction
         decision_role_01a = {
             question_prompt = {
