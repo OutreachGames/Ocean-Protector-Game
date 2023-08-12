@@ -12,9 +12,6 @@
 
     -- maybe at last decision it tallies up all decisions and if all correct it sets to highest? (just as failsafe to ensure players can get max)?
 
-    -- on steam store page add "For more inforamtion and learning activies on Ocean Acidification head to the Natiaonal Oceanic and Atmospheric Administration website:
-    -- https://oceanacidification.noaa.gov/
-
     -- add firebase connection and Google sheets connection
     --  start time, each decision click with time since decisions started
 

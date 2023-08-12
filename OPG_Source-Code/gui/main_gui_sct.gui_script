@@ -127,6 +127,10 @@ end
 
 -- Player Data Updating, Setting, and Getting
 
+local function PlayerData_CloudRecord(self, stage_key, substage_key, choice_key)
+
+end
+
 local function PlayerData_Set_Character(self, role_key)
 
 	-- changes player character variables and labels
@@ -814,7 +818,7 @@ local function Get_Coastal_OA_Percent_Helper(self)
 	local choice_key = decision_info.selection_choice_key
 	local character_role = self.player_data_tbl.character_role_key
 
-	return STR:Get_Decision_PercentCoastalOA(stage_key, substage_key, character_role, choice_key)
+	return STR:Get_Choice_PercentCoastalOA(stage_key, substage_key, character_role, choice_key)
 
 end
 
@@ -1746,7 +1750,7 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- run outcome function
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				local role_key = self.player_data_tbl.character_role_key
-				STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, role_key, answer_string_key)
+				STR:Run_Choice_Answer_OutcomeFunc(stage_key, substage_key, role_key, answer_string_key)
 
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
@@ -1759,7 +1763,7 @@ local function Screen_Decision_Input(self, action_id, action)
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 
 					-- also subtract one from current progress if incorrect so we go back to it in the next submit
-					if STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, role_key, answer_string_key) then
+					if STR:Get_Choice_Answer_RepeatD(stage_key, substage_key, role_key, answer_string_key) then
 						PlayerData_Update_I_Key_Progress(self, -1)
 					end
 

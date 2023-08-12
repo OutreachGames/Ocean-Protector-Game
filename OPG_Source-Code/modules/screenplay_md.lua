@@ -551,6 +551,7 @@ STR.Screenplay = {
             question_prompt = {
                 "Burning fossil fuels reduces large amounts of a gas called ____."
             },
+            question_cloud_string = "fossil_fuels",
             hint_text = {
                 STR.CV.hint_text_defaults.hint_open_review_sheet[1]
             },
@@ -559,6 +560,7 @@ STR.Screenplay = {
                     display_text = {
                         "oxygen"
                     },
+                    choice_cloud_string = "oxygen",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -569,6 +571,7 @@ STR.Screenplay = {
                     display_text = {
                         "carbon dioxide"
                     },
+                    choice_cloud_string = "carbon_dioxide",
                     debrief_text = {
                         "Correct! Burning fossil fuels releases very high amounts of carbon dioxide gas into the atmosphere."
                     },
@@ -578,6 +581,7 @@ STR.Screenplay = {
                     display_text = {
                         "ozone"
                     },
+                    choice_cloud_string = "ozone",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -588,6 +592,7 @@ STR.Screenplay = {
                     display_text = {
                         "helium"
                     },
+                    choice_cloud_string = "helium",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -601,6 +606,7 @@ STR.Screenplay = {
             question_prompt = {
                 "True or false? Burning fossil fuels leads to ocean acidification."
             },
+            question_cloud_string = "CO2_to_OA",
             hint_text = {
                 "Click the 'Review Sheet' button below to review how burning excess fossils fuels affects our oceans. "
             },
@@ -610,6 +616,7 @@ STR.Screenplay = {
                     display_text = {
                         "True"
                     },
+                    choice_cloud_string = "true",
                     debrief_text = {
                         "This is true. Burning fossil fuels releases carbon dioxide gas. Much of this gas is absorbed by our oceans, which triggers chemical changes that make the water more acidic."
                     },
@@ -619,6 +626,7 @@ STR.Screenplay = {
                     display_text = {
                         "False"
                     },
+                    choice_cloud_string = "false",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -632,6 +640,7 @@ STR.Screenplay = {
             question_prompt = { 
                 "In addition to burning fossil fuels, _____ can also cause the water in our oceans to become more acidic."
             },
+            question_cloud_string = "other_OA_cause",
             hint_text = {
                 "To review the two main causes of ocean acidification click the 'Review Sheet' button below."
             },
@@ -640,6 +649,7 @@ STR.Screenplay = {
                     display_text = {
                         "noise pollution"
                     },
+                    choice_cloud_string = "excess_noise",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -650,6 +660,7 @@ STR.Screenplay = {
                     display_text = {
                         "nutrient pollution"
                     },
+                    choice_cloud_string = "excess_nutrients",
                     debrief_text = {
                         "Correct! Nutrient pollution can be caused by using too much fertilizer, dumping wastewater, and other sources. If this polluted water makes its way to the ocean and can cause a chain reaction that makes the ocean water near our coasts more acidic."
                     },
@@ -659,6 +670,7 @@ STR.Screenplay = {
                     display_text = {
                         "light pollution"
                     },
+                    choice_cloud_string = "excess_light",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -669,6 +681,7 @@ STR.Screenplay = {
                     display_text = {
                         "gamma pollution"
                     },
+                    choice_cloud_string = "gamma_rays",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -682,6 +695,7 @@ STR.Screenplay = {
             question_prompt = {
                 "A decrease in the pH of water means the water becomes ________."
             },
+            question_cloud_string = "lower_pH_equals",
             hint_text = {
                 "To review the pH scale click the 'Review Sheet' button below."
             },
@@ -690,6 +704,7 @@ STR.Screenplay = {
                     display_text = {
                         "warmer"
                     },
+                    choice_cloud_string = "warmer",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -700,6 +715,7 @@ STR.Screenplay = {
                     display_text = {
                         "more acidic"
                     },
+                    choice_cloud_string = "more_acidic",
                     debrief_text = {
                         "Correct! If pH of water decreases that shows the acidity of the water has increased."
                     },
@@ -709,6 +725,7 @@ STR.Screenplay = {
                     display_text = {
                         "less acidic"
                     },
+                    choice_cloud_string = "less_acidic",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -719,6 +736,7 @@ STR.Screenplay = {
                     display_text = {
                         "colder"
                     },
+                    choice_cloud_string = "colder",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -732,6 +750,7 @@ STR.Screenplay = {
             question_prompt = { 
                 "Ocean acidification harms which of the following groups?"
             },
+            question_cloud_string = "personal_co2",
             hint_text = {
                 "Think about which groups we have examined in our ocean scene."
             },
@@ -741,6 +760,7 @@ STR.Screenplay = {
                     display_text = {
                         "Plankton and Coral"
                     },
+                    choice_cloud_string = "plankton_coral",
                     debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
@@ -751,6 +771,7 @@ STR.Screenplay = {
                     display_text = {
                         "Mollusks and Crustaceans"
                     },
+                    choice_cloud_string = "mollusks_crustaceans",
                     debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
@@ -761,6 +782,7 @@ STR.Screenplay = {
                     display_text = {
                         "Fish and Humans"
                     },
+                    choice_cloud_string = "fish_humans",
                     debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
@@ -771,6 +793,7 @@ STR.Screenplay = {
                     display_text = {
                         "All of the groups listed here."
                     },
+                    choice_cloud_string = "all_major_life",
                     debrief_text = {
                         "Correct! Ocean acidification harms plant and animal life throughout the ocean, including humans. As humans we rely on our oceans for food, ways to make a living, and even medicines."
                     },
@@ -783,6 +806,7 @@ STR.Screenplay = {
             question_prompt = {
                 "True or false? There are steps we can all take to reduce ocean acidification."
             },
+            question_cloud_string = "can_reduce_OA",
             hint_text = {
                 STR.CV.hint_text_defaults.hint_open_review_sheet[1]
             },
@@ -792,6 +816,7 @@ STR.Screenplay = {
                     display_text = {
                         "True"
                     },
+                    choice_cloud_string = "true",
                     debrief_text = {
                         "True! There are many steps each of us can take to help reduce ocean acidification. Continue with this program to make some of those decisions yourself!"
                     },
@@ -801,6 +826,7 @@ STR.Screenplay = {
                     display_text = {
                         "False"
                     },
+                    choice_cloud_string = "false",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -879,6 +905,7 @@ STR.Screenplay = {
             question_prompt = {
                 "Please choose a character. Each character has specific goals and does a different job. You can view this information by clicking on each character button. "
             },
+            question_cloud_string = "choose_character",
             answer_options = {
                 --#TODO think about updating character selection screen so more info can be shown?
                 user_choice_1 = {
@@ -886,6 +913,7 @@ STR.Screenplay = {
                         --"Fishing Boat Captain"..n..
                         "Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "--..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "--..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
                     },
+                    choice_cloud_string = "choose_captian",
                     debrief_text = nil,
                     outcome_result_func = function()
                         STR.CV.outcome_functions.func_set_role("role_captain")
@@ -896,6 +924,7 @@ STR.Screenplay = {
                         --"Marine Park Ranger"..n..
                         "Choose to be a marine park ranger. This character makes a living by watching over a marine park. "--..n.."Your primary goal is to choose decisions that protect healthy populations for all ocean life so you can continue to work at the park and make a living. "--..n.."Your bonus goal is to protect this part of the ocean well enough to attract sea turtles. "
                     },
+                    choice_cloud_string = "choose_ranger",
                     debrief_text = nil,
                     outcome_result_func = function()
                         STR.CV.outcome_functions.func_set_role("role_ranger")
@@ -906,6 +935,7 @@ STR.Screenplay = {
                         --"Ocean Tour Guide"..n..
                         "Choose to be an ocean tour guide. This character makes a living by showing visitors and tourists the sights of the ocean and the life within it. "--..n.."Your primary goal is to choose decisions that support sights that the tourists most enjoy so that you can continue to run tours and earn steady money. "--..n.."Your bonus goal is to help ensure this part of the ocean becomes healthy enough to attract dolphins. "
                     },
+                    choice_cloud_string = "choose_guide",
                     debrief_text = nil,
                     outcome_result_func = function()
                         STR.CV.outcome_functions.func_set_role("role_guide")
@@ -1013,6 +1043,7 @@ STR.Screenplay = {
                     "Congratulations on your promotion as Head Ocean Tour Guide! With this new position you have some extra money to spend. Now that you are in charge of tours, how do want to spend this money?"
                 },
             },
+            question_cloud_string = "personal_boat",
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
@@ -1030,30 +1061,13 @@ STR.Screenplay = {
                             "Buy a new engine for your current tour boat that uses less fuel."
                         },
                     },
+                    choice_cloud_string = "less_fuel",
                     debrief_text = {
                         "You've upgraded your engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    display_text = {
-                        "",
-                        role_captain = {
-                            "Keep your current fishing boat the same. Instead, spend the money to go on more fishing trips."
-                        },
-                        role_ranger = {
-                            "Keep your current research boat the same. Instead, spend the money to go on more research trips."
-                        },
-                        role_guide = {
-                            "Keep your current tour boat the same. Instead, spend the money to go on more tours."
-                        },
-                    },
-                    debrief_text = {
-                        "You've increased the number of trips you take on your boat. This earns you slightly more money in the short term, but also has cost a lot of money in the long term by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "
-                    },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
-                },
-                user_choice_3 = {
                     display_text = {
                         "",
                         role_captain = {
@@ -1066,11 +1080,32 @@ STR.Screenplay = {
                             "Upgrade the digital equipment of your current tour boat."
                         },
                     },
+                    choice_cloud_string = "new_computer",
                     debrief_text = {
                         "You've chosen to upgrade the digital equipment aboard your boat. Your boat sensors and communication lines are higher resolution, but the amount of carbon dioxide that your boat emits remains the same. "
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
-                }
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "",
+                        role_captain = {
+                            "Keep your current fishing boat the same. Instead, spend the money to go on more fishing trips."
+                        },
+                        role_ranger = {
+                            "Keep your current research boat the same. Instead, spend the money to go on more research trips."
+                        },
+                        role_guide = {
+                            "Keep your current tour boat the same. Instead, spend the money to go on more tours."
+                        },
+                    },
+                    choice_cloud_string = "no_change",
+                    debrief_text = {
+                        "You've increased the number of trips you take on your boat. This earns you slightly more money in the short term, but also has cost a lot of money in the long term by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                },
+
             },
         },
 
@@ -1096,6 +1131,7 @@ STR.Screenplay = {
             hint_text = {
                 "Healthy ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to environmental changes. "
             },
+            question_cloud_string = "phytoplankton_choice",
             prevent_option_randomization = true,
             answer_options = {
                 user_choice_1 = {
@@ -1111,30 +1147,13 @@ STR.Screenplay = {
                             "On your tours make sure to keep a safe distance from fish that eat excess phytoplankton."
                         },
                     },
+                    choice_cloud_string = "help_fish",
                     debrief_text = {
                         "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced, which has helped keep many other groups of life throughout the ocean healthy and balanced. "
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
-                    display_text = {
-                        "",
-                        role_captain = {
-                            "Manually try and remove excess phytoplankton from the water with fishing nets."
-                        },
-                        role_ranger = {
-                            "Try and remove excess nutrients and excess phytoplankton from the water with nets and filters."
-                        },
-                        role_guide = {
-                            "Manually try and remove excess phytoplankton from the water with nets."
-                        },
-                    },
-                    debrief_text = {
-                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, this does not work out because other ocean life is caught in the nets and disturbed. Also, the extra boat trips increase carbon dioxide emissions. "
-                    },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
-                },
-                user_choice_3 = {
                     display_text = {
                         "",
                         role_captain = {
@@ -1147,10 +1166,30 @@ STR.Screenplay = {
                             "Keep how you run tours the same as before, and do not try to remove excess phytoplankton."
                         },
                     },
+                    choice_cloud_string = "no_change",
                     debrief_text = {
                         "You have chosen to keep practices the same as they were before. Carbon dioxide emissions also have not changed. "
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "",
+                        role_captain = {
+                            "Manually try and remove excess phytoplankton from the water with fishing nets."
+                        },
+                        role_ranger = {
+                            "Try and remove excess nutrients and excess phytoplankton from the water with nets and filters."
+                        },
+                        role_guide = {
+                            "Manually try and remove excess phytoplankton from the water with nets."
+                        },
+                    },
+                    choice_cloud_string = "artifical_nets",
+                    debrief_text = {
+                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, this does not work out because other ocean life is caught in the nets and disturbed. Also, the extra boat trips increase carbon dioxide emissions. "
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
             },
         },
@@ -1177,11 +1216,13 @@ STR.Screenplay = {
             hint_text = {
                 "Waste and garbage that makes its way to the ocean can affect the entire marine food-web, as well as trigger acidification."
             },
+            question_cloud_string = "personal_waste",
             answer_options = {
                 user_choice_1 = {
                     display_text = {
                         "Dispose of the waste in the local landfill. "
                     },
+                    choice_cloud_string = "landfill",
                     debrief_text = {
                         "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. "
                     },
@@ -1189,22 +1230,24 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "Dispose of the waste by burning it. "
-                    },
-                    debrief_text = {
-                        "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
-                    },
-                    coastal_oa_percent_to_run = 100,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
-                },
-                user_choice_3 = {
-                    display_text = {
                         "Dispose of the waste in the waters far away from the shore. "
                     },
+                    choice_cloud_string = "water",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
                         "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Travelling far from shore also uses more fuel, which increases carbon dioxide emissions. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "Dispose of the waste by burning it. "
+                    },
+                    choice_cloud_string = "burning",
+                    debrief_text = {
+                        "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
+                    },
+                    coastal_oa_percent_to_run = 100,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
             },
@@ -1229,6 +1272,7 @@ STR.Screenplay = {
                     "You are again thinking about ways to reduce the impacts of ocean acidification on the ocean life your tours rely on. Which option will you choose to do?"
                 },
             },
+            question_cloud_string = "coral_reefs",
             hint_text = {
                 "Well-balanced ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to physical changes. "
             },
@@ -1247,6 +1291,7 @@ STR.Screenplay = {
                             "Do not let tourists or your boat go too close to coral to make sure you do not damage it."
                         },
                     },
+                    choice_cloud_string = "protect",
                     debrief_text = {
                         role_captain = {
                             "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups that include fish you catch. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "
@@ -1272,6 +1317,26 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
+                            "Do not change how you catch fish and do not add net barriers."
+                        },
+                        role_ranger = {
+                            "Do not change the current rules regarding coral or fish life. Also, do not add net barriers."
+                        },
+                        role_guide = {
+                            "Do not alter the places you go on your ocean tours and do not add net barriers."
+                        },
+                    },
+                    choice_cloud_string = "no_change",
+                    coastal_oa_percent_to_run = 50,
+                    debrief_text = {
+                        "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. "
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "",
+                        role_captain = {
                             "Create large fishing net barriers and try to completely block off the parts of the ocean where you fish."
                         },
                         role_ranger = {
@@ -1281,6 +1346,7 @@ STR.Screenplay = {
                             "Create large barriers with nets and try to completely block off the part of the ocean that you run tours through."
                         },
                     },
+                    choice_cloud_string = "artifical_nets",
                     coastal_oa_percent_to_run = 50,
                     debrief_text = {
                         "You have chosen to try and block off parts of the ocean. Unfortunately, creating large physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "
@@ -1294,25 +1360,6 @@ STR.Screenplay = {
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
                     end
-                },
-                user_choice_3 = {
-                    display_text = {
-                        "",
-                        role_captain = {
-                            "Do not change how you catch fish and do not add net barriers."
-                        },
-                        role_ranger = {
-                            "Do not change the current rules regarding coral or fish life. Also, do not add net barriers."
-                        },
-                        role_guide = {
-                            "Do not alter the places you go on your ocean tours and do not add net barriers."
-                        },
-                    },
-                    coastal_oa_percent_to_run = 50,
-                    debrief_text = {
-                        "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. "
-                    },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
         },
@@ -1339,11 +1386,13 @@ STR.Screenplay = {
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
+            question_cloud_string = "city_money_1",
             answer_options = {
                 user_choice_1 = {
                     display_text = {
                         "The money should be spent to add more buses, carpool lanes, and sidewalks throughout the city."
                     },
+                    choice_cloud_string = "less_exhaust",
                     debrief_text = {
                         "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "
                     },
@@ -1351,23 +1400,25 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "The money should be spent on creating more parking lots throughout the city."
-                    },
-                    coastal_oa_percent_to_run = 100,
-                    debrief_text = {
-                        "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "
-                    },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
-                },
-                user_choice_3 = {
-                    display_text = {
                         "The money should be spent on building a large convention center in the city."
                     },
+                    choice_cloud_string = "new_building",
                     coastal_oa_percent_to_run = 50,
                     debrief_text = {
                         "The council has followed your advice to build a large convention center. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution. "
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "The money should be spent on creating more parking lots throughout the city."
+                    },
+                    choice_cloud_string = "parking_lots",
+                    coastal_oa_percent_to_run = 100,
+                    debrief_text = {
+                        "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
         },
@@ -1394,11 +1445,13 @@ STR.Screenplay = {
             hint_text = {
                 "Reducing the amount of fossil fuel use and nutrient pollution are very effective ways to reduce ocean acidification. "
             },
+            question_cloud_string = "farmers",
             answer_options = {
                 user_choice_1 = {
                     display_text = {
                         "Farmers should install solar panels on their farm and try to use less fertilizer on their fields."
                     },
+                    choice_cloud_string = "renewables_upgrade",
                     debrief_text = {
                         "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. "
                     },
@@ -1408,6 +1461,7 @@ STR.Screenplay = {
                     display_text = {
                         "farmers should buy additional tractors so they can harvest their crops more quickly."
                     },
+                    choice_cloud_string = "more_tractors",
                     debrief_text = {
                         "The farmers followed your advice to buy extra tractors to speed up crop harvesting. Instead of making two trips with one tractor, now they can make one trip each with two tractors at once. Overall, the amount of carbon dioxide emissions remains the same. "
                     },
@@ -1417,6 +1471,7 @@ STR.Screenplay = {
                     display_text = {
                         "Farmers should build more barns on their land to store their crops and tractors."
                     },
+                    choice_cloud_string = "more_buildings",
                     debrief_text = {
                         "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. "
                     },
@@ -1444,6 +1499,7 @@ STR.Screenplay = {
                     "The community appreciates the jobs your ocean tours support. They want to help improve ocean health and ask you for advice. What do you recommend they do?"
                 },
             },
+            question_cloud_string = "community_water",
             hint_text = {
                 "Reducing the amount of excess water and energy use helps reduce carbon dioxide emissions and helps decrease nutrient pollution runoff into the ocean. "
             },
@@ -1452,6 +1508,7 @@ STR.Screenplay = {
                     display_text = {
                         "People should conserve water and energy when possible, such as not leaving on faucets or appliances if they are not using them."
                     },
+                    choice_cloud_string = "conserve_water",
                     debrief_text = {
                         "People follow your advice and use less energy and water when possible. This has saved people money. Using less energy has reduced the amount of carbon dioxide emissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "
                     },
@@ -1461,6 +1518,7 @@ STR.Screenplay = {
                     display_text = {
                         "People should buy many house plants and place them throughout their homes and workplaces."
                     },
+                    choice_cloud_string = "more_plants",
                     debrief_text = {
                         "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "
                     },
@@ -1470,6 +1528,7 @@ STR.Screenplay = {
                     display_text = {
                         "People should water their lawns and wash their cars more frequently."
                     },
+                    choice_cloud_string = "more_energy",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
                         "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. "
@@ -1498,6 +1557,7 @@ STR.Screenplay = {
                     "The city council continues to value your advice as a local business owner that provides local jobs. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
                 },
             },
+            question_cloud_string = "city_money_2",
             hint_text = {
                 "Cars and trucks emit large amounts of carbon dioxide gas, so reducing the distance or driving usage can help reduce emissions. "
             },
@@ -1506,6 +1566,7 @@ STR.Screenplay = {
                     display_text = {
                         "Businesses will be granted money to sell their goods to the local community."
                     },
+                    choice_cloud_string = "sell_local",
                     debrief_text = {
                         "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "
                     },
@@ -1513,21 +1574,23 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "Businesses will be granted money to sell their products to cities in different states."
-                    },
-                    debrief_text = {
-                        "The council has followed your advice to support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "
-                    },
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
-                },
-                user_choice_3 = {
-                    display_text = {
                         "Businesses will be granted money to buy new computers and office equipment."
                     },
+                    choice_cloud_string = "new_computers",
                     debrief_text = {
                         "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "
                     },
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                },
+                user_choice_3 = {
+                    display_text = {
+                        "Businesses will be granted money to sell their products to cities in different states."
+                    },
+                    choice_cloud_string = "sell_far",
+                    debrief_text = {
+                        "The council has followed your advice to support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "
+                    },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
         },
@@ -1551,6 +1614,7 @@ STR.Screenplay = {
                     "People in community continue to value your input as a local business that provides ocean-based jobs. They again ask for your advice about how they can further improve ocean health. What do you recommend they do?"
                 },
             },
+            question_cloud_string = "community_transportation",
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
@@ -1559,6 +1623,7 @@ STR.Screenplay = {
                     display_text = {
                         "People should carpool and/or use the bus to go to work and school."
                     },
+                    choice_cloud_string = "carpool",
                     debrief_text = {
                         "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emissions in the area. "
                     },
@@ -1568,6 +1633,7 @@ STR.Screenplay = {
                     display_text = {
                         "People should upgrade their car radios and seat cushions to make their cars more comfortable."
                     },
+                    choice_cloud_string = "new_radios",
                     debrief_text = {
                         "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emissions in the area remains the same. "
                     },
@@ -1577,6 +1643,7 @@ STR.Screenplay = {
                     display_text = {
                         "People should use more taxis and buy rides to get to work and school."
                     },
+                    choice_cloud_string = "more_taxis",
                     debrief_text = {
                         "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emissions in the area. "
                     },
@@ -1647,11 +1714,13 @@ STR.Screenplay = {
                 -- 
                 --..n..n.."Rerunning the game will allow you to select a character of your choice again and allow you to try and improve your score."..n..n
             },
+            question_cloud_string = "end_game_option",
             answer_options = {
                 user_choice_1 = {
                     display_text = {
                         "Review the outcomes of your decisions again. After reviewing your outcomes you will be returned to this option screen. "
                     },
+                    choice_cloud_string = "review_outcomes",
                     debrief_text = {
                         HSH.helper_outcome_final_debrief
                     },
@@ -1663,6 +1732,7 @@ STR.Screenplay = {
                     display_text = {
                         "Go through the entire game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
                     },
+                    choice_cloud_string = "repeat_game",
                     debrief_text = nil,
                     outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
                 },
@@ -1671,6 +1741,7 @@ STR.Screenplay = {
                     display_text = {
                         "To learn more about ocean acidification check out other great resources from NOAA! After viewing the NOAA link you will be able to return to this option screen. "
                     },
+                    choice_cloud_string = "go_to_NOAA",
                     debrief_text = {
                         "Go to NOAA's site to learn more about ocean acidification by clicking the 'Open Link' button (this will open a new, separate webpage)."..n..n.."Click 'Continue' to go back to the end game options screen. "
                     },
@@ -1863,19 +1934,36 @@ end
 
 
 -- Decision HUD
-function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
+function STR:Get_Decision_Specific_Value(stage_key, substage_key, character_role, value_key, show_error)
 
-    -- gets the decision question text to display
+    -- gets specific key from within a decision table
 
+    -- error checking
     if not self:ValidCheck(stage_key, substage_key) then
         return nil
     end
 
     local decision_info = self.Screenplay[stage_key][substage_key]
 
-    local q_info = decision_info.question_prompt
+    local q_info = decision_info[value_key]
 
+    if q_info == nil then
+        if show_error then
+            print("Error specific value function for <"..tostring(value_key).."> was unable to find answer information.\n")
+        end
+        return nil
+    end
+
+    -- get value
     return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1])
+
+end
+
+function STR:Get_Decision_Text_Question(stage_key, substage_key, character_role)
+
+    -- gets the decision question text to display
+
+    return self:Get_Decision_Specific_Value(stage_key, substage_key, character_role, "question_prompt", true)
 
 end
 
@@ -1883,18 +1971,15 @@ function STR:Get_Decision_Text_Hint(stage_key, substage_key, character_role)
 
     -- gets the decision hint text to display
 
-    if not self:ValidCheck(stage_key, substage_key) then
-        return nil
-    end
+    return self:Get_Decision_Specific_Value(stage_key, substage_key, character_role, "hint_text")
 
-    local decision_info = self.Screenplay[stage_key][substage_key]
+end
 
-    local hint_info = decision_info.hint_text
+function STR:Get_Decision_Cloud_String(stage_key, substage_key, character_role)
 
-    -- recall, some decisions may not have hints
-    if hint_info == nil then return nil end
+    -- gets the decision hint text to display
 
-    return self:GetString_from_Tbl_or_Value(hint_info[character_role]) or self:GetString_from_Tbl_or_Value(hint_info[1])
+    return self:Get_Decision_Specific_Value(stage_key, substage_key, character_role, "question_cloud_string")
 
 end
 
@@ -1975,52 +2060,55 @@ function STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_
 
 end
 
-function STR:Get_Decision_PercentCoastalOA(stage_key, substage_key, character_role, choice_key)
+function STR:Get_Choice_Specific_Value(stage_key, substage_key, character_role, choice_key, value_key)
+
+    -- gets specific key from choice within a decision table
+
+    -- error check
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local decision_info = self.Screenplay[stage_key][substage_key]
+
+    local a_info_i = decision_info.answer_options[choice_key]
+
+    -- warning if nil
+    if a_info_i == nil then
+        print("Error choice specific value function for <"..tostring(value_key).."> was unable to find answer information for key <"..choice_key.."> \n")
+        return nil
+    end
+
+    -- get value
+    return a_info_i[value_key]
+
+end
+
+function STR:Get_Choice_PercentCoastalOA(stage_key, substage_key, character_role, choice_key)
 
     -- gets the percent of coastal OA to run with this choice
 
-    if not self:ValidCheck(stage_key, substage_key) then
-        return nil
-    end
-
-    local decision_info = self.Screenplay[stage_key][substage_key]
-
-    local a_info_i = decision_info.answer_options[choice_key]
-
-    if a_info_i == nil then
-        print("Error decision coastal OA function was unable to find answer information for key <"..choice_key.."> \n")
-        return nil
-    end
-
-    -- get debrief text table
-    local a_info_i_coastal_oa_percent = a_info_i.coastal_oa_percent_to_run
-
-    return a_info_i_coastal_oa_percent
+    return self:Get_Choice_Specific_Value(stage_key, substage_key, character_role, choice_key, "coastal_oa_percent_to_run")
 
 end
 
-function STR:Get_Decision_Answer_RepeatD(stage_key, substage_key, character_role, choice_key)
+function STR:Get_Choice_Cloud_String(stage_key, substage_key, character_role, choice_key)
+
+    -- gets the string to use in cloud data reporting
+
+    return self:Get_Choice_Specific_Value(stage_key, substage_key, character_role, choice_key, "choice_cloud_string")
+
+end
+
+function STR:Get_Choice_Answer_RepeatD(stage_key, substage_key, character_role, choice_key)
 
     -- gets whether or not this question should repeat given this answer
 
-    if not self:ValidCheck(stage_key, substage_key) then
-        return nil
-    end
-
-    local decision_info = self.Screenplay[stage_key][substage_key]
-
-    local a_info_i = decision_info.answer_options[choice_key]
-
-    if a_info_i == nil then
-        print("Error decision text function was unable to find debrief text for key <"..choice_key.."> \n")
-        return nil
-    end
-
-    return a_info_i.repeat_question_decision
+    return self:Get_Choice_Specific_Value(stage_key, substage_key, character_role, choice_key, "repeat_question_decision")
 
 end
 
-function STR:Run_Decision_Answer_OutcomeFunc(stage_key, substage_key, character_role, choice_key)
+function STR:Run_Choice_Answer_OutcomeFunc(stage_key, substage_key, character_role, choice_key)
 
     -- gets and runs the outcome function
 
