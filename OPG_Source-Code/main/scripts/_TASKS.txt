@@ -13,7 +13,6 @@
     -- maybe at last decision it tallies up all decisions and if all correct it sets to highest? (just as failsafe to ensure players can get max)?
 
     -- add firebase connection and Google sheets connection
-    --  start time, each decision click with time since decisions started
 
 
     -- maybe add medals along with bronze, silver, and gold medal achievments as final popup to view?
