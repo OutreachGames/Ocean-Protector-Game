@@ -9,7 +9,7 @@ local EXT = require ("modules.extend_md")
 local INFO = require("modules.item_info_md")
 
 -- constants
-local CV_Current_Save_Version_Major = 1
+local CV_Current_Save_Version_Major = 2
 local CV_Current_Save_Version_Minor = 1
 local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
 local CV_Application_ID = "Ocean_Protector"
