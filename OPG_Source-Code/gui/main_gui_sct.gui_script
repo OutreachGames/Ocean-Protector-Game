@@ -202,7 +202,11 @@ local function PlayerData_CloudRecord(self, print_outcome)
 			is_final_outcome = "true"
 		end
 
+	elseif stage_type == st.class_new_information then
+		decision_str = STR:Get_NewInfo_Cloud_String(stage_key, substage_key) or ""
 	else
+		-- recall observe and click items are not valid by this point 
+		-- since they have an early return
 		decision_str = ""
 		choice_str = ""
 	end

@@ -126,6 +126,7 @@ STR.CV = {
         goal_completed_type = CV_goal_types.observe_outcomes,
         run_swimmer_reset_before_oa_outcome = true,
         show_ocean_hud_highlighter = false,
+        newscreen_cloud_string = "observe_choice_outcome",
         goal_text = "Observe changes to ocean life."
 
     },
@@ -139,6 +140,7 @@ STR.CV = {
         allow_duplicate_clicks = true,
         enable_item_in_data_hud_onclick = false,
         enable_goto_in_data_hud_onclick = false,
+        newscreen_cloud_string = "record_choice_outcome",
         debrief_text = {
             "",
             item_ph = "",
@@ -157,6 +159,7 @@ STR.CV = {
         goal_completed_type = CV_goal_types.new_information,
         goal_text = "Review summary of outcomes from your decision.",
         displaytext_is_dynamic = true,
+        newscreen_cloud_string = "review_choice_outcome",
         display_text = HSH.helper_outcome_decision_summary,
 
     },
@@ -221,6 +224,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans.",
             debrief_text = "Let's observe all the life in this specific ocean scene, starting with the base of the food-web.",
+            newscreen_cloud_string = "intro_statement",
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_start_goals_gauge)
             end,
@@ -238,6 +242,7 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the base of our ocean food-web.",
             display_text = "Your new goal is to identify the base of the ocean food-web. \n\nThis current goal is shown on the left side of the screen. \n\nTo complete this goal, click 'Continue' and then click around in the ocean scene until you identify your goal.",
+            newscreen_cloud_string = "id_plankton",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = true,
@@ -255,6 +260,7 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document four groups of consumers in our ocean food-web.",
             display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemember, click 'Continue' to close this screen then click around the ocean scene to document the consumer groups.\n\n",
+            newscreen_cloud_string = "id_consumers",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = true,
@@ -292,6 +298,7 @@ STR.Screenplay = {
             display_text = "Excellent work, we have identified the groups of life in this scene. If you would like to read more about the groups you identified then click the 'Open Link' button (this will open a new, separate webpage). \n\nIt is also important to note that there are thousands of types of plants and animals throughout our oceans, far too many to all show in just this scene! \n\n\n",
             displaytext_hyperlink_address = "https://www.outreachgames.org/OceanProtector/custom_web_files/Student_Bonus_Content_Sheet.pdf",
             debrief_text = "For our example, we are going to add just one more group. Overall, this group is the highest-level consumer in the ocean.",
+            newscreen_cloud_string = "intro_humans",
             outcome_result_func = function()
                 STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_first_boat)
             end,
@@ -304,6 +311,7 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Find and document the highest-level consumer in our ocean food-web.",
             display_text = "Identify the highest-level consumer in this scene. To do this, click 'Continue' then click on the group you think is the highest consumer. ",
+            newscreen_cloud_string = "id_humans",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = true,
@@ -321,7 +329,8 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nBillions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nIn addition, our oceans help cycle nutrients and are even a source of new medicines.\n\n",
             debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
-            extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer."
+            extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer.",
+            newscreen_cloud_string = "ocean_are_good"
             --#TODO: special_image_id = Earth sphere with recycle arrows around oceans
         },
 
@@ -330,6 +339,7 @@ STR.Screenplay = {
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
             display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out. \n\nNote, a summary of this content will be provided as a review sheet later on. \n\n\n\n",
+            newscreen_cloud_string = "OA_intro",
             debrief_text = nil,
             extra_text = nil
         },
@@ -340,6 +350,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories.",
             --#TODO: special_image_id = Plane, cars, factories, houses releasing CO2
+            newscreen_cloud_string = "CO2_intro",
             debrief_text = nil,
             extra_text = nil
         },
@@ -350,6 +361,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gas mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.\n\n",
             --#TODO: special_image_id = CO2 mixing with ocean
+            newscreen_cloud_string = "ocean_absorb_CO2",
             debrief_text = nil,
             extra_text = nil
         },
@@ -358,6 +370,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Acidification can also occur due to nutrient pollution. \n\nExcess nutrient pollution can come from human sources such as fertilizers, soaps, and industrial waste.\n\n",
             --#TODO: special_image_id = fertilizers and industrial waste?
+            newscreen_cloud_string = "nutrient_oa_intro",
             debrief_text = nil,
             extra_text = nil
         },
@@ -380,6 +393,7 @@ STR.Screenplay = {
             display_text = "When it rains runoff water carries these excess nutrients to the coast and ocean. This provides unnatural amounts of nutrients to phytoplankton. ",
             --#TODO: special_image_id = fertilizers and industrial waste running into ocean and arrow showing phytoplankton growth
             debrief_text = nil,
+            newscreen_cloud_string = "nutrient_runoff",
             outcome_result_func = function()
                 --#TODO think about adding delay to progress function
                 --STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_coastal_oa_1)
@@ -393,6 +407,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decomposing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
             --#TODO: special_image_id = phytoplankton growth, then dying releasing CO2
+            newscreen_cloud_string = "algal_bloom",
             debrief_text = nil,
             extra_text = nil
         },
@@ -404,6 +419,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Overall, acidification caused by burning of fossil fuels affects our oceans globally, while acidification caused by nutrient pollution affects our oceans in specific locations.",
             debrief_text = "How do we do we know the oceans have become more acidic?",
+            newscreen_cloud_string = "oa_history_intro",
             extra_text = nil
         },
 
@@ -420,6 +436,7 @@ STR.Screenplay = {
         user_lesson_15a = {
             goal_text = "Follow information prompts.",
             display_text = "We have measured the pH of our oceans for over 150 years. \n\n In the past we measured the pH manually. In the modern day, we commonly measure pH remotely using ocean buoys. \n\n",
+            newscreen_cloud_string = "pH_intro",
             debrief_text = nil,
             extra_text = nil,
             outcome_result_func = function()
@@ -436,6 +453,7 @@ STR.Screenplay = {
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = true,
             enable_goto_in_data_hud_onclick = true,
+            newscreen_cloud_string = "record_pH",
             goal_text = "Document the current pH of the ocean water.",
             display_text = "Let's measure the current pH of the ocean water. \n\nTo do this, click 'Continue' then click on the buoy on the left side of the screen.",
             debrief_text = {
@@ -456,6 +474,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "When we compare the pH of today's oceans to pH measurements of the past there is a distinct difference."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
             --#TODO: special_image_id = pH decrease chart
+            newscreen_cloud_string = "pH_history",
             debrief_text = "This increase in ocean acidity over time is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
         },
 
@@ -464,6 +483,7 @@ STR.Screenplay = {
             display_text = "Ocean acidification hurts life throughout our oceans, including us. "..n..n.."For example, many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes."..n..n,
             --#TODO: special_image_id = show healthy shell than degraded shell
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
+            newscreen_cloud_string = "oa_affects_intro",
             extra_text = nil,
             outcome_result_func = function()
                 --recall we already decreased pH
@@ -478,6 +498,7 @@ STR.Screenplay = {
             run_swimmer_reset_before_oa_outcome = false,
             show_ocean_hud_highlighter = true,
             goal_text = "Observe how acidification has changed ocean life.",
+            newscreen_cloud_string = "oa_affects_observe",
         },
 
         -- Show animation of determinantal effects 
@@ -493,6 +514,7 @@ STR.Screenplay = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Document how each ocean group has changed under more acidic conditions in our ocean scene.",
             display_text = "Document how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. \n\n\n",
+            newscreen_cloud_string = "oa_affects_id",
             show_hud_data_popup = true,
             allow_duplicate_clicks = false,
             enable_item_in_data_hud_onclick = false,
@@ -523,6 +545,7 @@ STR.Screenplay = {
         user_lesson_18 = {
             goal_text = "Review your knowledge on ocean acidification.",
             display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we will move onto the next stage.\n\n",
+            newscreen_cloud_string = "recap_prep",
             debrief_text = nil,
             extra_text = nil
         },
@@ -863,6 +886,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans. ",
             debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidification."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n..n,
+            newscreen_cloud_string = "review_summary",
             -- OLDER: 
             --  debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n,
             extra_text = nil
@@ -871,6 +895,7 @@ STR.Screenplay = {
         user_lesson_20 = {
             goal_text = "Follow information prompts.",
             display_text = "Let's now choose a specific character role and work to reduce the impacts of ocean acidification with specific decisions.",
+            newscreen_cloud_string = "role_prep",
             debrief_text = nil,
             extra_text = nil
         },
@@ -1691,9 +1716,10 @@ STR.Screenplay = {
         key_basename_default = "user_lesson_",
 
         user_lesson_21a = {
-            goal_text = "Review outcomes of your decisions. ",
+            goal_text = "Review outcomes of your decisions.",
             display_text = "You have completed your work! Let's analyze the final health of each group of life in our ocean scene. ",
             debrief_text = HSH.helper_outcome_final_debrief,
+            newscreen_cloud_string = "review_final_debrief",
             debrief_is_dynamic = true,
             extra_text = nil
         },
@@ -1702,8 +1728,9 @@ STR.Screenplay = {
         -- life to evaluate how each has changed due to their cumulative decisions and outcomes. 
 
         user_lesson_21 = {
-            goal_text = "Review summary. ",
+            goal_text = "Review summary.",
             display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! "..n..n.."We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part, then together we can help protect our oceans! "..n..n,
+            newscreen_cloud_string = "review_reminder",
             debrief_text = nil,
         },
 
@@ -1898,6 +1925,20 @@ function STR:Get_NewInfo_Special_Image(stage_key, substage_key)
 
 end
 
+function STR:Get_NewInfo_Cloud_String(stage_key, substage_key)
+
+    -- gets the new info string to use in cloud data reporting
+
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil, nil, nil
+    end
+
+    local info = self.Screenplay[stage_key][substage_key]
+
+    return info.newscreen_cloud_string
+
+end
+
 
 -- Items to Click
 function STR:Get_Items_to_Click(stage_key, substage_key)
@@ -1960,7 +2001,7 @@ function STR:Get_Decision_Specific_Value(stage_key, substage_key, character_role
     end
 
     -- get value
-    return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1])
+    return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1]) or self:GetString_from_Tbl_or_Value(q_info)
 
 end
 
