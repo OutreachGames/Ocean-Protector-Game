@@ -189,21 +189,22 @@ local function PlayerData_CloudRecord(self, print_outcome)
 
 	-- if decision then get extra data
 	local decision_str, choice_str
+	local is_final_outcome = "false"
 
 	if stage_type == st.class_decisison then
 		-- recall choice keys are listed from best to worst, 
 		-- so for individual entry can see easily which choice was selected
 		decision_str = STR:Get_Decision_Cloud_String(stage_key, substage_key, character_role) or ""
 		choice_str = STR:Get_Choice_Cloud_String(stage_key, substage_key, character_role, choice_key) or ""
+
+		-- also set if final decision, which will also be added to final outcome sheet
+		if STR:Get_Decision_Is_Last(stage_key, substage_key, character_role)then
+			is_final_outcome = "true"
+		end
+
 	else
 		decision_str = ""
 		choice_str = ""
-	end
-
-	-- if end result send to final outcome sheet, too
-	local is_final_outcome = "false"
-	if total_answers > 0 and total_answers >= self.num_player_affected_questions then
-		is_final_outcome = "true"
 	end
 
 	if print_outcome then

@@ -1547,7 +1547,7 @@ STR.Screenplay = {
 
 
         -- Partnerships and Community III (city council for businesses)
-        decision_role_08a = { 
+        decision_role_08a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -1604,7 +1604,7 @@ STR.Screenplay = {
 
 
         -- Community Education II (community members transportation use)
-        decision_role_09a = { 
+        decision_role_09a = {
             question_prompt = {
                 "",
                 role_captain = {
@@ -1618,6 +1618,7 @@ STR.Screenplay = {
                 },
             },
             question_cloud_string = "community_transportation",
+            is_last_role_decision = true,
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
@@ -1658,6 +1659,8 @@ STR.Screenplay = {
         decision_role_09b = STR.CV.oa_outcome_observe_tbl,
         decision_role_09c = STR.CV.oa_outcome_record_tbl,
         decision_role_09d = STR.CV.oa_outcome_summary_tbl,
+
+        -- REMEMBER: last decision needs 'is_last_role_decision = true'
 
     },
 
@@ -1979,9 +1982,17 @@ end
 
 function STR:Get_Decision_Cloud_String(stage_key, substage_key, character_role)
 
-    -- gets the decision hint text to display
+    -- gets the decision string to use in cloud data reporting
 
     return self:Get_Decision_Specific_Value(stage_key, substage_key, character_role, "question_cloud_string")
+
+end
+
+function STR:Get_Decision_Is_Last(stage_key, substage_key, character_role)
+
+    -- gets if last decision for player character
+
+    return self:Get_Decision_Specific_Value(stage_key, substage_key, character_role, "is_last_role_decision")
 
 end
 
@@ -2096,7 +2107,7 @@ end
 
 function STR:Get_Choice_Cloud_String(stage_key, substage_key, character_role, choice_key)
 
-    -- gets the string to use in cloud data reporting
+    -- gets the choice string to use in cloud data reporting
 
     return self:Get_Choice_Specific_Value(stage_key, substage_key, character_role, choice_key, "choice_cloud_string")
 
