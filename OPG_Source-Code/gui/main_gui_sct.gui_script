@@ -7,6 +7,7 @@ local MY_GOO = require ("gui.gooey_theme_md")
 local STR = require ("modules.screenplay_md")
 local EXT = require ("modules.extend_md")
 local INFO = require("modules.item_info_md")
+local GA = require("modules.custom_analytics_md")
 
 -- constants
 local CV_Current_Save_Version_Major = 2
@@ -14,7 +15,7 @@ local CV_Current_Save_Version_Minor = 1
 local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
 local CV_Application_ID = "Ocean_Protector"
 local CV_Save_File_Name = "player_data_save_file"
-local CV_Player_Role_Empty = "player_role_unselected"
+local CV_Player_Role_Empty = "not_yet_selected"
 local CV_Node_Save_Icon = "gnode_saved_icon"
 
 local CV_item_groups = {}
@@ -145,9 +146,9 @@ local function PlayerData_IsValid(self, opt_id_tag)
 
 end
 
-local function PlayerData_CloudRecord(self)
+local function PlayerData_CloudRecord(self, print_outcome)
 
-	-- #TODO function to send report to cloud database
+	-- function to send report to cloud database
 
 	-- error checking
 	if not PlayerData_IsValid(self, "check_for_cloud_reporting") then
@@ -162,6 +163,15 @@ local function PlayerData_CloudRecord(self)
 		return
 	end
 
+	local st = STR.CV.goal_completed_types
+	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
+
+	-- check stage types
+	-- only save to cloud if not observe OA or click
+	if stage_type == st.class_observe_outcomes or stage_type == st.class_click_items then
+		return
+	end
+
 	local ply = self.player_data_tbl
 	local id = ply.unique_id_key or 0000
 	local character_role = ply.character_role_key or ""
@@ -169,20 +179,20 @@ local function PlayerData_CloudRecord(self)
 	local duration = socket.gettime() - (self.game_logic_time_start or 0)
 
 	local current_score
+	local best_choices = ply.num_best_answers
 	local total_answers = ply.num_total_answers
 	if total_answers > 0 then
-		current_score = ply.num_best_answers/total_answers
+		current_score = best_choices/total_answers
 	else
-		current_score = "NA"
+		current_score = ""
 	end
-
-	-- recall choice keys are listed from best to worst, 
-	-- so for individual entry can see easily which choice was selected
 
 	-- if decision then get extra data
 	local decision_str, choice_str
-	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
-	if stage_type == STR.CV.goal_completed_types.class_decisison then
+
+	if stage_type == st.class_decisison then
+		-- recall choice keys are listed from best to worst, 
+		-- so for individual entry can see easily which choice was selected
 		decision_str = STR:Get_Decision_Cloud_String(stage_key, substage_key, character_role) or ""
 		choice_str = STR:Get_Choice_Cloud_String(stage_key, substage_key, character_role, choice_key) or ""
 	else
@@ -190,12 +200,49 @@ local function PlayerData_CloudRecord(self)
 		choice_str = ""
 	end
 
-	print("Sending analytics to cloud database!\n")
+	-- if end result send to final outcome sheet, too
+	local is_final_outcome = "false"
+	if total_answers > 0 and total_answers >= self.num_player_affected_questions then
+		is_final_outcome = "true"
+	end
 
+	if print_outcome then
+		print("Sending analytics to cloud database!\n")
+	end
+
+	-- compile and send report to cloud database
+	-- keys must match value in script!
+	-- https://docs.google.com/spreadsheets/d/1gisUU8HIs2_JcRbW2LxjusDa6IHTNBM-yAVTxverdCY
 	local cloud_send_tbl = {
-		id, stage_key, substage_key, decision_str, character_role, duration, current_score, choice_key, choice_str
+		ga_key_id = id,
+		ga_key_stage = stage_key,
+		ga_key_substage = substage_key,
+		ga_key_decision_str = decision_str,
+		ga_key_character = character_role,
+		ga_key_duration = duration,
+		ga_key_completed_decisions = total_answers,
+		ga_key_best_choices = best_choices,
+		ga_key_current_score = current_score,
+		ga_key_choice_str = choice_str,
+		ga_is_final = is_final_outcome
 		-- save player ID, stage key, substage key, duration, cloud_string or NA, secondary_key, secondary_cloud_string or NA
 	}
+
+	local url = GA.custom_spreadsheet_script_url
+	local headers = {
+		-- script already configured to take a JSON in Google Script, so no need to set it in header
+	}
+	if print_outcome then
+		headers.Accept = "application/json"  -- we want a JSON response
+	end
+
+	local function handle_response(self, id, response)
+		if print_outcome then
+			print(response.status, response.response)
+		end
+	end
+
+	http.request(url, "POST", handle_response, headers, json.encode(cloud_send_tbl))
 
 end
 
@@ -2766,7 +2813,7 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 	-- setups and runs next game-play event
 
 	-- record previous progress to cloud analytics reporting before advancing
-	PlayerData_CloudRecord(self)
+	PlayerData_CloudRecord(self, false)
 
 	-- set that new start time
 	self.game_logic_time_start = socket.gettime()

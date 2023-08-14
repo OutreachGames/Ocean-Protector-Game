@@ -1659,7 +1659,6 @@ STR.Screenplay = {
         decision_role_09c = STR.CV.oa_outcome_record_tbl,
         decision_role_09d = STR.CV.oa_outcome_summary_tbl,
 
-
     },
 
     s06_new_information_end = {
@@ -1713,7 +1712,7 @@ STR.Screenplay = {
             goal_text = "Select end game option.",
             prevent_option_randomization = true,
             question_prompt = {
-                "You have now completed the game! You can now choose to review your outcomes again, view additional NOAA resources, or rerun the game." 
+                "You have now completed the game! You can now choose to review your outcomes again, view additional NOAA resources, or rerun the game."
                 -- 
                 --..n..n.."Rerunning the game will allow you to select a character of your choice again and allow you to try and improve your score."..n..n
             },
@@ -1952,7 +1951,7 @@ function STR:Get_Decision_Specific_Value(stage_key, substage_key, character_role
 
     if q_info == nil then
         if show_error then
-            print("Error specific value function for <"..tostring(value_key).."> was unable to find answer information.\n")
+            print("Error decision specific value function for <"..tostring(value_key).."> was unable to find answer information within stage <"..stage_key.."> and substage <"..substage_key..">. \n")
         end
         return nil
     end
@@ -2078,7 +2077,7 @@ function STR:Get_Choice_Specific_Value(stage_key, substage_key, character_role, 
 
     -- warning if nil
     if a_info_i == nil then
-        print("Error choice specific value function for <"..tostring(value_key).."> was unable to find answer information for key <"..choice_key.."> \n")
+        print("Error choice specific value function for <"..tostring(value_key).."> was unable to find answer information for key <"..choice_key.."> within stage <"..stage_key.."> and substage <"..substage_key..">. \n")
         return nil
     end
 
@@ -2147,7 +2146,7 @@ function STR:Get_Total_Choices()
     local num_player_questions = 0
 
     for k_substagename,v_substage_tbl in pairs(STR.Screenplay.s05_decisions_character_role or {}) do
-        if string.find(k_substagename, "default") == nil and v_substage_tbl.question_prompt ~= nil and v_substage_tbl.answer_options ~= nil == nil then
+        if string.find(k_substagename, "default") == nil and v_substage_tbl.question_prompt ~= nil and v_substage_tbl.answer_options ~= nil then
             num_player_questions = num_player_questions + 1
         end
     end
