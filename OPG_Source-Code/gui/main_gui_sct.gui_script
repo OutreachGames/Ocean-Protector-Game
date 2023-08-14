@@ -1500,7 +1500,7 @@ end
 
 local function Screen_Popup_Input(self, action_id, action)
 
-	-- runs 'On Input' for Decision screen on HUD
+	-- runs 'On Input' for Popup screen on HUD
 
 	-- early out if not allowed to use
 	if not self.hud_popup_dynamic.screen_isactive or self.hud_decision_dynamic.screen_isactive or self.hud_plot_dynamic.screen_isactive then
@@ -2446,8 +2446,9 @@ local function PlayerData_CatchUp(self)
 	-- recall static and plankton are cumulative visuals, so need to be updated to where we left off
 	-- swimmers are reset each observation event, so no need to update visuals when loading
 
-	-- send message to start and set that OA outcomes are active so certain popup clicking does not work
-	self.oa_outcomes_are_active = true
+	-- send message to instantly catch up
+	-- do not show OA values, b/c graph plots and other popups are needed to advance to next stages
+	self.oa_outcomes_are_active = false
 	msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_catchup_micro_or_static, PlayerData_MakeOA_Tbl(self))
 
 end
@@ -2616,7 +2617,7 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 	-- run debrief display and item enabling if first click
 
 	local debrief_text = item_click_info.show_debrief_text
-	local run_debrief = debrief_text ~= nil and debrief_text ~= ""
+	local run_debrief = (debrief_text ~= nil and debrief_text ~= "")
 	if first_time_click then
 
 		-- check and run item data view enabling
@@ -2650,7 +2651,7 @@ local function On_GO_Item_Click_InputEnd(self, item_name, first_time_click)
 
 	end
 
-	-- run pop-up display
+	-- run graph plot display if needed
 	if not run_debrief and item_click_info.show_data_popup and not self.oa_outcomes_are_active then
 		-- update graph plot
 		--print("Item clicked and opening graph for <"..item_name..">. \n ")
