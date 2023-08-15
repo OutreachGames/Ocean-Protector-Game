@@ -126,7 +126,7 @@ local function SimpleToggleHelper(self, controller_node, enabled_setting, run_si
 
 end
 
-local function GeneratedID_Get(self)
+local function GeneratedID_Manage(self)
 
 	-- loads a generated ID or makes one if file does not exist then save it
 
@@ -142,12 +142,13 @@ local function GeneratedID_Get(self)
 	-- if exists, then set loaded value as generated ID
 	if loaded_data ~= nil then
 		loaded_id = loaded_data.generated_id_value
+		--print("Loaded generated ID from file of <"..tostring(loaded_id)..">.\n")
 	end
 
 	-- if does not exist as file or file was read correctly, then generate new one
 	-- keep this as separate check (do not use else check)
 	-- b/c about loaded_id may be nil if it did not read correctly
-	if loaded_data == nil then
+	if loaded_id == nil then
 		-- generate new one
 		for _=1,3 do
 			math.random()
@@ -163,6 +164,7 @@ local function GeneratedID_Get(self)
 	end
 
 	-- finally save it for easy access
+	--print("Setting generated ID of <"..tostring(loaded_id)..">.\n")
 	self.generated_id_value = loaded_id
 
 end
@@ -3424,7 +3426,7 @@ local function Game_First_Initialization(self)
 	local current_time = socket.gettime()
 	math.randomseed(current_time)
 
-	GeneratedID_Get(self)
+	GeneratedID_Manage(self)
 
 	self.game_logic_time_start = current_time
 
