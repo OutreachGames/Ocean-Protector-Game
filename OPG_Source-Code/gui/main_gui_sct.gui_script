@@ -10,11 +10,12 @@ local INFO = require("modules.item_info_md")
 local GA = require("modules.custom_analytics_md")
 
 -- constants
-local CV_Current_Save_Version_Major = 2
+local CV_Current_Save_Version_Major = 3
 local CV_Current_Save_Version_Minor = 1
 local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
 local CV_Application_ID = "Ocean_Protector"
-local CV_Save_File_Name = "player_data_save_file"
+local CV_Save_Player_File_Name = "player_data_save_file"
+local CV_Save_GeneratedID_File_Name = "generated_id_save_file"
 local CV_Player_Role_Empty = "not_yet_selected"
 local CV_Node_Save_Icon = "gnode_saved_icon"
 
@@ -125,6 +126,47 @@ local function SimpleToggleHelper(self, controller_node, enabled_setting, run_si
 
 end
 
+local function GeneratedID_Get(self)
+
+	-- loads a generated ID or makes one if file does not exist then save it
+
+	-- get path
+	local filename = sys.get_save_file(CV_Application_ID, CV_Save_GeneratedID_File_Name)
+
+	-- load file
+	local loaded_data = sys.load(filename)
+
+	-- check and load ID or generate new one
+	local loaded_id
+
+	-- if exists, then set loaded value as generated ID
+	if loaded_data ~= nil then
+		loaded_id = loaded_data.generated_id_value
+	end
+
+	-- if does not exist as file or file was read correctly, then generate new one
+	-- keep this as separate check (do not use else check)
+	-- b/c about loaded_id may be nil if it did not read correctly
+	if loaded_data == nil then
+		-- generate new one
+		for _=1,3 do
+			math.random()
+		end
+		loaded_id = math.random(100000, 999999)
+
+		-- since we are generating it make sure to also save it
+		-- if we loaded it that means it was already saved
+		local save_successful = sys.save(filename, {generated_id_value = loaded_id})
+		if not save_successful then
+			print("Warning: Saving generated ID file was not successful!\n")
+		end
+	end
+
+	-- finally save it for easy access
+	self.generated_id_value = loaded_id
+
+end
+
 
 -- Player Data Updating, Setting, and Getting
 local function PlayerData_IsValid(self, opt_id_tag)
@@ -173,7 +215,7 @@ local function PlayerData_CloudRecord(self, print_outcome)
 	end
 
 	local ply = self.player_data_tbl
-	local id = ply.unique_id_key or 0000
+	local id_user = ply.id_key_user or 0000
 	local character_role = ply.character_role_key or ""
 	local choice_key = ply.most_recent_decision_choice_key or ""
 	local duration = socket.gettime() - (self.game_logic_time_start or 0)
@@ -215,11 +257,14 @@ local function PlayerData_CloudRecord(self, print_outcome)
 		print("Sending analytics to cloud database!\n")
 	end
 
+	local id_generated = self.generated_id_value or 999999
+
 	-- compile and send report to cloud database
 	-- keys must match value in script!
 	-- https://docs.google.com/spreadsheets/d/1gisUU8HIs2_JcRbW2LxjusDa6IHTNBM-yAVTxverdCY
 	local cloud_send_tbl = {
-		ga_key_id = id,
+		ga_key_id_user = id_user,
+		ga_key_id_generated = id_generated,
 		ga_key_stage = stage_key,
 		ga_key_substage = substage_key,
 		ga_key_decision_str = decision_str,
@@ -442,12 +487,12 @@ local function PlayerData_Save(self)
 	-- saves 'self.player_data_tbl' to file
 
 	-- get path
-	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
+	local filename = sys.get_save_file(CV_Application_ID, CV_Save_Player_File_Name)
 
 	-- save file
 	local save_successful = sys.save(filename, self.player_data_tbl)
 	if not save_successful then
-		print("Warning: Save not successful!\n")
+		print("Warning: Saving player data file not successful!\n")
 	else
 		--print("Saving player data to file with i-key "..self.player_data_tbl.gameplay_loop_i_key.."\n")
 		local saved_text_icon = gui.get_node(CV_Node_Save_Icon)
@@ -478,18 +523,18 @@ local function PlayerData_Check_MaybeLoad(self, load_saved_file)
 	-- if ~= to CV_Current_Save_Version then do not load
 
 	-- get path
-	local filename = sys.get_save_file(CV_Application_ID, CV_Save_File_Name)
+	local ply_data_filename = sys.get_save_file(CV_Application_ID, CV_Save_Player_File_Name)
 
 	-- load file
-	local loaded_data = sys.load(filename)
+	local ply_loaded_data = sys.load(ply_data_filename)
 
-	if loaded_data ~= nil then
-		local saved_version = loaded_data.save_file_version_major or 0
+	if ply_loaded_data ~= nil then
+		local saved_version = ply_loaded_data.save_file_version_major or 0
 		if saved_version >= CV_Current_Save_Version_Major then
 			-- loaded data is valid so set as player data table for lua
 			if load_saved_file then
 				self.player_data_tbl = nil
-				self.player_data_tbl = loaded_data
+				self.player_data_tbl = ply_loaded_data
 
 				-- take care of special things that are saved
 				msg.post(".", HSH.msg_request_resume_catchup)
@@ -2467,7 +2512,7 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 	self.player_data_tbl = nil
 
 	self.player_data_tbl = {
-		unique_id_key = 1111,
+		id_key_user = 1111,
 		save_file_version_major = CV_Current_Save_Version_Major,
 		save_file_version_minor = CV_Current_Save_Version_Minor,
 		num_best_answers = 0,
@@ -3015,7 +3060,7 @@ local function Screen_MainMenu_Initialize(self, enabled_status, save_file_exists
 	-- set dynamics
 	self.hud_mainmenu_dynamic = {}
 	self.hud_mainmenu_dynamic.stage_number = 1
-	self.hud_mainmenu_dynamic.current_input_id = self.player_data_tbl.unique_id_key
+	self.hud_mainmenu_dynamic.current_input_id = self.player_data_tbl.id_key_user
 
 	self.hud_mainmenu_dynamic.resume_game_possible = save_file_exists
 
@@ -3083,7 +3128,7 @@ local function Screen_MainMenu_Input(self, action_id, action)
 
 		-- handle all the button functionality for new game ID confirmation
 
-		self.player_data_tbl.unique_id_key = self.hud_mainmenu_dynamic.current_input_id
+		self.player_data_tbl.id_key_user = self.hud_mainmenu_dynamic.current_input_id
 
 		local run_sizer = false
 		local run_file_save = true
@@ -3335,6 +3380,8 @@ local function Game_First_Initialization(self)
 	-- randomize random generator
 	local current_time = socket.gettime()
 	math.randomseed(current_time)
+
+	GeneratedID_Get(self)
 
 	self.game_logic_time_start = current_time
 
