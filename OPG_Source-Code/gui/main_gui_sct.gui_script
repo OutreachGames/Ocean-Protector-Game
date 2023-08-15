@@ -206,11 +206,11 @@ local function PlayerData_CloudRecord(self, print_outcome)
 	end
 
 	local st = STR.CV.goal_completed_types
-	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
+	local stage_type = STR:Get_Completion_Type(stage_key, substage_key) or -1
 
 	-- check stage types
 	-- only save to cloud if not observe OA or click
-	if stage_type == st.class_observe_outcomes or stage_type == st.class_click_items then
+	if EXT:equalAny(stage_type, {st.class_observe_method, st.class_click_items, -1}) then
 		return
 	end
 
@@ -1592,7 +1592,7 @@ local function Screen_Popup_Input(self, action_id, action)
 					local update_values_to_debrief = true
 					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, nil, is_debrief_dynamic, opt_link)
 				else
-					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+					STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
 				end
 
@@ -1616,7 +1616,7 @@ local function Screen_Popup_Input(self, action_id, action)
 
 				if progress_to_next_stage then
 					local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-					STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+					STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
 				end
 			end
@@ -2180,7 +2180,7 @@ local function Screen_Plot_Input(self, action_id, action)
 		if Loop_CompletionType_is_Primary(self, STR.CV.goal_completed_types.class_click_items) then
 			if self.items_all_clicked then
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-				STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
+				STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
 				msg.post(".", HSH.msg_request_game_progress)
 			end
 		end
@@ -2859,6 +2859,41 @@ end
 
 
 -- HUD Process: Game Loop
+local function GamePauseToggle_Internal(self)
+
+	-- pause by setting game update factor to 0
+	self.game_paused = not self.game_paused
+
+	local factor
+	if self.game_paused then
+		factor = 0
+	else
+		factor = 1
+	end
+
+	msg.post("level_loader#collectionproxy", HSH.msg_builtin_set_timestep, {factor = factor, mode = 1})
+	msg.post("ocean_level:/level_controller#script", HSH.msg_pause_game_msg_sent, {minfo_game_paused = self.game_paused})
+
+end
+
+local function GamePause_On(self)
+
+	-- if game should be paused but is not paused, then pause it
+	if not self.game_paused then
+		GamePauseToggle_Internal(self)
+	end
+
+end
+
+local function GamePause_Off(self)
+
+	-- if game should be resumed but is paused, then resume it
+	if self.game_paused then
+		GamePauseToggle_Internal(self)
+	end
+
+end
+
 local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 
 	-- setups and runs next game-play event
@@ -2905,7 +2940,8 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 
 	-- get type of event and start associated screens
 	local stage_type = STR:Get_Completion_Type(stage_key, substage_key)
-	local st = STR.CV.goal_completed_types
+	local cv = STR.CV
+	local st = cv.goal_completed_types
 	self.gameplay_loop_completion_type_primary = stage_type
 	self.gameplay_loop_completion_type_secondary = stage_type
 
@@ -2943,22 +2979,59 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink)
 
 
-	elseif stage_type == st.class_observe_outcomes then
-		-- observe outcomes
-		-- send message to run outcomes
-		-- this script will get a message back once that outcome effect is done
-		-- and at that point request a game progress
-		-- get previous and current values for items into table and send it
-		if PlayerData_IsValid(self, "Observe Items Setup") then
-			-- hide data screen so OA changes are easier to see?
-			-- then open back up after OA done? 
-			-- or just do not bother and assume player will set how they want
-			-- also might hiding and un-hiding may distract from watching OA changes 
-			-- and OA changes and animal groups to click on will virtually always be visible to click on
+	elseif stage_type == st.class_observe_method then
+		-- observe methods
+		local observe_methods = cv.goal_completed_extra_types
 
-			-- send message to start and set that OA outcomes are active so certain popup clicking does not work
-			self.oa_outcomes_are_active = true
-			msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, PlayerData_MakeOA_Tbl(self, stage_key, substage_key))
+		-- first get which method type and then run accordingly
+		local observe_type = STR:Get_Goal_SubType_Method(stage_key, substage_key) or -1
+
+		if observe_type == observe_methods.subclass_oa_outcome then
+			-- OA outcome
+
+			-- send message to run outcomes
+			-- this script will get a message back once that outcome effect is done
+			-- and at that point request a game progress
+			-- get previous and current values for items into table and send it
+			if PlayerData_IsValid(self, "Observe Items Setup") then
+				-- hide data screen so OA changes are easier to see?
+				-- then open back up after OA done? 
+				-- or just do not bother and assume player will set how they want
+				-- also might hiding and un-hiding may distract from watching OA changes 
+				-- and OA changes and animal groups to click on will virtually always be visible to click on
+
+				-- send message to start and set that OA outcomes are active so certain popup clicking does not work
+				self.oa_outcomes_are_active = true
+				msg.post(CV_ID_Ocean_Setup_Script, HSH.msg_request_oa_outcomes_started, PlayerData_MakeOA_Tbl(self, stage_key, substage_key))
+			end
+
+		elseif EXT:equalAny(observe_type, {observe_methods.subclass_wait_time_only, observe_methods.subclass_wait_then_pause}) then
+			-- wait time only or wait time then pause
+
+			-- get wait time
+			local time_to_wait = STR:Get_Goal_SubType_Value(stage_key, substage_key)
+
+			-- run timer, pause if needed, then progress game
+			timer.delay(time_to_wait, false, function (self)
+
+				if observe_type == observe_methods.subclass_wait_then_pause then
+					GamePause_On(self)
+				end
+
+				STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
+				msg.post(".", HSH.msg_request_game_progress)
+
+			end)
+
+
+		elseif observe_type == observe_methods.subclass_unpause then
+			-- unpause 
+
+			-- unpause then progress game
+			GamePause_Off(self)
+			STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
+			msg.post(".", HSH.msg_request_game_progress)
+
 		end
 
 	end
@@ -3131,8 +3204,8 @@ local function Screen_MainMenu_Input(self, action_id, action)
 		self.player_data_tbl.id_key_user = self.hud_mainmenu_dynamic.current_input_id
 
 		local run_sizer = false
-		local run_file_save = true
 		Screen_MainMenu_Reset(self, false, run_sizer)
+		local run_file_save = true
 		GameLogic_Progress(self, 1, run_file_save)
 
 	end
@@ -3204,40 +3277,6 @@ end
 
 
 -- HUD Process: More Game-play
-local function GamePauseToggle_Internal(self)
-
-	-- pause by setting game update factor to 0
-	self.game_paused = not self.game_paused
-
-	local factor
-	if self.game_paused then
-		factor = 0
-	else
-		factor = 1
-	end
-
-	msg.post("level_loader#collectionproxy", HSH.msg_builtin_set_timestep, {factor = factor, mode = 1})
-	msg.post("ocean_level:/level_controller#script", HSH.msg_pause_game_msg_sent, {minfo_game_paused = self.game_paused})
-
-end
-
-local function GamePause_On(self)
-
-	-- if game should be paused but is not paused, then pause it
-	if not self.game_paused then
-		GamePauseToggle_Internal(self)
-	end
-
-end
-
-local function GamePause_Off(self)
-
-	-- if game should be resumed but is paused, then resume it
-	if self.game_paused then
-		GamePauseToggle_Internal(self)
-	end
-
-end
 
 local function OceanScene_ChangeWeather(self, is_raining, wave_direction, run_coastal_oa_when_done)
 
@@ -3285,9 +3324,13 @@ end
 local function On_OutcomeEffects_Done(self)
 
 	self.oa_outcomes_are_active = false
+
 	Screen_Highlighter_Reset(self)
-	local run_file_save = true
-	GameLogic_Progress(self, 1, run_file_save)
+
+	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
+	STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
+
+	msg.post(".", HSH.msg_request_game_progress)
 
 end
 

@@ -19,7 +19,14 @@ local CV_goal_types = {
     new_information = 1,
     decisison = 2,
     click_items = 3,
-    observe_outcomes = 4
+    observe_method = 4
+}
+
+local CV_subgoal_extra = {
+    observe_wait_time_only = 1,
+    observe_oa_outcome = 2,
+    observe_time_then_pause = 3,
+    unpause_immediately = 4
 }
 
 -- module 
@@ -104,7 +111,14 @@ STR.CV = {
         class_new_information = CV_goal_types.new_information,
         class_decisison = CV_goal_types.decisison,
         class_click_items = CV_goal_types.click_items,
-        class_observe_outcomes = CV_goal_types.observe_outcomes
+        class_observe_method = CV_goal_types.observe_method
+    },
+
+    goal_completed_extra_types = {
+        subclass_wait_time_only = CV_subgoal_extra.observe_wait_time_only,
+        subclass_oa_outcome = CV_subgoal_extra.observe_oa_outcome,
+        subclass_wait_then_pause = CV_subgoal_extra.observe_time_then_pause,
+        subclass_unpause = CV_subgoal_extra.unpause_immediately
     },
 
     debrief_decision_view = {
@@ -123,7 +137,8 @@ STR.CV = {
 
     oa_outcome_observe_tbl = {
 
-        goal_completed_type = CV_goal_types.observe_outcomes,
+        goal_completed_type = CV_goal_types.observe_method,
+        goal_completed_extra_method = CV_subgoal_extra.observe_oa_outcome,
         run_swimmer_reset_before_oa_outcome = true,
         show_ocean_hud_highlighter = false,
         newscreen_cloud_string = "observe_choice_outcome",
@@ -395,7 +410,6 @@ STR.Screenplay = {
             debrief_text = nil,
             newscreen_cloud_string = "nutrient_runoff",
             outcome_result_func = function()
-                --#TODO think about adding delay to progress function
                 --STR.CV.outcome_functions.func_setup_special_action(HSH.special_setup_coastal_oa_1)
             end,
             extra_text = nil
@@ -494,7 +508,8 @@ STR.Screenplay = {
         },
 
         user_lesson_16b = {
-            goal_completed_type = STR.CV.goal_completed_types.class_observe_outcomes,
+            goal_completed_type = STR.CV.goal_completed_types.class_observe_method,
+            goal_completed_extra_method = CV_subgoal_extra.observe_oa_outcome,
             run_swimmer_reset_before_oa_outcome = false,
             show_ocean_hud_highlighter = true,
             goal_text = "Observe how acidification has changed ocean life.",
@@ -1822,17 +1837,53 @@ function STR:Get_Completion_Type(stage_key, substage_key)
 
 end
 
+function STR:Get_Generic_Specific_Value(stage_key, substage_key, value_key, show_error)
 
--- Observe Outcomes
-function STR:Get_Swimmers_are_Resetting(stage_key, substage_key)
+    -- gets specific key from within a decision table
 
-    -- gets if swimmers should be reset for noticeable visualization
+    -- error checking
+    if not self:ValidCheck(stage_key, substage_key) then
+        return nil
+    end
+
+    local info = self.Screenplay[stage_key][substage_key]
+
+    local value = self:GetString_from_Tbl_or_Value(info[value_key])
+
+    if value == nil and show_error then
+        print("Error get generic specific value function for <"..tostring(value_key).."> was unable to find answer information within stage <"..stage_key.."> and substage <"..substage_key..">. \n")
+    end
+
+    -- get value
+    return value
+
+end
+
+function STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
+
+    -- runs outcome function
 
     if not self:ValidCheck(stage_key, substage_key) then
         return nil
     end
 
-    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].run_swimmer_reset_before_oa_outcome)
+    local outcome_func = self.Screenplay[stage_key][substage_key].outcome_result_func
+
+    if outcome_func ~= nil then
+        outcome_func()
+        return true
+    else
+        return false
+    end
+
+end
+
+-- General check that is mostly used with Observe Scene (includes OA outcome, wait time, and any others)
+function STR:Get_Swimmers_are_Resetting(stage_key, substage_key)
+
+    -- gets if swimmers should be reset for noticeable visualization
+
+    return STR:Get_Generic_Specific_Value(stage_key, substage_key, "run_swimmer_reset_before_oa_outcome")
 
 end
 
@@ -1840,11 +1891,19 @@ function STR:Get_Show_HUD_Highlighter(stage_key, substage_key)
 
     -- gets if HUD highlighter box should be shown for this outcome observation
 
-    if not self:ValidCheck(stage_key, substage_key) then
-        return nil
-    end
+    return STR:Get_Generic_Specific_Value(stage_key, substage_key, "show_ocean_hud_highlighter")
 
-    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].show_ocean_hud_highlighter)
+end
+
+function STR:Get_Goal_SubType_Method(stage_key, substage_key)
+
+    return STR:Get_Generic_Specific_Value(stage_key, substage_key, "goal_completed_extra_method")
+
+end
+
+function STR:Get_Goal_SubType_Value(stage_key, substage_key)
+
+    return STR:Get_Generic_Specific_Value(stage_key, substage_key, "goal_completed_extra_value")
 
 end
 
@@ -1892,25 +1951,6 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 
 end
 
-function STR:Run_NewInfo_Text_OutcomeFunc(stage_key, substage_key)
-
-    -- gets body text to display
-
-    if not self:ValidCheck(stage_key, substage_key) then
-        return nil
-    end
-
-    local outcome_func = self.Screenplay[stage_key][substage_key].outcome_result_func
-
-    if outcome_func ~= nil then
-        outcome_func()
-        return true
-    else
-        return false
-    end
-
-end
-
 function STR:Get_NewInfo_Special_Image(stage_key, substage_key)
 
     -- gets string name of special image to display
@@ -1929,13 +1969,7 @@ function STR:Get_NewInfo_Cloud_String(stage_key, substage_key)
 
     -- gets the new info string to use in cloud data reporting
 
-    if not self:ValidCheck(stage_key, substage_key) then
-        return nil, nil, nil
-    end
-
-    local info = self.Screenplay[stage_key][substage_key]
-
-    return info.newscreen_cloud_string
+    STR:Get_Generic_Specific_Value(stage_key, substage_key, "newscreen_cloud_string")
 
 end
 

@@ -335,6 +335,8 @@ local function On_Death(self)
 		local fadeout_delay = 1
 		local fadeout_duration = delete_time - fadeout_delay
 		go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, go.EASING_LINEAR, fadeout_duration, fadeout_delay)
+		-- currently not using for fish since we might add skeletons at some point?
+		--   also swaying death is thus then timed to fade out
 	end
 
 	local function func_delete(self)
