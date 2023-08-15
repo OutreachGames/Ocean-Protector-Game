@@ -804,6 +804,15 @@ local function SetPlanktonViewer(self, toggle_option, is_instant)
 
 end
 
+local function Run_Temporary_RainyClouds(self, start_offscreen)
+
+	-- #TODO add function to spawn temporary clouds that pass over with rain
+	--   keep separate from coastal OA since that also can be called during permanent weather
+	--   ?also has clouds that hit sun and add timed ocean water color and sky fade?
+	
+
+end
+
 local function Run_CoastalOA(self, update_percentage_to_hide) -- percent ranges from 0.0 to 1.0
 
 	-- plays particle effect for coastal acidification
@@ -1816,15 +1825,22 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	local fader_time
 	local reset_time
 	local reset_buffer
+	local run_coastal_oa
+	local coastal_oa_spawns_offscreen
 
+	-- setup values for if running swimmer reset or not
 	if run_swimmer_reset then
+		-- recall if running swimmer reset then we are fading out then back in
 		fader_time = 0.5
 		reset_buffer = 0.1
 		reset_time = CV_Animal_Reset_Time
+		coastal_oa_spawns_offscreen = false
 	else
+		-- not fading out or back in, so set fader times to low for use in timers
 		fader_time = 0.01
 		reset_time = 0.01
 		reset_buffer = 0.01
+		coastal_oa_spawns_offscreen = true
 	end
 
 	local stage_done_plankton_or_oa
@@ -1846,9 +1862,11 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	if type(percent_coastal_oa_to_run) == "number" then
 		if percent_coastal_oa_to_run > 0 then
 			-- give some time for coastal effect to start
+			run_coastal_oa = true
 			stage_done_plankton_or_oa = stage_done_plankton_or_oa + CV_Total_Coastal_OA_Time/3
 		end
 	else
+		run_coastal_oa = false
 		percent_coastal_oa_to_run = 0
 	end
 
@@ -2054,7 +2072,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	local function update_plankton_or_coastal_oa()
 
 		-- trigger highlighter, but only if coastal OA is not running
-		if show_highlighter and percent_coastal_oa_to_run <= 0 then
+		if show_highlighter and not run_coastal_oa then
 			msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_plankton"})
 		end
 
@@ -2067,7 +2085,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		--  fine if some have shrank already it's likely not noticeable
 		--  and questions that use coastal OA also have co2 effects 
 		--   which can be used as justification for why plankton change before coastal OA kicks in
-		if percent_coastal_oa_to_run > 0 then
+		if run_coastal_oa then
 			local percent_coastal_oa_to_hide = 1 - percent_coastal_oa_to_run
 			Run_CoastalOA(self, percent_coastal_oa_to_hide)
 		end
@@ -2155,20 +2173,29 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 	-- recall: if resetting then fade out, remove all, spawn in new base, fade in, then finally run added or removed
 
-	-- fade out
+	-- if running swimmer reset then fade out
 	reset_swimmers_start(fader_time)
 
 	timer.delay(fader_time + reset_buffer, false, function()
 
-		-- now that faded out remove all
+		-- if running swimmer reset then that means we are faded out
 		reset_swimmers_mid()
 
 		-- if resetting add swimmers back in at reset population (for example, 50% health)
+		-- wait a fraction of a second though so to not overwhelm system
 
 		timer.delay(fader_time + reset_buffer + reset_time, false, function()
 
-			-- reset to base and fade back in
+			-- if running swimmer reset then that means we are faded out
+			-- so reset to base and fade back in
 			reset_swimmers_end(fader_time)
+
+			-- before fading back in also add rainy clouds if needed
+			if run_coastal_oa then
+				-- recall, if using fade in and fade out with reset swimmers, 
+				-- then coastal oa can start in center of screen and does not have to start offscreen
+				Run_Temporary_RainyClouds(self, coastal_oa_spawns_offscreen)
+			end
 
 			-- once faded back in, run through OA effects, including adding or removing
 			timer.delay(fader_time*1.5, false, function()
@@ -2201,7 +2228,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 							-- end OA effects when all animals done and coastal OA is done
 							-- IE if there is still time left on coastal OA then wait until it's done
-							if percent_coastal_oa_to_run > 0 then
+							if run_coastal_oa then
 								local time_used = stage_done_plankton_or_oa + stage_done_ocean_benthic + full_ocean_mid_done
 								if CV_Total_Coastal_OA_Time > time_used then
 									full_oa_done_wait = CV_Total_Coastal_OA_Time - time_used
@@ -2305,6 +2332,8 @@ function on_message(self, message_id, message, sender)
 		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction, message.minfo_run_coastal_oa_too)
 	elseif message_id == HSH.msg_request_run_coastal_oa then
 		Run_CoastalOA(self, message.minfo_percent_coastal_oa_hide)
+	elseif message_id == HSH.msg_request_run_temporary_rain then
+		Run_Temporary_RainyClouds(self, message.minfo_spawn_rain_offscreen)
 	--elseif message_id == HSH.msg_report_swim_run_started then --can use message.minfo_spawn_list_key
 	--elseif message_id == HSH.msg_report_swim_run_completed then --can use message.minfo_spawn_list_key
 	elseif message_id == HSH.msg_request_make_bubbles then

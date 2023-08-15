@@ -1,9 +1,5 @@
     --#TODOs Master List- 
 
-    -- add front that can move through quickly as option to coastal OA, 
-    --   also has clouds that hit sun and add timed ocean water color and sky fade
-    -- add time delay to next stage progression as option
-
     -- pause menu has black 1x1 gui square over screen?
 
     -- add bunch of new lines to make popup hud gauge large then add images 

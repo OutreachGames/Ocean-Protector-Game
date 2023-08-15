@@ -33,6 +33,7 @@ local HASH = {
     msg_update_item_value = hash("msg_update_item_value"),
     msg_pause_game_msg_sent = hash("msg_pause_game_msg_sent"),
     msg_request_run_coastal_oa = hash("msg_request_run_coastal_oa"),
+    msg_request_run_temporary_rain = hash("msg_request_run_temporary_rain"),
     msg_request_resume_catchup = hash("msg_request_resume_catchup"),
 
     -- controls
