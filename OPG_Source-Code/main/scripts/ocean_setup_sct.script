@@ -806,14 +806,41 @@ end
 
 local function Run_Temporary_RainyClouds(self, start_offscreen)
 
-	-- #TODO add function to spawn temporary clouds that pass over with rain
+	-- function to spawn temporary clouds that pass over with rain
 	--   keep separate from coastal OA since that also can be called during permanent weather
 	--   ?also has clouds that hit sun and add timed ocean water color and sky fade?
-	
+
+	-- bit of a hack since it does not use proper spawning tracking
+	--   also does not use info saved in info module
+
+	-- early out to disable or enable for testing
+	if true then return end
+
+	local x, duration
+	if start_offscreen or true then
+		x = -2000
+		duration = 42
+	else
+		x = 0
+		duration = 18
+	end
+	local y = 340
+	local z = 0.1
+	local scale = 1.3
+
+	local new_collection = collectionfactory.create("spawner_weather_front#collectionfactory", vmath.vector3(x, y, z), nil, nil, scale)
+
+	local function func_kill(self, url)
+		go.delete(url)
+	end
+
+	local id = new_collection[HSH.STR_go]
+	go.animate(id, "position.x", go.PLAYBACK_ONCE_FORWARD, 2500, go.EASING_LINEAR, duration, 0, func_kill)
+	particlefx.play(msg.url(nil, id, "particlefx"))
 
 end
 
-local function Run_CoastalOA(self, update_percentage_to_hide) -- percent ranges from 0.0 to 1.0
+local function Run_CoastalOA(self, update_percentage_to_hide, show_highlighter) -- percent ranges from 0.0 to 1.0
 
 	-- plays particle effect for coastal acidification
 	-- make sure weather going from left to right when OACoast is running
@@ -858,15 +885,45 @@ local function Run_CoastalOA(self, update_percentage_to_hide) -- percent ranges 
 	local duration = 10
 	local delay = 1.0 --gives time for runoff to spawn and to say something if needed
 
-	go.set("spawner_coastOA", "position.x", start_x)
-	go.animate("spawner_coastOA", "position.x", go.PLAYBACK_ONCE_FORWARD, end_x, go.EASING_OUTSINE, duration, delay)
+	-- set some variables
+	local anim_duration = CV_Total_Coastal_OA_Time
+
+	local spawner_id = "spawner_coastOA"
+	local highlighter_sprite = "spawner_coastOA#highlighter_sprite"
+
+	-- set positions and start movement
+	go.set(spawner_id, "position.x", start_x)
+	go.animate(spawner_id, "position.x", go.PLAYBACK_ONCE_FORWARD, end_x, go.EASING_OUTSINE, duration, delay)
+
+	-- deal with highlighter
+	-- note, we use a separate, non GUI highlighter, 
+	--   since it can parent and move with coastal OA spawner
+	--   and since coastal OA spawner has different starting positions based on amount to show
+	if show_highlighter then
+		msg.post(highlighter_sprite, "enable")
+
+		-- animation style copied from gui highlighter
+		go.set(highlighter_sprite, "tint", INFO.common_info.color_red_full)
+		go.animate(highlighter_sprite, "tint", go.PLAYBACK_LOOP_PINGPONG, INFO.common_info.color_red_flicker, gui.EASING_LINEAR, 1.5, 0)
+
+		-- fine to have large rectangle whole time, as it shows where to look in upcoming seconds
+		-- plus moving and scaling highlighter might distract from watching algae and decomposition
+
+		-- remove highlighter as decomposition is getting thin
+		local function func_disable_highlighter(self)
+			go.cancel_animations(highlighter_sprite)
+			msg.post(highlighter_sprite, "disable")
+		end
+
+		timer.delay(anim_duration-5, false, func_disable_highlighter)
+	else
+		msg.post(highlighter_sprite, "disable")
+	end
 
 	-- play effect while moving object
 	particlefx.play("spawner_coastOA#particlefx")
 
 	-- wait until particle effects are done before being able to do again
-	local anim_duration = CV_Total_Coastal_OA_Time
-
 	local function func_set_oa(self)
 		self.coastal_oa_playing = false
 		SetPlanktonViewer(self, true)
@@ -876,7 +933,7 @@ local function Run_CoastalOA(self, update_percentage_to_hide) -- percent ranges 
 
 end
 
-local function SetStatic_Weather(self, is_raining) 
+local function SetStatic_Weather(self, is_raining)
 
 	-- set the visuals for static sprites specific to the weather
 	-- does not spawn anything, changes tint and simply starts particle fx
@@ -1007,7 +1064,7 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 	if at_scene_start then
 		loader_helper(self)
 	else
-		timer.delay(self.reload_time, false, loader_helper)
+		timer.delay(self.weather_reload_time, false, loader_helper)
 	end
 
 end
@@ -1028,7 +1085,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 		return
 	end
 
-	-- switch weather 
+	-- switch weather
 	self.weather_changeable = false
 
 	-- fade out, then run Setup Scene with weather arguments
@@ -1045,7 +1102,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 		Setup_Weather(self, false, is_supposed_to_rain, wave_direction)
 
 		-- fade back in, wait enough time for setup scene to clear and reload
-		timer.delay(self.reload_time*2, false, function(self)
+		timer.delay(self.weather_reload_time*2, false, function(self)
 
 			-- fade back in
 			msg.post("main:/hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
@@ -2087,6 +2144,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		--   which can be used as justification for why plankton change before coastal OA kicks in
 		if run_coastal_oa then
 			local percent_coastal_oa_to_hide = 1 - percent_coastal_oa_to_run
+			-- add third arg as true to enable coastal oa highlighter
 			Run_CoastalOA(self, percent_coastal_oa_to_hide)
 		end
 
@@ -2261,7 +2319,7 @@ local function SceneStart(self)
 	-- set base variables
 	self.weather_changeable = true
 	self.weather_is_raining = false
-	self.reload_time = CV_Weather_Reload_Time
+	self.weather_reload_time = CV_Weather_Reload_Time
 	self.no_wind_default = 1
 	self.spawned_objects_list = nil
 	self.spawned_objects_list = {}
@@ -2331,7 +2389,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == HSH.msg_request_change_weather then
 		Weather_Change(self, message.minfo_is_raining, message.minfo_wave_direction, message.minfo_run_coastal_oa_too)
 	elseif message_id == HSH.msg_request_run_coastal_oa then
-		Run_CoastalOA(self, message.minfo_percent_coastal_oa_hide)
+		Run_CoastalOA(self, message.minfo_percent_coastal_oa_hide, message.minfo_coastal_oa_show_highlighter)
 	elseif message_id == HSH.msg_request_run_temporary_rain then
 		Run_Temporary_RainyClouds(self, message.minfo_spawn_rain_offscreen)
 	--elseif message_id == HSH.msg_report_swim_run_started then --can use message.minfo_spawn_list_key

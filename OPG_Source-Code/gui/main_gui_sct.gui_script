@@ -29,9 +29,6 @@ local CV_gameplay_loop = {
 
 local CV_Bar_Old = vmath.vector4(0.80, 0.80, 0.80, 1)
 local CV_Bar_Current = vmath.vector4(1.0, 1.0, 1.0, 1)
-local CV_Color_White = vmath.vector4(1.0, 1.0, 1.0, 1)
-local CV_Color_Red_Full = vmath.vector4(1.0, 0.4, 0.4, 1)
-local CV_Color_Red_Flicker = vmath.vector4(0.8, 0.2, 0.2, 0.3)
 
 -- functions
 
@@ -599,19 +596,19 @@ local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 		gui.cancel_animation(controller_node, "color")
 		gui.set_position(controller_node, new_position)
 		gui.set_size(controller_node, new_size)
-		gui.set_color(controller_node, CV_Color_Red_Full)
+		gui.set_color(controller_node, INFO.common_info.color_red_full)
 
 		if is_reset then
 			gui.set_visible(controller_node, false)
-			gui.set_color(controller_node, CV_Color_White)
+			gui.set_color(controller_node, INFO.common_info.color_white)
 		else
 			gui.set_visible(controller_node, true)
-			gui.animate(controller_node, "color", CV_Color_Red_Flicker, gui.EASING_LINEAR, 1.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+			gui.animate(controller_node, "color", INFO.common_info.color_red_flicker, gui.EASING_LINEAR, 1.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
 		end
 
 	else
 		gui.cancel_animation(controller_node, "color")
-		gui.set_color(controller_node, CV_Color_White)
+		gui.set_color(controller_node, INFO.common_info.color_white)
 		gui.set_position(controller_node, new_position)
 		gui.set_size(controller_node, new_size)
 		gui.set_enabled(controller_node, false)
@@ -634,6 +631,9 @@ local function Screen_Highlighter_Initialize(self, enabled_status)
 		node_controller = basename .. "/gui_frame_core",
 		-- specify HUD highlighter areas
 		highlight_setup = {
+			-- note, we use a separate, non GUI highlighter, 
+			--   since it can parent and move with coastal OA spawner
+			--   and since coastal OA spawner has different starting positions based on amount to show
 			show_key_reset = {l_position = vmath.vector3(0, 0, 0), l_size = vmath.vector3(32, 32, 0)},
 			show_area_plankton = {l_position = vmath.vector3(127, 538, 0), l_size = vmath.vector3(278, 180, 0)},
 			show_area_benthic = {l_position = vmath.vector3(800, 183, 0), l_size = vmath.vector3(1620, 390, 0)},

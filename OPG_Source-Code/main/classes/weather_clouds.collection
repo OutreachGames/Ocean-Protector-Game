@@ -21,7 +21,7 @@ embedded_instances {
   "}\n"
   "components {\n"
   "  id: \"particlefx\"\n"
-  "  component: \"/main/effects/rain.particlefx\"\n"
+  "  component: \"/main/effects/rain_cloud.particlefx\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: -36.0\n"

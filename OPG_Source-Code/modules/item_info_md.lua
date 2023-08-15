@@ -45,6 +45,12 @@ local CV_Plot_X_Bar_Labels = {
 
 local INFO = {}
 
+INFO.common_info = {
+    color_white = vmath.vector4(1.0, 1.0, 1.0, 1),
+    color_red_full = vmath.vector4(1.0, 0.4, 0.4, 1),
+    color_red_flicker = vmath.vector4(0.8, 0.2, 0.2, 0.3)
+}
+
 INFO.item_info = {
 
 	-- reminders:
