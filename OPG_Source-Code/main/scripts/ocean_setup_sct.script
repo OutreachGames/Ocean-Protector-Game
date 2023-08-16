@@ -20,7 +20,7 @@ local CV_Update_Property = {
 
 local CV_Weather_Reload_Time = 0.25
 local CV_Animal_Reset_Time = 0.25
-local CV_Total_Coastal_OA_Time = 30
+local CV_Total_Coastal_OA_Time = 28
 
 -- functions
 
@@ -865,8 +865,8 @@ local function Run_CoastalOA(self, update_percentage_to_hide, show_highlighter) 
 	if self.coastal_oa_playing then
 		print("Notice: Run Coastal OA function called while currently running, requested run will not occur...")
 		return
-	else
-		print("Starting Coastal Acidification effect \n")
+	--else
+		--print("Starting Coastal Acidification effect \n")
 	end
 
 	-- default args
@@ -1929,7 +1929,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		if percent_coastal_oa_to_run > 0 then
 			-- give some time for coastal effect to start
 			run_coastal_oa = true
-			stage_done_plankton_or_oa = stage_done_plankton_or_oa + (CV_Total_Coastal_OA_Time * 0.5)
+			stage_done_plankton_or_oa = stage_done_plankton_or_oa + (CV_Total_Coastal_OA_Time * 0.55)
 		end
 	else
 		run_coastal_oa = false
