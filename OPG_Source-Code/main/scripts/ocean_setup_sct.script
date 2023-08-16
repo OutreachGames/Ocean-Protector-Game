@@ -1451,6 +1451,24 @@ local function Setup_AllAnimals(self)
 
 end
 
+local function Boat_GotoCenter(self, boat_id, cancel_first)
+
+	-- moves boat to center, clears and reset first if needed
+
+	local msg_info = {minfo_swim_to_x = RES.Center_X}
+
+	boat_id = boat_id or self.helper_player_boat_url
+
+	if cancel_first then
+		go.cancel_animations(boat_id)
+		local spawn_pos = INFO.common_info.boat_default_spawn
+		go.set_position(vmath.vector3(spawn_pos.x, spawn_pos.y, spawn_pos.z))
+	end
+
+	msg.post(boat_id, HSH.msg_order_swim_to_pos, msg_info)
+
+end
+
 local function Spawn_Boat(self, boat_type_name)
 
 	-- defaults
@@ -1481,14 +1499,16 @@ local function Spawn_Boat(self, boat_type_name)
 	local z = subitem_tbl.spawn_z_base
 	local spanwn_pos = vmath.vector3(x,y,z)
 	local new_collection = collectionfactory.create(collfact_name, spanwn_pos, rot, props, scale)
+	local boat_object = new_collection[HSH.STR_go]
+
+	self.helper_player_boat_url = boat_object
 
 	-- add GO to tracker
-	Spawned_AddObject(self, subitem_tbl.spawn_list_key, new_collection[HSH.STR_go])
+	Spawned_AddObject(self, subitem_tbl.spawn_list_key, boat_object)
 
 	-- call boat move
-	local msg_info = {minfo_swim_to_x = RES.Center_X}
+	Boat_GotoCenter(self, boat_object)
 
-	msg.post(new_collection[HSH.STR_go], HSH.msg_order_swim_to_pos, msg_info)
 
 end
 
@@ -1497,6 +1517,7 @@ local function Boat_Change_Character(self, boat_subitem_name)
 	-- clear all current boats with expire message
 	for _,v_subiteminfo in pairs(INFO.item_info.item_humans.subitem_info) do
 		Spawned_ResetAll(self, v_subiteminfo.spawn_list_key, false)
+		self.helper_player_boat_url = nil
 	end
 
 	-- request new boat 
@@ -1895,6 +1916,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	local coastal_oa_spawns_offscreen
 
 	-- setup values for if running swimmer reset or not
+	--  recall player boat movement is included in swimmer reset
 	if run_swimmer_reset then
 		-- recall if running swimmer reset then we are fading out then back in
 		fader_time = 0.5
@@ -1998,6 +2020,11 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		--   if health <= 0.5 (reset) then run effect up to 40%
 
 		if not run_swimmer_reset then return end
+
+		-- also before fading back in teleport player boat and tell it to come back onscreen
+		-- teleport player boat to far left and tell it to go to center
+		--   also cancel any animations first
+		Boat_GotoCenter(self, nil, true)
 
 		-- what percent population should visual change alter (for example, visual changer is 40%)
 		local reset_health_delta = 0.4

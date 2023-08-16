@@ -48,7 +48,8 @@ local INFO = {}
 INFO.common_info = {
     color_white = vmath.vector4(1.0, 1.0, 1.0, 1),
     color_red_full = vmath.vector4(1.0, 0.4, 0.4, 1),
-    color_red_flicker = vmath.vector4(0.8, 0.2, 0.2, 0.3)
+    color_red_flicker = vmath.vector4(0.8, 0.2, 0.2, 0.3),
+    boat_default_spawn = {x = RES.Boundary_X[1]-300, y = 204, z = 0}
 }
 
 INFO.item_info = {
@@ -481,27 +482,27 @@ INFO.item_info = {
                 spawn_list_key = "item_human__subitem_ranger",
                 spawn_coll_factory = "spawner_human_ranger#collectionfactory",
                 object_logic_type = CV_Logic_Type_Boat,
-                spawn_y_range = {204, 204},
-                spawn_x_min = RES.Boundary_X[1]-300,
-                spawn_z_base = 0,
+                spawn_y_range = {INFO.common_info.boat_default_spawn.y, INFO.common_info.boat_default_spawn.y},
+                spawn_x_min = INFO.common_info.boat_default_spawn.x,
+                spawn_z_base = INFO.common_info.boat_default_spawn.z,
                 object_dimensions = { x = 412, y = 230 }, --compiled sprite/spine dimensions
             },
             subitem_captain = {
                 spawn_list_key = "item_human__subitem_captain",
                 spawn_coll_factory = "spawner_human_captain#collectionfactory",
                 object_logic_type = CV_Logic_Type_Boat,
-                spawn_y_range = {204, 204},
-                spawn_x_min = RES.Boundary_X[1]-300,
-                spawn_z_base = 0,
+                spawn_y_range = {INFO.common_info.boat_default_spawn.y, INFO.common_info.boat_default_spawn.y},
+                spawn_x_min = INFO.common_info.boat_default_spawn.x,
+                spawn_z_base = INFO.common_info.boat_default_spawn.z,
                 object_dimensions = { x = 412, y = 230 }, --compiled sprite/spine dimensions
             },
             subitem_guide = {
                 spawn_list_key = "item_human__subitem_guide",
                 spawn_coll_factory = "spawner_human_guide#collectionfactory",
                 object_logic_type = CV_Logic_Type_Boat,
-                spawn_y_range = {204, 204},
-                spawn_x_min = RES.Boundary_X[1]-300,
-                spawn_z_base = 0,
+                spawn_y_range = {INFO.common_info.boat_default_spawn.y, INFO.common_info.boat_default_spawn.y},
+                spawn_x_min = INFO.common_info.boat_default_spawn.x,
+                spawn_z_base = INFO.common_info.boat_default_spawn.z,
                 object_dimensions = { x = 448, y = 215 }, --compiled sprite/spine dimensions
             }
         }
@@ -567,20 +568,28 @@ function INFO:Get_Plot_Subtitle_Text(item_name, opt_subitem_name)
 end
 
 function INFO:Logic_is_Swimmer(logic_type)
+
     return logic_type == CV_Logic_Type_Swimmer
+
 end
 
 function INFO:Logic_is_Static(logic_type)
+
     return logic_type == CV_Logic_Type_Static
+
 end
 
 function INFO:Logic_is_Micro(logic_type)
+
     return logic_type == CV_Logic_Type_Micro
+
 end
 
 function INFO:Logic_is_Alive(item_name)
+
     local l_info = self.item_info[item_name] or {}
     return l_info.item_is_alive
+
 end
 
 function INFO:Get_ItemSubItem_Names_from_Enum(item_enum, subitem_enum)
