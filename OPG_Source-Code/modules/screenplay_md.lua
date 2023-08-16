@@ -311,7 +311,7 @@ STR.Screenplay = {
         user_lesson_04 = {
             goal_text = "Follow information prompts.",
             display_text = "Excellent work, we have identified the groups of life in this scene. If you would like to read more about the groups you identified then click the 'Open Link' button (this will open a new, separate webpage). \n\nIt is also important to note that there are thousands of types of plants and animals throughout our oceans, far too many to all show in just this scene! \n\n\n",
-            displaytext_hyperlink_address = "https://www.outreachgames.org/OceanProtector/custom_web_files/Student_Bonus_Content_Sheet.pdf",
+            displaytext_hyperlink_address = "https://www.outreachgames.org/OceanProtector/custom_web_files/OPG_Student_Bonus_Content_Sheet.pdf",
             debrief_text = "For our example, we are going to add just one more group. Overall, this group is the highest-level consumer in the ocean.",
             newscreen_cloud_string = "intro_humans",
             outcome_result_func = function()
@@ -1502,7 +1502,7 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "farmers should buy additional tractors so they can harvest their crops more quickly."
+                        "Farmers should buy additional tractors so they can harvest their crops more quickly."
                     },
                     choice_cloud_string = "more_tractors",
                     debrief_text = {
@@ -2034,8 +2034,14 @@ function STR:Get_Decision_Specific_Value(stage_key, substage_key, character_role
         return nil
     end
 
-    -- get value
-    return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1]) or self:GetString_from_Tbl_or_Value(q_info)
+    -- get value type and return accordingly
+    local qinfo_type = type(q_info)
+
+    if qinfo_type == "table" then
+        return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1])
+    else
+        return self:GetString_from_Tbl_or_Value(q_info)
+    end
 
 end
 

@@ -239,7 +239,7 @@ local function PlayerData_CloudRecord(self, print_outcome)
 		choice_str = STR:Get_Choice_Cloud_String(stage_key, substage_key, character_role, choice_key) or ""
 
 		-- also set if final decision, which will also be added to final outcome sheet
-		if STR:Get_Decision_Is_Last(stage_key, substage_key, character_role)then
+		if STR:Get_Decision_Is_Last(stage_key, substage_key, character_role) then
 			is_final_outcome = "true"
 		end
 
@@ -1933,7 +1933,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 					-- add debrief screen and also update goals
 					local run_sizing_goals = false
-					Screen_Goals_Reset(self, true, run_sizing_goals, "Evaluate outcome of choice")
+					Screen_Goals_Reset(self, true, run_sizing_goals, "Review outcomes from your decision.")
 
 					local run_sizing_popup = true
 					local reset_values_popup = true
@@ -1981,7 +1981,7 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- could not open the url...
 		-- 	end
 
-		sys.open_url("https://www.outreachgames.org/OceanProtector/custom_web_files/Student_Helper_Sheet.pdf")
+		sys.open_url("https://www.outreachgames.org/OceanProtector/custom_web_files/OPG_Student_Helper_Sheet.pdf")
 
 	end
 
