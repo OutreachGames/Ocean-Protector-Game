@@ -840,6 +840,15 @@ local function Run_Temporary_RainyClouds(self, start_offscreen)
 
 end
 
+local function Setup_CoastalOA(self)
+
+	-- does everything needed to setup coastal OA
+
+	local highlighter_sprite = "spawner_coastOA#highlighter_sprite"
+	msg.post(highlighter_sprite, "disable")
+
+end
+
 local function Run_CoastalOA(self, update_percentage_to_hide, show_highlighter) -- percent ranges from 0.0 to 1.0
 
 	-- plays particle effect for coastal acidification
@@ -1920,7 +1929,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		if percent_coastal_oa_to_run > 0 then
 			-- give some time for coastal effect to start
 			run_coastal_oa = true
-			stage_done_plankton_or_oa = stage_done_plankton_or_oa + CV_Total_Coastal_OA_Time/3
+			stage_done_plankton_or_oa = stage_done_plankton_or_oa + (CV_Total_Coastal_OA_Time * 0.5)
 		end
 	else
 		run_coastal_oa = false
@@ -2337,6 +2346,10 @@ local function SceneStart(self)
 			end
 		end
 	end
+
+	-- setup other aspects
+
+	Setup_CoastalOA(self)
 
 	ResetDynamicGrids(self)
 
