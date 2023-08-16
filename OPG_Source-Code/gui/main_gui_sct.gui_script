@@ -1047,7 +1047,7 @@ local function DynamicText_DecisionSummary(self)
 	local choice_key = decision_info.selection_choice_key
 	local character_role = self.player_data_tbl.character_role_key
 
-	local decision_debrief = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, character_role, choice_key, true)
+	local decision_debrief = STR:Get_Choice_Text_Debrief(stage_key, substage_key, character_role, choice_key)
 
 	-- get text for pH change
     local txt_ph = func_get_delta_text(items_delta.item_ph, true)
@@ -1082,7 +1082,7 @@ local function DynamicText_DecisionSummary(self)
 
 end
 
-local function DynamicText_FinalDebrief(self)
+local function DynamicText_FinalDebrief(self, end_game_opt)
 
 	-- get dynamic text for final debrief
 
@@ -1183,11 +1183,10 @@ local function DynamicText_FinalDebrief(self)
     local good_suffix = "helped reduce ocean acidification, increased the health of ocean life, and improved your character goals."
     local reminder_suffix = "choices that help reduce energy usage and/or nutrient pollution are effective ways to help prevent ocean acidification. "
     local try_again_txt
-	if not self.final_debrief_shown then
-		self.final_debrief_shown = true
-		try_again_txt = "You will soon have an option to rerun the game, too. "
+	if end_game_opt then
+		try_again_txt = "Don't forget, you can rerun the game, too. Just click 'Continue' to go back to the end options screen."
 	else
-		try_again_txt = "Don't forget, you can rerun the game, too. "
+		try_again_txt = "You will soon have an option to rerun the game, too. "
 	end
 
     -- recall that many questions have 0 change, so while they may not help as much they also do not hinder as much
@@ -1203,6 +1202,7 @@ local function DynamicText_FinalDebrief(self)
     end
 
 	-- compile
+
 	local text_tbl = {
 		dynamic_text_top_title = "Summary of your decisions:",
 		dynamic_text_top_value = txt_recomendations,
@@ -1371,9 +1371,10 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			-- get which type of dynamic text is being used
 			local text_tbl
 
-			if body_text == HSH.helper_outcome_final_debrief then
+			if body_text == HSH.helper_outcome_final_debrief_1 or body_text == HSH.helper_outcome_final_debrief_2 then
 				title_text = "Final Summary"
-				text_tbl = DynamicText_FinalDebrief(self)
+				local is_final_2 = (body_text == HSH.helper_outcome_final_debrief_2)
+				text_tbl = DynamicText_FinalDebrief(self, is_final_2)
 			elseif body_text == HSH.helper_outcome_decision_summary then
 				title_text = "Decision Summary"
 				text_tbl = DynamicText_DecisionSummary(self)
@@ -1583,7 +1584,7 @@ local function Screen_Popup_Input(self, action_id, action)
 
 				local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
 				local debrief_text, is_debrief_dynamic, opt_link = STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
-				local debrief_title_text
+				local debrief_title_text = STR:Get_NewInfo_Title_Debrief(stage_key, substage_key)
 
 				-- if there is debrief for this new_info screen then run it, 
 				-- otherwise finish up 
@@ -1592,7 +1593,8 @@ local function Screen_Popup_Input(self, action_id, action)
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 					local run_sizing_debrief = true
 					local update_values_to_debrief = true
-					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, nil, is_debrief_dynamic, opt_link)
+					local special_image_str = STR:Get_NewInfo_Special_Image_Debrief(stage_key, substage_key)
+					Screen_Popup_Reset(self, true, run_sizing_debrief, update_values_to_debrief, debrief_text, debrief_title_text, nil, is_debrief_dynamic, opt_link, special_image_str)
 				else
 					STR:Run_Generic_OutcomeFunc(stage_key, substage_key)
 					msg.post(".", HSH.msg_request_game_progress)
@@ -1645,7 +1647,7 @@ end
 
 
 -- HUD Screen: Decision
-local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables, num_options, question_text, answer_text_tbl, hint_text)
+local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tracker_variables, num_options, question_text, answer_text_tbl, hint_text, title)
 
 	-- reset Decision screen of HUD
 
@@ -1755,10 +1757,13 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	gui.set_color(gui.get_node(constant.node_submit_button_frame), MY_GOO.COLOR_LOCKED)
 	gui.set_color(gui.get_node(constant.node_submit_button_text), MY_GOO.COLOR_LOCKED)
 
-	-- set text 
+	-- set text body and title
 	if question_text ~= nil then
 		gui.set_text(gui.get_node(constant.node_question_text), question_text)
 	end
+
+	title = title or "Decision"
+	gui.set_text(gui.get_node(constant.node_question_title), title)
 
 	-- update answer option text and save keys in same order
 	self.hud_decision_dynamic.answer_choice_keys = nil
@@ -1789,6 +1794,7 @@ local function Screen_Decision_Initialize(self, enabled_status)
 		node_controller = basename .. "/gnode_controller",
 		node_frame = basename .. "/group_body/gui_frame_core",
 		node_question_text = basename .. "/gnode_question_text",
+		node_question_title = basename .. "/group_header/gui_frame_text",
 		goo_option_placement = {
 			{frame_ylength = 740, frame_position_y = 450, submit_position_y = -368},
 			{frame_ylength = 740, frame_position_y = 450, submit_position_y = -368},
@@ -1918,8 +1924,8 @@ local function Screen_Decision_Input(self, action_id, action)
 
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
-				local debrief_text, is_debrief_dynamic = STR:Get_Decision_Text_AnswerDebrief(stage_key, substage_key, role_key, answer_string_key)
-				local debrief_title_text
+				local debrief_text, is_debrief_dynamic, debrief_link = STR:Get_Choice_Text_Debrief(stage_key, substage_key, role_key, answer_string_key)
+				local debrief_title_text = STR:Get_Choice_Title_Debrief(stage_key, substage_key, role_key, answer_string_key)
 
 				if Loop_StatusType_is_Main(self) and debrief_text ~= nil and debrief_text ~= "" then
 
@@ -1933,11 +1939,14 @@ local function Screen_Decision_Input(self, action_id, action)
 
 					-- add debrief screen and also update goals
 					local run_sizing_goals = false
-					Screen_Goals_Reset(self, true, run_sizing_goals, "Review outcomes from your decision.")
+					local goal_text = STR:Get_Choice_Answer_GoalText(stage_key, substage_key, role_key, answer_string_key) or "Review outcomes from your decision."
+					Screen_Goals_Reset(self, true, run_sizing_goals, goal_text)
 
 					local run_sizing_popup = true
 					local reset_values_popup = true
-					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, debrief_title_text or "Update", is_debrief_dynamic)
+					local size_type = nil
+					local special_image_id = nil
+					Screen_Popup_Reset(self, true, run_sizing_popup, reset_values_popup, debrief_text, debrief_title_text or "Update", size_type, is_debrief_dynamic, debrief_link, special_image_id)
 
 				else
 					msg.post(".", HSH.msg_request_game_progress)
@@ -2949,6 +2958,8 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 
 	--print("  TRK: Running stage <"..stage_key.."> with substage <"..substage_key.."> with completion type <"..stage_type.."> \n")
 
+	local special_image_str = nil
+
 	if stage_type == st.class_click_items then
 		-- setup clicking on items
 		On_GO_Items_Clicked_Reset(self, true)
@@ -2958,8 +2969,8 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 		local popup_text_body, pop_textbody_isdynamic, opt_hyperlink = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 		local run_sizer = true
 		local reset_values = true
-		local popup_text_title
-		local special_image_str = STR:Get_NewInfo_Special_Image(stage_key, substage_key)
+		local popup_text_title = STR:Get_NewInfo_Title_Body(stage_key, substage_key)
+
 		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink, special_image_str)
 
 	elseif stage_type == st.class_decisison then
@@ -2969,16 +2980,18 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save)
 		local a_tbl = STR:Get_Decision_Text_Options(stage_key, substage_key, role_key)
 		local hint_text = STR:Get_Decision_Text_Hint(stage_key, substage_key, role_key)
 		local reset_values = true
-		Screen_Decision_Reset(self, true, true, reset_values, #a_tbl, q_text, a_tbl, hint_text)
+		local title = STR:Get_Decision_Text_Title(stage_key, substage_key, role_key)
+		Screen_Decision_Reset(self, true, true, reset_values, #a_tbl, q_text, a_tbl, hint_text, title)
 
 	elseif stage_type == st.class_new_information then
 		-- setup new information
 		local popup_text_body, pop_textbody_isdynamic, opt_hyperlink  = STR:Get_NewInfo_Text_Body(stage_key, substage_key)
-		local popup_text_title
+		local popup_text_title = STR:Get_NewInfo_Title_Body(stage_key, substage_key)
 		local run_sizer = true
 		local reset_values = true
 
-		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink)
+		special_image_str = STR:Get_NewInfo_Special_Image_Body(stage_key, substage_key)
+		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink, special_image_str)
 
 
 	elseif stage_type == st.class_observe_method then
@@ -3383,7 +3396,6 @@ local function Game_RunRestart(self, reset_ply_data)
 
 	self.gameplay_loop_completion_type_primary = 0
 	self.gameplay_loop_completion_type_secondary = 0
-	self.final_debrief_shown = false
 
 	-- get stage and substage list in order
 	self.gameplay_loop_status = CV_gameplay_loop.status_unknown
