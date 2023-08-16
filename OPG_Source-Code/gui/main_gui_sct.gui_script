@@ -2905,12 +2905,14 @@ local function GamePause_Off(self)
 
 end
 
-local function GameLogic_Progress(self, i_stage_addition, run_file_save)
+local function GameLogic_Progress(self, i_stage_addition, run_file_save, disable_cloud_report)
 
 	-- setups and runs next game-play event
 
 	-- record previous progress to cloud analytics reporting before advancing
-	PlayerData_CloudRecord(self, false)
+	if not disable_cloud_report then
+		PlayerData_CloudRecord(self, false)
+	end
 
 	-- set that new start time
 	self.game_logic_time_start = socket.gettime()
@@ -3206,7 +3208,12 @@ local function Screen_MainMenu_Input(self, action_id, action)
 			stage_addition = 1
 		end
 
-		GameLogic_Progress(self, stage_addition)
+		local run_file_save = false
+		local disable_cloud_report = true
+		-- disable cloud report so that if players are loading/resuming game there are no duplicates
+		-- particularly useful to avoid duplicates in the final score analytic sheet 
+		--   which is caused by loading/resuming game during the final question phase
+		GameLogic_Progress(self, stage_addition, run_file_save, disable_cloud_report)
 
 		--print("Game resumed!")
 
@@ -3220,6 +3227,7 @@ local function Screen_MainMenu_Input(self, action_id, action)
 
 		local run_sizer = false
 		Screen_MainMenu_Reset(self, false, run_sizer)
+
 		local run_file_save = true
 		GameLogic_Progress(self, 1, run_file_save)
 
