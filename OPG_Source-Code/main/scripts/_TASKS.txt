@@ -1,15 +1,19 @@
     --#TODOs Master List- 
 
-    -- pause menu has black 1x1 gui square over screen?
+    -- fix water line gap
+
+    -- add so boat comes in each time with OA outcome
 
     -- add bunch of new lines to make popup hud gauge large then add images 
     --   for example, coastal acidification close up then shown in ocean scene
     --   for example, include diagram of CO2 mixing with ocean and increasing acidity, then also show in ocean scene
 
+
     -- maybe at last decision it tallies up all decisions and if all correct it sets to highest? (just as failsafe to ensure players can get max)?
 
-
     -- maybe add medals along with bronze, silver, and gold medal achievments as final popup to view?
+
+    -- pause menu has black 1x1 gui square over screen?
 
     -- add button that takes screenshots of your reef?
     -- find way for boat to move with arrow keys with side view and have particle effect bubbles for movement and white sprite bars for tint selection?
