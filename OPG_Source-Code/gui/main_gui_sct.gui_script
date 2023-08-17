@@ -1931,7 +1931,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 				-- do debrief text if present
 				-- this consists of opening popup window and setting goal type
-				local debrief_text, is_debrief_dynamic, debrief_link = STR:Get_Choice_Text_Debrief(stage_key, substage_key, role_key, answer_string_key)
+				local debrief_text, is_debrief_dynamic, debrief_link = STR:Get_Choice_Text_Debrief(stage_key, substage_key, role_key, answer_string_key, true)
 				local debrief_title_text = STR:Get_Choice_Title_Debrief(stage_key, substage_key, role_key, answer_string_key)
 
 				if Loop_StatusType_is_Main(self) and debrief_text ~= nil and debrief_text ~= "" then
@@ -2525,7 +2525,7 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 	-- resets player data
 	-- player data will be loaded in and checked for save file and loaded if needed within main menu logic
 
-	-- if 'back_to_beginning' is true, then this is running as part of restart and not first initialization
+	-- if 'back_to_beginning' is true, then this is running as part of full restart and not first initialization
 
 	-- save player ID if restarting game
 	local ply_id
@@ -2571,16 +2571,11 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 		PlayerData_UpdateHUDTracker(self, k_itemname, false, false)
 	end
 
-	-- we do not need to add reset of graph and data bars to full here, b/c it's done elsewhere:
-	-- the init function initializes the plot and data screens, 
-	-- and each of this initialization functions run the reset function for each
-	-- which runs the health bar reset to whatever the value in this health tracker table is
-	-- plus hud screens may not have been initialized yet
-
 	-- recall this function is only run when starting or repeating game
 	-- also recall, that bar plots are updated and checked for each bar within player table each time bar plot is opened,
 	-- which means that if player table entry is not there, since it was reset, then bar will be hidden 
 	-- so no need to enable or disable bars since it already does it when opening bar plot
+	-- plus hud screens may not have been initialized yet
 	if update_hud_screens then
 
 		Screen_Data_Reset(self, false, back_to_beginning)

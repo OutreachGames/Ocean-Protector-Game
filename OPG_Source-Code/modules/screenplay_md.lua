@@ -1127,8 +1127,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "less_fuel",
                     debrief_text = {
-                        "You've upgraded your engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've upgraded your engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -1146,8 +1147,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "new_computer",
                     debrief_text = {
-                        "You've chosen to upgrade the digital equipment aboard your boat. Your boat sensors and communication lines are higher resolution, but the amount of carbon dioxide that your boat emits remains the same. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've chosen to upgrade the digital equipment aboard your boat. Your boat sensors and communication lines are higher resolution, but the amount of carbon dioxide that your boat emits remains the same. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1165,8 +1167,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "no_change",
                     debrief_text = {
-                        "You've increased the number of trips you take on your boat. This earns you slightly more money in the short term, but also has cost a lot of money in the long term by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You've increased the number of trips you take on your boat. This earns you slightly more money in the short term, but also has cost a lot of money in the long term by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
 
@@ -1213,8 +1216,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "help_fish",
                     debrief_text = {
-                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced, which has helped keep many other groups of life throughout the ocean healthy and balanced. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced, which has helped keep many other groups of life throughout the ocean healthy and balanced. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -1232,8 +1236,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "no_change",
                     debrief_text = {
-                        "You have chosen to keep practices the same as they were before. Carbon dioxide emissions also have not changed. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to keep practices the same as they were before. Carbon dioxide emissions also have not changed. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1251,8 +1256,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "artifical_nets",
                     debrief_text = {
-                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, this does not work out because other ocean life is caught in the nets and disturbed. Also, the extra boat trips increase carbon dioxide emissions. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, this does not work out because other ocean life is caught in the nets and disturbed. Also, the extra boat trips increase carbon dioxide emissions. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
             },
@@ -1288,8 +1294,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "landfill",
                     debrief_text = {
-                        "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You make a habit of disposing your waste in the local landfill, which keeps the waste contained and out of the ocean. This also helps reduce acidification caused by waste pollution into the ocean. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
@@ -1299,8 +1306,9 @@ STR.Screenplay = {
                     choice_cloud_string = "water",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
-                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Travelling far from shore also uses more fuel, which increases carbon dioxide emissions. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Travelling far from shore also uses more fuel, which increases carbon dioxide emissions. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 },
                 user_choice_3 = {
@@ -1309,8 +1317,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "burning",
                     debrief_text = {
-                        "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     coastal_oa_percent_to_run = 100,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
@@ -1358,15 +1367,16 @@ STR.Screenplay = {
                     choice_cloud_string = "protect",
                     debrief_text = {
                         role_captain = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups that include fish you catch. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups that include fish you catch. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "
                         },
                         role_ranger = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups as well. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups as well. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "
                         },
                         role_guide = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "
                         }
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = function ()
                         local was_best_choice = true
                         local player_choice = true
@@ -1393,8 +1403,9 @@ STR.Screenplay = {
                     choice_cloud_string = "no_change",
                     coastal_oa_percent_to_run = 50,
                     debrief_text = {
-                        "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1413,8 +1424,9 @@ STR.Screenplay = {
                     choice_cloud_string = "artifical_nets",
                     coastal_oa_percent_to_run = 50,
                     debrief_text = {
-                        "You have chosen to try and block off parts of the ocean. Unfortunately, creating large physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "You have chosen to try and block off parts of the ocean. Unfortunately, creating large physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = function ()
                         local was_best_choice = false
                         local player_choice = true
@@ -1458,8 +1470,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "less_exhaust",
                     debrief_text = {
-                        "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
@@ -1469,8 +1482,9 @@ STR.Screenplay = {
                     choice_cloud_string = "new_building",
                     coastal_oa_percent_to_run = 50,
                     debrief_text = {
-                        "The council has followed your advice to build a large convention center. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to build a large convention center. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1480,8 +1494,9 @@ STR.Screenplay = {
                     choice_cloud_string = "parking_lots",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
-                        "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
@@ -1517,8 +1532,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "renewables_upgrade",
                     debrief_text = {
-                        "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to use solar panels and reduce fertilizer use. This has saved the farmers money and it has reduced carbon dioxide emissions. It has also reduced the amount of excess nutrient pollution in the area. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
@@ -1527,8 +1543,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "more_tractors",
                     debrief_text = {
-                        "The farmers followed your advice to buy extra tractors to speed up crop harvesting. Instead of making two trips with one tractor, now they can make one trip each with two tractors at once. Overall, the amount of carbon dioxide emissions remains the same. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to buy extra tractors to speed up crop harvesting. Instead of making two trips with one tractor, now they can make one trip each with two tractors at once. Overall, the amount of carbon dioxide emissions remains the same. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1537,8 +1554,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "more_buildings",
                     debrief_text = {
-                        "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The farmers followed your advice to build more barns for storage. Overall, the amount of carbon dioxide emissions in the area remains the same. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 }
             },
@@ -1574,8 +1592,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "conserve_water",
                     debrief_text = {
-                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less energy has reduced the amount of carbon dioxide emissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use less energy and water when possible. This has saved people money. Using less energy has reduced the amount of carbon dioxide emissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
@@ -1584,8 +1603,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "more_plants",
                     debrief_text = {
-                        "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1595,8 +1615,9 @@ STR.Screenplay = {
                     choice_cloud_string = "more_energy",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
-                        "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
@@ -1632,8 +1653,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "sell_local",
                     debrief_text = {
-                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
@@ -1642,8 +1664,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "new_computers",
                     debrief_text = {
-                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1652,8 +1675,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "sell_far",
                     debrief_text = {
-                        "The council has followed your advice to support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "The council has followed your advice to support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
@@ -1690,8 +1714,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "carpool",
                     debrief_text = {
-                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emissions in the area. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emissions in the area. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
                 },
                 user_choice_2 = {
@@ -1700,8 +1725,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "new_radios",
                     debrief_text = {
-                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emissions in the area remains the same. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to make their cars more comfortable. Overall, the amount of carbon dioxide emissions in the area remains the same. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
@@ -1710,8 +1736,9 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "more_taxis",
                     debrief_text = {
-                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emissions in the area. ".. STR:GetString_from_Tbl_or_Value(STR.CV.debrief_decision_view)
+                        "People follow your advice to use more taxis. Unfortunately, this has increased the amount of carbon dioxide emissions in the area. "
                     },
+                    debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
                 }
             },
@@ -2218,7 +2245,7 @@ function STR:Get_Choice_Specific_Value(stage_key, substage_key, character_role, 
 
 end
 
-function STR:Get_Choice_Text_Debrief(stage_key, substage_key, character_role, choice_key)
+function STR:Get_Choice_Text_Debrief(stage_key, substage_key, character_role, choice_key, get_extra_text)
 
     -- gets the decision answer option debrief text to display
 
@@ -2243,10 +2270,20 @@ function STR:Get_Choice_Text_Debrief(stage_key, substage_key, character_role, ch
     local role_debrief = self:GetString_from_Tbl_or_Value(a_info_i_debrief[character_role])
     local default_debrief = self:GetString_from_Tbl_or_Value(a_info_i_debrief[1])
 
+    local extra_debrief
+    if get_extra_text then
+        local a_info_i_dextra = a_info_i.debrief_extra or {}
+        local role_extra = self:GetString_from_Tbl_or_Value(a_info_i_dextra[character_role])
+        local default_extra = self:GetString_from_Tbl_or_Value(a_info_i_dextra[1])
+        extra_debrief = role_extra or default_extra or ""
+    else
+        extra_debrief = ""
+    end
+
     local returned_debrief = role_debrief or default_debrief
 
     -- return values
-    return returned_debrief, a_info_i.debrief_is_dynamic, a_info_i.debrief_hyperlink_address
+    return returned_debrief..extra_debrief, a_info_i.debrief_is_dynamic, a_info_i.debrief_hyperlink_address
 
 end
 
