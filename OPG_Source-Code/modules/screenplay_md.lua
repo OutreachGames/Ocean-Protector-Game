@@ -97,6 +97,7 @@ STR.CV = {
             msg.post("hud#gui", HSH.msg_update_item_value, send_tbl)
         end,
 
+        --# TODO make and run unit tests to calculate max pH and others
         func_option_outcome_default_super = function() -- (+)
             msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*2}, minfo_was_best_choice = true, minfo_was_player_choice = true})
         end,
@@ -225,8 +226,8 @@ STR.Screenplay = {
         -- Ocean Introduction
 
         user_lesson_01 = {
-            goal_text = "Follow information prompts.",
             display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans.",
+            goal_text = "Follow information prompts.",
             debrief_text = "Let's observe all the life in this specific ocean scene, starting with the base of the food-web.",
             newscreen_cloud_string = "intro_statement",
             outcome_result_func = function()
@@ -244,8 +245,8 @@ STR.Screenplay = {
 
         user_lesson_02 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
-            goal_text = "Find and document the base of our ocean food-web.",
             display_text = "Your new goal is to identify the base of the ocean food-web. \n\nThis current goal is shown on the left side of the screen. \n\nTo complete this goal, click 'Continue' and then click around in the ocean scene until you identify your goal.",
+            goal_text = "Find and document the base of our ocean food-web.",
             newscreen_cloud_string = "id_plankton",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
@@ -254,7 +255,7 @@ STR.Screenplay = {
             debrief_text = {
                 "",
                 item_plankton = {
-                    "Plankton "..n..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food webs. There are two main groups of plankton, phytoplankton, and zooplankton."..n..ntab.."- Phytoplankton are producers that use sunlight to get energy."..ntab.."- Zooplankton are consumers that eat other plankton to get energy."
+                    "Plankton "..n..n.."Plankton are very small organisms that float around the ocean. They are the foundation of ocean food-webs. There are two main groups of plankton, phytoplankton, and zooplankton."..n..ntab.."- Phytoplankton are producers that use sunlight to get energy."..ntab.."- Zooplankton are consumers that eat other plankton to get energy."
                 }
             },
             extra_text = nil
@@ -262,8 +263,8 @@ STR.Screenplay = {
 
         user_lesson_03 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
+            display_text = "Excellent, the base of the food-web is documented! Next, let's identify some consumer groups in our ocean food-web. \n\nTo do this, click 'Continue' to close this screen then click around the ocean scene to document each group.\n\n",
             goal_text = "Find and document four groups of consumers in our ocean food-web.",
-            display_text = "Great! Now that the base of the food web is documented, next identify components of the food-web in this scene by clicking. \n\nRemember, click 'Continue' to close this screen then click around the ocean scene to document the consumer groups.\n\n",
             newscreen_cloud_string = "id_consumers",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
@@ -298,8 +299,8 @@ STR.Screenplay = {
         -- Once all life has been identified the program will progress with this next message. 
 
         user_lesson_04 = {
+            display_text = "Excellent work, we have identified many groups of life shown in our ocean scene. If you would like to read more about the groups you identified then click the 'Open Link' button (this will open a new, separate webpage). \n\nIt is also important to note that there are thousands of types of plants and animals throughout our oceans, far too many to all show in just this scene! \n\n\n",
             goal_text = "Follow information prompts.",
-            display_text = "Excellent work, we have identified the groups of life in this scene. If you would like to read more about the groups you identified then click the 'Open Link' button (this will open a new, separate webpage). \n\nIt is also important to note that there are thousands of types of plants and animals throughout our oceans, far too many to all show in just this scene! \n\n\n",
             displaytext_hyperlink_address = "https://www.outreachgames.org/OceanProtector/custom_web_files/OPG_Student_Bonus_Content_Sheet.pdf",
             debrief_text = "For our example, we are going to add just one more group. Overall, this group is the highest-level consumer in the ocean.",
             newscreen_cloud_string = "intro_humans",
@@ -313,8 +314,8 @@ STR.Screenplay = {
 
         user_lesson_05 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
+            display_text = "Identify the highest-level consumer in our ocean food-web. To do this, click 'Continue' then click on the group you think is the highest consumer. ",
             goal_text = "Find and document the highest-level consumer in our ocean food-web.",
-            display_text = "Identify the highest-level consumer in this scene. To do this, click 'Continue' then click on the group you think is the highest consumer. ",
             newscreen_cloud_string = "id_humans",
             show_hud_data_popup = false,
             allow_duplicate_clicks = false,
@@ -518,7 +519,7 @@ STR.Screenplay = {
         user_lesson_17 = {
             goal_completed_type = STR.CV.goal_completed_types.class_click_items,
             goal_text = "Document how each ocean group has changed under more acidic conditions in our ocean scene.",
-            display_text = "Document how each component of the food-web has changed under more acidic oceans by clicking. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. \n\n\n",
+            display_text = "Let's now document how each each ocean group here has changed under more acidic oceans. \n\nTo do this, click 'Continue' then click on each group of life in the ocean scene. \n\n\n",
             newscreen_cloud_string = "oa_affects_id",
             show_hud_data_popup = true,
             allow_duplicate_clicks = false,
@@ -953,7 +954,8 @@ STR.Screenplay = {
 
         decision_character_01 = {
             question_prompt = {
-                "Please choose a character. Each character has specific goals and does a different job. You can view this information by clicking on each character button. "
+                "Please choose a character. Each character has specific goals and does a different job. "
+                -- You can view this information by clicking on each character button. 
             },
             question_cloud_string = "choose_character",
             answer_options = {
