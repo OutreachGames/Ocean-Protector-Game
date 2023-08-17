@@ -34,6 +34,7 @@ local function Move_Wave_X(self)
 		-- move wave back off screen and then move again
 		-- keep it local within this function since it cannot take values and needs a self reference
 			go.set(".", "position.x", self.Distance_offscreen_start)
+
 			Move_Wave_X(self)
 	end
 
@@ -45,8 +46,8 @@ local function Move_Wave_X(self)
 	else
 		-- move the wave from the start side to finish side, eventually offscreen
 		-- note that the distance should always be the same to ensure the wave velocity is consistent
-		-- if we tried to only move the wave just off screen it might result in a very slow wave 
-		-- if wave is starting on right side of screen b/c wave only has short distance to travel but long duration	
+		--   if we tried to only move the wave just off screen it might result in a very slow wave 
+		--   b/c if wave is starting on right side of screen b/c wave only has short distance to travel but long duration	
 		local wave_speed = self.Obj_Wave_Movment_X_Time
 		local wave_velocity = RES.Internal_X / wave_speed -- x seconds to go across screen for given pixels
 		local distance_to_travel = math.abs(self.Distance_offscreen_end - go.get_position().x)
@@ -107,7 +108,7 @@ local function Wave_Setup(self)
 		-- assume scale x=y=z
 		-- also take out some pixels from each side to fix perfectly aligned scrolling along x-axis 
 		-- (issue was that global position was always 0-1 pixels off from local position, and global position cannot be set)
-		self.Sprite_width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x")) - 4
+		self.Sprite_width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x")) - 2
 
 		-- default values are from left to right
 		local buffer = 0
@@ -119,7 +120,9 @@ local function Wave_Setup(self)
 
 		-- special case if this sprite is larger than game resolution
 		if self.Sprite_width > scr_width then
-			self.Distance_offscreen_start = self.Distance_offscreen_start - (self.Sprite_width - scr_width)
+			local new_val = self.Distance_offscreen_start - (self.Sprite_width - scr_width)
+			self.Distance_offscreen_start = new_val
+			self.Distance_offscreen_end = -new_val
 		end
 
 		-- above was default for movement from left to right, so now flip if movement is from right to left
