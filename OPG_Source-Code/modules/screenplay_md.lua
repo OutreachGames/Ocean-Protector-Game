@@ -29,6 +29,26 @@ local CV_subgoal_extra = {
     unpause_immediately = 4
 }
 
+local function GetString_from_Tbl_or_Value(tbl_or_str)
+
+    -- gets a string from a value or randomly from a table of options
+
+    if type(tbl_or_str) == "table" then
+        local tbl__i
+        local length_tbl = #tbl_or_str
+        if length_tbl > 1 then
+            tbl__i = math.random(1, length_tbl)
+        else
+            tbl__i = 1
+        end
+        return tbl_or_str[tbl__i]
+    else
+        return tbl_or_str
+    end
+
+end
+
+
 -- module 
 local STR = {}
 
@@ -180,37 +200,6 @@ STR.CV = {
     },
 
 }
-
-function STR:GetString_from_Tbl_or_Value(tbl_or_str)
-
-    -- gets a string from a value or randomly from a table of options
-
-    if type(tbl_or_str) == "table" then
-        local tbl__i
-        local length_tbl = #tbl_or_str
-        if length_tbl > 1 then
-            tbl__i = math.random(1, length_tbl)
-        else
-            tbl__i = 1
-        end
-        return tbl_or_str[tbl__i]
-    else
-        return tbl_or_str
-    end
-
-end
-
-function STR:Get_Subitem_from_Role(role_keyname)
-
-    local role_to_subitem = {
-        role_captain = "subitem_captain",
-        role_ranger = "subitem_ranger",
-        role_guide = "subitem_guide",
-    }
-
-    return role_to_subitem[role_keyname]
-
-end
 
 STR.Screenplay = {
 
@@ -1882,6 +1871,18 @@ STR.Screenplay = {
 }
 
 -- General Checking
+function STR:Get_Subitem_from_Role(role_keyname)
+
+    local role_to_subitem = {
+        role_captain = "subitem_captain",
+        role_ranger = "subitem_ranger",
+        role_guide = "subitem_guide",
+    }
+
+    return role_to_subitem[role_keyname]
+
+end
+
 function STR:ValidCheck(stage_key, substage_key)
 
     -- just run validity check and warn with prints if bad
@@ -1910,7 +1911,7 @@ function STR:Get_Completion_Type(stage_key, substage_key)
         return nil
     end
 
-    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type) or self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_completed_type_default)
+    return GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_completed_type) or GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_completed_type_default)
 
 end
 
@@ -1925,7 +1926,7 @@ function STR:Get_Generic_Specific_Value(stage_key, substage_key, value_key, show
 
     local info = self.Screenplay[stage_key][substage_key]
 
-    local value = self:GetString_from_Tbl_or_Value(info[value_key])
+    local value = GetString_from_Tbl_or_Value(info[value_key])
 
     if value == nil and show_error then
         print("Error get generic specific value function for <"..tostring(value_key).."> was unable to find answer information within stage <"..stage_key.."> and substage <"..substage_key..">. \n")
@@ -1994,7 +1995,7 @@ function STR:Get_Goal_Text(stage_key, substage_key)
         return nil
     end
 
-    return self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_text) or self:GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_text_default)
+    return GetString_from_Tbl_or_Value(self.Screenplay[stage_key][substage_key].goal_text) or GetString_from_Tbl_or_Value(self.Screenplay[stage_key].goal_text_default)
 
 end
 
@@ -2010,7 +2011,7 @@ function STR:Get_NewInfo_Text_Body(stage_key, substage_key)
 
     local info = self.Screenplay[stage_key][substage_key]
 
-    return self:GetString_from_Tbl_or_Value(info.display_text), info.displaytext_is_dynamic, info.displaytext_hyperlink_address
+    return GetString_from_Tbl_or_Value(info.display_text), info.displaytext_is_dynamic, info.displaytext_hyperlink_address
 
 end
 
@@ -2024,7 +2025,7 @@ function STR:Get_NewInfo_Text_Debrief(stage_key, substage_key)
 
     local info = self.Screenplay[stage_key][substage_key]
 
-    return self:GetString_from_Tbl_or_Value(info.debrief_text), info.debrief_is_dynamic, info.debrief_hyperlink_address
+    return GetString_from_Tbl_or_Value(info.debrief_text), info.debrief_is_dynamic, info.debrief_hyperlink_address
 
 end
 
@@ -2092,7 +2093,7 @@ function STR:Get_Items_to_Click(stage_key, substage_key)
             if k_item_keyname ~= "" and k_item_keyname ~= 1 then
                 items_tbl[k_item_keyname] = {
                     item_name = k_item_keyname,
-                    show_debrief_text = self:GetString_from_Tbl_or_Value(v_item_debrieftext),
+                    show_debrief_text = GetString_from_Tbl_or_Value(v_item_debrieftext),
                     show_data_popup = show_data_popup,
                     allow_duplicate_clicks = allow_dup_clicks,
                     enable_item_in_data_hud_onclick = enable_item,
@@ -2133,9 +2134,9 @@ function STR:Get_Decision_Specific_Value(stage_key, substage_key, character_role
     local qinfo_type = type(q_info)
 
     if qinfo_type == "table" then
-        return self:GetString_from_Tbl_or_Value(q_info[character_role]) or self:GetString_from_Tbl_or_Value(q_info[1])
+        return GetString_from_Tbl_or_Value(q_info[character_role]) or GetString_from_Tbl_or_Value(q_info[1])
     else
-        return self:GetString_from_Tbl_or_Value(q_info)
+        return GetString_from_Tbl_or_Value(q_info)
     end
 
 end
@@ -2198,7 +2199,7 @@ function STR:Get_Decision_Text_Options(stage_key, substage_key, character_role)
     for k_userchoie_name, v_info in pairs(a_info) do
 
         local text_tbl = v_info.display_text
-        local answer_text = self:GetString_from_Tbl_or_Value(text_tbl[character_role]) or self:GetString_from_Tbl_or_Value(text_tbl[1])
+        local answer_text = GetString_from_Tbl_or_Value(text_tbl[character_role]) or GetString_from_Tbl_or_Value(text_tbl[1])
 
         a_i = a_i + 1
         a_tbl[a_i] = {user_choice_key = k_userchoie_name, choice_text_answer = answer_text}
@@ -2267,14 +2268,14 @@ function STR:Get_Choice_Text_Debrief(stage_key, substage_key, character_role, ch
 
     if a_info_i_debrief == nil then return nil end
 
-    local role_debrief = self:GetString_from_Tbl_or_Value(a_info_i_debrief[character_role])
-    local default_debrief = self:GetString_from_Tbl_or_Value(a_info_i_debrief[1])
+    local role_debrief = GetString_from_Tbl_or_Value(a_info_i_debrief[character_role])
+    local default_debrief = GetString_from_Tbl_or_Value(a_info_i_debrief[1])
 
     local extra_debrief
     if get_extra_text then
         local a_info_i_dextra = a_info_i.debrief_extra or {}
-        local role_extra = self:GetString_from_Tbl_or_Value(a_info_i_dextra[character_role])
-        local default_extra = self:GetString_from_Tbl_or_Value(a_info_i_dextra[1])
+        local role_extra = GetString_from_Tbl_or_Value(a_info_i_dextra[character_role])
+        local default_extra = GetString_from_Tbl_or_Value(a_info_i_dextra[1])
         extra_debrief = role_extra or default_extra or ""
     else
         extra_debrief = ""
