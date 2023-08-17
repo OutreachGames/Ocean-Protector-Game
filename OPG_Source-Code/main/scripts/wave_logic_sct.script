@@ -112,7 +112,7 @@ local function Wave_Setup(self)
 		-- default values are from left to right
 		local buffer = 0
 		if self.Obj_Wave_Movment_X_Buffer then
-			buffer = math.floor(self.Sprite_width * 0.15, 0)
+			buffer = math.floor(self.Sprite_width * 0.15)
 		end
 		self.Distance_offscreen_end = (scr_width/2) + (self.Sprite_width/2) + buffer
 		self.Distance_offscreen_start = -self.Distance_offscreen_end
