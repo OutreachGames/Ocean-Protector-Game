@@ -493,7 +493,7 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 	end
 
 	local side_bins
-	if wave_direction > 0 then 
+	if wave_direction > 0 then
 		side_bins = {1, 0}
 	elseif wave_direction < 0 then
 		side_bins = {0, 1}
@@ -502,7 +502,7 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 	end
 
 	local bin_t = {
-		num_bins = 1,
+		num_bins = 4,
 		yrange_table_unscaled = sgroup.spawn_y_range,
 		scaling_y = scaling_y,
 		screen_width = screen_width,
