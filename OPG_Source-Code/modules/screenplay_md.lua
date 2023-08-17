@@ -2268,23 +2268,28 @@ function STR:Get_Choice_Text_Debrief(stage_key, substage_key, character_role, ch
 
     if a_info_i_debrief == nil then return nil end
 
-    local role_debrief = GetString_from_Tbl_or_Value(a_info_i_debrief[character_role])
-    local default_debrief = GetString_from_Tbl_or_Value(a_info_i_debrief[1])
-
-    local extra_debrief
-    if get_extra_text then
-        local a_info_i_dextra = a_info_i.debrief_extra or {}
-        local role_extra = GetString_from_Tbl_or_Value(a_info_i_dextra[character_role])
-        local default_extra = GetString_from_Tbl_or_Value(a_info_i_dextra[1])
-        extra_debrief = role_extra or default_extra or ""
+    local role_debrief, default_debrief
+    if type(a_info_i_debrief) == "table" then
+        role_debrief = GetString_from_Tbl_or_Value(a_info_i_debrief[character_role])
+        default_debrief = GetString_from_Tbl_or_Value(a_info_i_debrief[1])
     else
-        extra_debrief = ""
+        role_debrief = GetString_from_Tbl_or_Value(a_info_i_debrief)
     end
 
     local returned_debrief = role_debrief or default_debrief
 
+    if returned_debrief ~= nil and get_extra_text then
+        local a_info_i_dextra = a_info_i.debrief_extra or {}
+        local role_extra = GetString_from_Tbl_or_Value(a_info_i_dextra[character_role])
+        local default_extra = GetString_from_Tbl_or_Value(a_info_i_dextra[1])
+        local extra_debrief = role_extra or default_extra
+        if extra_debrief ~= nil then
+            returned_debrief = returned_debrief .. extra_debrief
+        end
+    end
+
     -- return values
-    return returned_debrief..extra_debrief, a_info_i.debrief_is_dynamic, a_info_i.debrief_hyperlink_address
+    return returned_debrief, a_info_i.debrief_is_dynamic, a_info_i.debrief_hyperlink_address
 
 end
 
