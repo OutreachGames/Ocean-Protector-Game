@@ -2520,10 +2520,17 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 
 	-- if 'back_to_beginning' is true, then this is running as part of restart and not first initialization
 
+	-- save player ID if restarting game
+	local ply_id
+	if type(self.player_data_tbl) == "table" then
+		ply_id = self.player_data_tbl.id_key_user or 1111
+	end
+
+	-- reset fully
 	self.player_data_tbl = nil
 
 	self.player_data_tbl = {
-		id_key_user = 1111,
+		id_key_user = ply_id,
 		save_file_version_major = CV_Current_Save_Version_Major,
 		save_file_version_minor = CV_Current_Save_Version_Minor,
 		num_best_answers = 0,
