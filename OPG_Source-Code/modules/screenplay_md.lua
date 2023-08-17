@@ -1779,8 +1779,6 @@ STR.Screenplay = {
             prevent_option_randomization = true,
             question_prompt = {
                 "You have now completed the game! You can now choose to review your outcomes again, view additional NOAA resources, or rerun the game."
-                -- 
-                --..n..n.."Rerunning the game will allow you to select a character of your choice again and allow you to try and improve your score."..n..n
             },
             question_cloud_string = "end_game_option",
             answer_options = {
@@ -1812,19 +1810,48 @@ STR.Screenplay = {
                 },
                 user_choice_3 = {
                     display_text = {
-                        "Go through the entire game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
+                        "Go through the game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
+                    },
+                    choice_cloud_string = "replay_game_start",
+                    debrief_text = nil,
+                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                }
+            },
+        },
+
+        --[[
+        --#TODO think about adding option to just do another character along with quiz?
+        -- if using this section then comment out <outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full> line above!!
+        user_lesson_23 = {
+            goal_completed_type = STR.CV.goal_completed_types.class_decisison,
+            goal_text = "Select game replay option.",
+            prevent_option_randomization = true,
+            question_prompt = {
+                "Choose what point in the game you would like to go back to. All options will allow you to select a character of your choice again and allow you to try and improve your score."
+            },
+            question_cloud_string = "replay_game_method",
+            answer_options = {
+                user_choice_1 = {
+                    display_text = {
+                        "Go back to the very start of game, which includes the introductory section on ocean life."
                     },
                     choice_cloud_string = "repeat_game_full",
                     debrief_text = nil,
                     outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
                 },
-                --#TODO think about adding option to just do another character along with quiz?
+                user_choice_2 = {
+                    display_text = {
+                        "Skip the introductory part of the game and go back to the knowledge quiz section."
+                    },
+                    choice_cloud_string = "repeat_game_full",
+                    debrief_text = nil,
+                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                },
             },
-        },
+        }
+        --]]
 
-        -- Run game end
-
-    },
+    }
 }
 
 -- General Checking
