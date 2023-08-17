@@ -1,7 +1,5 @@
     --#TODOs Master List- 
 
-    -- fix water line gap
-
     -- add bunch of new lines to make popup hud gauge large then add images 
     --   for example, coastal acidification close up then shown in ocean scene
     --   for example, include diagram of CO2 mixing with ocean and increasing acidity, then also show in ocean scene
