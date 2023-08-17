@@ -102,7 +102,7 @@ STR.CV = {
         end,
 
         set_game_repeat_full = function()
-            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_go_to_event_i = 0, minfo_reset_player_save = true})
+            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_reset_player_save = true})
         end,
 
     },
@@ -588,7 +588,7 @@ STR.Screenplay = {
 
         decision_quiz_01 = {
             question_prompt = {
-                "Burning fossil fuels reduces large amounts of a gas called ____."
+                "Burning fossil fuels reduces large amounts of a gas called ________."
             },
             question_cloud_string = "fossil_fuels",
             hint_text = {
@@ -600,6 +600,7 @@ STR.Screenplay = {
                         "oxygen"
                     },
                     choice_cloud_string = "oxygen",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -611,6 +612,7 @@ STR.Screenplay = {
                         "carbon dioxide"
                     },
                     choice_cloud_string = "carbon_dioxide",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Correct! Burning fossil fuels releases very high amounts of carbon dioxide gas into the atmosphere."
                     },
@@ -621,6 +623,7 @@ STR.Screenplay = {
                         "ozone"
                     },
                     choice_cloud_string = "ozone",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -632,6 +635,7 @@ STR.Screenplay = {
                         "helium"
                     },
                     choice_cloud_string = "helium",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -656,6 +660,7 @@ STR.Screenplay = {
                         "True"
                     },
                     choice_cloud_string = "true",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "This is true. Burning fossil fuels releases carbon dioxide gas. Much of this gas is absorbed by our oceans, which triggers chemical changes that make the water more acidic."
                     },
@@ -666,6 +671,7 @@ STR.Screenplay = {
                         "False"
                     },
                     choice_cloud_string = "false",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -677,7 +683,7 @@ STR.Screenplay = {
 
         decision_quiz_03 = {
             question_prompt = { 
-                "In addition to burning fossil fuels, _____ can also cause the water in our oceans to become more acidic."
+                "In addition to burning fossil fuels, __________ can also cause the water in our oceans to become more acidic."
             },
             question_cloud_string = "other_OA_cause",
             hint_text = {
@@ -688,6 +694,7 @@ STR.Screenplay = {
                     display_text = {
                         "noise pollution"
                     },
+                    goal_text = "Review help text. ",
                     choice_cloud_string = "excess_noise",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
@@ -699,6 +706,7 @@ STR.Screenplay = {
                     display_text = {
                         "nutrient pollution"
                     },
+                    goal_text = "Review help text. ",
                     choice_cloud_string = "excess_nutrients",
                     debrief_text = {
                         "Correct! Nutrient pollution can be caused by using too much fertilizer, dumping wastewater, and other sources. If this polluted water makes its way to the ocean and can cause a chain reaction that makes the ocean water near our coasts more acidic."
@@ -710,6 +718,7 @@ STR.Screenplay = {
                         "light pollution"
                     },
                     choice_cloud_string = "excess_light",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -720,6 +729,7 @@ STR.Screenplay = {
                     display_text = {
                         "gamma pollution"
                     },
+                    goal_text = "Review help text. ",
                     choice_cloud_string = "gamma_rays",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
@@ -732,7 +742,7 @@ STR.Screenplay = {
 
         decision_quiz_04 = {
             question_prompt = {
-                "A decrease in the pH of water means the water becomes ________."
+                "A decrease in the pH of water means the water becomes __________."
             },
             question_cloud_string = "lower_pH_equals",
             hint_text = {
@@ -744,6 +754,7 @@ STR.Screenplay = {
                         "warmer"
                     },
                     choice_cloud_string = "warmer",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -755,6 +766,7 @@ STR.Screenplay = {
                         "more acidic"
                     },
                     choice_cloud_string = "more_acidic",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Correct! If pH of water decreases that shows the acidity of the water has increased."
                     },
@@ -765,6 +777,7 @@ STR.Screenplay = {
                         "less acidic"
                     },
                     choice_cloud_string = "less_acidic",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -776,6 +789,7 @@ STR.Screenplay = {
                         "colder"
                     },
                     choice_cloud_string = "colder",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -800,6 +814,7 @@ STR.Screenplay = {
                         "Plankton and Coral"
                     },
                     choice_cloud_string = "plankton_coral",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
@@ -811,6 +826,7 @@ STR.Screenplay = {
                         "Mollusks and Crustaceans"
                     },
                     choice_cloud_string = "mollusks_crustaceans",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
@@ -822,6 +838,7 @@ STR.Screenplay = {
                         "Fish and Humans"
                     },
                     choice_cloud_string = "fish_humans",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "This is true, but there is a more correct answer, so try again!"
                     },
@@ -833,6 +850,7 @@ STR.Screenplay = {
                         "All of the groups listed here."
                     },
                     choice_cloud_string = "all_major_life",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Correct! Ocean acidification harms plant and animal life throughout the ocean, including humans. As humans we rely on our oceans for food, ways to make a living, and even medicines."
                     },
@@ -856,6 +874,7 @@ STR.Screenplay = {
                         "True"
                     },
                     choice_cloud_string = "true",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "True! There are many steps each of us can take to help reduce ocean acidification. Continue with this program to make some of those decisions yourself!"
                     },
@@ -866,6 +885,7 @@ STR.Screenplay = {
                         "False"
                     },
                     choice_cloud_string = "false",
+                    goal_text = "Review help text. ",
                     debrief_text = {
                         "Unfortunately that is not correct, but try again!"
                     },
@@ -1778,15 +1798,6 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "Go through the entire game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
-                    },
-                    choice_cloud_string = "repeat_game",
-                    debrief_text = nil,
-                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
-                },
-                --#TODO think about adding option to just do another character along with quiz?
-                user_choice_3 = {
-                    display_text = {
                         "To learn more about ocean acidification check out other great resources from NOAA! After viewing the NOAA link you will be able to return to this option screen. "
                     },
                     choice_cloud_string = "go_to_NOAA",
@@ -1799,6 +1810,15 @@ STR.Screenplay = {
                     repeat_question_decision = true,
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
+                user_choice_3 = {
+                    display_text = {
+                        "Go through the entire game again. This option will allow you to select a character of your choice again and allow you to try and improve your score. "
+                    },
+                    choice_cloud_string = "repeat_game_full",
+                    debrief_text = nil,
+                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                },
+                --#TODO think about adding option to just do another character along with quiz?
             },
         },
 

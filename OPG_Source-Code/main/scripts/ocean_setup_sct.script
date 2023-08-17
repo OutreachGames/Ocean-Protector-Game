@@ -1534,7 +1534,7 @@ local function SetupBuoy(self, hide_buoy)
 	local buoy_list_key = INFO.item_info.item_ph.subitem_info.subitem_buoy.spawn_list_key
 
 	if hide_buoy then
-		local hide_rot = 35
+		local hide_rot = 40
 		go.cancel_animations("/ph_buoy/go_rope")
 		go.cancel_animations("/ph_buoy/go_body")
 		go.set("/ph_buoy/go_rope", "euler.z", hide_rot)

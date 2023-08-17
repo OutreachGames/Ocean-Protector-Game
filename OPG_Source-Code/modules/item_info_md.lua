@@ -221,9 +221,9 @@ INFO.item_info = {
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/elkhorn-coral",
                 static_spawner_tbl = {
-                    {-371, -242, CV_Base_Top, flip_sprite = false, rotation_z_euler = -4, sprite_selection_i = 1}, --top
+                    {-380, -235, CV_Base_Top, flip_sprite = false, rotation_z_euler = -4, sprite_selection_i = 1}, --top
                     {-40, -443, CV_Base_Bottom, flip_sprite = false, rotation_z_euler = 0, sprite_selection_i = 2}, --bottom
-                    {635, -441, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
+                    {627, -441, CV_Base_Bottom, flip_sprite = true, rotation_z_euler = 0, sprite_selection_i = 1} --bottom
                 },
                 sprite_options = {"coral_horn_1", "coral_horn_2"},
                 tint_fully_healthy = {r = 255/255, g = 200/255, b = 140/255, a = 1},
@@ -280,9 +280,9 @@ INFO.item_info = {
                 scale_fully_healthy = 1.0,
                 scale_fully_sick = 0.90,
                 static_spawner_tbl = {
-                    {-546, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 50}, --1
-                    {-516, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = false, rotation_z_euler = 0}, --2
-                    {-488, -420, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = -25}, --3
+                    {-517, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = 50}, --1
+                    {-482, -416, CV_Base_Z_Buoy + 0.05, flip_sprite = false, rotation_z_euler = 0}, --2
+                    {-447, -420, CV_Base_Z_Buoy + 0.05, flip_sprite = true, rotation_z_euler = -25}, --3
                     {-419, -285, CV_Base_Top, flip_sprite = false, rotation_z_euler = 20}, --4
                     {-398, -279, CV_Base_Top, flip_sprite = true, rotation_z_euler = 0}, --5
                     {-373, -287, CV_Base_Top, flip_sprite = true, rotation_z_euler = -22}, --6

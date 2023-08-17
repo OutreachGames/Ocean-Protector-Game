@@ -3,7 +3,7 @@ collection_instances {
   id: "ph_buoy"
   collection: "/main/classes/ph_buoy.collection"
   position {
-    x: -516.0
+    x: -490.0
     y: 181.0
     z: 0.0
   }
