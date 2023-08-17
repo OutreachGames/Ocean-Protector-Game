@@ -108,7 +108,7 @@ local function Wave_Setup(self)
 		-- assume scale x=y=z
 		-- also take out some pixels from each side to fix perfectly aligned scrolling along x-axis 
 		-- (issue was that global position was always 0-1 pixels off from local position, and global position cannot be set)
-		self.Sprite_width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x")) - 2
+		self.Sprite_width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x")) - 4
 
 		-- default values are from left to right
 		local buffer = 0
