@@ -1461,6 +1461,7 @@ local function Boat_GotoCenter(self, boat_id, reset_first)
 
 	if reset_first then
 		-- do not cancel animations since that will cancel default rocking motion
+		go.cancel_animations(boat_id, "position.x")
 		local spawn_pos = INFO.common_info.boat_default_spawn
 		go.set_position(vmath.vector3(spawn_pos.x, spawn_pos.y, spawn_pos.z))
 	end

@@ -69,7 +69,7 @@ end
 local function GO_Setup(self)
 
 	-- float back an forth
-	go.animate(".", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1, go.EASING_INOUTSINE, 3, 0.1)
+	go.animate(".", "euler.z", go.PLAYBACK_LOOP_PINGPONG, -1.25, go.EASING_INOUTSINE, 3, 0.1)
 
 end
 
