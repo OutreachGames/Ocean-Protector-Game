@@ -2465,48 +2465,48 @@ local function PlayerData_CatchUp(self)
 
 	-- runs all catch up events that should have been triggered by this point
 
-	local t = self.player_data_tbl
+	local ply = self.player_data_tbl
 
 	-- human character
-	if t.character_role_key ~= CV_Player_Role_Empty then
+	if ply.character_role_key ~= CV_Player_Role_Empty then
 		-- already got to character choice, so use that
-		PlayerData_Set_Character(self, t.character_role_key)
+		PlayerData_Set_Character(self, ply.character_role_key)
 	else
 		-- not yet at character choice, so show default boat
-		if t.special_setup_item_boat_present then
+		if ply.special_setup_item_boat_present then
 			msg.post(".", HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_setup_first_boat})
 		end
 	end
 
 	-- show goals?
-	-- t.special_setup_goals_hud_enabled just bool check at game progress
-	if t.special_setup_goals_hud_enabled and not self.hud_goals_dynamic.screen_isactive then
+	-- ply.special_setup_goals_hud_enabled just bool check at game progress
+	if ply.special_setup_goals_hud_enabled and not self.hud_goals_dynamic.screen_isactive then
 		Screen_Goals_Reset(self, true)
 	end
 
 	-- show data hud? 
-	-- t.special_setup_data_hud_enabled just bool check at game progress
-	if t.special_setup_data_hud_enabled and not self.hud_data_dynamic.screen_isactive then
+	-- ply.special_setup_data_hud_enabled just bool check at game progress
+	if ply.special_setup_data_hud_enabled and not self.hud_data_dynamic.screen_isactive then
 		Screen_Data_Reset(self, true)
 	end
 
 	-- show buoy
-	if t.special_setup_item_buoy_present then
+	if ply.special_setup_item_buoy_present then
 		msg.post(".", HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_setup_pH_buoy})
 	end
 
 	-- show individual items in data screen
 	for k_itemname,_ in pairs(CV_item_groups) do
-		local d = t.item_hud_status[k_itemname]
-		if d ~= nil then
-			ScreenData_ToggleItem(self, k_itemname, d.data_item_shown, d.data_item_shown, false)
-			ScreenData_ToggleItem(self, k_itemname, d.data_goto_shown, false, d.data_goto_shown)
+		local hud_data = ply.item_hud_status[k_itemname]
+		if hud_data ~= nil then
+			ScreenData_ToggleItem(self, k_itemname, hud_data.data_item_shown, hud_data.data_item_shown, false)
+			ScreenData_ToggleItem(self, k_itemname, hud_data.data_goto_shown, false, hud_data.data_goto_shown)
 		end
 	end
 
 	-- run static and plankton catch up
 	-- if buoy not present then still within starting range and no need to do all of this
-	if not t.special_setup_item_buoy_present then
+	if not ply.special_setup_item_buoy_present then
 		return
 	end
 
