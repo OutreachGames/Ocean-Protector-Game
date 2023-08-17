@@ -1932,9 +1932,9 @@ local function Screen_Decision_Input(self, action_id, action)
 					self.gameplay_loop_status = CV_gameplay_loop.status_running_debrief
 					self.gameplay_loop_completion_type_secondary = STR.CV.goal_completed_types.class_new_information
 
-					-- also subtract one from current progress if incorrect so we go back to it in the next submit
+					-- also do not advance one from current progress if incorrect so we go back to it in the next submit
 					if STR:Get_Choice_Answer_RepeatD(stage_key, substage_key, role_key, answer_string_key) then
-						PlayerData_Update_I_Key_Progress(self, -1)
+						self.player_data_tbl.game_loop_needs_repeated = true
 					end
 
 					-- add debrief screen and also update goals
@@ -2540,7 +2540,8 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 		-- and first entry in health trackers are initial negative health
 		decision_data_tbl = {{}},
 		item_data_tbl = {},
-		item_hud_status = {}
+		item_hud_status = {},
+		game_loop_needs_repeated = false
 	}
 
 	PlayerData_Update_SumBestChoices(self, 0, true)
@@ -2910,6 +2911,7 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save, disable
 	-- setups and runs next game-play event
 
 	-- record previous progress to cloud analytics reporting before advancing
+	-- though if i_stage_addition is -1 we need to account for that
 	if not disable_cloud_report then
 		PlayerData_CloudRecord(self, false)
 	end
@@ -2920,6 +2922,11 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save, disable
 	-- update i-key
 	if i_stage_addition == nil then
 		i_stage_addition = 1
+	end
+	-- special case for repeating events
+	if i_stage_addition == 1 and self.player_data_tbl.game_loop_needs_repeated then
+		i_stage_addition = 0
+		self.player_data_tbl.game_loop_needs_repeated = false
 	end
 	PlayerData_Update_I_Key_Progress(self, i_stage_addition)
 
@@ -3504,7 +3511,8 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == HSH.msg_report_go_clicked then
 		On_GO_Item_Clicked_Received(self, message)
 	elseif message_id == HSH.msg_request_game_progress then
-		GameLogic_Progress(self, 1, true)
+		local add_i = message.minfo_game_i_stage_addition or 1
+		GameLogic_Progress(self, add_i, true)
 	elseif message_id == HSH.msg_request_game_repeat then
 		Game_RunRestart(self, message.minfo_reset_player_save)
 	elseif message_id == HSH.msg_set_player_character_role then

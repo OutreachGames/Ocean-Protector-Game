@@ -345,7 +345,7 @@ STR.Screenplay = {
             display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nBillions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nIn addition, our oceans help cycle nutrients and are even a source of new medicines.\n\n",
             debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
             extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer.",
-            newscreen_cloud_string = "ocean_are_good"
+            newscreen_cloud_string = "oceans_are_good"
             --#TODO: special_image_id = Earth sphere with recycle arrows around oceans
         },
 
@@ -443,6 +443,7 @@ STR.Screenplay = {
             goal_text = "Follow information prompts.",
             display_text = "We use the pH scale to measure how acidic or basic something is. \n\nThe pH scale runs from 0 to 14, with 7 being a neutral pH. \n\nValues above 7 are basic, or alkaline. Values below 7 are acidic.\n\n",
             --#TODO: special_image_id = pH scale example
+            newscreen_cloud_string = "pH_scale",
             debrief_text = "Values of pH are measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic than a pH of 7. \n\n",
             extra_text = nil,
         },
@@ -788,7 +789,7 @@ STR.Screenplay = {
             question_prompt = { 
                 "Ocean acidification harms which of the following groups?"
             },
-            question_cloud_string = "personal_co2",
+            question_cloud_string = "oa_harms_who",
             hint_text = {
                 "Think about which groups we have examined in our ocean scene."
             },
@@ -1742,7 +1743,7 @@ STR.Screenplay = {
         -- Users will examine the final summary and graphs of each group of 
         -- life to evaluate how each has changed due to their cumulative decisions and outcomes. 
 
-        user_lesson_21 = {
+        user_lesson_21b = {
             goal_text = "Review summary.",
             display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! "..n..n.."We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part, then together we can help protect our oceans! "..n..n,
             newscreen_cloud_string = "review_reminder",
@@ -1989,7 +1990,7 @@ function STR:Get_NewInfo_Cloud_String(stage_key, substage_key)
 
     -- gets the new info string to use in cloud data reporting
 
-    STR:Get_Generic_Specific_Value(stage_key, substage_key, "newscreen_cloud_string")
+    return STR:Get_Generic_Specific_Value(stage_key, substage_key, "newscreen_cloud_string")
 
 end
 
