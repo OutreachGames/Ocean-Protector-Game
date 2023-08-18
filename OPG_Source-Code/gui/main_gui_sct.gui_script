@@ -1357,9 +1357,13 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 	local node_hyperlink_button = gui.get_node(constant.node_optional_hyperlink)
 	local node_special_image = gui.get_node(constant.node_special_image)
 
-	gui.set_enabled(node_controller_review, false)
-	gui.set_enabled(node_hyperlink_button, false)
-	gui.set_visible(node_special_image, false)
+	-- leave on more dynamic options if not resetting values
+	-- in other words, disable more dynamic nodes if resetting
+	if reset_values then
+		gui.set_enabled(node_controller_review, false)
+		gui.set_enabled(node_hyperlink_button, false)
+		gui.set_visible(node_special_image, false)
+	end
 
 	-- enable and set text, but only if enabling
 	-- do this before sizing so text sizer can be used
