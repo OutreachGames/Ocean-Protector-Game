@@ -156,7 +156,7 @@ STR.CV = {
 
     game_repeat_methods = {
         repeat_type_full = CV_game_repeat_types.repeat_full,
-        repeat_type_to_quiz = CV_game_repeat_types.repeat_quiz
+        repeat_type_quiz = CV_game_repeat_types.repeat_quiz
     },
 
     goal_completed_types = {
@@ -585,7 +585,7 @@ STR.Screenplay = {
             newscreen_cloud_string = "recap_prep",
             debrief_text = nil,
             extra_text = nil,
-            game_repeat_checkpoint_value = STR.CV.game_repeat_methods.repeat_type_to_quiz
+            game_repeat_checkpoint_value = STR.CV.game_repeat_methods.repeat_type_quiz
         },
 
         -- Game presents list of review questions to confirm user knowledge. 

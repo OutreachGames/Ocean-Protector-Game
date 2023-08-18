@@ -3482,11 +3482,11 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 			msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_restart_game})
 			--^ above takes 0.25 seconds at least so wait a bit before fading back in
 
-			-- #TODO test deal with game repeat types
+			-- deal with game repeat types
 			if game_repeat_method == repeat_methods.repeat_type_quiz then
 
 				-- add back in starter OA hurt values
-				STR.CV.outcome_functions.func_option_outcome_dynamic(STR.CV.update_item_values_tbls.initial_oa_affected_values_all, nil, true)
+				PlayerData_RunScoreInput(self, STR.CV.update_item_values_tbls.initial_oa_affected_values_all, true)
 
 				-- enable special aspects
 				self.player_data_tbl.special_setup_goals_hud_enabled = true
