@@ -1864,12 +1864,12 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "replay_game_start",
                     debrief_text = nil,
-                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                    -- just go to next stage now
+                    --outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
                 }
             },
         },
 
-        --[[
         --#TODO think about adding option to just do another character along with quiz?
         -- if using this section then comment out <outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full> line above!!
         user_lesson_23 = {
@@ -1899,7 +1899,6 @@ STR.Screenplay = {
                 },
             },
         }
-        --]]
 
     }
 }
