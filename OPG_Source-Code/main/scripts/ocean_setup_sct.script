@@ -1739,7 +1739,7 @@ local function ExpireObjectCheck(self, spawn_list_key, go_id)
 
 end
 
-local function DynamicObject_Reset(self)
+local function Reset_DynamicObjects_All(self)
 
 	-- reset animals, either just swimmers or all (includes humans) and buoy
 
@@ -1993,8 +1993,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		-- if previous health 0.2 and new health 0.1, visual should be 0.6 to 0.2
 		-- if previous health 0.2 and new health 0.3, visual should be 0.2 to 0.6 or 0.6 to 1.0
 		--   then next time, 0.3 to 0.4 will be 0.6 to 1.0 in both above cases? or drop it back down to previous value?
-		-- if previous health 0.7 and new health 0.6, visual should be 0.7 to 0.3 or 0.6 to 0.2 or 1.0 to 0.6
-		-- if previous health 0.7 and new health 0.8, visual should be 0.6 to 1.0
+		-- if previous health 0.7 and new health 0.6, visual should be 0.7 to 0.3 or 0.6 to 0.2 or 1.0 to 0.6?
+		-- if previous health 0.7 and new health 0.8, visual should be 0.6 to 1.0?
 		-- still has potential to be large difference between previous and reset fade
 
 		-- priority should be having the final value match whatever the actual health is
@@ -2052,11 +2052,13 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 			local reset_health_val
 			if new_health > old_health then
 				-- got more healthy
+				-- so only start with a few so we can add a bunch later
 				reset_health_val = new_health - reset_health_delta
 			elseif new_health < old_health then
 				-- got less healthy
+				-- so start with a lot so we have a lot to kill
 				reset_health_val = new_health + reset_health_delta
-			--else
+			else
 				-- remained same
 				reset_health_val = new_health
 			end
@@ -2074,7 +2076,8 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 	local function update_swimmer(item_name, subitem_name, death_ignore_stop, death_instant_stop)
 
-		-- update health of a swimmer subitem
+		-- update health of a swimmer subitem group
+		-- in other words, how many new objects do we add or subtract
 
 		-- setup
 		local s_item = INFO.item_info[item_name]
@@ -2091,18 +2094,19 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		-- calculate amount to change
 		local number_added, number_subtracted = 0, 0
 
-		local new_health = oa_outcome_tbl[item_name].health_value_new
+		local new_health_actual = oa_outcome_tbl[item_name].health_value_new
 		-- recall, we need to externally track the previous and new health 
 		-- b/c gos are added and deleted with swimmers and b/c health is reset to middle value for visualization
 		-- recall if delta change equals 0 ('old' == 'new') then the reset health also equals 'new'
 
 		-- get current health of spawned animals
+		-- which is what the base reset function above set
 		local current_count = self.spawned_objects_sum[spawn_list_name]
 		local max_count = subitem_tbl.spawn_max_count
-		local current_health = EXT:math_round(current_count/max_count, 4)
+		local current_health_at_reset = EXT:math_round(current_count/max_count, 4)
 
 		-- get amount needed to add or subtract (use math.ceil for maximum effect)
-		local delta_change = new_health - current_health
+		local delta_change = new_health_actual - current_health_at_reset
 		local delta_count_change = EXT:math_sign(delta_change) * math.ceil(math.abs(delta_change) * subitem_tbl.spawn_max_count)
 
 		-- early out if:
@@ -2410,7 +2414,7 @@ local function On_SpecialAction(self, special_action_name)
 	elseif special_action_name == HSH.special_setup_pH_buoy then
 		SetupBuoy(self)
 	elseif special_action_name == HSH.special_restart_game then
-		DynamicObject_Reset(self)
+		Reset_DynamicObjects_All(self)
 	end
 
 end
