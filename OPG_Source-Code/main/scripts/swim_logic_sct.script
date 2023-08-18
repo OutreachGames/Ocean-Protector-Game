@@ -337,6 +337,11 @@ local function On_Death(self)
 		go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, go.EASING_LINEAR, fadeout_duration, fadeout_delay)
 		-- currently not using for fish since we might add skeletons at some point?
 		--   also swaying death is thus then timed to fade out
+
+		-- #TODO think about adding fade out in script for fish and shrimp, 
+		-- fine if falling stops and forward go animate continues fading body, 
+		-- since fade out is much smoother
+
 	end
 
 	local function func_delete(self)
