@@ -1666,7 +1666,7 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 		reset_tracker_variables = false
 	end
 	if num_options == nil then
-		num_options = 3
+		num_options = self.hud_decision_dynamic.number_answer_options or 3
 	end
 
 	-- set enabled status
