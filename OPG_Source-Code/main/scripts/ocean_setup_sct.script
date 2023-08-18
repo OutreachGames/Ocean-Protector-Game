@@ -2249,16 +2249,30 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		Update_Micro_or_Static(self, "item_mollusks", "subitem_oyster", oa_outcome_tbl, true)
 
 		-- on seafloor so stop, and stop quickly so effect is viewable
-		local death_ignore_stop = false
+		local death_ignore_stop = true 
+		-- ^^ if false this might be causing the stationary crabs and snails 
+		--    that are removed from list but not deleted?
+
 		local death_instant_stop = true
 
 		--conches
-		update_swimmer("item_mollusks", "subitem_conch", death_ignore_stop, death_instant_stop)
+		local add_conch, subtract_conch = update_swimmer("item_mollusks", "subitem_conch", death_ignore_stop, death_instant_stop)
 
 		--crabs
-		update_swimmer("item_crustaceans", "subitem_crab", death_ignore_stop, death_instant_stop)
+		local add_crab, subtract_crab = update_swimmer("item_crustaceans", "subitem_crab", death_ignore_stop, death_instant_stop)
 
 		-- recall conch and crab timing not needed to track since they do not go in formation
+		-- return amount of extra time to wait if just deleting these
+		if (add_conch + add_crab) > 0 then
+			-- wait for joins
+			return 4
+		elseif (subtract_conch + subtract_crab) > 0 then
+			-- wait for decays
+			return 2
+		else
+			return 0
+		end
+
 	end
 
 	local function update_ocean_water()
@@ -2290,7 +2304,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 			return 4
 		elseif number_subtracted > 0 then
 			-- wait for decays
-			return 1
+			return 2
 		else
 			return 0
 		end
@@ -2343,13 +2357,13 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 				timer.delay(stage_done_plankton_or_oa, false, function()
 
 					-- highlight ocean floor and request update
-					update_ocean_floor()
+					local extra_seafloor_catch_up_time = update_ocean_floor()
 
 					timer.delay(stage_done_ocean_benthic, false, function()
 
 						-- highlight ocean middle and request update
 						local extra_swimmer_catch_up_time = update_ocean_water()
-						local full_ocean_mid_done = stage_done_ocean_pelagic + extra_swimmer_catch_up_time
+						local full_ocean_mid_done = stage_done_ocean_pelagic + math.max(extra_swimmer_catch_up_time, extra_seafloor_catch_up_time)
 
 						timer.delay(full_ocean_mid_done, false, function()
 
