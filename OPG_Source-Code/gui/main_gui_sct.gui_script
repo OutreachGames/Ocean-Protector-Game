@@ -356,6 +356,7 @@ local function PlayerData_UpdateDecisionTracker(self, stage_key, substage_key, c
 
 	-- adds an i-based entry to player save table for given decision choice
 	-- needs to match up with item tracker scores (self.player_data_tbl.item_data_tbl)
+	-- useful for things where we can't use i-key b/c it might have been a few stages ago
 
 	if not PlayerData_IsValid(self, "Player Data Update Score Tracker") then
 		return
@@ -393,6 +394,7 @@ local function PlayerData_UpdateScoreTracker(self, item_key, delta_value, new_va
 
 	-- adds an i-based entry to player save table for given item key 
 	-- needs to match up with decision tracker scores (self.player_data_tbl.decision_data_tbl)
+	-- useful for things where we can't use i-key b/c it might have been a few stages ago
 
 	if not PlayerData_IsValid(self, "Player Data Update Score Tracker") then
 		return
@@ -967,6 +969,7 @@ end
 local function Get_Coastal_OA_Percent_Helper(self)
 
 	-- safe way of getting coastal OA percent from question choice
+	-- can't use i-key b/c it might have been a few stages ago
 
 	local decision_tbl = self.player_data_tbl.decision_data_tbl
 	local length_decision_items = #decision_tbl
@@ -1037,7 +1040,7 @@ local function DynamicText_DecisionSummary(self)
 	local length_decision_items = #decision_tbl
 	local length_ph_trck = #self.player_data_tbl.item_data_tbl.item_ph
 	if length_decision_items ~= length_ph_trck then
-		print("Error: withing 'Dynamic Text Decision Summary' function, length_decision_items <"..tostring(length_decision_items).."> is not equal to length_ph_trck <"..tostring(length_ph_trck)..">\n")
+		print("Error: within 'Dynamic Text Decision Summary' function, length_decision_items <"..tostring(length_decision_items).."> is not equal to length_ph_trck <"..tostring(length_ph_trck)..">\n")
 	end
 
 	-- get text for decision reminder
@@ -2423,7 +2426,7 @@ local function Screen_Data_Input(self, action_id, action)
 end
 
 
---HUD Process: Reset Player Data Table
+--HUD Process: Deal with Player Data Table
 local function PlayerData_MakeOA_Tbl(self, stage_key, substage_key)
 
 	-- makes and returns table to use in OA outcome observations and catchup 
@@ -3397,7 +3400,7 @@ local function GameHandleButtonInput(self, action_id, action)
 
 end
 
-local function Game_RunRestart(self, reset_ply_data)
+local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 
 	-- reset save table
 	if reset_ply_data then
@@ -3427,8 +3430,33 @@ local function Game_RunRestart(self, reset_ply_data)
 	-- if game has already been initialized, that means this function was called as part of a game restart
 	-- so close any menus that were open 
 
-	-- go to starting stage
-	PlayerData_Update_I_Key_Progress(self, 0, true)
+	-- go to stage according to repeat type
+	local repeat_methods = STR.CV.game_repeat_methods
+	local new_i_key
+
+	if game_repeat_method ~= nil then
+		if game_repeat_method == repeat_methods.repeat_type_full then
+			-- full repeat
+			new_i_key = 0
+
+		elseif game_repeat_method == repeat_methods.repeat_type_quiz then
+			-- partial repeat starting at quiz
+			-- find matching repeat_type and save i key
+			for i_ss,v_ssinfo in ipairs(self.gameplay_loop_order) do
+				local repeat_method = STR:Get_Game_Repeat_Value(v_ssinfo.stage_name_key, v_ssinfo.substage_name_key)
+				if repeat_method == repeat_methods.repeat_type_quiz then
+					new_i_key = i_ss
+					break
+				end
+			end
+
+		end
+	else
+		-- default of 0
+		new_i_key = 0
+	end
+
+	PlayerData_Update_I_Key_Progress(self, new_i_key, true)
 
 	if self.gameplay_initialized then
 		-- popup and others should have already been closed by 
@@ -3446,11 +3474,36 @@ local function Game_RunRestart(self, reset_ply_data)
 		Run_Fader(self, true, 0.25)
 		-- wait until fully dark/hidden, then reset, then fade back in
 		timer.delay(0.35, false, function(self)
+
 			msg.post("ocean_level:/level_controller#script", HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_restart_game})
-			--^ above takes 0.25 seconds at least so wait a bit 
+			--^ above takes 0.25 seconds at least so wait a bit before fading back in
+
+			-- #TODO test deal with game repeat types
+			if game_repeat_method == repeat_methods.repeat_type_quiz then
+
+				-- add back in starter OA hurt values
+				STR.CV.outcome_functions.func_option_outcome_dynamic(STR.CV.update_item_values_tbls.initial_oa_affected_values_all, nil, true)
+
+				-- enable special aspects
+				self.player_data_tbl.special_setup_goals_hud_enabled = true
+				self.player_data_tbl.special_setup_data_hud_enabled = true
+				self.player_data_tbl.special_setup_item_boat_present = true
+				self.player_data_tbl.special_setup_item_buoy_present = true
+
+				-- set goals and HUD data to on
+				for k_itemname,_ in pairs(CV_item_groups) do
+					PlayerData_UpdateHUDTracker(self, k_itemname, true, true)
+				end
+
+				-- run catch up
+				PlayerData_CatchUp(self)
+
+			end
+
 			timer.delay(0.45, false, function(self)
 				Run_Fader(self, false, 0.25)
 			end)
+
 		end)
 	end
 
@@ -3523,7 +3576,7 @@ function on_message(self, message_id, message, sender)
 		local add_i = message.minfo_game_i_stage_addition or 1
 		GameLogic_Progress(self, add_i, true)
 	elseif message_id == HSH.msg_request_game_repeat then
-		Game_RunRestart(self, message.minfo_reset_player_save)
+		Game_RunRestart(self, message.minfo_reset_player_file, message.minfo_game_repeat_method)
 	elseif message_id == HSH.msg_set_player_character_role then
 		PlayerData_Set_Character(self, message.minfo_role_name)
 	elseif message_id == HSH.msg_update_item_value then

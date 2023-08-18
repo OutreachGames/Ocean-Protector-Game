@@ -29,6 +29,25 @@ local CV_subgoal_extra = {
     unpause_immediately = 4
 }
 
+local CV_game_repeat_types = {
+    repeat_full = 0,
+    repeat_quiz = 2,
+}
+
+local CV_initial_oa_values = {
+    -- note values initialized with 1, so this value is added to give OA value for data gauge
+    -- in other words, 1 + this_value = starting graph value
+    -- make sure this value matches what the text description says the first pH value is
+    item_ph = -0.5, -- ie results in value of 0.5
+    -- don't make all healths exactly -0.5 for present day start 
+    item_plankton = -0.45, -- ie results in value of 0.55
+    item_coral = -0.8,
+    item_mollusks = -0.7,
+    item_fish = -0.55,
+    item_crustaceans = -0.6,
+    item_humans = -0.5,
+}
+
 local function GetString_from_Tbl_or_Value(tbl_or_str)
 
     -- gets a string from a value or randomly from a table of options
@@ -54,22 +73,25 @@ local STR = {}
 
 STR.CV = {
     update_item_values_tbls = {
-        -- recall that index of 1 is default for all keys if no string key is specified
-        -- also, if index of 1 not present and string key not present then no value will be added
         initial_oa_affected_values_ph = {
-            -- note values initialized with 1, so this value is added to give OA value for data gauge
-            -- in other words, 1 + this_value = starting graph value
-            -- make sure this value matches what the text description says the first pH value is
-            item_ph = -0.5, -- ie results in value of 0.5
+            item_ph = CV_initial_oa_values.item_ph
         },
         initial_oa_affected_values_life = {
-            -- don't make all healths exactly -0.5 for present day start, 
-            item_plankton = -0.45, -- ie results in value of 0.55
-            item_coral = -0.8,
-            item_mollusks = -0.7,
-            item_fish = -0.55,
-            item_crustaceans = -0.6,
-            item_humans = -0.5,
+            item_plankton = CV_initial_oa_values.item_plankton,
+            item_coral = CV_initial_oa_values.item_coral,
+            item_mollusks = CV_initial_oa_values.item_mollusks,
+            item_fish = CV_initial_oa_values.item_fish,
+            item_crustaceans = CV_initial_oa_values.item_crustaceans,
+            item_humans = CV_initial_oa_values.item_humans,
+        },
+        initial_oa_affected_values_all = {
+            item_ph = CV_initial_oa_values.item_ph,
+            item_plankton = CV_initial_oa_values.item_plankton,
+            item_coral = CV_initial_oa_values.item_coral,
+            item_mollusks = CV_initial_oa_values.item_mollusks,
+            item_fish = CV_initial_oa_values.item_fish,
+            item_crustaceans = CV_initial_oa_values.item_crustaceans,
+            item_humans = CV_initial_oa_values.item_humans,
         }
     },
 
@@ -123,9 +145,18 @@ STR.CV = {
         end,
 
         set_game_repeat_full = function()
-            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_reset_player_save = true})
+            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_reset_player_file = true, minfo_game_repeat_method = CV_game_repeat_types.repeat_full})
         end,
 
+        set_game_repeat_quiz = function()
+            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_reset_player_file = true, minfo_game_repeat_method = CV_game_repeat_types.repeat_quiz})
+        end,
+
+    },
+
+    game_repeat_methods = {
+        repeat_type_full = CV_game_repeat_types.repeat_full,
+        repeat_type_to_quiz = CV_game_repeat_types.repeat_quiz
     },
 
     goal_completed_types = {
@@ -198,7 +229,7 @@ STR.CV = {
         newscreen_cloud_string = "review_choice_outcome",
         display_text = HSH.helper_outcome_decision_summary
 
-    },
+    }
 
 }
 
@@ -553,7 +584,8 @@ STR.Screenplay = {
             display_text = "Let's recap what we have covered with a few questions."..n..n.."For each question choose the best answer and click submit to see if you got the correct answer. Once we have answered all questions correctly, we will move onto the next stage.\n\n",
             newscreen_cloud_string = "recap_prep",
             debrief_text = nil,
-            extra_text = nil
+            extra_text = nil,
+            game_repeat_checkpoint_value = STR.CV.game_repeat_methods.repeat_type_to_quiz
         },
 
         -- Game presents list of review questions to confirm user knowledge. 
@@ -1861,9 +1893,9 @@ STR.Screenplay = {
                     display_text = {
                         "Skip the introductory part of the game and go back to the knowledge quiz section."
                     },
-                    choice_cloud_string = "repeat_game_full",
+                    choice_cloud_string = "repeat_game_quiz",
                     debrief_text = nil,
-                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full
+                    outcome_result_func = STR.CV.outcome_functions.set_game_repeat_quiz
                 },
             },
         }
@@ -1977,13 +2009,25 @@ end
 
 function STR:Get_Goal_SubType_Method(stage_key, substage_key)
 
+    -- get subtype method of goal
+
     return STR:Get_Generic_Specific_Value(stage_key, substage_key, "goal_completed_extra_method")
 
 end
 
 function STR:Get_Goal_SubType_Value(stage_key, substage_key)
 
+    -- get subtype value of goal
+
     return STR:Get_Generic_Specific_Value(stage_key, substage_key, "goal_completed_extra_value")
+
+end
+
+function STR:Get_Game_Repeat_Value(stage_key, substage_key)
+
+    -- get game repeat value
+
+    return STR:Get_Generic_Specific_Value(stage_key, substage_key, "game_repeat_checkpoint_value")
 
 end
 
