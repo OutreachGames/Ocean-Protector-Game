@@ -10,7 +10,7 @@ local INFO = require("modules.item_info_md")
 local GA = require("modules.custom_analytics_md")
 
 -- constants
-local CV_Current_Save_Version_Major = 3
+local CV_Current_Save_Version_Major = 4
 local CV_Current_Save_Version_Minor = 1
 local CV_ID_Ocean_Setup_Script = "ocean_level:/level_controller"
 local CV_Application_ID = "Ocean_Protector"
@@ -215,6 +215,7 @@ local function PlayerData_CloudRecord(self, print_outcome)
 
 	local ply = self.player_data_tbl
 	local id_user = ply.id_key_user or 0000
+	local plythrough_count = ply.id_playthrough_count or 1
 	local character_role = ply.character_role_key or ""
 	local choice_key = ply.most_recent_decision_choice_key or ""
 	local duration = socket.gettime() - (self.game_logic_time_start or 0)
@@ -262,9 +263,11 @@ local function PlayerData_CloudRecord(self, print_outcome)
 	-- compile and send report to cloud database
 	-- keys must match value in script!
 	-- https://docs.google.com/spreadsheets/d/1gisUU8HIs2_JcRbW2LxjusDa6IHTNBM-yAVTxverdCY
+	-- any changes also make sure to re-deploy script then save new url in associated module!
 	local cloud_send_tbl = {
 		ga_key_id_user = id_user,
 		ga_key_id_generated = id_generated,
+		ga_key_id_playthrough_count = plythrough_count,
 		ga_key_stage = stage_key,
 		ga_key_substage = substage_key,
 		ga_key_decision_str = decision_str,
@@ -349,6 +352,19 @@ local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 		self.player_data_tbl.gameplay_loop_i_key = new_ikey
 	else
 		self.player_data_tbl.gameplay_loop_i_key = self.player_data_tbl.gameplay_loop_i_key + new_ikey
+	end
+
+end
+
+local function PlayerData_Update_Repeat_Count(self, new_ikey, override)
+
+	-- update number of times repeat has occurred
+
+	new_ikey = new_ikey or 1
+	if override then
+		self.player_data_tbl.id_playthrough_count = new_ikey
+	else
+		self.player_data_tbl.id_playthrough_count = self.player_data_tbl.id_playthrough_count + new_ikey
 	end
 
 end
@@ -2544,9 +2560,10 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 	-- if 'back_to_beginning' is true, then this is running as part of full restart and not first initialization
 
 	-- save player ID if restarting game
-	local ply_id
+	local ply_id, ply_repeat_count
 	if type(self.player_data_tbl) == "table" then
 		ply_id = self.player_data_tbl.id_key_user or 1111
+		ply_repeat_count = self.player_data_tbl.id_playthrough_count or 1
 	end
 
 	-- reset fully
@@ -2554,6 +2571,7 @@ local function PlayerData_Reset(self, update_hud_screens, back_to_beginning)
 
 	self.player_data_tbl = {
 		id_key_user = ply_id,
+		id_playthrough_count = ply_repeat_count,
 		save_file_version_major = CV_Current_Save_Version_Major,
 		save_file_version_minor = CV_Current_Save_Version_Minor,
 		num_best_answers = 0,
@@ -3445,12 +3463,13 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 
 	-- go to stage according to repeat type
 	local repeat_methods = STR.CV.game_repeat_methods
-	local new_i_key
+	local new_i_key, playthrough_add
 
 	if game_repeat_method ~= nil then
 		if game_repeat_method == repeat_methods.repeat_type_full then
 			-- full repeat
 			new_i_key = 1
+			playthrough_add = 1
 
 		elseif game_repeat_method == repeat_methods.repeat_type_quiz then
 			-- partial repeat starting at quiz
@@ -3459,6 +3478,7 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 				local repeat_method = STR:Get_Game_Repeat_Value(v_ssinfo.stage_name_key, v_ssinfo.substage_name_key)
 				if repeat_method == repeat_methods.repeat_type_quiz then
 					new_i_key = i_ss
+					playthrough_add = 1
 					break
 				end
 			end
@@ -3467,6 +3487,7 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 	else
 		-- default of 1
 		new_i_key = 1
+		playthrough_add = 0
 	end
 
 	-- Recall:
@@ -3478,6 +3499,7 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 	new_i_key = new_i_key - 1
 
 	PlayerData_Update_I_Key_Progress(self, new_i_key, true)
+	PlayerData_Update_Repeat_Count(self, playthrough_add)
 
 	if self.gameplay_initialized then
 		-- popup and others should have already been closed by 
