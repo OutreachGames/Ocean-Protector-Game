@@ -191,10 +191,11 @@ STR.CV = {
 
         goal_completed_type = CV_goal_types.observe_method,
         goal_completed_extra_method = CV_subgoal_extra.observe_oa_outcome,
+        goal_text = "Observe changes to ocean life.",
+        disable_save_game_progress = true,
         run_swimmer_reset_before_oa_outcome = true,
         show_ocean_hud_highlighter = false,
-        newscreen_cloud_string = "observe_choice_outcome",
-        goal_text = "Observe changes to ocean life."
+        newscreen_cloud_string = "observe_choice_outcome"
 
     },
 
@@ -202,6 +203,7 @@ STR.CV = {
 
         goal_completed_type = CV_goal_types.click_items,
         goal_text = "Document how each ocean group has changed following your decision.",
+        disable_save_game_progress = true,
         display_text = "Let's document and record the status of each group following your newest decision. Remember, click 'Continue' then click on a member of each group to measure it. ",
         show_hud_data_popup = true,
         allow_duplicate_clicks = true,
@@ -221,13 +223,27 @@ STR.CV = {
 
     },
 
-    oa_outcome_summary_tbl = {
+    oa_outcome_summary_def_tbl = {
 
         goal_completed_type = CV_goal_types.new_information,
         goal_text = "Review summary of outcomes from your decision.",
         displaytext_is_dynamic = true,
         newscreen_cloud_string = "review_choice_outcome",
         display_text = HSH.helper_outcome_decision_summary
+
+    },
+
+    oa_outcome_summary_end_tbl = {
+
+        -- same as above <oa_outcome_summary_def_tbl> but adds in final score save
+
+        goal_completed_type = CV_goal_types.new_information,
+        goal_text = "Review summary of outcomes from your decision.",
+        displaytext_is_dynamic = true,
+        newscreen_cloud_string = "review_choice_outcome",
+        display_text = HSH.helper_outcome_decision_summary,
+
+        save_summary_report_card = true
 
     }
 
@@ -1130,6 +1146,7 @@ STR.Screenplay = {
                     "Congratulations on your promotion as Head Ocean Tour Guide! With this new position you have some extra money to spend. Now that you are in charge of tours, how do want to spend this money?"
                 },
             },
+            disable_save_game_progress = true,
             question_cloud_string = "personal_boat",
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
@@ -1201,7 +1218,7 @@ STR.Screenplay = {
 
         decision_role_01b = STR.CV.oa_outcome_observe_tbl,
         decision_role_01c = STR.CV.oa_outcome_record_tbl,
-        decision_role_01d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_01d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Biologic Connection I (phytoplankton)
@@ -1218,6 +1235,7 @@ STR.Screenplay = {
                     "You have observed how ocean life that tourists want to see can be impacted by ocean acidification. You want to continue to help maintain a healthy ocean are thinking about different options. Which one do you pick?"
                 },
             },
+            disable_save_game_progress = true,
             hint_text = {
                 "Healthy ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to environmental changes. "
             },
@@ -1289,7 +1307,7 @@ STR.Screenplay = {
 
         decision_role_02b = STR.CV.oa_outcome_observe_tbl,
         decision_role_02c = STR.CV.oa_outcome_record_tbl,
-        decision_role_02d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_02d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Personal Nutrient Pollution Reduction
@@ -1306,6 +1324,7 @@ STR.Screenplay = {
                     "As you use your boat for tours garbage and waste develops. You want to dispose and remove this waste in an ocean-friendly way. Which option do you choose? "
                 },
             },
+            disable_save_game_progress = true,
             hint_text = {
                 "Waste and garbage that makes its way to the ocean can affect the entire marine food-web, as well as trigger acidification."
             },
@@ -1351,7 +1370,7 @@ STR.Screenplay = {
 
         decision_role_03b = STR.CV.oa_outcome_observe_tbl,
         decision_role_03c = STR.CV.oa_outcome_record_tbl,
-        decision_role_03d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_03d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Biologic Connection II (reef)
@@ -1368,6 +1387,7 @@ STR.Screenplay = {
                     "You are again thinking about ways to reduce the impacts of ocean acidification on the ocean life your tours rely on. Which option will you choose to do?"
                 },
             },
+            disable_save_game_progress = true,
             question_cloud_string = "coral_reefs",
             hint_text = {
                 "Well-balanced ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to physical changes. "
@@ -1465,7 +1485,7 @@ STR.Screenplay = {
 
         decision_role_04b = STR.CV.oa_outcome_observe_tbl,
         decision_role_04c = STR.CV.oa_outcome_record_tbl,
-        decision_role_04d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_04d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Partnerships and Community I (city council for citizens)
@@ -1482,6 +1502,7 @@ STR.Screenplay = {
                     "With your ocean tour business, you provide jobs and money to the local community. The city council recognizes your work and wants your help. The council has money to spend on construction projects and asks you which option would best help ocean health?"
                 },
             },
+            disable_save_game_progress = true,
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
@@ -1527,7 +1548,7 @@ STR.Screenplay = {
 
         decision_role_05b = STR.CV.oa_outcome_observe_tbl,
         decision_role_05c = STR.CV.oa_outcome_record_tbl,
-        decision_role_05d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_05d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Partnerships and Community II (farmer friends)
@@ -1544,6 +1565,7 @@ STR.Screenplay = {
                     "Many of your friends are farmers that live far inland. They are upgrading their farms and ask you for advice because you also help support local jobs. The farmers ask you which option would be most useful for protecting the surrounding land and ocean?"
                 },
             },
+            disable_save_game_progress = true,
             hint_text = {
                 "Reducing the amount of fossil fuel use and nutrient pollution are very effective ways to reduce ocean acidification. "
             },
@@ -1587,7 +1609,7 @@ STR.Screenplay = {
 
         decision_role_06b = STR.CV.oa_outcome_observe_tbl,
         decision_role_06c = STR.CV.oa_outcome_record_tbl,
-        decision_role_06d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_06d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Community Education I (community members water use)
@@ -1604,6 +1626,7 @@ STR.Screenplay = {
                     "The community appreciates the jobs your ocean tours support. They want to help improve ocean health and ask you for advice. What do you recommend they do?"
                 },
             },
+            disable_save_game_progress = true,
             question_cloud_string = "community_water",
             hint_text = {
                 "Reducing the amount of excess water and energy use helps reduce carbon dioxide emissions and helps decrease nutrient pollution runoff into the ocean. "
@@ -1648,7 +1671,7 @@ STR.Screenplay = {
 
         decision_role_07b = STR.CV.oa_outcome_observe_tbl,
         decision_role_07c = STR.CV.oa_outcome_record_tbl,
-        decision_role_07d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_07d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Partnerships and Community III (city council for businesses)
@@ -1665,6 +1688,7 @@ STR.Screenplay = {
                     "The city council continues to value your advice as a local business owner that provides local jobs. The council has money to support local businesses and they want your recommendation on how to spend it. Which option do you think would help ocean health?"
                 },
             },
+            disable_save_game_progress = true,
             question_cloud_string = "city_money_2",
             hint_text = {
                 "Cars and trucks emit large amounts of carbon dioxide gas, so reducing the distance or driving usage can help reduce emissions. "
@@ -1708,7 +1732,7 @@ STR.Screenplay = {
 
         decision_role_08b = STR.CV.oa_outcome_observe_tbl,
         decision_role_08c = STR.CV.oa_outcome_record_tbl,
-        decision_role_08d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_08d = STR.CV.oa_outcome_summary_def_tbl,
 
 
         -- Community Education II (community members transportation use)
@@ -1725,8 +1749,8 @@ STR.Screenplay = {
                     "People in community continue to value your input as a local business that provides ocean-based jobs. They again ask for your advice about how they can further improve ocean health. What do you recommend they do?"
                 },
             },
+            disable_save_game_progress = true,
             question_cloud_string = "community_transportation",
-            is_last_role_decision = true,
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
@@ -1769,9 +1793,22 @@ STR.Screenplay = {
 
         decision_role_09b = STR.CV.oa_outcome_observe_tbl,
         decision_role_09c = STR.CV.oa_outcome_record_tbl,
-        decision_role_09d = STR.CV.oa_outcome_summary_tbl,
+        decision_role_09d = STR.CV.oa_outcome_summary_end_tbl,
 
-        -- REMEMBER: last decision needs 'is_last_role_decision = true'
+        -- REMEMBER: last decision needs 'oa_outcome_summary_end_tbl'
+        -- we do not have the final report boolean set in the final question b/c 
+        -- loading back in the final question after having clicked on it would send duplicate final score reports
+        -- IE when click on submit answer in decision:
+        --   1. game saves to cloud and goes to next stage
+        --   2. player exists and resumes game, and gets back to observe OA screen or decision screen?
+        --     a. going back to observe OA screen does not make much sense, since they might have forgotten things
+        --     b. ALSO, always having OA observe be started from FRESH space 
+        --        should fix those bugs where player cannot click on something that died but was not deleted
+        --     c. and ocean health might not match well
+        --     d. so have them go back to question 
+        --   3. so if when player resumes game they went back to question, then clicking submit again would save cloud score again
+        --   4. in theory they can kinda game the system by closing a resuming game if they picked a bad choice...
+        --   5. which is really not a bad thing, if kids think that learning through sneaky ways is fun they are still learning
 
     },
 
@@ -2030,6 +2067,22 @@ function STR:Get_Game_Repeat_Value(stage_key, substage_key)
 
 end
 
+function STR:Get_Game_Disable_Save(stage_key, substage_key)
+
+    -- get boolean if game should not save this i key stage/substage
+
+    return STR:Get_Generic_Specific_Value(stage_key, substage_key, "disable_save_game_progress")
+
+end
+
+function STR:Get_Summary_Report_Card(stage_key, substage_key)
+
+    -- gets if this is where the player report card should be saved to the summary analytics sheet
+
+    return self:Get_Generic_Specific_Value(stage_key, substage_key, "save_summary_report_card")
+
+end
+
 
 -- Goals HUD
 function STR:Get_Goal_Text(stage_key, substage_key)
@@ -2215,14 +2268,6 @@ function STR:Get_Decision_Cloud_String(stage_key, substage_key, character_role)
     -- gets the decision string to use in cloud data reporting
 
     return self:Get_Decision_Specific_Value(stage_key, substage_key, character_role, "question_cloud_string")
-
-end
-
-function STR:Get_Decision_Is_Last(stage_key, substage_key, character_role)
-
-    -- gets if last decision for player character
-
-    return self:Get_Decision_Specific_Value(stage_key, substage_key, character_role, "is_last_role_decision")
 
 end
 
