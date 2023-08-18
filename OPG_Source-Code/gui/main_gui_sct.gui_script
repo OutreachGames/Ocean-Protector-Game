@@ -487,6 +487,9 @@ local function PlayerData_Save(self)
 
 	-- saves 'self.player_data_tbl' to file
 
+	-- add in early return for dev testing if we don't want to save
+	-- if true then return end
+
 	-- get path
 	local filename = sys.get_save_file(CV_Application_ID, CV_Save_Player_File_Name)
 
@@ -3441,7 +3444,7 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 	if game_repeat_method ~= nil then
 		if game_repeat_method == repeat_methods.repeat_type_full then
 			-- full repeat
-			new_i_key = 0
+			new_i_key = 1
 
 		elseif game_repeat_method == repeat_methods.repeat_type_quiz then
 			-- partial repeat starting at quiz
@@ -3456,9 +3459,17 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 
 		end
 	else
-		-- default of 0
-		new_i_key = 0
+		-- default of 1
+		new_i_key = 1
 	end
+
+	-- Recall:
+	--   'Game logic progress' function runs after selecting 'Start Game' option in starting menu
+	--   'Game logic progress' function runs after clicking submit on decision
+	-- so no need to run game logic progress here, 
+	-- as we have updated the i key and the function will use that once called by the above methods
+	-- but it does mean we have to subtract 1 from it
+	new_i_key = new_i_key - 1
 
 	PlayerData_Update_I_Key_Progress(self, new_i_key, true)
 
@@ -3466,13 +3477,6 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 		-- popup and others should have already been closed by 
 		-- internal choice button logic that got us to this point
 		Screen_Goals_Reset(self, set_enabled)
-
-		-- Recall, 'Game logic progress' function runs after selecting 'Start Game' option in starting menu
-		-- Which will occur if player is starting new game 
-		-- so only run it here if game already initialized (ie repeating game)
-		-- set this to 0 b/c if running repeat as part of debrief screen, 
-		-- then debrief logic will kick in and auto update game progress after this function call
-		GameLogic_Progress(self, 0)
 
 		-- also if running game restart here then reset animals and buoy
 		Run_Fader(self, true, 0.25)
