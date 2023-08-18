@@ -284,7 +284,13 @@ local function GetDynamicGrid_IEntry(self, spawn_list_key, i_index)
 		print("Error: function 'Get Dynamic Grid' supplied with invalid spawn list key <"..tostring(spawn_list_key)..">")
 		return {x=0, y=0, z=0}
 	else
-		return dyn_grid[i_index]
+		local grid_i = dyn_grid[i_index]
+		if grid_i == nil then
+			print("Error: function 'Get Dynamic Grid' supplied with invalid key of <"..tostring(i_index).."> for list key <"..tostring(spawn_list_key)..">")
+			return {x=0, y=0, z=0}
+		else
+			return grid_i
+		end
 	end
 
 end
@@ -1406,8 +1412,9 @@ local function Setup_Animal(self, item_name, subitem_name, new_health, skip_rese
 
 	if INFO:Logic_is_Swimmer(logic_typ) then
 
-		--spawn in swimmers
-		local num_swimmers = math.max(1, math.ceil(health_val*max_number_to_spawn))
+		-- spawn in swimmers
+		-- clamp between 1 and max swimmers
+		local num_swimmers = EXT:math_clamp(math.ceil(health_val*max_number_to_spawn), 1, max_number_to_spawn)
 		for i=1,num_swimmers do
 			Spawn_Animal_Swimmer(self, item_name, subitem_name, i, spawn_offscreen, flip_h, go_auto_patrol)
 		end
@@ -2096,45 +2103,48 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		local number_added, number_subtracted = 0, 0
 
 		local new_health_actual = oa_outcome_tbl[item_name].health_value_new
+		local old_health_actual = oa_outcome_tbl[item_name].health_value_previous
+		local delta_change_actual = new_health_actual - old_health_actual
 		-- recall, we need to externally track the previous and new health 
 		-- b/c gos are added and deleted with swimmers and b/c health is reset to middle value for visualization
 		-- recall if delta change equals 0 ('old' == 'new') then the reset health also equals 'new'
 
 		-- get current health of spawned animals
-		-- which is what the base reset function above set
-		local current_count = self.spawned_objects_sum[spawn_list_name]
+		-- which is what the reset swimmers function above set
+		local current_count_at_reset = self.spawned_objects_sum[spawn_list_name]
 		local max_count = subitem_tbl.spawn_max_count
-		local current_health_at_reset = EXT:math_round(current_count/max_count, 4)
+		local current_health_at_reset = EXT:math_round(current_count_at_reset/max_count, 4)
 
 		-- get amount needed to add or subtract (use math.ceil for maximum effect)
-		local delta_change = new_health_actual - current_health_at_reset
-		local delta_count_change = EXT:math_sign(delta_change) * math.ceil(math.abs(delta_change) * subitem_tbl.spawn_max_count)
+		local desired_accurate_count = EXT:math_clamp(math.ceil(math.abs(new_health_actual) * max_count), 0, max_count)
 
-		-- early out if:
-		--   if change count + current_count > max_count then do not add
-		--   if change count + current_count < 0 then do not add
-		local final_count_possible = delta_change + current_count
-		if (final_count_possible > max_count) or (final_count_possible <= 0) then
+		local delta_count_change_raw = desired_accurate_count - current_count_at_reset
+		local delta_count_change_abs = math.abs(delta_count_change_raw)
+
+		-- early out if over limits
+		local final_amount = current_count_at_reset + delta_count_change_raw
+		if (final_amount > max_count) or (final_amount <= 0) then
 			return 0, 0
 		end
 
 		-- finally actually spawn or remove animals
 		-- also record amount for wait time updating
-		if delta_count_change > 0 then
+		if delta_count_change_raw > 0 then
 			-- add
-			number_added = math.abs(delta_count_change)
+			number_added = delta_count_change_abs
 			local spawn_offscreen = true
 			local is_spawn_flipped = self.dynamic_spawn_sides[spawn_list_name]
 
 			-- go through number and add 
+			-- keep in order so they appear in a smaller group that is together
 			for i=1,number_added do
-				local i_position_in_grid = current_count + i
+				local i_position_in_grid = current_count_at_reset + i
 				Spawn_Animal_Swimmer(self, item_name, subitem_name, i_position_in_grid, spawn_offscreen, is_spawn_flipped)
 			end
 
-		elseif delta_count_change < 0 then
+		elseif delta_count_change_raw < 0 then
 			-- subtract
-			number_subtracted = math.abs(delta_count_change)
+			number_subtracted = delta_count_change_abs
 
 			-- go through go list and add gos to a i table 
 			-- then pick index and remove randomly
