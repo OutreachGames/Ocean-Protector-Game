@@ -1,7 +1,5 @@
     --#TODOs Master List- 
 
-    -- when changing screens sometimes see minimized screen
-
     -- add bunch of new lines to make popup hud gauge large then add images 
     --   for example, coastal acidification close up then shown in ocean scene
     --   for example, include diagram of CO2 mixing with ocean and increasing acidity, then also show in ocean scene
@@ -23,6 +21,9 @@
 
     -- NOTES 
     --[[
+    when changing screens sometimes see minimized screen? 
+        seems like might just be slower hardware so might be no way around it...
+
     should questions be persistent or one-off? 
         IE if player chooses to use a lot of gas in first question, 
         for each question is a negative amount incorporated into each following answer outcome? 
