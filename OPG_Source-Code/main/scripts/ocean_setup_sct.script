@@ -1945,6 +1945,9 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 	local stage_done_ocean_pelagic
 	local full_oa_done_wait = 0.1
 
+	-- what percent population should visual change alter (for example, visual changer is 40%)
+	local reset_health_delta = 0.4
+
 	if show_highlighter then
 		stage_done_plankton_or_oa = 2
 		stage_done_ocean_benthic = 3
@@ -2035,9 +2038,6 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		--   also cancel any animations first
 		Boat_GotoCenter(self, nil, true)
 
-		-- what percent population should visual change alter (for example, visual changer is 40%)
-		local reset_health_delta = 0.4
-
 		local skip_reset = true
 		local spawn_offscreen = false
 		local go_auto_patrol = false
@@ -2049,26 +2049,31 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 			-- calculate reset value based on new value, delta change, and visualization size
 			local item_name = v_info.l_item_name
 			local oa_item_tbl = oa_outcome_tbl[item_name]
-			local new_health = oa_item_tbl.health_value_new
+
 			if oa_item_tbl == nil then
 				print("Error: Checking within function 'Finish Reset Swimmers' OA Table does not have key <"..tostring(item_name)..">\n")
 				return
 			end
-			local old_health = oa_item_tbl.health_value_previous
 
 			-- get population health for visual change
+			local new_health_actual = oa_item_tbl.health_value_new
+			--local old_health_actual = oa_item_tbl.health_value_previous
+
+			-- but the delta value is the value directly from the screenplay choice outcome table
+			local delta_change_actual = oa_outcome_tbl[item_name].health_value_delta
+
 			local reset_health_val
-			if new_health > old_health then
+			if delta_change_actual > 0 then
 				-- got more healthy
 				-- so only start with a few so we can add a bunch later
-				reset_health_val = new_health - reset_health_delta
-			elseif new_health < old_health then
+				reset_health_val = EXT:math_clamp((new_health_actual - reset_health_delta), 0.3, 0.5)
+			elseif delta_change_actual < 0 then
 				-- got less healthy
 				-- so start with a lot so we have a lot to kill
-				reset_health_val = new_health + reset_health_delta
+				reset_health_val = EXT:math_clamp((new_health_actual + reset_health_delta), 0.5, 0.7)
 			else
 				-- remained same
-				reset_health_val = new_health
+				reset_health_val = new_health_actual
 			end
 
 			-- reminder, animal setup already forces there to be at least 1 animal
@@ -2102,9 +2107,10 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		-- calculate amount to change
 		local number_added, number_subtracted = 0, 0
 
-		local new_health_actual = oa_outcome_tbl[item_name].health_value_new
-		local old_health_actual = oa_outcome_tbl[item_name].health_value_previous
-		local delta_change_actual = new_health_actual - old_health_actual
+		-- recall healths might be capped at 1 or ~0.1 if player has been doing really well or really badly
+		-- but the delta value is the value directly from the screenplay choice outcome table
+		local delta_change_actual = oa_outcome_tbl[item_name].health_value_delta
+
 		-- recall, we need to externally track the previous and new health 
 		-- b/c gos are added and deleted with swimmers and b/c health is reset to middle value for visualization
 		-- recall if delta change equals 0 ('old' == 'new') then the reset health also equals 'new'
@@ -2116,14 +2122,35 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		local current_health_at_reset = EXT:math_round(current_count_at_reset/max_count, 4)
 
 		-- get amount needed to add or subtract (use math.ceil for maximum effect)
-		local desired_accurate_count = EXT:math_clamp(math.ceil(math.abs(new_health_actual) * max_count), 0, max_count)
+		-- try making a more dramatic number to better show visuals
+		local desired_health_showy
 
-		local delta_count_change_raw = desired_accurate_count - current_count_at_reset
+		if delta_change_actual > 0 then
+			-- more healthy
+			desired_health_showy = EXT:math_clamp((current_health_at_reset + reset_health_delta), 0.8, 0.9)
+
+		elseif delta_change_actual < 0 then
+			-- less healthy
+			desired_health_showy = EXT:math_clamp((current_health_at_reset - reset_health_delta), 0.1, 0.2)
+
+		else
+			-- no change
+			desired_health_showy = 0
+			return 0, 0
+
+		end
+
+		-- get desired count of objects
+		--   use <desired_health_showy> or <new_health_actual>?
+		--   using <desired_health_showy> for now
+		local desired_count = EXT:math_clamp(math.ceil(math.abs(desired_health_showy) * max_count), 0, max_count)
+
+		local delta_count_change_raw = desired_count - current_count_at_reset
 		local delta_count_change_abs = math.abs(delta_count_change_raw)
 
 		-- early out if over limits
 		local final_amount = current_count_at_reset + delta_count_change_raw
-		if (final_amount > max_count) or (final_amount <= 0) then
+		if (desired_count <= 0) or (final_amount > max_count) or (final_amount <= 0) then
 			return 0, 0
 		end
 

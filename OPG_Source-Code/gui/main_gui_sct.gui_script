@@ -1119,15 +1119,15 @@ local function DynamicText_FinalDebrief(self, end_game_opt)
     local n = "\n"
 	local indent = "    "
 
-    -- make table that has all final - initial values for all items
-    local items_delta = {}
-    for k_itemname,_ in pairs(CV_item_groups) do
-        local val_change_start = PlayerData_Get_Item_Entry_I(self, "item_ph", 1).item_tracker_score
-        local val_change_end = PlayerData_Get_Item_Entry_I(self, "item_ph").item_tracker_score
-        local val_delta = val_change_end - val_change_start
-        local percent_delta = (val_delta/val_change_start)
-        items_delta[k_itemname] = percent_delta
-    end
+	-- make table that has all final - initial values for all items
+	local items_delta = {}
+	for k_itemname,_ in pairs(CV_item_groups) do
+		local val_change_start = PlayerData_Get_Item_Entry_I(self, "item_ph", 1).item_tracker_score
+		local val_change_end = PlayerData_Get_Item_Entry_I(self, "item_ph").item_tracker_score
+		local val_delta = val_change_end - val_change_start
+		local percent_delta = (val_delta/val_change_start)
+		items_delta[k_itemname] = percent_delta
+	end
 
 	-- make function to get text descriptions of change
     local function func_get_delta_text(percent_delta, is_ph, extra_special_acidity_case)
@@ -2473,14 +2473,17 @@ local function PlayerData_MakeOA_Tbl(self, stage_key, substage_key)
 			local previous_val
 			-- add previous and new values
 			if tracker_list_length >= 2 then
-				previous_val = v_item_tracker_tbl[tracker_list_length-1].item_tracker_score
+				previous_val = v_item_tracker_tbl[tracker_list_length - 1].item_tracker_score
 			else
 				previous_val = new_val
 			end
 			-- save to table for message passing
 			oa_outcome_tbl.minfo_oa_outcome_item_health_values[k_item_name] = {
 				health_value_previous = previous_val,
-				health_value_new = new_val
+				health_value_new = new_val,
+				-- also save delta since value old and new might have been clamped, 
+				-- so this is only way to tell if decision was better or worse
+				health_value_delta = v_item_tracker_tbl[tracker_list_length].item_tracker_delta
 			}
 		end
 	end
