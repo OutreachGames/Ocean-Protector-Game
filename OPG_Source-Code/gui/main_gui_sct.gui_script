@@ -351,7 +351,8 @@ local function PlayerData_Update_I_Key_Progress(self, new_ikey, override)
 	if override then
 		self.player_data_tbl.gameplay_loop_i_key = new_ikey
 	else
-		self.player_data_tbl.gameplay_loop_i_key = self.player_data_tbl.gameplay_loop_i_key + new_ikey
+		local current_val = self.player_data_tbl.gameplay_loop_i_key or 0
+		self.player_data_tbl.gameplay_loop_i_key = current_val + new_ikey
 	end
 
 end
@@ -364,7 +365,8 @@ local function PlayerData_Update_Repeat_Count(self, new_ikey, override)
 	if override then
 		self.player_data_tbl.id_playthrough_count = new_ikey
 	else
-		self.player_data_tbl.id_playthrough_count = self.player_data_tbl.id_playthrough_count + new_ikey
+		local current_val = self.player_data_tbl.id_playthrough_count or 1
+		self.player_data_tbl.id_playthrough_count = current_val + new_ikey
 	end
 
 end
