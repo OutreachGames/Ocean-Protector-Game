@@ -1146,7 +1146,8 @@ STR.Screenplay = {
                     "Congratulations on your promotion as Head Ocean Tour Guide! With this new position you have some extra money to spend. Now that you are in charge of tours, how do want to spend this money?"
                 },
             },
-            disable_save_game_progress = true,
+            -- do not disable save on first question, otherwise makes us choose role again
+            --disable_save_game_progress = true,
             question_cloud_string = "personal_boat",
             hint_text = {
                 STR.CV.hint_text_defaults.hint_lower_emissions[1]
