@@ -541,7 +541,8 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 				Obj_Wave_Movment_X_Multiplier = 0.2, -- only valid if x direction == 0
 				Obj_OG_Tint_R = tint[1],
 				Obj_OG_Tint_G = tint[2],
-				Obj_OG_Tint_B = tint[3]
+				Obj_OG_Tint_B = tint[3],
+				Obj_SpriteOverride_Width = sgroup.sprite_override_width
 			}
 		}
 

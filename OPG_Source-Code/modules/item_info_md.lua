@@ -75,7 +75,8 @@ INFO.item_info = {
                 spawn_list_key = "item_weather__subitem_waterlines",
                 spawn_coll_factory = "spawner_weather_waterlines#collectionfactory",
                 spawn_z_base = CV_Base_Z_Weather + 0.1,
-                spawn_y_range = {153, 153}
+                spawn_y_range = {153, 153},
+                sprite_override_width = 400
             },
             subitem_waves = {
                 subitem_enum = 3,

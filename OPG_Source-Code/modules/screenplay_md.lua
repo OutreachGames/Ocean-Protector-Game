@@ -1907,7 +1907,6 @@ STR.Screenplay = {
             },
         },
 
-        --#TODO think about adding option to just do another character along with quiz?
         -- if using this section then comment out <outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full> line above!!
         user_lesson_23 = {
             goal_completed_type = STR.CV.goal_completed_types.class_decisison,

@@ -22,6 +22,7 @@ go.property("Obj_OG_Tint_R", 1)
 go.property("Obj_OG_Tint_G", 1)
 go.property("Obj_OG_Tint_B", 1)
 go.property("Obj_PlayParticleFX", false)
+go.property("Obj_SpriteOverride_Width", -1)
 
 
 -- functions
@@ -106,9 +107,19 @@ local function Wave_Setup(self)
 		local scr_width = RES.Internal_X
 		-- get sprite width, but make sure to scale by go scale!!
 		-- assume scale x=y=z
-		-- also take out some pixels from each side to fix perfectly aligned scrolling along x-axis 
-		-- (issue was that global position was always 0-1 pixels off from local position, and global position cannot be set)
-		self.Sprite_width = math.abs(go.get("#sprite", "size.x") * go.get(".", "scale.x")) - 4
+		-- also take out some pixels from each side to fix perfectly aligned scrolling along x-axis?
+		--   (issue seems that global position was always 0-1 pixels off from local position, and global position cannot be set)
+
+		-- now try using custom sprite widths
+		local scale_1_width
+		if self.Obj_SpriteOverride_Width > 0 then
+			-- use custom if set
+			scale_1_width = self.Obj_SpriteOverride_Width
+		else
+			-- otherwise use actual sprite width
+			scale_1_width = go.get("#sprite", "size.x")
+		end
+		self.Sprite_width = math.abs(scale_1_width * go.get(".", "scale.x"))
 
 		-- default values are from left to right
 		local buffer = 0
