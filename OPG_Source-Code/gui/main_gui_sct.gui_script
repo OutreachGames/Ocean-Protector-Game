@@ -33,6 +33,8 @@ local CV_gameplay_loop = {
 local CV_Bar_Old = vmath.vector4(0.80, 0.80, 0.80, 1)
 local CV_Bar_Current = vmath.vector4(1.0, 1.0, 1.0, 1)
 
+local CV_Color_Vectors = INFO:Get_Color_Vectors()
+
 
 -- functions
 
@@ -629,19 +631,19 @@ local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
 		gui.cancel_animation(controller_node, "color")
 		gui.set_position(controller_node, new_position)
 		gui.set_size(controller_node, new_size)
-		gui.set_color(controller_node, INFO.common_info.color_red_full)
+		gui.set_color(controller_node, CV_Color_Vectors.color_red_full)
 
 		if is_reset then
 			gui.set_visible(controller_node, false)
-			gui.set_color(controller_node, INFO.common_info.color_white)
+			gui.set_color(controller_node, CV_Color_Vectors.color_white)
 		else
 			gui.set_visible(controller_node, true)
-			gui.animate(controller_node, "color", INFO.common_info.color_red_flicker, gui.EASING_LINEAR, 1.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+			gui.animate(controller_node, "color", CV_Color_Vectors.color_red_flicker, gui.EASING_LINEAR, 1.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
 		end
 
 	else
 		gui.cancel_animation(controller_node, "color")
-		gui.set_color(controller_node, INFO.common_info.color_white)
+		gui.set_color(controller_node, CV_Color_Vectors.color_white)
 		gui.set_position(controller_node, new_position)
 		gui.set_size(controller_node, new_size)
 		gui.set_enabled(controller_node, false)
@@ -3623,6 +3625,7 @@ local function UnitTest_Choices(self, choice_method)
 
 	-- developer function to test total OA outcomes
 
+	-- run unit tester
 	STR:UnitTest_Choices(choice_method)
 
 	-- wait for messages to be done then print results
@@ -3643,8 +3646,8 @@ function init(self)
 
 	Game_First_Initialization(self)
 
-	-- tune up OA values with development testing
-	--UnitTest_Choices(self, "user_choice_1")
+	-- tune up OA values with development testing (uncomment out to test)
+	-- UnitTest_Choices(self, "user_choice_1")
 
 end
 

@@ -43,14 +43,15 @@ local CV_Plot_X_Bar_Labels = {
     "'42" --10
 }
 
-local INFO = {}
-
-INFO.common_info = {
+local CV_Default_Boat_Spawn = {x = RES.Boundary_X[1]-300, y = 204, z = 0}
+local CV_Color_Vectors = {
     color_white = vmath.vector4(1.0, 1.0, 1.0, 1),
-    color_red_full = vmath.vector4(1.0, 0.4, 0.4, 1),
-    color_red_flicker = vmath.vector4(0.8, 0.2, 0.2, 0.3),
-    boat_default_spawn = {x = RES.Boundary_X[1]-300, y = 204, z = 0}
+    color_red_full = vmath.vector4(1.0, 1.0, 1.0, 1),
+    color_red_flicker = vmath.vector4(0.8, 0.2, 0.2, 0.3)
 }
+
+
+local INFO = {}
 
 INFO.item_info = {
 
@@ -487,27 +488,27 @@ INFO.item_info = {
                 spawn_list_key = "item_human__subitem_ranger",
                 spawn_coll_factory = "spawner_human_ranger#collectionfactory",
                 object_logic_type = CV_Logic_Type_Boat,
-                spawn_y_range = {INFO.common_info.boat_default_spawn.y, INFO.common_info.boat_default_spawn.y},
-                spawn_x_min = INFO.common_info.boat_default_spawn.x,
-                spawn_z_base = INFO.common_info.boat_default_spawn.z,
+                spawn_y_range = {CV_Default_Boat_Spawn.y, CV_Default_Boat_Spawn.y},
+                spawn_x_min = CV_Default_Boat_Spawn.x,
+                spawn_z_base = CV_Default_Boat_Spawn.z,
                 object_dimensions = { x = 412, y = 230 }, --compiled sprite/spine dimensions
             },
             subitem_captain = {
                 spawn_list_key = "item_human__subitem_captain",
                 spawn_coll_factory = "spawner_human_captain#collectionfactory",
                 object_logic_type = CV_Logic_Type_Boat,
-                spawn_y_range = {INFO.common_info.boat_default_spawn.y, INFO.common_info.boat_default_spawn.y},
-                spawn_x_min = INFO.common_info.boat_default_spawn.x,
-                spawn_z_base = INFO.common_info.boat_default_spawn.z,
+                spawn_y_range = {CV_Default_Boat_Spawn.y, CV_Default_Boat_Spawn.y},
+                spawn_x_min = CV_Default_Boat_Spawn.x,
+                spawn_z_base = CV_Default_Boat_Spawn.z,
                 object_dimensions = { x = 412, y = 230 }, --compiled sprite/spine dimensions
             },
             subitem_guide = {
                 spawn_list_key = "item_human__subitem_guide",
                 spawn_coll_factory = "spawner_human_guide#collectionfactory",
                 object_logic_type = CV_Logic_Type_Boat,
-                spawn_y_range = {INFO.common_info.boat_default_spawn.y, INFO.common_info.boat_default_spawn.y},
-                spawn_x_min = INFO.common_info.boat_default_spawn.x,
-                spawn_z_base = INFO.common_info.boat_default_spawn.z,
+                spawn_y_range = {CV_Default_Boat_Spawn.y, CV_Default_Boat_Spawn.y},
+                spawn_x_min = CV_Default_Boat_Spawn.x,
+                spawn_z_base = CV_Default_Boat_Spawn.z,
                 object_dimensions = { x = 448, y = 215 }, --compiled sprite/spine dimensions
             }
         }
@@ -699,5 +700,18 @@ function INFO:Get_BaseWave_Direction()
     return CV_Base_Wave_Direction
 
 end
+
+function INFO:Get_Default_BoatSpawn()
+
+    return CV_Default_Boat_Spawn
+
+end
+
+function INFO:Get_Color_Vectors()
+
+    return CV_Color_Vectors
+
+end
+
 
 return INFO

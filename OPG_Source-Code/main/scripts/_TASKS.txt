@@ -11,10 +11,6 @@
 
     -- add button that takes screenshots of your reef?
     -- find way for boat to move with arrow keys with side view and have particle effect bubbles for movement and white sprite bars for tint selection?
-    -- after selection, animation of rain or CO2 happens, 
-    --   then animations and life update for each life group, 
-    --   then player has to click on how to measure, including pH and possibly making a hypothesis
-	-- regarding saves, save locally after every decision and show text Auto-saved
 
 
     -- NOTES 

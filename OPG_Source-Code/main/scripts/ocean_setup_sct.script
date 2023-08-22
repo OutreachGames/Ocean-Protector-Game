@@ -22,6 +22,7 @@ local CV_Weather_Reload_Time = 0.25
 local CV_Animal_Reset_Time = 0.25
 local CV_Total_Coastal_OA_Time = 28
 
+local CV_Color_Vectors = INFO:Get_Color_Vectors()
 local CV_URL_HUD_GUI = msg.url("main:/hud#gui")
 
 
@@ -922,8 +923,8 @@ local function Run_CoastalOA(self, update_percentage_to_hide, show_highlighter) 
 		msg.post(highlighter_sprite, "enable")
 
 		-- animation style copied from gui highlighter
-		go.set(highlighter_sprite, "tint", INFO.common_info.color_red_full)
-		go.animate(highlighter_sprite, "tint", go.PLAYBACK_LOOP_PINGPONG, INFO.common_info.color_red_flicker, gui.EASING_LINEAR, 1.5, 0)
+		go.set(highlighter_sprite, "tint", CV_Color_Vectors.color_red_full)
+		go.animate(highlighter_sprite, "tint", go.PLAYBACK_LOOP_PINGPONG, CV_Color_Vectors.color_red_flicker, gui.EASING_LINEAR, 1.5, 0)
 
 		-- fine to have large rectangle whole time, as it shows where to look in upcoming seconds
 		-- plus moving and scaling highlighter might distract from watching algae and decomposition
@@ -1473,7 +1474,7 @@ local function Boat_GotoCenter(self, boat_id, reset_first)
 	if reset_first then
 		-- do not cancel animations since that will cancel default rocking motion
 		go.cancel_animations(boat_id, "position.x")
-		local spawn_pos = INFO.common_info.boat_default_spawn
+		local spawn_pos = INFO:Get_Default_BoatSpawn()
 		go.set_position(vmath.vector3(spawn_pos.x, spawn_pos.y, spawn_pos.z))
 	end
 
