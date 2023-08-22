@@ -3608,10 +3608,32 @@ local function Game_CacheURLS(self)
 
 end
 
+local function UnitTest_Choices(self, choice_method)
+
+	-- developer function to test total OA outcomes
+
+	STR:UnitTest_Choices(choice_method)
+
+	-- wait for messages to be done then print results
+	timer.delay(2, false, function(self)
+		print("Unit Test Results for OA Outcomes for choice base "..tostring(choice_method))
+		for k_itemname,v_item_tracker_tbl in pairs(self.player_data_tbl.item_data_tbl) do
+			print("  "..k_itemname)
+			for i,v in ipairs(v_item_tracker_tbl) do
+				print("  ".."  "..i..": "..v.item_tracker_score)
+			end
+		end
+	end)
+
+end
+
 
 function init(self)
 
 	Game_First_Initialization(self)
+
+	-- #tune up OA values with development testing
+	UnitTest_Choices(self, "user_choice_1")
 
 end
 

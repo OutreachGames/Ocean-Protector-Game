@@ -120,7 +120,6 @@ STR.CV = {
             msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
 
-        --# TODO make and run unit tests to calculate max pH and others
         func_option_outcome_default_super = function() -- (++)
             msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*2}, minfo_was_best_choice = true, minfo_was_player_choice = true})
         end,
@@ -2469,7 +2468,8 @@ function STR:Get_Total_Choices()
 
 end
 
--- Setup
+
+-- Setup and Extras
 function STR:GameOrder_CreateTable()
 
     -- get table with form {{stage_name_key = v_stagename, substage_name_key = v_substagename}, {}}
@@ -2514,45 +2514,34 @@ function STR:GameOrder_CreateTable()
 
 end
 
-
--- Extras
 function STR:UnitTest_Choices(choice_method)
 
     -- go through all choices for various choices and print results
 
     -- setup
     choice_method = choice_method or "user_choice_1"
-    local outcomes_tbl = {}
     local decision_keys = {}
-    local decisions = self.Screenplay.s05_decisions_character_role
-    local i_stage = 1
+    local decisions_stage_key = "s05_decisions_character_role"
+    local decisions = self.Screenplay[decisions_stage_key]
 
     -- make sorted list of valid decision keys
     for k_decisionkey,v_decisioninfo in pairs(decisions) do
-        if string.find(k_decisionkey, "default") == nil then
-            if v_decisioninfo.goal_completed_type == CV_goal_types.decisison then
-                table.insert(decision_keys, k_decisionkey)
-            end
+        if v_decisioninfo.answer_options ~= nil then
+            table.insert(decision_keys, k_decisionkey)
         end
     end
 
     table.sort(decision_keys)
 
-
     -- add in initial values
-    for k_itemname,v_startervalue in pairs(CV_initial_oa_values) do
-        outcomes_tbl[k_itemname] = {v_startervalue}
-    end
-    i_stage = 2
+    local initial_decreases = STR.CV.update_item_values_tbls.initial_oa_affected_values_all
+    local override_rather_than_insert = true
+    STR.CV.outcome_functions.func_option_outcome_dynamic(initial_decreases, nil, override_rather_than_insert)
 
     -- add in each player decision with specified choice
     for _,v_decisionkey in ipairs(decision_keys) do
-        local decision_info = decisions[v_decisionkey]
-        local choice_info = decision_info.answer_options[choice_method]
-        local outcome_func = choice_info.outcome_result_func
+        STR:Run_Choice_Answer_OutcomeFunc(decisions_stage_key, v_decisionkey, nil, choice_method)
     end
-
-    -- print out 
 
 end
 
