@@ -516,14 +516,24 @@ INFO.item_info = {
 }
 
 function INFO:Get_X_Tick_Labels()
+
+    -- get individual labels for x axis bars in data plot
+
     return CV_Plot_X_Bar_Labels
+
 end
 
 function INFO:Get_X_Axis_Label()
+
+    -- get main label for x axis in data plot
+
     return CV_Plot_X_Axis_Label
+
 end
 
 function INFO:Get_Y_Tick_Labels(item_name, opt_subitem_name)
+
+    -- get labels for y axis in data plot
 
     local tick_labels_tbl = self.item_info[item_name].gui_info.plot_y_tick_labels
 
@@ -537,6 +547,8 @@ end
 
 function INFO:Get_Y_Axis_Label(item_name, opt_subitem_name)
 
+    -- get main label for y axis in data plot
+
     local axis_label_tbl = self.item_info[item_name].gui_info.plot_y_axis_label
 
     if opt_subitem_name ~= nil then
@@ -549,6 +561,8 @@ end
 
 function INFO:Get_Data_Item_Label(item_name, opt_subitem_name)
 
+    -- get label for item in data screen
+
     local data_label_tbl = self.item_info[item_name].gui_info.data_view_label
 
     if opt_subitem_name ~= nil then
@@ -560,6 +574,8 @@ function INFO:Get_Data_Item_Label(item_name, opt_subitem_name)
 end
 
 function INFO:Get_Plot_Subtitle_Text(item_name, opt_subitem_name)
+
+    -- get helper label for item in plot screen
 
     local data_subtitle_tbl = self.item_info[item_name].gui_info.plot_helper_text
 
@@ -575,11 +591,15 @@ end
 
 function INFO:Logic_is_Swimmer(logic_type)
 
+    -- checks if logic type is swimmer
+
     return logic_type == CV_Logic_Type_Swimmer
 
 end
 
 function INFO:Logic_is_Static(logic_type)
+
+    -- checks if logic type is static    
 
     return logic_type == CV_Logic_Type_Static
 
@@ -587,11 +607,15 @@ end
 
 function INFO:Logic_is_Micro(logic_type)
 
+    -- checks if logic type is microscopic    
+
     return logic_type == CV_Logic_Type_Micro
 
 end
 
 function INFO:Logic_is_Alive(item_name)
+
+    -- checks if logic type is alive    
 
     local l_info = self.item_info[item_name] or {}
     return l_info.item_is_alive
@@ -599,6 +623,8 @@ function INFO:Logic_is_Alive(item_name)
 end
 
 function INFO:Get_ItemSubItem_Names_from_Enum(item_enum, subitem_enum)
+
+    -- gets item and subitem name from item and subitem enumeration
 
     --find item name first, then subitem name
     local item_name, subitem_name
@@ -622,6 +648,8 @@ end
 
 function INFO:Get_Subitem_Value(item_enum, subitem_enum, subitem_value_key)
 
+    -- gets subitem value from item and subitem enumeration and subitem value key
+
     local item_key, subitem_key = self:Get_ItemSubItem_Names_from_Enum(item_enum, subitem_enum)
 
     if item_key == nil or subitem_key == nil then return nil end
@@ -631,6 +659,8 @@ function INFO:Get_Subitem_Value(item_enum, subitem_enum, subitem_value_key)
 end
 
 function INFO:Calculate_Decompositon_Scale(item_enum, subitem_enum, go_scale)
+
+    -- gets the scale specified for this item and subitem   
 
     -- get width and height of subitem, then scale by scale
     -- then scale that to width of decomposition particle fx
@@ -647,7 +677,7 @@ end
 
 function INFO:Get_Subitem_SpriteOptions(item_enum, subitem_enum)
 
-    --returns i-based table of strings of possible sprite options if set
+    -- returns i-based table of strings of possible sprite options if set
 
     return self:Get_Subitem_Value(item_enum, subitem_enum, "sprite_options")
 
@@ -655,11 +685,15 @@ end
 
 function INFO:Get_Base_Scale(item_enum, subitem_enum)
 
+    -- returns base scale of subitem or default base scale
+
     return self:Get_Subitem_Value(item_enum, subitem_enum, "object_scale_base") or CV_Default_Base_Scale
 
 end
 
 function INFO:Get_Health_Scale(item_enum, subitem_enum, health_val)
+
+    -- returns scale based on health with safety checks
 
     local scale_health_0 = self:Get_Subitem_Value(item_enum, subitem_enum, "scale_fully_sick") or 0.001
     local scale_health_1 = self:Get_Subitem_Value(item_enum, subitem_enum, "scale_fully_healthy") or 1
@@ -677,6 +711,8 @@ end
 
 function INFO:Get_Health_Tint_Vector4(item_enum, subitem_enum, health_val)
 
+    -- returns tint based on health with safety checks
+
     local tint_healthy = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_healthy") or {r=1, g=1, b=1, a=1}
     local tint_sick = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_sick") or {r=0, g=0, b=0, a=0}
 
@@ -691,11 +727,15 @@ end
 
 function INFO:Get_Spawn_List_Key(item_enum, subitem_enum)
 
+    -- gets spawn list key of subitem
+
     return self:Get_Subitem_Value(item_enum, subitem_enum, "spawn_list_key")
 
 end
 
 function INFO:Get_BaseWave_Direction()
+
+    -- get default value for wave direction
 
     return CV_Base_Wave_Direction
 
@@ -703,11 +743,15 @@ end
 
 function INFO:Get_Default_BoatSpawn()
 
+    -- get default position vector for boat spawning
+
     return CV_Default_Boat_Spawn
 
 end
 
 function INFO:Get_Color_Vectors()
+
+    -- get table of commonly used color vectors
 
     return CV_Color_Vectors
 
