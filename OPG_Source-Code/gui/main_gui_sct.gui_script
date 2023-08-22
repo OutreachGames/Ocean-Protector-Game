@@ -3632,7 +3632,7 @@ function init(self)
 
 	Game_First_Initialization(self)
 
-	-- #tune up OA values with development testing
+	-- #TODO tune up OA values with development testing
 	UnitTest_Choices(self, "user_choice_1")
 
 end

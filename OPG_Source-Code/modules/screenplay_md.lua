@@ -15,6 +15,8 @@ local CV_ID_HUD = "hud#gui"
 local CV_Delta_Up = 0.06
 local CV_Delta_Zero = 0
 local CV_Delta_Down = -0.04
+local CV_Multiplier_Big = 1.8
+local CV_Multiplier_Huge = 2.5
 
 local CV_goal_types = {
     new_information = 1,
@@ -121,7 +123,7 @@ STR.CV = {
         end,
 
         func_option_outcome_default_super = function() -- (++)
-            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*2}, minfo_was_best_choice = true, minfo_was_player_choice = true})
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*CV_Multiplier_Big}, minfo_was_best_choice = true, minfo_was_player_choice = true})
         end,
         func_option_outcome_default_good = function() -- (+)
             msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up}, minfo_was_best_choice = true, minfo_was_player_choice = true})
@@ -133,7 +135,7 @@ STR.CV = {
             msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down}, minfo_was_player_choice = true})
         end,
         func_option_outcome_default_awful = function() -- (--)
-            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down*2}, minfo_was_player_choice = true})
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down*CV_Multiplier_Big}, minfo_was_player_choice = true})
         end,
 
         func_set_role = function(chosen_role_name)
@@ -1425,8 +1427,8 @@ STR.Screenplay = {
                         local was_best_choice = true
                         local player_choice = true
                         local outcome_tbl_scores = {
-                            CV_Delta_Up*2,
-                            item_coral = CV_Delta_Up*3
+                            CV_Delta_Up*CV_Multiplier_Big,
+                            item_coral = CV_Delta_Up*CV_Multiplier_Huge
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
                     end
@@ -1476,7 +1478,7 @@ STR.Screenplay = {
                         local player_choice = true
                         local outcome_tbl_scores = {
                             CV_Delta_Down,
-                            item_fish = CV_Delta_Down*2
+                            item_fish = CV_Delta_Down*CV_Multiplier_Big
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
                     end
