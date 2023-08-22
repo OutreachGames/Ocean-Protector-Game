@@ -8,6 +8,7 @@ shared_state = 1
 [display]
 width = 1600
 height = 900
+high_dpi = 1
 
 [android]
 input_method = HiddenInputField
@@ -33,4 +34,7 @@ show_fullscreen_button = 0
 [particle_fx]
 max_count = 128
 max_emitter_count = 128
+
+[windows]
+app_icon = /asset_files/images/icons/favicon.ico
 
