@@ -22,6 +22,9 @@ local CV_Weather_Reload_Time = 0.25
 local CV_Animal_Reset_Time = 0.25
 local CV_Total_Coastal_OA_Time = 28
 
+local CV_URL_HUD_GUI = msg.url("main:/hud#gui")
+
+
 -- functions
 
 local function SetBins_X(t, disable_x_correction)
@@ -1107,7 +1110,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 	-- fade out, then run Setup Scene with weather arguments
 	-- recall particles are above GO sprites, so use GUI fader
 	local fader_time = 0.75
-	msg.post("main:/hud#gui", HSH.msg_request_fade_out, {minfo_fade_duration = fader_time})
+	msg.post(CV_URL_HUD_GUI, HSH.msg_request_fade_out, {minfo_fade_duration = fader_time})
 
 	-- once fadeout done and fully black and hiding view, then update scene
 	timer.delay(fader_time + 0.25 , false, function(self)
@@ -1121,7 +1124,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 		timer.delay(self.weather_reload_time*2, false, function(self)
 
 			-- fade back in
-			msg.post("main:/hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
+			msg.post(CV_URL_HUD_GUI, HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
 
 			-- once fully visible again allow weather to be changed again
 			timer.delay(1.0, false, function(self)
@@ -1707,7 +1710,7 @@ local function Get_Item_Clicked_On(self, screen_pos)
 
 		table.sort(match_id_tbl, sort_click_proximity)
 
-		msg.post("main:/hud#gui", HSH.msg_report_go_clicked, {minfo_screen_position = screen_pos, minfo_match_tbl = match_id_tbl, minfo_match_count = match_sum})
+		msg.post(CV_URL_HUD_GUI, HSH.msg_report_go_clicked, {minfo_screen_position = screen_pos, minfo_match_tbl = match_id_tbl, minfo_match_count = match_sum})
 	--else
 		--print("No items found to click on!\n")
 	end
@@ -1978,7 +1981,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		-- start swimmer resetting to maximize visual change
 
 		if run_swimmer_reset then
-			msg.post("main:/hud#gui", HSH.msg_request_fade_out, {minfo_fade_duration = screen_fader_time})
+			msg.post(CV_URL_HUD_GUI, HSH.msg_request_fade_out, {minfo_fade_duration = screen_fader_time})
 		end
 
 	end
@@ -2083,7 +2086,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 		end
 
 		-- Fade back in 
-		msg.post("main:/hud#gui", HSH.msg_request_fade_in, {minfo_fade_duration = screen_fader_time})
+		msg.post(CV_URL_HUD_GUI, HSH.msg_request_fade_in, {minfo_fade_duration = screen_fader_time})
 
 	end
 
@@ -2209,7 +2212,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 		-- trigger highlighter, but only if coastal OA is not running
 		if show_highlighter and not run_coastal_oa then
-			msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_plankton"})
+			msg.post(CV_URL_HUD_GUI, HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_plankton"})
 		end
 
 		-- update plankton, which uses health update message
@@ -2236,7 +2239,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 		-- trigger highlighter
 		if show_highlighter then
-			msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_benthic"})
+			msg.post(CV_URL_HUD_GUI, HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_benthic"})
 		end
 
 		-- coral
@@ -2280,7 +2283,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 		-- trigger highlighter
 		if show_highlighter then
-			msg.post("main:/hud#gui", HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_pelagic"})
+			msg.post(CV_URL_HUD_GUI, HSH.msg_request_update_highlighter, {minfo_hud_highlighter_type="show_area_pelagic"})
 		end
 
 		-- swimming, so do not stop since we want momentum to continue when dying
@@ -2390,7 +2393,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 							-- recall this message will also disable highlighter
 							timer.delay(full_oa_done_wait, false, function()
 
-								msg.post("main:/hud#gui", HSH.msg_report_oa_outcomes_done)
+								msg.post(CV_URL_HUD_GUI, HSH.msg_report_oa_outcomes_done)
 
 							end)
 

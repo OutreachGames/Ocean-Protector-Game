@@ -2514,4 +2514,21 @@ function STR:GameOrder_CreateTable()
 end
 
 
+-- Extras
+function STR:UnitTest_Choices(choice_method)
+
+    -- go through all choices for various choices and print results
+
+    -- setup
+    local outcomes_tbl = {}
+
+    -- add in initial values
+
+    -- add in each player decision with specified choice
+
+    -- print out 
+
+end
+
+
 return STR
