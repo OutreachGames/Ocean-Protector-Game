@@ -5,8 +5,6 @@
     --   for example, include diagram of CO2 mixing with ocean and increasing acidity, then also show in ocean scene
 
 
-    -- maybe at last decision it tallies up all decisions and if all correct it sets to highest? (just as failsafe to ensure players can get max)?
-
     -- maybe add medals along with bronze, silver, and gold medal achievments as final popup to view?
 
     -- pause menu has black 1x1 gui square over screen?

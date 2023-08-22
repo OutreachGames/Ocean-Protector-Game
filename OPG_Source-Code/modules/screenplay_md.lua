@@ -12,11 +12,18 @@ local CV_ID_HUD = "hud#gui"
 
 -- keep separated incase we want to make starting values really low and only mainly go up from there
 -- ie ups will be large in magnitude, downs will be small in magnitude
-local CV_Delta_Up = 0.06
+local CV_Delta_Up = 0.044
 local CV_Delta_Zero = 0
-local CV_Delta_Down = -0.04
-local CV_Multiplier_Big = 1.8
-local CV_Multiplier_Huge = 2.5
+local CV_Delta_Down = -0.036
+local CV_Multiplier_Big = 1.7
+local CV_Multiplier_Huge = 3.0
+-- Note, the unit tests of all perfect answers show last two final values of 1-ish
+-- might not be bad though, since if student gets one wrong 
+-- b/c redundancy allows them to still get some item scores to 1
+
+-- set-and-forget to give perfect scores end perfect values
+-- kind of useful though to show not all life will be perfect in future?
+local CV_Use_Perfect_Final = false
 
 local CV_goal_types = {
     new_information = 1,
@@ -75,6 +82,7 @@ end
 local STR = {}
 
 STR.CV = {
+
     update_item_values_tbls = {
         initial_oa_affected_values_ph = {
             item_ph = CV_initial_oa_values.item_ph
@@ -122,20 +130,64 @@ STR.CV = {
             msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
 
-        func_option_outcome_default_super = function() -- (++)
-            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*CV_Multiplier_Big}, minfo_was_best_choice = true, minfo_was_player_choice = true})
+        -- (++)
+        func_option_outcome_default_super = function()
+            local send_tbl = {
+                minfo_item_score_update_tbl = {
+                    CV_Delta_Up*CV_Multiplier_Big
+                },
+                minfo_was_best_choice = true,
+                minfo_was_player_choice = true
+            }
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
-        func_option_outcome_default_good = function() -- (+)
-            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up}, minfo_was_best_choice = true, minfo_was_player_choice = true})
+
+        -- (+)
+        func_option_outcome_default_good = function()
+            local send_tbl = {
+                minfo_item_score_update_tbl = {
+                    CV_Delta_Up
+                },
+                minfo_was_best_choice = true,
+                minfo_was_player_choice = true
+            }
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
-        func_option_outcome_default_fair = function() -- (0)
-            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Zero}, minfo_was_player_choice = true})
+
+        -- (0)
+        func_option_outcome_default_fair = function()
+            local send_tbl = {
+                minfo_item_score_update_tbl = {
+                    CV_Delta_Zero
+                },
+                minfo_was_best_choice = false,
+                minfo_was_player_choice = true
+            }
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
-        func_option_outcome_default_bad = function() -- (-)
-            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down}, minfo_was_player_choice = true})
+
+        -- (-)
+        func_option_outcome_default_bad = function()
+            local send_tbl = {
+                minfo_item_score_update_tbl = {
+                    CV_Delta_Down
+                },
+                minfo_was_best_choice = false,
+                minfo_was_player_choice = true
+            }
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
-        func_option_outcome_default_awful = function() -- (--)
-            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down*CV_Multiplier_Big}, minfo_was_player_choice = true})
+
+        -- (--)
+        func_option_outcome_default_awful = function()
+            local send_tbl = {
+                minfo_item_score_update_tbl = {
+                    CV_Delta_Down*CV_Multiplier_Big
+                },
+                minfo_was_best_choice = false,
+                minfo_was_player_choice = true
+            }
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
 
         func_set_role = function(chosen_role_name)
@@ -247,7 +299,9 @@ STR.CV = {
 
         save_summary_report_card = true
 
-    }
+    },
+
+    use_perfect_final = CV_Use_Perfect_Final
 
 }
 
@@ -1428,7 +1482,10 @@ STR.Screenplay = {
                         local player_choice = true
                         local outcome_tbl_scores = {
                             CV_Delta_Up*CV_Multiplier_Big,
-                            item_coral = CV_Delta_Up*CV_Multiplier_Huge
+                            item_ph = CV_Delta_Up*0.7, -- protecting coral itself does not have as huge of a pH change, though limiting boat movement helps
+                            item_plankton = CV_Delta_Up*0.8,
+                            item_coral = CV_Delta_Up*CV_Multiplier_Huge,
+                            item_mollusks = CV_Delta_Up*CV_Multiplier_Huge
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
                     end

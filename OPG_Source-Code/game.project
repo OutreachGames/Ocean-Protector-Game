@@ -14,7 +14,7 @@ input_method = HiddenInputField
 
 [project]
 title = Ocean Protector
-version = 0.1
+version = 1.0
 publisher = Outreach Games
 developer = Alex Zimmerman
 dependencies#0 = https://github.com/britzl/gooey/archive/master.zip
