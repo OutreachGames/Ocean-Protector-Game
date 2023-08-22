@@ -8,6 +8,7 @@ local HSH = require ("modules.hashes_md")
 local n = '\n'
 local tab = '     '
 local ntab = n .. tab
+local CV_ID_HUD = "hud#gui"
 
 -- keep separated incase we want to make starting values really low and only mainly go up from there
 -- ie ups will be large in magnitude, downs will be small in magnitude
@@ -116,40 +117,40 @@ STR.CV = {
                 minfo_was_player_choice = is_player_choice
             }
 
-            msg.post("hud#gui", HSH.msg_update_item_value, send_tbl)
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
 
         --# TODO make and run unit tests to calculate max pH and others
-        func_option_outcome_default_super = function() -- (+)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*2}, minfo_was_best_choice = true, minfo_was_player_choice = true})
+        func_option_outcome_default_super = function() -- (++)
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up*2}, minfo_was_best_choice = true, minfo_was_player_choice = true})
         end,
         func_option_outcome_default_good = function() -- (+)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up}, minfo_was_best_choice = true, minfo_was_player_choice = true})
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Up}, minfo_was_best_choice = true, minfo_was_player_choice = true})
         end,
         func_option_outcome_default_fair = function() -- (0)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Zero}, minfo_was_player_choice = true})
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Zero}, minfo_was_player_choice = true})
         end,
         func_option_outcome_default_bad = function() -- (-)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down}, minfo_was_player_choice = true})
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down}, minfo_was_player_choice = true})
         end,
-        func_option_outcome_default_awful = function() -- (-)
-            msg.post("hud#gui", HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down*2}, minfo_was_player_choice = true})
+        func_option_outcome_default_awful = function() -- (--)
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, {minfo_item_score_update_tbl = {CV_Delta_Down*2}, minfo_was_player_choice = true})
         end,
 
         func_set_role = function(chosen_role_name)
-            msg.post("hud#gui", HSH.msg_set_player_character_role, {minfo_role_name = chosen_role_name})
+            msg.post(CV_ID_HUD, HSH.msg_set_player_character_role, {minfo_role_name = chosen_role_name})
         end,
 
         func_setup_special_action = function(special_key_name)
-            msg.post("hud#gui", HSH.msg_request_special_case_action, {minfo_special_case_key = special_key_name})
+            msg.post(CV_ID_HUD, HSH.msg_request_special_case_action, {minfo_special_case_key = special_key_name})
         end,
 
         set_game_repeat_full = function()
-            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_reset_player_file = true, minfo_game_repeat_method = CV_game_repeat_types.repeat_full})
+            msg.post(CV_ID_HUD, HSH.msg_request_game_repeat, {minfo_reset_player_file = true, minfo_game_repeat_method = CV_game_repeat_types.repeat_full})
         end,
 
         set_game_repeat_quiz = function()
-            msg.post("hud#gui", HSH.msg_request_game_repeat, {minfo_reset_player_file = true, minfo_game_repeat_method = CV_game_repeat_types.repeat_quiz})
+            msg.post(CV_ID_HUD, HSH.msg_request_game_repeat, {minfo_reset_player_file = true, minfo_game_repeat_method = CV_game_repeat_types.repeat_quiz})
         end,
 
     },
@@ -2520,11 +2521,36 @@ function STR:UnitTest_Choices(choice_method)
     -- go through all choices for various choices and print results
 
     -- setup
+    choice_method = choice_method or "user_choice_1"
     local outcomes_tbl = {}
+    local decision_keys = {}
+    local decisions = self.Screenplay.s05_decisions_character_role
+    local i_stage = 1
+
+    -- make sorted list of valid decision keys
+    for k_decisionkey,v_decisioninfo in pairs(decisions) do
+        if string.find(k_decisionkey, "default") == nil then
+            if v_decisioninfo.goal_completed_type == CV_goal_types.decisison then
+                table.insert(decision_keys, k_decisionkey)
+            end
+        end
+    end
+
+    table.sort(decision_keys)
+
 
     -- add in initial values
+    for k_itemname,v_startervalue in pairs(CV_initial_oa_values) do
+        outcomes_tbl[k_itemname] = {v_startervalue}
+    end
+    i_stage = 2
 
     -- add in each player decision with specified choice
+    for _,v_decisionkey in ipairs(decision_keys) do
+        local decision_info = decisions[v_decisionkey]
+        local choice_info = decision_info.answer_options[choice_method]
+        local outcome_func = choice_info.outcome_result_func
+    end
 
     -- print out 
 
