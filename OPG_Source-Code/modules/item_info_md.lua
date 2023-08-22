@@ -680,7 +680,7 @@ function INFO:Get_Health_Tint_Vector4(item_enum, subitem_enum, health_val)
     local tint_sick = self:Get_Subitem_Value(item_enum, subitem_enum, "tint_fully_sick") or {r=0, g=0, b=0, a=0}
 
     local new_tint = {}
-    for k,v in pairs(tint_healthy) do
+    for k,_ in pairs(tint_healthy) do
 		new_tint[k] = EXT:Lerp(tint_sick[k], tint_healthy[k], health_val)
 	end
 

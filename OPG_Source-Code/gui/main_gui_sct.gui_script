@@ -2858,7 +2858,7 @@ local function On_GO_Item_Clicked_Received(self, clicked_info)
 end
 
 
--- HUD Process: Screen Fader
+-- HUD Process: Screen Fader and Screen Closer
 local function Run_Fader(self, fade_out, time)
 
 	-- run either fade in or fade out
@@ -2891,7 +2891,6 @@ local function Run_Fader(self, fade_out, time)
 	gui.animate(fader_node, "color.w", alpha, go.EASING_LINEAR, time, 0, func_set_status)
 
 end
-
 
 local function Close_All_Center_Screens(self)
 
