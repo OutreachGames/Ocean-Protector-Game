@@ -18,6 +18,7 @@ title = Ocean Protector
 version = 1.0
 publisher = Outreach Games
 developer = Alex Zimmerman
+bundle_exclude_resources = /.defold, /.idea, /.vscode
 dependencies#0 = https://github.com/britzl/gooey/archive/master.zip
 dependencies#1 = https://github.com/britzl/defold-orthographic/archive/master.zip
 dependencies#2 = https://github.com/defold/extension-spine/archive/master.zip

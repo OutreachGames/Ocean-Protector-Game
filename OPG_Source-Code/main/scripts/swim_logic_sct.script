@@ -326,24 +326,6 @@ local function On_Death(self)
 	-- set alive to false after the stop movement message
 	self.is_alive = false
 
-	-- give time for death animation to play
-	local delete_time = 5
-	Toggle_MovingAnimation(self, "spine_is_dead")
-
-	-- extra fade out visual effect if specified
-	if self.Obj_Extra_Death_Effect_Type == 1 then
-		local fadeout_delay = 1
-		local fadeout_duration = delete_time - fadeout_delay
-		go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, go.EASING_LINEAR, fadeout_duration, fadeout_delay)
-		-- currently not using for fish since we might add skeletons at some point?
-		--   also swaying death is timed to fade out
-
-		-- right now we have enabled fade out in script for fish and conch, 
-		-- fine if falling stops and forward go animate continues fading body, 
-		-- since fade out is much smoother and overall looks good with this time duration
-
-	end
-
 	local function func_delete(self)
 
 		--tell level manager to delete go and clear tracker table entry
@@ -351,7 +333,35 @@ local function On_Death(self)
 
 	end
 
-	timer.delay(delete_time, false, func_delete)
+	local function func_death(self)
+
+		-- go to dead animation
+		Toggle_MovingAnimation(self, "spine_is_dead")
+
+		-- give time for death animation to play
+		local delete_time = 5
+
+		-- extra fade out visual effect if specified
+		if self.Obj_Extra_Death_Effect_Type == 1 then
+			local fadeout_delay = 1
+			local fadeout_duration = delete_time - fadeout_delay
+			go.animate("#spinemodel", "tint", go.PLAYBACK_ONCE_FORWARD, CV_ZERO_VEC4, go.EASING_LINEAR, fadeout_duration, fadeout_delay)
+			-- currently not using for fish since we might add skeletons at some point?
+			--   also swaying death is timed to fade out
+
+			-- right now we have enabled fade out in script for fish and conch, 
+			-- fine if falling stops and forward go animate continues fading body, 
+			-- since fade out is much smoother and overall looks good with this time duration
+
+		end
+
+		timer.delay(delete_time, false, func_delete)
+
+	end
+
+	-- give some randomness to death flip then run death
+	local death_delay = math.random(0, 150)/100
+	timer.delay(death_delay, false, func_death)
 
 end
 
