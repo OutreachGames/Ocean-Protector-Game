@@ -15,15 +15,20 @@ local CV_ID_HUD = "hud#gui"
 local CV_Delta_Up = 0.044
 local CV_Delta_Zero = 0
 local CV_Delta_Down = -0.036
-local CV_Multiplier_Big = 1.7
-local CV_Multiplier_Huge = 3.0
--- Note, the unit tests of all perfect answers show last two final values of 1-ish
+local CV_Multiplier_Minor = 0.7
+local CV_Multiplier_Medium = 1.7
+local CV_Multiplier_Major = 2.8
+
+-- Note, the unit tests of all perfect answers show last two final values of 1-ish for most items
 -- might not be bad though, since if student gets one wrong 
 -- b/c redundancy allows them to still get some item scores to 1
 
 -- set-and-forget to give perfect scores end perfect values
 -- kind of useful though to show not all life will be perfect in future?
-local CV_Use_Perfect_Final = false
+-- also might result in massive jump at end if values not tuned
+-- but first levels at start of game start at 100% health...
+-- currently values are tuned well so most end at 98%-100% so just set this to ensure 100%
+local CV_Use_Perfect_Final = true
 
 local CV_goal_types = {
     new_information = 1,
@@ -134,7 +139,7 @@ STR.CV = {
         func_option_outcome_default_super = function()
             local send_tbl = {
                 minfo_item_score_update_tbl = {
-                    CV_Delta_Up*CV_Multiplier_Big
+                    CV_Delta_Up*CV_Multiplier_Medium
                 },
                 minfo_was_best_choice = true,
                 minfo_was_player_choice = true
@@ -182,7 +187,7 @@ STR.CV = {
         func_option_outcome_default_awful = function()
             local send_tbl = {
                 minfo_item_score_update_tbl = {
-                    CV_Delta_Down*CV_Multiplier_Big
+                    CV_Delta_Down*CV_Multiplier_Medium
                 },
                 minfo_was_best_choice = false,
                 minfo_was_player_choice = true
@@ -1317,7 +1322,16 @@ STR.Screenplay = {
                         "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced, which has helped keep many other groups of life throughout the ocean healthy and balanced. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
+                    outcome_result_func = function ()
+                        local was_best_choice = true
+                        local player_choice = true
+                        local outcome_tbl_scores = {
+                            CV_Delta_Up,
+                            item_plankton = CV_Delta_Up*CV_Multiplier_Minor,
+                            item_coral = CV_Delta_Up*CV_Multiplier_Major
+                        }
+                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
+                    end
                 },
                 user_choice_2 = {
                     display_text = {
@@ -1481,11 +1495,11 @@ STR.Screenplay = {
                         local was_best_choice = true
                         local player_choice = true
                         local outcome_tbl_scores = {
-                            CV_Delta_Up*CV_Multiplier_Big,
-                            item_ph = CV_Delta_Up*0.7, -- protecting coral itself does not have as huge of a pH change, though limiting boat movement helps
-                            item_plankton = CV_Delta_Up*0.8,
-                            item_coral = CV_Delta_Up*CV_Multiplier_Huge,
-                            item_mollusks = CV_Delta_Up*CV_Multiplier_Huge
+                            CV_Delta_Up*CV_Multiplier_Medium,
+                            item_ph = CV_Delta_Up*CV_Multiplier_Minor, -- protecting coral itself does not have as huge of a pH change, though limiting boat movement helps
+                            item_plankton = CV_Delta_Up*CV_Multiplier_Minor,
+                            item_coral = CV_Delta_Up*CV_Multiplier_Major,
+                            item_mollusks = CV_Delta_Up*CV_Multiplier_Major
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
                     end
@@ -1535,7 +1549,7 @@ STR.Screenplay = {
                         local player_choice = true
                         local outcome_tbl_scores = {
                             CV_Delta_Down,
-                            item_fish = CV_Delta_Down*CV_Multiplier_Big
+                            item_fish = CV_Delta_Down*CV_Multiplier_Medium
                         }
                         STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
                     end
@@ -1701,7 +1715,16 @@ STR.Screenplay = {
                         "People follow your advice and use less energy and water when possible. This has saved people money. Using less energy has reduced the amount of carbon dioxide emissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
+                    outcome_result_func = function ()
+                        local was_best_choice = true
+                        local player_choice = true
+                        local outcome_tbl_scores = {
+                            CV_Delta_Up*CV_Multiplier_Medium,
+                            item_coral = CV_Delta_Up*CV_Multiplier_Major,
+                            item_mollusks = CV_Delta_Up*CV_Multiplier_Major
+                        }
+                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
+                    end
                 },
                 user_choice_2 = {
                     display_text = {
@@ -1824,7 +1847,16 @@ STR.Screenplay = {
                         "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emissions in the area. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
+                    outcome_result_func = function ()
+                        local was_best_choice = true
+                        local player_choice = true
+                        local outcome_tbl_scores = {
+                            CV_Delta_Up*CV_Multiplier_Medium,
+                            item_coral = CV_Delta_Up*CV_Multiplier_Major,
+                            item_mollusks = CV_Delta_Up*CV_Multiplier_Major
+                        }
+                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
+                    end
                 },
                 user_choice_2 = {
                     display_text = {
