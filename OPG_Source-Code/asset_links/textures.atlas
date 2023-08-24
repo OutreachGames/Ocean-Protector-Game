@@ -478,6 +478,10 @@ images {
   image: "/asset_files/images/ph_buoy/buoy_rope_short.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/asset_files/images/infographics/Infographic_1_EarthOceans.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0

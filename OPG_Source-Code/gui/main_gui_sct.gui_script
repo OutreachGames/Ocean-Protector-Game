@@ -1515,7 +1515,7 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 				size_small = {250, 119, 108, 230},
 				size_medium = {400, 258, -51, 86},
 				size_large = {600, 468, -251, -38},
-				size_huge = {820, 680, -465, -248},
+				size_huge = {820, 680, -465, -210},
 			}
 
 			local yvals = y_ranges[self.hud_popup_dynamic.overall_size]
@@ -1535,9 +1535,11 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 			gui.set_position(node_special_image, vmath.vector3(gui.get_position(node_special_image).x, yvals[4], 0))
 
 			gui.animate(node_controller_main, "scale", MY_GOO.MAXIMIZE, gui.EASING_OUTBACK, 0.50, 0)
+
 		else
 			--gui.set_scale(node_controller_main, MY_GOO.MAXIMIZE)
 			gui.animate(node_controller_main, "scale", MY_GOO.MINIMIZE, gui.EASING_INBACK, 0.50, 0, func_done)
+
 		end
 	else
 		func_done(self, node_controller_main)
