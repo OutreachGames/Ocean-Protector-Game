@@ -9,6 +9,7 @@ local n = '\n'
 local tab = '     '
 local ntab = n .. tab
 local CV_Extra_N_Huge = "\n\n\n\n\n\n\n\n\n\n\n\n"
+local CV_Extra_N_Large = "\n\n\n\n\n\n\n"
 local CV_ID_HUD = "hud#gui"
 
 -- keep separated incase we want to make starting values really low and only mainly go up from there
@@ -463,8 +464,8 @@ STR.Screenplay = {
 
         user_lesson_08 = {
             goal_text = "Follow information prompts.",
-            display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories.",
-            --#TODO: display_special_image_id = ""
+            display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories."..CV_Extra_N_Huge,
+            display_special_image_id = "Infographic_2_CO2Emitters",
             -- ^^Plane, cars, factories, houses releasing CO2
             newscreen_cloud_string = "CO2_intro",
             debrief_text = nil,
@@ -475,8 +476,8 @@ STR.Screenplay = {
 
         user_lesson_09 = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gas mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans.\n\n",
-            --#TODO: display_special_image_id = "",
+            display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gas mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans."..CV_Extra_N_Large,
+            display_special_image_id = "Infographic_3_CO2Ocean",
             -- ^^CO2 mixing with ocean
             newscreen_cloud_string = "ocean_absorb_CO2",
             debrief_text = nil,
