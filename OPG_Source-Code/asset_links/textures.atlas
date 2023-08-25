@@ -490,6 +490,18 @@ images {
   image: "/asset_files/images/infographics/Infographic_3_CO2Ocean.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/asset_files/images/infographics/Infographic_4_ExcessNutrients.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/infographics/Infographic_5_AlgalBloom.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/asset_files/images/infographics/Infographic_6_CoastalAcid.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0

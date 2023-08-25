@@ -454,7 +454,7 @@ STR.Screenplay = {
 
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
-            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out. \n\nNote, a summary of this content will be provided as a review sheet later on. \n\n\n\n",
+            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out. \n\n\n**Note, a summary of this content will be provided as a review sheet later on. \n\n\n\n",
             newscreen_cloud_string = "OA_intro",
             debrief_text = nil,
             extra_text = nil
@@ -464,7 +464,7 @@ STR.Screenplay = {
 
         user_lesson_08 = {
             goal_text = "Follow information prompts.",
-            display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories."..CV_Extra_N_Huge,
+            display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories. \n\n\n**Note, carbon dioxide gas is invisible, but the gas is being show here for visual purposes."..CV_Extra_N_Huge,
             display_special_image_id = "Infographic_2_CO2Emitters",
             -- ^^Plane, cars, factories, houses releasing CO2
             newscreen_cloud_string = "CO2_intro",
@@ -486,8 +486,8 @@ STR.Screenplay = {
 
         user_lesson_10a = {
             goal_text = "Follow information prompts.",
-            display_text = "Acidification can also occur due to nutrient pollution. \n\nExcess nutrient pollution can come from human sources such as fertilizers, soaps, and industrial waste.\n\n",
-            --#TODO: display_special_image_id = "",
+            display_text = "Acidification can also occur due to nutrient pollution. \n\nExcess nutrient pollution can come from human sources such as soaps, industrial waste water, and plant fertilizers used on lawns or in fields.\n\n"..CV_Extra_N_Large,
+            display_special_image_id = "Infographic_4_ExcessNutrients",
             -- ^^fertilizers and industrial waste?
             newscreen_cloud_string = "nutrient_oa_intro",
             debrief_text = nil,
@@ -509,8 +509,8 @@ STR.Screenplay = {
 
         user_lesson_11 = {
             goal_text = "Follow information prompts.",
-            display_text = "When it rains runoff water carries these excess nutrients to the coast and ocean. This provides unnatural amounts of nutrients to phytoplankton. ",
-            --#TODO: display_special_image_id = "",
+            display_text = "When it rains runoff water carries these excess nutrients to the coast and ocean. \n\nThese excess nutrients provide unnatural amounts of nutrients to phytoplankton. "..CV_Extra_N_Large,
+            display_special_image_id = "Infographic_5_AlgalBloom",
             -- ^^fertilizers and industrial waste running into ocean and arrow showing phytoplankton growth
             debrief_text = nil,
             newscreen_cloud_string = "nutrient_runoff",
@@ -524,8 +524,8 @@ STR.Screenplay = {
 
         user_lesson_12 = {
             goal_text = "Follow information prompts.",
-            display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decomposing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n",
-            --#TODO: display_special_image_id = "",
+            display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decomposing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n"..CV_Extra_N_Large,
+            display_special_image_id = "Infographic_6_CoastalAcid",
             -- ^^phytoplankton growth, then dying releasing CO2
             newscreen_cloud_string = "algal_bloom",
             debrief_text = nil,
@@ -551,7 +551,8 @@ STR.Screenplay = {
             --#TODO: display_special_image_id = "",
             -- ^^pH scale example
             newscreen_cloud_string = "pH_scale",
-            debrief_text = "Values of pH are measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic than a pH of 7. \n\n",
+            -- logarithmic debrief stage add or not? Might be confusing and is not really needed ATM
+            --debrief_text = "Values of pH are measured on a logarithmic scale, where small changes have increasingly greater effects."..n..n.."For example, a pH of 5 is ten times more acidic than a pH of 6 and 100 times more acidic than a pH of 7. \n\n",
             extra_text = nil,
         },
 
@@ -603,7 +604,7 @@ STR.Screenplay = {
 
         user_lesson_16a = {
             goal_text = "Follow information prompts.",
-            display_text = "Ocean acidification hurts life throughout our oceans, including us. "..n..n.."For example, many animals that build shells and exteriors from a compound called carbonate, and carbonate becomes scarce when ocean acidity increases due to chemical changes."..n..n,
+            display_text = "Ocean acidification hurts life throughout our oceans, including us."..n..n.."For example, many animals build shells and exteriors from a compound called carbonate. Ocean acidification causes chemcial changes that make carbonate become scarce."..n..n,
             --#TODO: display_special_image_id = "",
             -- ^^show healthy shell than degraded shell
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
