@@ -26,11 +26,46 @@ local CV_Base_Wave_Direction = 1
 local CV_Default_Y_Tick_Labels = {"Very Low", "Low", "Moderate", "High", "Very High"}
 
 local CV_Plot_X_Axis_Label = "Time (years)"
+
+local CV_pH_Range = {
+    {"8.01", "8.03", "8.05", "8.07", "8.09"}
+    -- option A: {{"7.90", "7.95", "8.00", "8.05", "8.10"}}
+    -- option B: {{"8.01, 8.03", "8.05", "8.07", "8.09"}}?
+    -- ^^ option B is better since 2020 is 8.05 and 2042 (when game ends is 8.0 predicted, also allows it to not get too high)
+    -- main source is https://www.nnvl.noaa.gov/view/globaldata.html#ACID
+    -- other source is http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
+    --   with graph: http://www.igbp.net/images/18.30566fc6142425d6c911240/1384335514265/diagram-ph_projections.gif 
+    -- visually it doesn't really matter since the bars will proportionally look same regardless of what the labels are
+    -- would be neat to have past and then a future prediction plot though? (1870 and then 2100, instead of just 2020 to 2060)
+    --   overall that would look the same as just the last data point though...
+    -- 7.8 to 8.2 allow for showing historical and far future trends, 
+    --   and pH internal setting of -0.5 would match well with 2020 8.05 (range of 0.4 so half is 0.2, so 8.2->8.1)
+    --   would require internal pH changes to be not as big as other animal health changes 
+    --   b/c from 2020 to 2060 player would not be able to get to lowest pH of 7.8, only 7.9
+    --   also player would not be able to get back to highest level which would be frustrating in game-play and 
+    --   also not align well with goal of game which is to inspire and show solutions are possible
+    -- 7.90 to 8.10 would allow for setting everything being able to go back up to starting position and have it make sense
+    --   otherwise code logic cap is needed, so for example pH does not go magically back up to 8.2
+    --   smaller would also mean internal question changes values might make more or less sense with decreases
+    --   though recall internal game logic is in percent delta, not actual pH 
+    --   so this would work b/c 7.9 is the lowest score one could possibly get (ie full most negative final score)
+    --   initial pH of starting in 1980, 2000 could work without time jump, 
+    --   but overall health of animals might look odd since were fish really 100% healthy in 1980 compared to 2020?
+    -- if going with narrower range then override first entry rather then add to, we do not want to see that high 1
+    --150 years ago was 1870 and pH was 8.2 (maybe 8.18?)
+    --1920 and 1970 also 8.1 (maybe 8.16 for 1920 and 8.13 for 1970?)
+    --  so first 50 years goes down by 0.02, then 0.03 for next fifty years
+    --1988/1990: 8.10; has gone down by 0.03 over 20 years
+    --2020: 8.05; has gone down by 0.05 over 30 years
+    --2040: 8.00
+    --2060: 7.92
+    --2080: 7.80 (7.84?)
+    --2100: 7.80 (7.75?)
+}
+
 local CV_Plot_X_Bar_Labels = {
-    -- game starts with pH at 8, and in ~20 years it can go up to 8.1 or down to 7.9
+    -- game starts with pH at 8.05 as noted above
     -- realistically, pH will go down 0.05 every 20 years
-    -- so either double the time or make the plot y tick labels a more narrow range
-    -- or say we are not going to worry about it?
     "'24", --1
     "'26", --2
     "'28", --3
@@ -98,37 +133,7 @@ INFO.item_info = {
             object_clicked_label = "pH Buoy",
             data_view_label = {"Ocean pH"},
             plot_helper_text = {"Remember: lower pH means more acidic"},
-            plot_y_tick_labels = {{"7.90", "7.95", "8.00", "8.05", "8.10"}}
-            -- or {{"7.950", "7.975", "8.000", "8.025", "8.050"}}?
-            -- main source is https://www.nnvl.noaa.gov/view/globaldata.html#ACID
-            -- other source is http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
-            --   with graph: http://www.igbp.net/images/18.30566fc6142425d6c911240/1384335514265/diagram-ph_projections.gif 
-            -- visually it doesn't really matter since the bars will proportionally look same regardless of what the labels are
-            -- would be neat to have past and then a future prediction plot though? (1870 and then 2100, instead of just 2020 to 2060)
-            --   overall that would look the same as just the last data point though...
-            -- 7.8 to 8.2 allow for showing historical and far future trends, 
-            --   and pH internal setting of -0.5 would match well with 2020 8.05 (range of 0.4 so half is 0.2, so 8.2->8.1)
-            --   would require internal pH changes to be not as big as other animal health changes 
-            --   b/c from 2020 to 2060 player would not be able to get to lowest pH of 7.8, only 7.9
-            --   also player would not be able to get back to highest level which would be frustrating in game-play and 
-            --   also not align well with goal of game which is to inspire and show solutions are possible
-            -- 7.90 to 8.10 would allow for setting everything being able to go back up to starting position and have it make sense
-            --   otherwise code logic cap is needed, so for example pH does not go magically back up to 8.2
-            --   smaller would also mean internal question changes values might make more or less sense with decreases
-            --   though recall internal game logic is in percent delta, not actual pH 
-            --   so this would work b/c 7.9 is the lowest score one could possibly get (ie full most negative final score)
-            --   initial pH of starting in 1980, 2000 could work without time jump, 
-            --   but overall health of animals might look odd since were fish really 100% healthy in 1980 compared to 2020?
-            -- if going with narrower range then override first entry rather then add to, we do not want to see that high 1
-            --150 years ago was 1870 and pH was 8.2 (maybe 8.18?)
-            --1920 and 1970 also 8.1 (maybe 8.16 for 1920 and 8.13 for 1970?)
-            --  so first 50 years goes down by 0.02, then 0.03 for next fifty years
-            --1988/1990: 8.10; has gone down by 0.03 over 20 years
-            --2020: 8.05; has gone down by 0.05 over 30 years
-            --2040: 8.00
-            --2060: 7.92
-            --2080: 7.80 (7.84?)
-            --2100: 7.80 (7.75?)
+            plot_y_tick_labels = CV_pH_Range
         },
         subitem_info = {
             subitem_buoy = {

@@ -589,14 +589,14 @@ STR.Screenplay = {
                 --Since 1870 CO2 has increased by 40% in our oceans.
                 --Rate of acidification is 10 times faster than any time in past 55 million years.
                 --http://www.igbp.net/download/18.30566fc6142425d6c91140a/1385975160621/OA_spm2-FULL-lorez.pdf 
-                item_ph = {"Excellent, the current pH is 8.0. This measurement has been recorded in your Data Log. You can access these values at any time by clicking the arrow button for each item in the Data Log Screen."}
+                item_ph = {"Excellent, the current pH is 8.05. This measurement has been recorded in your Data Log. You can access these values at any time by clicking the arrow button for each item in the Data Log Screen."}
             }
         },
 
         user_lesson_15c = {
             goal_text = "Follow information prompts.",
-            display_text = "When we compare the pH of today's oceans to pH measurements of the past there is a distinct difference."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. ",
-            --#TODO: display_special_image_id = "",
+            display_text = "When we compare the pH of today's oceans to pH measurements of the past there is a distinct difference."..n..n.."We observe that pH today is 30% lower than the pH measured over 150 years ago. "..n..n.."This means our oceans have become significantly more acidic. "..CV_Extra_N_Huge,
+            display_special_image_id = "Infographic_8_pHthrTime",
             -- ^^pH decrease chart
             newscreen_cloud_string = "pH_history",
             debrief_text = "This increase in ocean acidity over time is primarily due to increases in carbon dioxide gas released from burning fossil fuels."
