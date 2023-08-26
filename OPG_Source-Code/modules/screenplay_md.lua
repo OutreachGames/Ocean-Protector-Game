@@ -442,7 +442,7 @@ STR.Screenplay = {
 
         user_lesson_06 = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nBillions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nIn addition, our oceans help cycle nutrients and are even a source of new medicines.\n\n"..CV_Extra_N_Huge,
+            display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nBillions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nIn addition, our oceans help cycle nutrients and are even a source of new medicines.\n\n"..CV_Extra_N_Large,
             debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
             extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer.",
             newscreen_cloud_string = "oceans_are_good",
@@ -547,8 +547,8 @@ STR.Screenplay = {
 
         user_lesson_14 = {
             goal_text = "Follow information prompts.",
-            display_text = "We use the pH scale to measure how acidic or basic something is. \n\nThe pH scale runs from 0 to 14, with 7 being a neutral pH. \n\nValues above 7 are basic, or alkaline. Values below 7 are acidic.\n\n",
-            --#TODO: display_special_image_id = "",
+            display_text = "We use the pH scale to measure how acidic or basic something is. \n\nThe pH scale runs from 0 to 14, with 7 being a neutral pH. \n\nValues above 7 are basic, or alkaline. \n\nValues below 7 are acidic."..CV_Extra_N_Huge,
+            display_special_image_id = "Infographic_7_pHScale",
             -- ^^pH scale example
             newscreen_cloud_string = "pH_scale",
             -- logarithmic debrief stage add or not? Might be confusing and is not really needed ATM

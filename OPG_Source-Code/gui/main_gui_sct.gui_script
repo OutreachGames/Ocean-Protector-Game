@@ -1515,8 +1515,8 @@ local function Screen_Popup_Reset(self, enabled_setting, run_sizing, reset_value
 				-- y values for 1) body frame, 2) body text, 3) lower buttons, 4) special image
 				size_small = {250, 119, 108, 230},
 				size_medium = {400, 258, -51, 86},
-				size_large = {600, 468, -251, -38},
-				size_huge = {820, 680, -465, -210},
+				size_large = {600, 468, -251, -40},
+				size_huge = {820, 680, -465, -200},
 			}
 
 			local yvals = y_ranges[self.hud_popup_dynamic.overall_size]
