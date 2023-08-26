@@ -6,7 +6,8 @@ local HSH = require ("modules.hashes_md")
 
 
 -- locals 
-local CV_URL_WaterRays_Bottom_Sprite = msg.url("ocean_level:/background_water_light_rays_bottom#sprite")
+local CV_URL_WaterRays_Bottom_Sprite_Left = msg.url("ocean_level:/background_water_light_rays_bottom#sprite_left")
+local CV_URL_WaterRays_Bottom_Sprite_Right = msg.url("ocean_level:/background_water_light_rays_bottom#sprite_right")
 local CV_URL_WaterRays_Top_Sprite = msg.url("ocean_level:/background_water_light_rays_top#sprite")
 
 -- cache these after initialization since they are components
@@ -72,7 +73,8 @@ local function ShadowUpdate(self, shadow_level, is_entering)
 		-- clear out any old animations and run some new ones
 		go.cancel_animations(".")
 
-		go.animate(CV_URL_WaterRays_Bottom_Sprite, "tint.w", go.PLAYBACK_ONCE_FORWARD, new_alpha, go.EASING_INOUTSINE, time, 0)
+		go.animate(CV_URL_WaterRays_Bottom_Sprite_Left, "tint.w", go.PLAYBACK_ONCE_FORWARD, new_alpha, go.EASING_INOUTSINE, time, 0)
+		go.animate(CV_URL_WaterRays_Bottom_Sprite_Right, "tint.w", go.PLAYBACK_ONCE_FORWARD, new_alpha, go.EASING_INOUTSINE, time, 0)
 		go.animate(CV_URL_WaterRays_Top_Sprite, "tint.w", go.PLAYBACK_ONCE_FORWARD, new_alpha, go.EASING_INOUTSINE, time, 0)
 	end
 
@@ -92,7 +94,8 @@ local function ResetShadows(self)
 	self.current_alpha = 1.0
 
 	go.cancel_animations(".")
-	go.set(CV_URL_WaterRays_Bottom_Sprite, "tint.w", self.current_alpha)
+	go.set(CV_URL_WaterRays_Bottom_Sprite_Left, "tint.w", self.current_alpha)
+	go.set(CV_URL_WaterRays_Bottom_Sprite_Right, "tint.w", self.current_alpha)
 	go.set(CV_URL_WaterRays_Top_Sprite, "tint.w", self.current_alpha)
 
 end
