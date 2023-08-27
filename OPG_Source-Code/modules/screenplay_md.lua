@@ -34,7 +34,7 @@ local CV_Use_Perfect_Final = true
 
 local CV_goal_types = {
     new_information = 1,
-    decisison = 2,
+    decision = 2,
     click_items = 3,
     observe_method = 4
 }
@@ -222,7 +222,7 @@ STR.CV = {
 
     goal_completed_types = {
         class_new_information = CV_goal_types.new_information,
-        class_decisison = CV_goal_types.decisison,
+        class_decision = CV_goal_types.decision,
         class_click_items = CV_goal_types.click_items,
         class_observe_method = CV_goal_types.observe_method
     },
@@ -660,7 +660,7 @@ STR.Screenplay = {
                     "Fish"..n.."Increased ocean acidity reduces fish size and populations. Some fish grow slower while others have more difficulty avoiding predators, and less will survive. \n\nLower fish populations negatively affect many animals that rely on them for food, including humans.\n\n\n"
                 },
                 item_crustaceans = {
-                    "Crusteaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. \n\nLower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected.\n\n\n"
+                    "Crustaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. \n\nLower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected.\n\n\n"
                 },
                 item_humans = {
                     "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. \n\nAlso, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered.\n\n\n"
@@ -692,7 +692,7 @@ STR.Screenplay = {
         },
 
         goal_completed_type_default = {
-            STR.CV.goal_completed_types.class_decisison
+            STR.CV.goal_completed_types.class_decision
         },
 
         key_basename_default = "decision_quiz_",
@@ -1068,7 +1068,7 @@ STR.Screenplay = {
         },
 
         goal_completed_type_default = {
-            STR.CV.goal_completed_types.class_decisison
+            STR.CV.goal_completed_types.class_decision
         },
 
         key_basename_default = "decision_character_",
@@ -1086,7 +1086,7 @@ STR.Screenplay = {
                         --"Fishing Boat Captain"..n..
                         "Choose to be a fishing boat captain. This character makes a living by catching fish and selling them. "--..n.."Your primary goal is to choose decisions that support healthy fish populations so you can continue to catch more fish and make steady money. "--..n.."Your bonus goal is to work to make this part of the ocean healthy enough to attract sharks. "
                     },
-                    choice_cloud_string = "choose_captian",
+                    choice_cloud_string = "choose_captain",
                     debrief_text = nil,
                     outcome_result_func = function()
                         STR.CV.outcome_functions.func_set_role("role_captain")
@@ -1157,7 +1157,7 @@ STR.Screenplay = {
         },
 
         goal_completed_type_default = {
-            STR.CV.goal_completed_types.class_decisison
+            STR.CV.goal_completed_types.class_decision
         },
 
         key_basename_default = "decision_role_",
@@ -1378,7 +1378,7 @@ STR.Screenplay = {
                             "Manually try and remove excess phytoplankton from the water with nets."
                         },
                     },
-                    choice_cloud_string = "artifical_nets",
+                    choice_cloud_string = "artificial_nets",
                     debrief_text = {
                         "You have chosen to attempt to remove excess phytoplankton yourself. Unfortunately, this does not work out because other ocean life is caught in the nets and disturbed. Also, the extra boat trips increase carbon dioxide emissions. "
                     },
@@ -1550,7 +1550,7 @@ STR.Screenplay = {
                             "Create large barriers with nets and try to completely block off the part of the ocean that you run tours through."
                         },
                     },
-                    choice_cloud_string = "artifical_nets",
+                    choice_cloud_string = "artificial_barieers",
                     coastal_oa_percent_to_run = 50,
                     debrief_text = {
                         "You have chosen to try and block off parts of the ocean. Unfortunately, creating large physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "
@@ -1965,7 +1965,7 @@ STR.Screenplay = {
             -- this could just be an info screen that brings up a 'Rerun Game' or 'Review Outcomes' buttons in main menu
             -- having submit button allows not accidentally hitting replay button and is similar to what players have seen
             -- also allows for using existing logic
-            goal_completed_type = STR.CV.goal_completed_types.class_decisison,
+            goal_completed_type = STR.CV.goal_completed_types.class_decision,
             goal_text = "Select end game option.",
             prevent_option_randomization = true,
             question_prompt = {
@@ -2013,7 +2013,7 @@ STR.Screenplay = {
 
         -- if using this section then comment out <outcome_result_func = STR.CV.outcome_functions.set_game_repeat_full> line above!!
         user_lesson_23 = {
-            goal_completed_type = STR.CV.goal_completed_types.class_decisison,
+            goal_completed_type = STR.CV.goal_completed_types.class_decision,
             goal_text = "Select game replay option.",
             prevent_option_randomization = true,
             question_prompt = {

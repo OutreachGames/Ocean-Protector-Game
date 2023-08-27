@@ -245,7 +245,7 @@ local function PlayerData_CloudRecord(self, print_outcome)
 		is_final_outcome = "true"
 	end
 
-	if stage_type == st.class_decisison then
+	if stage_type == st.class_decision then
 		-- recall choice keys are listed from best to worst, 
 		-- so for individual entry can see easily which choice was selected
 		decision_str = STR:Get_Decision_Cloud_String(stage_key, substage_key, character_role) or ""
@@ -1972,7 +1972,7 @@ local function Screen_Decision_Input(self, action_id, action)
 
 		--print("Submit Button was pressed")
 
-		local loop_type = STR.CV.goal_completed_types.class_decisison
+		local loop_type = STR.CV.goal_completed_types.class_decision
 
 		if Valid_Event_Check_Full(self, loop_type) then
 			if Loop_CompletionType_is_Primary(self, loop_type) then
@@ -3048,7 +3048,7 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save, disable
 
 		Screen_Popup_Reset(self, true, run_sizer, reset_values, popup_text_body, popup_text_title, nil, pop_textbody_isdynamic, opt_hyperlink, special_image_str)
 
-	elseif stage_type == st.class_decisison then
+	elseif stage_type == st.class_decision then
 		-- setup decision
 		local role_key = self.player_data_tbl.character_role_key
 		local q_text = STR:Get_Decision_Text_Question(stage_key, substage_key, role_key)
