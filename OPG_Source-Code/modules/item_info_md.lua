@@ -27,8 +27,7 @@ local CV_Default_Y_Tick_Labels = {"Very Low", "Low", "Moderate", "High", "Very H
 
 local CV_Plot_X_Axis_Label = "Time (years)"
 
-local CV_pH_Range = {
-    {"8.01", "8.03", "8.05", "8.07", "8.09"}
+local CV_pH_Range = { {"8.01", "8.03", "8.05", "8.07", "8.09"}
     -- option A: {{"7.90", "7.95", "8.00", "8.05", "8.10"}}
     -- option B: {{"8.01, 8.03", "8.05", "8.07", "8.09"}}?
     -- ^^ option B is better since 2020 is 8.05 and 2042 (when game ends is 8.0 predicted, also allows it to not get too high)
@@ -282,8 +281,10 @@ INFO.item_info = {
                 object_scale_base = 1,
                 object_logic_type = CV_Logic_Type_Static,
                 info_url = "https://www.fisheries.noaa.gov/species/eastern-oyster",
-                tint_fully_healthy = {r = 1, g = 1, b = 1, a = 1},
-                tint_fully_sick = {r = 0.6, g = 0.6, b = 0.6, a = 1},
+                tint_fully_healthy = {r = 245/255, g = 200/255, b = 140/255, a = 1},
+                tint_fully_sick = {r = 1, g = 1, b = 1, a = 1},
+                -- 8.1 vs 7.8 colors for oysters: 
+                -- https://www.iaea.org/newscenter/news/jeopardy-at-sea-what-atoms-in-clams-tell-us-about-ocean-acidification
                 scale_fully_healthy = 1.0,
                 scale_fully_sick = 0.90,
                 static_spawner_tbl = {
