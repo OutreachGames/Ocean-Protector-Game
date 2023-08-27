@@ -516,8 +516,7 @@ local function PlayerData_Save(self)
 	-- of if saving disabled for stage 
 	--   (such as stage not does not make any sense alone, like observing OA)
 	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-	--#TODO take out <true or> when done testing
-	if true or STR:Get_Game_Disable_Save(stage_key, substage_key) then
+	if STR:Get_Game_Disable_Save(stage_key, substage_key) then
 		return
 	end
 

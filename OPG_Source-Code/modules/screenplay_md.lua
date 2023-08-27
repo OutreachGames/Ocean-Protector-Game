@@ -604,8 +604,8 @@ STR.Screenplay = {
 
         user_lesson_16a = {
             goal_text = "Follow information prompts.",
-            display_text = "Ocean acidification hurts life throughout our oceans, including us."..n..n.."For example, many animals build shells and exteriors from a compound called carbonate. Ocean acidification causes chemcial changes that make carbonate become scarce."..n..n,
-            --#TODO: display_special_image_id = "",
+            display_text = "Ocean acidification hurts life throughout our oceans, including us."..n..n.."For example, many animals build shells and exteriors from a compound called carbonate. Ocean acidification causes chemical changes that make carbonate become scarce, which results in many animals having weaker and unhealthy shells and exteriors. "..CV_Extra_N_Huge,
+            display_special_image_id = "Infographic_9_OAEffects",
             -- ^^show healthy shell than degraded shell
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
             newscreen_cloud_string = "oa_affects_intro",

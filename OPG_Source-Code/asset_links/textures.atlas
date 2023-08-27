@@ -510,6 +510,10 @@ images {
   image: "/asset_files/images/infographics/Infographic_8_pHthrTime.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/asset_files/images/infographics/Infographic_9_OAEffects.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0

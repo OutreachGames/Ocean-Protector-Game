@@ -1,10 +1,5 @@
     --#TODOs Master List- 
 
-    -- add bunch of new lines to make popup hud gauge large then add images 
-    --   for example, coastal acidification close up then shown in ocean scene
-    --   for example, include diagram of CO2 mixing with ocean and increasing acidity, then also show in ocean scene
-
-
     -- maybe add medals along with bronze, silver, and gold medal achievments as final popup to view?
 
     -- pause menu has black 1x1 gui square over screen?
