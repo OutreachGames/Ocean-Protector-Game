@@ -13,16 +13,6 @@
     -- find way for boat to move with arrow keys with side view and have particle effect bubbles for movement and white sprite bars for tint selection?
 
 
--- Test to confirm fixes
-Fixed capitialization consitency on pH scale inforgraphic.
-
-Fixed links to open in new tabs instead of the same tab.  
-
-Fixed rendering bug of having 0 health for Data UI Screen. 
-
-Fixed final debriefing outcome messages so they will reflect the final player score. Also updated outcome comments for nutrient pollution where appropriate.
-
-
     -- NOTES 
     --[[
     when changing screens sometimes see minimized screen? 
