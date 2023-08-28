@@ -246,7 +246,7 @@ STR.CV = {
             "To review information we covered click the 'Review Sheet' button below."
         },
         hint_lower_emissions = {
-            "Making energy efficent decisions will help reduce emissions of carbon dioxide gas, which will help decrease ocean acidification. "
+            "Making energy efficient decisions will help reduce emissions of carbon dioxide gas, which will help decrease ocean acidification. "
         }
     },
 
@@ -1433,7 +1433,7 @@ STR.Screenplay = {
                     choice_cloud_string = "water",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
-                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Travelling far from shore also uses more fuel, which increases carbon dioxide emissions. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
+                        "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Traveling far from shore also uses more fuel, which increases carbon dioxide emissions. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
@@ -1495,13 +1495,13 @@ STR.Screenplay = {
                     choice_cloud_string = "optimize_trips",
                     debrief_text = {
                         role_captain = {
-                            "You have chosen to buy larger storage tanks, which reduces the amount of seperate fishing trips you go on. Improving boat movements has decreased carbon dioxide emissions and saved you money."
+                            "You have chosen to buy larger storage tanks, which reduces the amount of separate fishing trips you go on. Improving boat movements has decreased carbon dioxide emissions and saved you money."
                         },
                         role_ranger = {
-                            "You have chosen to plan more strategic routes on your boat, which reduces the number of seperate research trips you take. Improving boat movements has decreased carbon dioxide emissions and saved you money."
+                            "You have chosen to plan more strategic routes on your boat, which reduces the number of separate research trips you take. Improving boat movements has decreased carbon dioxide emissions and saved you money."
                         },
                         role_guide = {
-                            "You have chosen to upgrade your boat with more deck space for tourists, which reduces the amount of seperate tours you run. Improving boat movements has decreased carbon dioxide emissions and saved you money."
+                            "You have chosen to upgrade your boat with more deck space for tourists, which reduces the amount of separate tours you run. Improving boat movements has decreased carbon dioxide emissions and saved you money."
                         }
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
@@ -1543,7 +1543,7 @@ STR.Screenplay = {
                     choice_cloud_string = "fishing_bait",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
-                        "You have chosen to try attracting more fish by spreading food powder and bait around the ocean over many trips. Unfortunately, this has cost you a lot of money and lead to more nutrient pollution, which ended up hurting the fish. Also, the additional boat trips have increased carbon dioxide emmissions. "
+                        "You have chosen to try attracting more fish by spreading food powder and bait around the ocean over many trips. Unfortunately, this has cost you a lot of money and lead to more nutrient pollution, which ended up hurting the fish. Also, the additional boat trips have increased carbon dioxide emissions. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
