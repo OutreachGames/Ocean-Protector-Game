@@ -19,7 +19,7 @@ local CV_Delta_Zero = 0
 local CV_Delta_Down = -0.036
 local CV_Multiplier_Minor = 0.7
 local CV_Multiplier_Medium = 1.7
-local CV_Multiplier_Major = 2.8
+local CV_Multiplier_Major = 2.5
 
 -- Note, the unit tests of all perfect answers show last two final values of 1-ish for most items
 -- might not be bad though, since if student gets one wrong 
@@ -1709,6 +1709,7 @@ STR.Screenplay = {
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super,
+				},
                 user_choice_2 = {
                     display_text = {
                         "People should buy multiple air filters and place them throughout their homes and workplaces."
@@ -1998,7 +1999,7 @@ STR.Screenplay = {
                     choice_cloud_string = "repeat_game_quiz",
                     debrief_text = nil,
                     outcome_result_func = STR.CV.outcome_functions.set_game_repeat_quiz
-                },
+                }
             },
         }
 
