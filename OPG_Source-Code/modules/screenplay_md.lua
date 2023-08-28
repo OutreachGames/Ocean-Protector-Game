@@ -141,7 +141,9 @@ STR.CV = {
         func_option_outcome_default_super = function()
             local send_tbl = {
                 minfo_item_score_update_tbl = {
-                    CV_Delta_Up*CV_Multiplier_Medium
+                    CV_Delta_Up*CV_Multiplier_Medium,
+                    item_coral = CV_Delta_Up*CV_Multiplier_Major,
+                    item_mollusks = CV_Delta_Up*CV_Multiplier_Major
                 },
                 minfo_was_best_choice = true,
                 minfo_was_player_choice = true
@@ -648,7 +650,7 @@ STR.Screenplay = {
             debrief_text = {
                 "",
                 item_plankton = {
-                    "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to get as nutrients or build their protective shells as easily. \n\nPlankton are the food base for many animals, so unhealthy or unbalanced plankton populations can affect the entire food-web.\n\n\n",
+                    "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to build their protective shells as easily. \n\nPlankton are the food base for many animals, so unhealthy or unbalanced plankton populations can affect the entire food-web.\n\n\n",
                 },
                 item_coral = {
                     "Coral"..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons. Also, unhealthy corals are more likely to become diseased and die. \n\nMany reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web.\n\n\n"
@@ -1205,7 +1207,7 @@ STR.Screenplay = {
         -- recall choice keys are listed from best to worst, 
         -- so for individual entry can see easily which choice was selected
 
-        -- Personal CO2 Reduction
+        -- Personal CO2 Reduction I
         decision_role_01a = {
             question_prompt = {
                 "",
@@ -1331,7 +1333,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "help_fish",
                     debrief_text = {
-                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced, which has helped keep many other groups of life throughout the ocean healthy and balanced. "
+                        "You have chosen to help protect fish that eat excess phytoplankton. This has helped keep phytoplankton populations balanced and healthy, which has helped keep many other groups of life throughout the ocean healthy and balanced. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = function ()
@@ -1445,7 +1447,7 @@ STR.Screenplay = {
                         "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    coastal_oa_percent_to_run = 100,
+                    coastal_oa_percent_to_run = 75,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
             },
@@ -1456,7 +1458,7 @@ STR.Screenplay = {
         decision_role_03d = STR.CV.oa_outcome_summary_def_tbl,
 
 
-        -- Biologic Connection II (reef)
+        -- CO2 Reduction II
         decision_role_04a = {
             question_prompt = {
                 "",
@@ -1471,9 +1473,9 @@ STR.Screenplay = {
                 },
             },
             disable_save_game_progress = true,
-            question_cloud_string = "coral_reefs",
+            question_cloud_string = "trip_usage",
             hint_text = {
-                "Well-balanced ocean life is better able to deal with changes than ocean life that is frequently stressed and exposed to physical changes. "
+                STR.CV.hint_text_defaults.hint_lower_emissions[1]
             },
             prevent_option_randomization = true,
             answer_options = {
@@ -1481,58 +1483,46 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Change how you fish around coral to ensure that you do not damage the coral."
+                            "Buy larger storage tanks so you can stay out on the water and fish for longer."
                         },
                         role_ranger = {
-                            "Create extra rules that tell others to not get too close to the coral in your marine park."
+                            "Take time to plan more optimized routes on your boat that reduce the number of trips you take. "
                         },
                         role_guide = {
-                            "Do not let tourists or your boat go too close to coral to make sure you do not damage it."
+                            "Upgrade your boat with more deck space so you can fit more tourists on each trip and reduce the number of total trips you take. "
                         },
                     },
-                    choice_cloud_string = "protect",
+                    choice_cloud_string = "optimize_trips",
                     debrief_text = {
                         role_captain = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups that include fish you catch. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "
+                            "You have chosen to buy larger storage tanks, which reduces the amount of seperate fishing trips you go on. Improving boat movements has decreased carbon dioxide emissions and saved you money."
                         },
                         role_ranger = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral, and helping coral helps these other groups as well. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "
+                            "You have chosen to plan more strategic routes on your boat, which reduces the number of seperate research trips you take. Improving boat movements has decreased carbon dioxide emissions and saved you money."
                         },
                         role_guide = {
-                            "You have chosen to help coral be more protected. Many groups of life in the ocean rely on healthy coral. Helping coral helps these other groups, which includes fish that your tour guests want to see. Limiting boat movements around coral has also slightly decreased carbon dioxide emissions. "
+                            "You have chosen to upgrade your boat with more deck space for tourists, which reduces the amount of seperate tours you run. Improving boat movements has decreased carbon dioxide emissions and saved you money."
                         }
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = function ()
-                        local was_best_choice = true
-                        local player_choice = true
-                        local outcome_tbl_scores = {
-                            CV_Delta_Up*CV_Multiplier_Medium,
-                            item_ph = CV_Delta_Up*CV_Multiplier_Minor, -- protecting coral itself does not have as huge of a pH change, though limiting boat movement helps
-                            item_plankton = CV_Delta_Up*CV_Multiplier_Minor,
-                            item_coral = CV_Delta_Up*CV_Multiplier_Major,
-                            item_mollusks = CV_Delta_Up*CV_Multiplier_Major
-                        }
-                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
-                    end
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
                 },
                 user_choice_2 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Do not change how you catch fish and do not add net barriers."
+                            "Do not change how you catch fish or how you use your fishing boat. "
                         },
                         role_ranger = {
-                            "Do not change the current rules regarding coral or fish life. Also, do not add net barriers."
+                            "Do not change how you manage fish or how you use your research boat. "
                         },
                         role_guide = {
-                            "Do not alter the places you go on your ocean tours and do not add net barriers."
+                            "Do not change how you attract fish or how you use your tour boat. "
                         },
                     },
                     choice_cloud_string = "no_change",
-                    coastal_oa_percent_to_run = 50,
                     debrief_text = {
-                        "You have chosen to not change how you interact with fish and other ocean life. Carbon dioxide emissions also have not changed. "
+                        "You have chosen to not change how you interact with fish or how you use your boat. Carbon dioxide emissions have also not changed. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
@@ -1541,30 +1531,22 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Create large fishing net barriers and try to completely block off the parts of the ocean where you fish."
+                            "Buy a lot of fish bait and make many trips spreading it around to try attracting more fish to catch."
                         },
                         role_ranger = {
-                            "Create large barriers with nets around the marine park and try to completely block off this area."
+                            "Purchase large amounts of food powder and go on many trips spreading it around the marine park to try attracting more fish."
                         },
                         role_guide = {
-                            "Create large barriers with nets and try to completely block off the part of the ocean that you run tours through."
+                            "Purchase a lot of fish bait and make many trips spreading it around to try attracting more fish for tourists to view."
                         },
                     },
-                    choice_cloud_string = "artificial_barieers",
-                    coastal_oa_percent_to_run = 50,
+                    choice_cloud_string = "fishing_bait",
+                    coastal_oa_percent_to_run = 100,
                     debrief_text = {
-                        "You have chosen to try and block off parts of the ocean. Unfortunately, creating large physical barriers to ocean movements does not work and has instead disrupted ocean life. The extra boat movements have also released more carbon dioxide gas and cost you money. "
+                        "You have chosen to try attracting more fish by spreading food powder and bait around the ocean over many trips. Unfortunately, this has cost you a lot of money and lead to more nutrient pollution, which ended up hurting the fish. Also, the additional boat trips have increased carbon dioxide emmissions. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = function ()
-                        local was_best_choice = false
-                        local player_choice = true
-                        local outcome_tbl_scores = {
-                            CV_Delta_Down,
-                            item_fish = CV_Delta_Down*CV_Multiplier_Medium
-                        }
-                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
-                    end
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
             },
         },
@@ -1607,12 +1589,11 @@ STR.Screenplay = {
                 },
                 user_choice_2 = {
                     display_text = {
-                        "The money should be spent on building a large convention center in the city."
+                        "The money should be spent on updating the exteriors of shops and buildings with new paint and decorations."
                     },
-                    choice_cloud_string = "new_building",
-                    coastal_oa_percent_to_run = 50,
+                    choice_cloud_string = "new_decorations",
                     debrief_text = {
-                        "The council has followed your advice to build a large convention center. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution. "
+                        "The council has followed your advice to update the outside of many buildings. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution.  "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
@@ -1727,36 +1708,26 @@ STR.Screenplay = {
                         "People follow your advice and use less energy and water when possible. This has saved people money. Using less energy has reduced the amount of carbon dioxide emissions in the area. Also, using less water outside has reduced the amount of nutrient pollution in the area. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = function ()
-                        local was_best_choice = true
-                        local player_choice = true
-                        local outcome_tbl_scores = {
-                            CV_Delta_Up*CV_Multiplier_Medium,
-                            item_coral = CV_Delta_Up*CV_Multiplier_Major,
-                            item_mollusks = CV_Delta_Up*CV_Multiplier_Major
-                        }
-                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
-                    end
-                },
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super,
                 user_choice_2 = {
                     display_text = {
-                        "People should buy many house plants and place them throughout their homes and workplaces."
+                        "People should buy multiple air filters and place them throughout their homes and workplaces."
                     },
-                    choice_cloud_string = "more_plants",
+                    choice_cloud_string = "more_air_filters",
                     debrief_text = {
-                        "People follow your advice and buy many plants for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "
+                        "People follow your advice and buy many air filters for their homes and work. Overall, the amount of carbon dioxide emissions remains about the same. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
                 },
                 user_choice_3 = {
                     display_text = {
-                        "People should water their lawns and wash their cars more frequently."
+                        "People should water and fertilizer their lawns more frequently to ensure the grass is always green."
                     },
-                    choice_cloud_string = "more_energy",
+                    choice_cloud_string = "greener_lawns",
                     coastal_oa_percent_to_run = 100,
                     debrief_text = {
-                        "People follow your advice and use more water on their lawns and cars. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra water running over the land has increased excess nutrient pollution in the area. "
+                        "People follow your advice and use more water and fertilizer on their lawns. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra fertilizer use has increased excess nutrient pollution in the area. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
@@ -1859,16 +1830,7 @@ STR.Screenplay = {
                         "People follow your advice and carpool and use buses more. This has saved people money and it has reduced the amount of carbon dioxide emissions in the area. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = function ()
-                        local was_best_choice = true
-                        local player_choice = true
-                        local outcome_tbl_scores = {
-                            CV_Delta_Up*CV_Multiplier_Medium,
-                            item_coral = CV_Delta_Up*CV_Multiplier_Major,
-                            item_mollusks = CV_Delta_Up*CV_Multiplier_Major
-                        }
-                        STR.CV.outcome_functions.func_option_outcome_dynamic(outcome_tbl_scores, was_best_choice, false, player_choice)
-                    end
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super,
                 },
                 user_choice_2 = {
                     display_text = {

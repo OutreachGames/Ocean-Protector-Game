@@ -935,7 +935,7 @@ end
 
 
 -- HUD Process: Update Items 
-local function QuestionScores_GetFinalPercent(self)
+local function QuestionScores_GetFinalPercent(self) -- ranges from 0.0 to 1.0 !
 
 	local affected_total = self.num_player_affected_questions
 	if affected_total <= 0 then
@@ -1237,11 +1237,11 @@ local function DynamicText_FinalDebrief(self, end_game_opt)
 	end
 
     -- recall that many questions have 0 change, so while they may not help as much they also do not hinder as much
-    if final_score == 100 then
+    if final_score >= 1.0 then
         txt_recomendations = "Fantastic work with the questions. Every choice you made "..good_suffix.." As you have shown,"..reminder_suffix
-    elseif final_score > 70 then
+    elseif final_score > 0.7 then
         txt_recomendations = "Very good work with the questions. Most of the choices you made "..good_suffix.." A few of the other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix
-    elseif final_score > 40 then
+    elseif final_score > 0.40 then
         txt_recomendations = "Good work with the questions. Many of the choices you made "..good_suffix.." Other choices did not result in outcomes that were as beneficial. Remember,"..reminder_suffix
     else
 		--"It can be tricky to know what the best choice might be for each question. " --might be too much reading
@@ -1684,7 +1684,7 @@ local function Screen_Popup_Input(self, action_id, action)
 
 	local function func_hyperlink(button)
 
-		sys.open_url(hyperlink)
+		sys.open_url(hyperlink, {target = "_blank"})
 
 	end
 
@@ -2050,7 +2050,7 @@ local function Screen_Decision_Input(self, action_id, action)
 				-- could not open the url...
 		-- 	end
 
-		sys.open_url("https://www.outreachgames.org/OceanProtector/custom_web_files/OPG_Student_Helper_Sheet.pdf")
+		sys.open_url("https://www.outreachgames.org/OceanProtector/custom_web_files/OPG_Student_Helper_Sheet.pdf", {target = "_blank"})
 
 	end
 
