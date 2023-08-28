@@ -17,6 +17,7 @@ local CV_Save_Player_File_Name = "player_data_save_file"
 local CV_Save_GeneratedID_File_Name = "generated_id_save_file"
 local CV_Player_Role_Empty = "not_yet_selected"
 local CV_Node_Save_Icon = "gnode_saved_icon"
+local CV_Min_Bar_Pixels = 15 -- if set to < this value the 9 slice fails and it looks blocky
 
 -- recall ocean level has not been loaded yet so only save as strings for now
 local CV_URL_Ocean_Setup_GO = "ocean_level:/level_controller"
@@ -588,6 +589,14 @@ local function PlayerData_Check_MaybeLoad(self, load_saved_file)
 
 end
 
+local function Bar_Get_Pixels(health, bar_max_pixels)
+
+	-- gets pixel width or height of min pixel for data or plot bar
+
+	return EXT:math_clamp(math.ceil(bar_max_pixels * health), CV_Min_Bar_Pixels, bar_max_pixels)
+
+end
+
 
 -- HUD Screen: Highlighter
 local function Screen_Highlighter_Reset(self, enabled_setting, highlight_what)
@@ -835,8 +844,7 @@ local function Screen_Data_TrackerUpdate(self, item_name)
 		-- set as new size
 		local progress_node = gui.get_node(gui_groupname..constant.basename_item_bar_progress)
 		local new_size_vector = gui.get_size(progress_node)
-		local new_width_x = EXT:math_round(max_size.x * new_health_value, 0)
-		new_size_vector.x = EXT:math_clamp(new_width_x, 2, max_size.x) -- in pixels
+		new_size_vector.x = Bar_Get_Pixels(new_health_value, max_size.x)
 		gui.set_size(progress_node, new_size_vector)
 	end
 
@@ -876,7 +884,7 @@ local function Plot_Data_TrackerUpdate(self, item_key)
 			local new_size = gui.get_size(progress_node)
 			-- get health percent
 			local new_health_value = EXT:math_clamp(entry_health_data.item_tracker_score, 0, 1)
-			new_size.y = EXT:math_round(max_size.y * new_health_value, 0)
+			new_size.y = Bar_Get_Pixels(new_health_value, max_size.y)
 			-- set as new size and enable visibility
 			gui.set_size(progress_node, new_size)
 			local label_text = constant.specified_bar_labels[i]
