@@ -1431,7 +1431,7 @@ STR.Screenplay = {
                         "Dispose of the waste in the waters far away from the shore. "
                     },
                     choice_cloud_string = "water",
-                    coastal_oa_percent_to_run = 100,
+                    coastal_oa_percent_to_run = 1.0,
                     debrief_text = {
                         "You start disposing your waste in waters far from shore, but this ends up increasing acidification caused by waste pollution into the ocean. Traveling far from shore also uses more fuel, which increases carbon dioxide emissions. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
@@ -1447,7 +1447,7 @@ STR.Screenplay = {
                         "You start disposing your waste by burning, but this increases carbon dioxide gas emissions. Also, the ash is blown into the ocean by the wind, which increases acidification caused by waste pollution. ".. "\n\nIn the future you plan to use a landfill for disposing your waste. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    coastal_oa_percent_to_run = 75,
+                    coastal_oa_percent_to_run = 0.75,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
                 }
             },
@@ -1541,7 +1541,7 @@ STR.Screenplay = {
                         },
                     },
                     choice_cloud_string = "fishing_bait",
-                    coastal_oa_percent_to_run = 100,
+                    coastal_oa_percent_to_run = 1.0,
                     debrief_text = {
                         "You have chosen to try attracting more fish by spreading food powder and bait around the ocean over many trips. Unfortunately, this has cost you a lot of money and lead to more nutrient pollution, which ended up hurting the fish. Also, the additional boat trips have increased carbon dioxide emissions. "
                     },
@@ -1603,7 +1603,7 @@ STR.Screenplay = {
                         "The money should be spent on creating more parking lots throughout the city."
                     },
                     choice_cloud_string = "parking_lots",
-                    coastal_oa_percent_to_run = 100,
+                    coastal_oa_percent_to_run = 1.0,
                     debrief_text = {
                         "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "
                     },
@@ -1726,7 +1726,7 @@ STR.Screenplay = {
                         "People should water and fertilizer their lawns more frequently to ensure the grass is always green."
                     },
                     choice_cloud_string = "greener_lawns",
-                    coastal_oa_percent_to_run = 100,
+                    coastal_oa_percent_to_run = 1.0,
                     debrief_text = {
                         "People follow your advice and use more water and fertilizer on their lawns. This has used more energy, which cost people money and increased carbon dioxide emissions. Also, the extra fertilizer use has increased excess nutrient pollution in the area. "
                     },
