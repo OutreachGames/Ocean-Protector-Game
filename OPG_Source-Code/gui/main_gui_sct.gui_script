@@ -23,6 +23,12 @@ local CV_Min_Bar_Pixels = 15 -- if set to < this value the 9 slice fails and it 
 local CV_URL_Ocean_Setup_GO = "ocean_level:/level_controller"
 local CV_URL_Ocean_Setup_Script = "ocean_level:/level_controller#script"
 
+-- for development
+local CV_Dev_Mode_Options = {
+	disable_cloud_saves = false,
+	disable_progression_saves = false
+}
+
 local CV_item_groups = {}
 
 local CV_gameplay_loop = {
@@ -199,7 +205,7 @@ local function PlayerData_CloudRecord(self, print_outcome)
 	-- function to send report to cloud database
 
 	-- error checking
-	if not PlayerData_IsValid(self, "check_for_cloud_reporting") then
+	if CV_Dev_Mode_Options.disable_cloud_saves or not PlayerData_IsValid(self, "check_for_cloud_reporting") then
 		return
 	end
 
@@ -517,7 +523,7 @@ local function PlayerData_Save(self)
 	-- of if saving disabled for stage 
 	--   (such as stage not does not make any sense alone, like observing OA)
 	local stage_key, substage_key = Get_Current_Stage_and_Substage(self)
-	if STR:Get_Game_Disable_Save(stage_key, substage_key) then
+	if CV_Dev_Mode_Options.disable_progression_saves or STR:Get_Game_Disable_Save(stage_key, substage_key) then
 		return
 	end
 
