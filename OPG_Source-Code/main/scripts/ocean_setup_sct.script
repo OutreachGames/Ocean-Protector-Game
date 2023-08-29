@@ -19,6 +19,7 @@ local CV_Update_Property = {
 }
 
 local CV_Weather_Reload_Time = 0.25
+local CV_Weather_Default_Sign = 1
 local CV_Animal_Reset_Time = 0.25
 local CV_Total_Coastal_OA_Time = 28
 
@@ -529,7 +530,7 @@ local function Spawn_WaterLines(self, wave_direction, is_raining)
 	if wave_direction == 0 then
 		-- if swaying there is a shorter distance so time tuning is trickier
 		movex_time = math.floor(movex_time * 1.6) -- when using sway it was 0.7
-		wave_direction = self.no_wind_default
+		wave_direction = CV_Weather_Default_Sign
 		-- also main wave not moving in same direction as clouds is strange
 		-- so either clouds do not move with wind direction 0, or we track what direction 0 actually is
 	end
@@ -624,7 +625,7 @@ local function Spawn_Clouds(self, wave_direction, is_raining)
 	else
 		-- move slower if no large wind
 		mtime = mtime * 1.7
-		sign = self.no_wind_default
+		sign = CV_Weather_Default_Sign
 	end
 
 	local collfact_name = sgroup.spawn_coll_factory
@@ -1085,7 +1086,7 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 	if at_scene_start then
 		loader_helper(self)
 	else
-		timer.delay(self.weather_reload_time, false, loader_helper)
+		timer.delay(CV_Weather_Reload_Time, false, loader_helper)
 	end
 
 end
@@ -1123,7 +1124,7 @@ local function Weather_Change(self, is_supposed_to_rain, wave_direction, run_coa
 		Setup_Weather(self, false, is_supposed_to_rain, wave_direction)
 
 		-- fade back in, wait enough time for setup scene to clear and reload
-		timer.delay(self.weather_reload_time*2, false, function(self)
+		timer.delay(CV_Weather_Reload_Time*2, false, function(self)
 
 			-- fade back in
 			msg.post(CV_URL_HUD_GUI, HSH.msg_request_fade_in, {minfo_fade_duration = fader_time})
@@ -2417,8 +2418,6 @@ local function SceneStart(self)
 	-- set base variables
 	self.weather_changeable = true
 	self.weather_is_raining = false
-	self.weather_reload_time = CV_Weather_Reload_Time
-	self.no_wind_default = 1
 	self.spawned_objects_list = nil
 	self.spawned_objects_list = {}
 	self.spawned_objects_sum = nil

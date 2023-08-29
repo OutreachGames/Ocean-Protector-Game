@@ -5,7 +5,7 @@
         Hmm, calculate max wait time for OA outcomes then add failsafe timer?
 
 
-    -- maybe add medals along with bronze, silver, and gold medal achievments as final popup to view?
+    -- maybe add medals along with bronze, silver, and gold medal achievements as final popup to view?
 
     -- pause menu has black 1x1 gui square over screen?
 
