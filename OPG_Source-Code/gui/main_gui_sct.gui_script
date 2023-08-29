@@ -1727,9 +1727,9 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	local constant = self.hud_decision_constant
 	local controller_node = gui.get_node(constant.node_controller)
 
-	local has_specific_hint_text
+	local has_new_hint_text
 	if hint_text ~= nil and hint_text ~= "" then
-		has_specific_hint_text = true
+		has_new_hint_text = true
 	end
 
 	-- run enabling status and possibly sizing
@@ -1741,8 +1741,9 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 		-- will enable below if enabling screen
 		gui.set_text(gui.get_node(constant.node_hint_button_text), "Show Hint")
 		local hint_button_frame = gui.get_node(constant.node_hint_button_frame)
+		local hint_body_subcontroller = gui.get_node(constant.node_hint_subcontroller)
 		gui.set_enabled(hint_button_frame, false)
-		gui.set_enabled(gui.get_node(constant.node_hint_subcontroller), false)
+		gui.set_enabled(hint_body_subcontroller, false)
 
 		-- get which buttons to enable/disable when starting up/enabling
 		-- disable all buttons to start except for those that will be used
@@ -1768,23 +1769,25 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 			gui.set_position(button_node, vmath.vector3(current_pos_button.x, pos_update.submit_position_y, 0))
 
 			-- enable hint button if hint present
-			-- also set hint text now, too
-			if has_specific_hint_text then
-
-				local hint_button_pos = vmath.vector3(-current_pos_button.x, pos_update.submit_position_y, 0)
-				local hint_txt_controller_node = gui.get_node(constant.node_hint_subcontroller)
-
-				gui.set_enabled(hint_button_frame, true)
-
-				gui.set_position(hint_button_frame, hint_button_pos)
-				gui.set_position(hint_txt_controller_node, hint_button_pos)
-				gui.set_text(gui.get_node(constant.node_hint_body_text), hint_text)
-			end
+			local hint_previously_set = (not reset_tracker_variables and self.hud_decision_dynamic.has_hint_available)
 
 			-- if not resetting values (ie coming from closing plot screen) 
 			-- then enable hint if it is supposed to be enabled
-			if not reset_tracker_variables and self.hud_decision_dynamic.has_hint_available then
+			if hint_previously_set or has_new_hint_text then
 				gui.set_enabled(hint_button_frame, true)
+				local hint_button_pos = vmath.vector3(-current_pos_button.x, pos_update.submit_position_y, 0)
+				gui.set_position(hint_button_frame, hint_button_pos)
+
+				-- make sure hint text stays open if we are coming back to this screen
+				if self.hud_decision_dynamic.hint_box_is_open then
+					gui.set_enabled(hint_body_subcontroller, true)
+					gui.set_position(hint_body_subcontroller, hint_button_pos)
+				end
+			end
+
+			-- if new text then update text too
+			if has_new_hint_text then
+				gui.set_text(gui.get_node(constant.node_hint_body_text), hint_text)
 			end
 
 		end
@@ -1812,7 +1815,7 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 	self.hud_decision_dynamic.goo_option_selected = 0
 	self.hud_decision_dynamic.goo_sumbit_isactive = false
 	self.hud_decision_dynamic.number_answer_options = num_options
-	self.hud_decision_dynamic.has_hint_available = has_specific_hint_text
+	self.hud_decision_dynamic.has_hint_available = has_new_hint_text
 	self.hud_decision_dynamic.hint_box_is_open = false
 
 	-- actually reset radio nodes, including resetting text color

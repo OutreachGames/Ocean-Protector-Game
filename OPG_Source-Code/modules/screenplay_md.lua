@@ -1243,7 +1243,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "less_fuel",
                     debrief_text = {
-                        "You've upgraded your engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "
+                        "You've upgraded your boat engine to use less fuel. This upgrade costs money, but you have saved a lot of money by buying less fuel. You have also reduced the amount of carbon dioxide that your boat emits. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_good
@@ -1494,6 +1494,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "optimize_trips",
                     debrief_text = {
+                        "",
                         role_captain = {
                             "You have chosen to buy larger storage tanks, which reduces the amount of separate fishing trips you go on. Improving boat movements has decreased carbon dioxide emissions and saved you money."
                         },
@@ -1582,7 +1583,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "less_exhaust",
                     debrief_text = {
-                        "The council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "
+                        "The city council has followed your advice to add more buses, carpool lanes, and sidewalks. This has reduced carbon dioxide emissions in the city. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
@@ -1593,7 +1594,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "new_decorations",
                     debrief_text = {
-                        "The council has followed your advice to update the outside of many buildings. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution.  "
+                        "The city council has followed your advice to update the outside of many buildings. This has not decreased carbon dioxide emissions and it has not changed the amount of excess nutrient pollution.  "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
@@ -1605,7 +1606,7 @@ STR.Screenplay = {
                     choice_cloud_string = "parking_lots",
                     coastal_oa_percent_to_run = 1.0,
                     debrief_text = {
-                        "The council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "
+                        "The city council has followed your advice to build more parking lots. This has increased the number of people driving instead of taking the bus, which increases carbon dioxide emissions. The additional parking lots also increases excess nutrient pollution that runs into rives and the ocean. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
@@ -1767,7 +1768,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "sell_local",
                     debrief_text = {
-                        "The council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "
+                        "The city council has followed your advice to help businesses sell locally. This uses less fuel and has reduced carbon dioxide emissions in the city. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_super
@@ -1778,7 +1779,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "new_computers",
                     debrief_text = {
-                        "The council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "
+                        "The city council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
@@ -1789,7 +1790,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "sell_far",
                     debrief_text = {
-                        "The council has followed your advice to support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "
+                        "The city council has followed your advice to support businesses selling to other states. This uses more fuel and has increased carbon dioxide emissions in the city. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_awful
