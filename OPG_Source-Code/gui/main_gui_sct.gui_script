@@ -1185,7 +1185,7 @@ local function DynamicText_FinalDebrief(self, end_game_opt)
             magnitude_text = "Substantially"
         elseif percent_delta > 0.5 then
             magnitude_text = "Moderately"
-        elseif percent_delta > 0.5 then
+        elseif percent_delta > 0.2 then
             magnitude_text = "Slightly"
         end
 
@@ -3116,7 +3116,7 @@ local function GameLogic_Progress(self, i_stage_addition, run_file_save, disable
 			-- wait time only or wait time then pause
 
 			-- get wait time
-			local time_to_wait = STR:Get_Goal_SubType_Value(stage_key, substage_key)
+			local time_to_wait = STR:Get_Goal_SubType_Value(stage_key, substage_key) or 0.1
 
 			-- run timer, pause if needed, then progress game
 			timer.delay(time_to_wait, false, function (self)
