@@ -24,7 +24,7 @@ dependencies#1 = https://github.com/britzl/defold-orthographic/archive/master.zi
 dependencies#2 = https://github.com/defold/extension-spine/archive/master.zip
 
 [native_extension]
-app_manifest = /manual_manifest.appmanifest
+app_manifest = /bundle_settings.appmanifest
 
 [html5]
 show_made_with_defold = 0
