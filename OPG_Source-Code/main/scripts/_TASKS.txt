@@ -2,9 +2,6 @@
 
     update wording in 'for educators PDF' about selecting student option
 
-    I managed to get stuck twice after answering a question, as in, the game would not ask me to inspect the species, and unlike normally, clicking the species did not make their name pop up. The UI on the right still worked though. But I am unable to reliably reproduce it.
-        Hmm, calculate max wait time for OA outcomes then add failsafe timer?
-
 
     -- maybe add medals along with bronze, silver, and gold medal achievements as final popup to view?
 
