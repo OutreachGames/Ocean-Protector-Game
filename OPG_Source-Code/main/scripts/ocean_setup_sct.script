@@ -360,7 +360,7 @@ local function Spawned_RemoveObject(self, spawn_list_key, go_id, delete_go, igno
 
 end
 
-local function Spawned_ResetAll(self, spawn_list_key, delete_gos)
+local function Spawned_Reset_SpawnList(self, spawn_list_key, delete_gos)
 
 	-- reset all spawned objects from given list key
 
@@ -404,7 +404,7 @@ local function Spawned_AddObject(self, spawn_list_key, go_id)
 
 	if current_count == nil then
 		print("Note: Add Spawned Object provided with non-initalized spawn type key "..spawn_list_key..", initializing now...\n")
-		Spawned_ResetAll(self, spawn_list_key, true)
+		Spawned_Reset_SpawnList(self, spawn_list_key, true)
 		current_count = 0
 	end
 
@@ -1019,7 +1019,7 @@ local function Setup_Weather(self, at_scene_start, is_supposed_to_rain, wave_dir
 	-- note, cannot delete objects then spawn more in same frame, 
 	-- as that overrides buffer and makes other bugs
 	for _, v_groupkey in pairs(INFO.item_info.item_weather.subitem_info) do
-		Spawned_ResetAll(self, v_groupkey.spawn_list_key, true)
+		Spawned_Reset_SpawnList(self, v_groupkey.spawn_list_key, true)
 	end
 
 	local function loader_helper(self)
@@ -1410,7 +1410,7 @@ local function Setup_Animal(self, item_name, subitem_name, new_health, skip_rese
 	end
 
 	if not skip_reset then
-		Spawned_ResetAll(self, subitem_tbl.spawn_list_key, true)
+		Spawned_Reset_SpawnList(self, subitem_tbl.spawn_list_key, true)
 	end
 
 	local flip_h = self.dynamic_spawn_sides[subitem_tbl.spawn_list_key]
@@ -1531,7 +1531,7 @@ local function Boat_Change_Character(self, boat_subitem_name)
 
 	-- clear all current boats with expire message
 	for _,v_subiteminfo in pairs(INFO.item_info.item_humans.subitem_info) do
-		Spawned_ResetAll(self, v_subiteminfo.spawn_list_key, false)
+		Spawned_Reset_SpawnList(self, v_subiteminfo.spawn_list_key, false)
 		self.helper_player_boat_url = nil
 	end
 
@@ -1553,9 +1553,12 @@ local function SetupBuoy(self, hide_buoy)
 		go.cancel_animations("/ph_buoy/go_rope")
 		go.cancel_animations("/ph_buoy/go_body")
 		go.set("/ph_buoy/go_rope", "euler.z", hide_rot)
-		Spawned_ResetAll(self, buoy_list_key, true)
+
+		Spawned_Reset_SpawnList(self, buoy_list_key, false)
+
 	else
 		Spawned_AddObject(self, buoy_list_key, "/ph_buoy/go_clickme")
+
 		-- reposition to proper spot then float back and forth
 		local og_rot = 0
 		local setup_time = 3
@@ -1762,7 +1765,7 @@ local function Reset_DynamicObjects_All(self)
 	for _, v_iteminfo in pairs(INFO.item_info) do
 		if v_iteminfo.item_is_alive then
 			for _,v_subiteminfo in pairs(v_iteminfo.subitem_info) do
-				Spawned_ResetAll(self, v_subiteminfo.spawn_list_key, delete_gos)
+				Spawned_Reset_SpawnList(self, v_subiteminfo.spawn_list_key, delete_gos)
 			end
 		end
 	end
@@ -1995,7 +1998,7 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 			-- reset swimmer spawn keys
 			for k_spawnlistkey,_ in pairs(self.helper_spawn_lists_swimmers) do
-				Spawned_ResetAll(self, k_spawnlistkey, true)
+				Spawned_Reset_SpawnList(self, k_spawnlistkey, true)
 			end
 
 		end

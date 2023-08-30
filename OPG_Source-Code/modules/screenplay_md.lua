@@ -1486,10 +1486,10 @@ STR.Screenplay = {
                             "Buy larger storage tanks so you can stay out on the water and fish for longer."
                         },
                         role_ranger = {
-                            "Take time to plan more optimized routes on your boat that reduce the number of trips you take. "
+                            "Take time to plan more optimized routes on your boat, which will reduce the number of separate trips you take. "
                         },
                         role_guide = {
-                            "Upgrade your boat with more deck space so you can fit more tourists on each trip and reduce the number of total trips you take. "
+                            "Upgrade your boat with more deck space so you can fit more tourists on each trip and reduce the number of separate trips you take. "
                         },
                     },
                     choice_cloud_string = "optimize_trips",

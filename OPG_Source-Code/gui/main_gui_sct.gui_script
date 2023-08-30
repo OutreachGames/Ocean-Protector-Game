@@ -25,6 +25,7 @@ local CV_URL_Ocean_Setup_Script = "ocean_level:/level_controller#script"
 
 -- for development
 local CV_Dev_Mode_Options = {
+	-- disable both for release builds
 	disable_cloud_saves = false,
 	disable_progression_saves = false
 }
@@ -3572,7 +3573,9 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 				end
 
 				-- run catch up
-				PlayerData_CatchUp(self)
+				-- send as a message so it plays after the message of reset?
+				-- (since catch relies on things that are set with reset)
+				msg.post(".", HSH.msg_request_resume_catchup)
 
 			end
 
