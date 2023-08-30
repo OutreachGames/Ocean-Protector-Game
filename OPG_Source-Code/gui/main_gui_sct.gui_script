@@ -3553,6 +3553,7 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 		timer.delay(0.35, false, function(self)
 
 			msg.post(CV_URL_Ocean_Setup_Script, HSH.msg_request_special_case_action, {minfo_special_case_key = HSH.special_restart_game})
+			local wait_delay = 0.4
 			--^ above takes 0.25 seconds at least so wait a bit before fading back in
 
 			-- deal with game repeat types
@@ -3573,13 +3574,17 @@ local function Game_RunRestart(self, reset_ply_data, game_repeat_method)
 				end
 
 				-- run catch up
-				-- send as a message so it plays after the message of reset?
+				-- run after reset done since catchup needs to work on some reset values
 				-- (since catch relies on things that are set with reset)
-				msg.post(".", HSH.msg_request_resume_catchup)
+				timer.delay(wait_delay, false, function(self)
+					PlayerData_CatchUp(self)
+				end)
+				wait_delay = wait_delay + 0.2
+				--^ recall above catchup is instant, but still add a touch of extra time
 
 			end
 
-			timer.delay(0.45, false, function(self)
+			timer.delay(wait_delay, false, function(self)
 				Run_Fader(self, false, 0.25)
 			end)
 
