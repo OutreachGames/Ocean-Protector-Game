@@ -1,8 +1,5 @@
     --#TODOs Master List- 
 
-    update wording in 'for educators PDF' about selecting student option
-
-
     -- maybe add medals along with bronze, silver, and gold medal achievements as final popup to view?
 
     -- pause menu has black 1x1 gui square over screen?
