@@ -10,3 +10,5 @@ Thumbs.db
 builtins
 /.vscode
 /.defold
+/.defold/api
+/.defold/assets
