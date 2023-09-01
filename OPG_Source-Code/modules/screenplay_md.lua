@@ -540,7 +540,7 @@ STR.Screenplay = {
         user_lesson_13 = {
             goal_text = "Follow information prompts.",
             display_text = "Overall, acidification caused by burning of fossil fuels affects our oceans globally, while acidification caused by nutrient pollution affects our oceans in specific locations.",
-            debrief_text = "How do we do we know the oceans have become more acidic?",
+            debrief_text = "How do we know the oceans have become more acidic?",
             newscreen_cloud_string = "oa_history_intro",
             extra_text = nil
         },
