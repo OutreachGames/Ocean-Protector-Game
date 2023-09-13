@@ -701,7 +701,7 @@ STR.Screenplay = {
 
         decision_quiz_01 = {
             question_prompt = {
-                "Burning fossil fuels reduces large amounts of a gas called ________."
+                "Burning fossil fuels releases large amounts of a gas called ________."
             },
             question_cloud_string = "fossil_fuels",
             hint_text = {
