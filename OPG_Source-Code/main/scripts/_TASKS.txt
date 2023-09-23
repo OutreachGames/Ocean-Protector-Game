@@ -2,6 +2,8 @@
 
     -- maybe add medals along with bronze, silver, and gold medal achievements as final popup to view?
 
+    -- Add menu bar with pause no shake and mute
+
     -- pause menu has black 1x1 gui square over screen?
 
     -- add button that takes screenshots of your reef?
