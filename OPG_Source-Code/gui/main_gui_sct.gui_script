@@ -1786,9 +1786,12 @@ local function Screen_Decision_Reset(self, enabled_setting, run_sizing, reset_tr
 				gui.set_position(hint_button_frame, hint_button_pos)
 
 				-- make sure hint text stays open if we are coming back to this screen
+				-- hint position does not need to change
 				if self.hud_decision_dynamic.hint_box_is_open then
 					gui.set_enabled(hint_body_subcontroller, true)
-					gui.set_position(hint_body_subcontroller, hint_button_pos)
+					gui.set_text(gui.get_node(constant.node_hint_button_text), "Hide Hint")
+				else
+					gui.set_text(gui.get_node(constant.node_hint_button_text), "Show Hint")
 				end
 			end
 
