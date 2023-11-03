@@ -403,12 +403,13 @@ INFO.item_info = {
             --[[
             subitem_tuna = {
                 subitem_enum = 1,
+                disable_oa_effects = true,
                 spawn_list_key = "item_fish__subitem_tuna",
                 spawn_coll_factory = "spawner_fish_tuna#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*1),
                 spawn_y_range = {-25, 120},
                 spawn_x_min = 10,
-                spawn_max_count = 8,
+                spawn_max_count = 4, --10
                 object_dimensions = { x = 190, y = 88 }, --compiled sprite/spine dimensions
                 object_scale_base = CV_Default_Base_Scale,
                 object_rotation_speed_base = 60,
@@ -421,12 +422,13 @@ INFO.item_info = {
             },
             subitem_bluefish  = {
                 subitem_enum = 2,
+                disable_oa_effects = true,
                 spawn_list_key = "item_fish__subitem_bluefish",
                 spawn_coll_factory = "spawner_fish_bluefish#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*2),
                 spawn_y_range = {-145, -45},
                 spawn_x_min = 40,
-                spawn_max_count = 10,
+                spawn_max_count = 6, --10
                 object_dimensions = { x = 155, y = 55 }, --compiled sprite/spine dimensions
                 object_scale_base = CV_Default_Base_Scale - 0.1,
                 object_rotation_speed_base = 50,
@@ -439,12 +441,13 @@ INFO.item_info = {
             },
             subitem_snapper = {
                 subitem_enum = 3,
+                disable_oa_effects = true,
                 spawn_list_key = "item_fish__subitem_snapper",
                 spawn_coll_factory = "spawner_fish_snapper#collectionfactory",
                 spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*3),
                 spawn_y_range = {-270, -170},
                 spawn_x_min = 0,
-                spawn_max_count = 8,
+                spawn_max_count = 3, --8
                 object_dimensions = { x = 145, y = 75 }, --compiled sprite/spine dimensions
                 object_scale_base = CV_Default_Base_Scale - 0.1,
                 object_rotation_speed_base = 40,

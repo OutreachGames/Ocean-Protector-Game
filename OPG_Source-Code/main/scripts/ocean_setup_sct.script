@@ -2301,10 +2301,12 @@ local function On_OA_OutcomeEffects(self, oa_outcome_tbl, run_swimmer_reset, sho
 
 		--fish
 		local item_fish = INFO.item_info.item_fish
-		for k_subitem_fish_name, _ in pairs(item_fish.subitem_info) do
-			local fish_added, fish_subtracted = update_swimmer("item_fish", k_subitem_fish_name, death_ignore_stop, death_instant_stop)
-			number_added = number_added + fish_added
-			number_subtracted = number_subtracted + fish_subtracted
+		for k_subitem_fish_name, v_subitem_fish_info in pairs(item_fish.subitem_info) do
+			if not v_subitem_fish_info.disable_oa_effects then
+				local fish_added, fish_subtracted = update_swimmer("item_fish", k_subitem_fish_name, death_ignore_stop, death_instant_stop)
+				number_added = number_added + fish_added
+				number_subtracted = number_subtracted + fish_subtracted
+			end
 		end
 
 		-- return amount of extra time to wait (added to stage_done_ocean_pelagic)
