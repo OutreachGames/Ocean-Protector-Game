@@ -14940,7 +14940,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Fishing Bussiness Success:"
+  text: "Fishing Business Success:"
   font: "font_body_bold"
   id: "hud_newinfo/gnode_review_you_title"
   xanchor: XANCHOR_NONE

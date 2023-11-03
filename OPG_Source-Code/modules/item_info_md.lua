@@ -266,7 +266,7 @@ INFO.item_info = {
         gui_info = {
             group_name = "/group_item_mollusks",
             plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
-            plot_y_axis_label = {"Mollusk Population Levels"},
+            plot_y_axis_label = {"Mollusk Health Levels"},
             object_clicked_label = "Mollusk",
             data_view_label = {"Mollusks"},
         },
@@ -342,7 +342,7 @@ INFO.item_info = {
         gui_info = {
             group_name = "/group_item_crustaceans",
             plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
-            plot_y_axis_label = {"Crustacean Population Levels"},
+            plot_y_axis_label = {"Crustacean Health Levels"},
             object_clicked_label = "Crustacean",
             data_view_label = {"Crustaceans"},
         },
@@ -395,11 +395,12 @@ INFO.item_info = {
         gui_info = {
             group_name = "/group_item_fish",
             plot_y_tick_labels = {CV_Default_Y_Tick_Labels},
-            plot_y_axis_label = {"Fish Population Levels"},
+            plot_y_axis_label = {"Fish Health Levels"},
             object_clicked_label = "Fish"
         },
         item_is_alive = true,
         subitem_info = {
+            --[[
             subitem_tuna = {
                 subitem_enum = 1,
                 spawn_list_key = "item_fish__subitem_tuna",
@@ -453,6 +454,61 @@ INFO.item_info = {
                 object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.7},
                 movement_easing_options = {move_go=1, move_stop=2},
                 info_url = "https://www.fisheries.noaa.gov/species/red-snapper"
+            },
+            --]]
+            subitem_cobia = {
+                subitem_enum = 1,
+                spawn_list_key = "item_fish__subitem_cobia",
+                spawn_coll_factory = "spawner_fish_cobia#collectionfactory",
+                spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*1),
+                spawn_y_range = {-25, 120},
+                spawn_x_min = 10,
+                spawn_max_count = 10,
+                object_dimensions = { x = 234, y = 76 }, --compiled sprite/spine dimensions
+                object_scale_base = CV_Default_Base_Scale,
+                object_rotation_speed_base = 60,
+                object_translation_speed_base = 40,
+                object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
+                object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.5},
+                movement_easing_options = {move_go=1, move_stop=2},
+                info_url = "https://www.fisheries.noaa.gov/species/cobia"
+            },
+            subitem_bass  = {
+                subitem_enum = 2,
+                spawn_list_key = "item_fish__subitem_bass",
+                spawn_coll_factory = "spawner_fish_bass#collectionfactory",
+                spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*2),
+                spawn_y_range = {-145, -45},
+                spawn_x_min = 40,
+                spawn_max_count = 10,
+                object_dimensions = { x = 167, y = 85 }, --compiled sprite/spine dimensions
+                object_scale_base = CV_Default_Base_Scale - 0.1,
+                object_rotation_speed_base = 50,
+                object_translation_speed_base = 30,
+                object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
+                object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.8},
+                movement_easing_options = {move_go=1, move_stop=2},
+                info_url = "https://www.fisheries.noaa.gov/species/black-sea-bass"
+            },
+            subitem_flounder = {
+                subitem_enum = 3,
+                spawn_list_key = "item_fish__subitem_flounder",
+                spawn_coll_factory = "spawner_fish_flounder#collectionfactory",
+                spawn_z_base = CV_Base_Z_Items + (CV_Z_Failsafe*3),
+                spawn_y_range = {-270, -170},
+                spawn_x_min = 0,
+                spawn_max_count = 8,
+                object_dimensions = { x = 232, y = 36 }, --compiled sprite/spine dimensions
+                object_scale_base = CV_Default_Base_Scale - 0.1,
+                object_rotation_speed_base = 40,
+                object_translation_speed_base = 20,
+                object_logic_type = CV_Logic_Type_Swimmer,
+                extra_death_effect = 1,
+                object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.7},
+                movement_easing_options = {move_go=1, move_stop=2},
+                info_url = "https://www.fisheries.noaa.gov/species/winter-flounder"
             }
         }
 	},
@@ -471,9 +527,9 @@ INFO.item_info = {
             plot_y_axis_label = {
                 --recall 1 is default
                 "Human Health",
-                subitem_captain = "Fishing Bussiness Success",
+                subitem_captain = "Fishing Business Success",
                 subitem_ranger = "Marine Park Health",
-                subitem_guide = "Tour Bussiness Success"
+                subitem_guide = "Tour Business Success"
             },
             object_clicked_label = "Human",
             data_view_label = {
