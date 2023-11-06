@@ -338,7 +338,7 @@ STR.Screenplay = {
         -- Ocean Introduction
 
         user_lesson_01 = {
-            display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans.",
+            display_text = "Our oceans support a huge diversity of life. This includes many plants and animals, from the tiny, floating plankton, all the way to larger fish, corals, and even humans. \n\nThis specific ocean scene shows ocean life that can be found in the waters of the southeast US and Gulf of Mexico. ",
             goal_text = "Follow information prompts.",
             debrief_text = "Let's observe all the life in this specific ocean scene, starting with the base of the food-web.",
             newscreen_cloud_string = "intro_statement",
@@ -385,10 +385,10 @@ STR.Screenplay = {
             debrief_text = {
                 "",
                 item_coral = {
-                    "Coral"..n..n.."Corals are a diverse group of very small animals that live in colonies that construct large hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet.",
+                    "Coral"..n..n.."Corals are a diverse group of very small animals that live in colonies that construct large, hard structures that come in many shapes and sizes. Over time, groups of these structures build up into large coral reefs that provide a home to many different animal groups. Overall, coral reefs support the highest diversity of life on the planet."..n..n.."Many corals get most of their energy from very small plankton organisms that live within the coral. These organisms are producers that get their energy from sunlight, while corals are consumers."..CV_Extra_N_Large,
                 },
                 item_fish = {
-                    "Fish"..n..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the bluefish, tuna, and red snapper. All fish have some form of internal skeleton. Fish are important food for many different animals, including other fish and humans."
+                    "Fish"..n..n.."Fish are a diverse group that range in many shapes and sizes. This example includes the cobia, black sea bass, and flounder. All fish have some form of internal skeleton. Fish are important food for many different animals, including other fish and humans."
                 },
                 item_mollusks = {
                     "Mollusks"..n..n.."Mollusks include oysters, snails, sea slugs, and even squid and octopi. Almost all mollusks have some kind of shell material somewhere around or in their body. Mollusks help cycle nutrients and are food for many animals, including humans."
@@ -399,9 +399,6 @@ STR.Screenplay = {
             },
             extra_text = {
                 "",
-                item_coral = {
-                    "Did you know?"..n.."Many corals get most of their energy from very small separate organisms that live within the coral. These organisms are producers that get their energy from sunlight."
-                },
                 item_fish = {
                     "Did you know?"..n.." Sharks have a skeleton make of cartilage, not bone!"
                 },
@@ -436,17 +433,26 @@ STR.Screenplay = {
             debrief_text = {
                 "",
                 item_humans = {
-                    "Humans"..n.."Though humans do not live in the water we rely heavily on our oceans! Our actions also have big impacts on ocean water and ocean life! "
+                    "Humans"..n..n.."Though humans do not live in the water we rely heavily on our oceans! Our actions also have big impacts on ocean water and ocean life! \n\nClick 'Continue' to read more about how we are connected to our oceans."..n..n..n
                 }
             },
             extra_text = nil
         },
 
-        user_lesson_06 = {
+        user_lesson_06a = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nBillions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nIn addition, our oceans help cycle nutrients and are even a source of new medicines.\n\n"..CV_Extra_N_Large,
-            debrief_text = "It is very important to keep our oceans healthy and protected from threats caused by humans.",
-            extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer.",
+            display_text = "Our oceans affect us all, even those of us who live far away from the coast. \n\nEveryone lives on a watershed that eventually drains and runs-off into the ocean. Therefore, no matter where we live, our actions can affect the health of the ocean. "..CV_Extra_N_Huge,
+            debrief_text = nil,
+            newscreen_cloud_string = "oceans_are_good",
+            display_special_image_id = "Infographic_1_EarthOceans"
+            -- ^^Earth sphere with recycle arrows around oceans
+        },
+
+        user_lesson_06b = {
+            goal_text = "Follow information prompts.",
+            display_text = "Billions of people from around the world get their food from our oceans, and fishing and tourism support millions of jobs. \n\nFor many groups of people, oceans are vital to their way of life and culture. \n\nAlso, our oceans help cycle nutrients and are even a source of some new medicines.\n\n"..CV_Extra_N_Large,
+            debrief_text = "All of us are connected to our oceans. It is very important to keep our oceans healthy and protected from threats caused by humans.",
+            --extra_text = "Did you know?"..n.."Many new marine-based medicines have already been discovered that reduce pain, treat infections, and even help treat some types of cancer.",
             newscreen_cloud_string = "oceans_are_good",
             display_special_image_id = "Infographic_1_EarthOceans"
             -- ^^Earth sphere with recycle arrows around oceans
@@ -456,9 +462,12 @@ STR.Screenplay = {
 
         user_lesson_07 = {
             goal_text = "Follow information prompts.",
-            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. \n\nThis threat is called ocean acidification, and it is caused by too much carbon dioxide gas dissolving into our oceans' water. \n\n Why is this happening? Let's find out. \n\n\n**Note, a summary of this content will be provided as a review sheet later on. \n\n\n\n",
+            display_text = "One of the human-caused threats to our oceans is that ocean water is becoming more acidic. This threat is called ocean acidification. \n\nOcean acidification occurs when the ocean absorbs carbon dioxide from the atmosphere. This causes a fundamental and global change in the chemistry of the ocean. \n\nIn addition, even freshwater bodies like the Great Lakes can experience acidification.",
+            -- ^^direct from NOAA here: https://oceanacidification.noaa.gov/what-is-ocean-acidification/ 
+            -- OLD: This threat is called ocean acidification, it is caused by too much carbon dioxide gas dissolving into our oceans' water.
             newscreen_cloud_string = "OA_intro",
-            debrief_text = nil,
+            --displaytext_hyperlink_address = "https://oceanacidification.noaa.gov/what-is-ocean-acidification/", -- where definition is from
+            debrief_text = "Why is ocean acidification this happening? Let's find out more. \n\n\n**Note, a summary of this content will be provided as a review sheet later on. \n\n\n\n",
             extra_text = nil
         },
 
@@ -466,7 +475,7 @@ STR.Screenplay = {
 
         user_lesson_08 = {
             goal_text = "Follow information prompts.",
-            display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories. \n\n\n**Note, carbon dioxide gas is invisible, but the gas is being show here for visual purposes."..CV_Extra_N_Huge,
+            display_text = "As humans, we produce large amounts of carbon dioxide gas when burning fossil fuels to drive cars, fly planes, make electricity, and run factories. \n\n\n**Note, carbon dioxide gas is invisible, but the gas is shown here for visual purposes."..CV_Extra_N_Huge,
             display_special_image_id = "Infographic_2_CO2Emitters",
             -- ^^Plane, cars, factories, houses releasing CO2
             newscreen_cloud_string = "CO2_intro",
@@ -478,7 +487,7 @@ STR.Screenplay = {
 
         user_lesson_09 = {
             goal_text = "Follow information prompts.",
-            display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nThis excess carbon dioxide gas mixes with ocean water and causes a chemical reaction that increases the acidity of our oceans."..CV_Extra_N_Large,
+            display_text = "Our oceans absorb much of this excess carbon dioxide gas. \n\nWhile the ocean itself is not acidic, the absorption of this carbon dioxide increases the ocean's acidity."..CV_Extra_N_Large,
             display_special_image_id = "Infographic_3_CO2Ocean",
             -- ^^CO2 mixing with ocean
             newscreen_cloud_string = "ocean_absorb_CO2",
@@ -488,7 +497,7 @@ STR.Screenplay = {
 
         user_lesson_10a = {
             goal_text = "Follow information prompts.",
-            display_text = "Acidification can also occur due to nutrient pollution. \n\nExcess nutrient pollution can come from human sources such as soaps, industrial waste water, and plant fertilizers used on lawns or in fields.\n\n"..CV_Extra_N_Large,
+            display_text = "Ocean acidification occurs on a large, global scale. In addition, nutrient pollution can cause smaller, local scale coastal acidification. \n\nCoastal acidification includes local changes in water chemistry from nutrient pollution that runs into the ocean from land and rivers. \n\nExcess nutrient pollution can come from human sources such as soaps, industrial waste water, and plant fertilizers used on lawns or in fields.\n\n"..CV_Extra_N_Huge,
             display_special_image_id = "Infographic_4_ExcessNutrients",
             -- ^^fertilizers and industrial waste?
             newscreen_cloud_string = "nutrient_oa_intro",
@@ -511,7 +520,7 @@ STR.Screenplay = {
 
         user_lesson_11 = {
             goal_text = "Follow information prompts.",
-            display_text = "When it rains runoff water carries these excess nutrients to the coast and ocean. \n\nThese excess nutrients provide unnatural amounts of nutrients to phytoplankton. "..CV_Extra_N_Large,
+            display_text = "When it rains, run-off water carries these excess nutrients to the coast and ocean. \n\nThese excess nutrients provide unnatural amounts of nutrients to phytoplankton. "..CV_Extra_N_Large,
             display_special_image_id = "Infographic_5_AlgalBloom",
             -- ^^fertilizers and industrial waste running into ocean and arrow showing phytoplankton growth
             debrief_text = nil,
@@ -526,7 +535,7 @@ STR.Screenplay = {
 
         user_lesson_12 = {
             goal_text = "Follow information prompts.",
-            display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decomposing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers acidification.\n\n"..CV_Extra_N_Large,
+            display_text = "These phytoplankton populations grow out of control and then die and decompose in large amounts. \n\nThe decomposing phytoplankton gives off large amounts of carbon dioxide gas into the water, which triggers coastal acidification.\n\n"..CV_Extra_N_Large,
             display_special_image_id = "Infographic_6_CoastalAcid",
             -- ^^phytoplankton growth, then dying releasing CO2
             newscreen_cloud_string = "algal_bloom",
@@ -539,7 +548,7 @@ STR.Screenplay = {
 
         user_lesson_13 = {
             goal_text = "Follow information prompts.",
-            display_text = "Overall, acidification caused by burning of fossil fuels affects our oceans globally, while acidification caused by nutrient pollution affects our oceans in specific locations.",
+            display_text = "Overall, ocean acidification is caused by burning of fossil fuels and affects our oceans globally. Coastal acidification is caused by nutrient pollution and affects our oceans in specific, local areas.",
             debrief_text = "How do we know the oceans have become more acidic?",
             newscreen_cloud_string = "oa_history_intro",
             extra_text = nil
@@ -606,7 +615,7 @@ STR.Screenplay = {
 
         user_lesson_16a = {
             goal_text = "Follow information prompts.",
-            display_text = "Ocean acidification hurts life throughout our oceans, including us."..n..n.."For example, many animals build shells and exteriors from a compound called carbonate. Ocean acidification causes chemical changes that make carbonate become scarce, which results in many animals having weaker and unhealthy shells and exteriors. "..CV_Extra_N_Huge,
+            display_text = "Ocean acidification hurts life throughout our oceans, including us."..n..n.."For example, many animals build shells and exteriors from a compound called carbonate. Ocean acidification reduces the amount of carbonate available. As a result, many shelled animals, such as oysters and snails, have a harder time building their protective shells. \n\nOther organisms can also be affected by ocean acidification while they are young, which can prevent many of them from growing up to be healthy adults. "..CV_Extra_N_Huge,
             display_special_image_id = "Infographic_9_OAEffects",
             -- ^^show healthy shell than degraded shell
             debrief_text = "Let's observe how this increase in ocean acidity has affected each group of life in our ocean scene.",
@@ -650,22 +659,22 @@ STR.Screenplay = {
             debrief_text = {
                 "",
                 item_plankton = {
-                    "Plankton"..n.."Increased ocean acidity hurt both phytoplankton and zooplankton. For example, many are not able to build their protective shells as easily. \n\nPlankton are the food base for many animals, so unhealthy or unbalanced plankton populations can affect the entire food-web.\n\n\n",
+                    "Plankton"..n..n.."Increased ocean acidity may hurt both phytoplankton and zooplankton. For example, many may not able to build their protective exteriors as easily and may not grow to be fully healthy. \n\nPlankton are the food base for many animals, so unhealthy or unbalanced plankton populations can affect the entire food-web.\n\n\n",
                 },
                 item_coral = {
-                    "Coral"..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons. Also, unhealthy corals are more likely to become diseased and die. \n\nMany reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web.\n\n\n"
+                    "Coral"..n..n.."Corals become unhealthy as ocean water becomes more acidic because they become unable to build their skeletons effectively. Also, unhealthy corals are more likely to become diseased and die. \n\nMany reef animals rely on coral for food and shelter, so a loss of corals can harm the entire food-web.\n\n\n"
                 },
                 item_mollusks = {
-                    "Mollusks"..n.."As ocean water increases in acidity, mollusks may have a much more difficult time building their protective shells, and less will survive. \n\nA decrease in mollusk populations can upset nutrient cycling in the ocean and provide less food to animals that rely on them, including humans.\n\n\n"
+                    "Mollusks"..n..n.."As ocean water increases in acidity, mollusks have to use much more energy to build their shells. Using more energy for shell building means mollusks may not be able to survive as easily or for as long. \n\nA decrease in mollusk health or populations can upset nutrient cycling in the ocean and provide less food to animals that rely on them, including humans.\n\n\n\n"
                 },
                 item_fish = {
-                    "Fish"..n.."Increased ocean acidity reduces fish size and populations. Some fish grow slower while others have more difficulty avoiding predators, and less will survive. \n\nLower fish populations negatively affect many animals that rely on them for food, including humans.\n\n\n"
+                    "Fish"..n..n.."Increased ocean acidity may possibly harm specific fish groups. Some fish may not grow to be fully healthy adults or they may have more difficulty in avoiding predators, both of which may possibly lead to less healthy adult populations. \n\nLower or less healthy fish populations may negatively affect many animals that rely on them for food, including humans.\n\n\n\n"
                 },
                 item_crustaceans = {
-                    "Crustaceans"..n.."Increased ocean acidity results in many crustaceans being unable to growth in a healthy way, and less will survive. \n\nLower crustacean populations mean that other animals that rely on them for food, including humans, may be negatively affected.\n\n\n"
+                    "Crustaceans"..n..n.."Increased ocean acidity can sometimes result in certain crustaceans being unable to growth in a healthy way. Specific crustaceans may be particularly affected by ocean acidification when young, which can result in less healthy adult populations. \n\nLower or less healthy crustacean populations may negatively affect other animals that rely on them for food, including humans.\n\n\n\n"
                 },
                 item_humans = {
-                    "Humans"..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. \n\nAlso, unhealthy oceans mean that potential new medicines from our oceans are less likely to be discovered.\n\n\n"
+                    "Humans"..n..n.."Ocean acidification impacts many animals in the ocean that humans rely on for food and to make a living. \n\nAlso, unhealthy oceans mean that potential new medicines from our oceans are possibly less likely to be discovered.\n\n\n\n"
                 }
             }
         },
@@ -796,11 +805,11 @@ STR.Screenplay = {
 
         decision_quiz_03 = {
             question_prompt = { 
-                "In addition to burning fossil fuels, __________ can also cause the water in our oceans to become more acidic."
+                "One of the major causes of coastal acidification is __________."
             },
             question_cloud_string = "other_OA_cause",
             hint_text = {
-                "To review the two main causes of ocean acidification click the 'Review Sheet' button below."
+                "To review the two main causes of acidification click the 'Review Sheet' button below."
             },
             answer_options = {
                 user_choice_1 = {
@@ -822,7 +831,7 @@ STR.Screenplay = {
                     goal_text = "Review help text. ",
                     choice_cloud_string = "excess_nutrients",
                     debrief_text = {
-                        "Correct! Nutrient pollution can be caused by using too much fertilizer, dumping wastewater, and other sources. If this polluted water makes its way to the ocean and can cause a chain reaction that makes the ocean water near our coasts more acidic."
+                        "Correct! Nutrient pollution can be caused by using too much fertilizer, dumping wastewater, and other sources. If this polluted water makes its way to the ocean and can cause a chain reaction that makes the water near our coasts more acidic."
                     },
                     outcome_result_func = STR.CV.outcome_functions.option_empty
                 },
@@ -1034,7 +1043,7 @@ STR.Screenplay = {
         user_lesson_19 = {
             goal_text = "Follow information prompts.",
             display_text = "Great, we've reviewed that the health of our oceans is important and for human health. We have also reviewed how increases in carbon dioxide gas result in an increase of acidity in our oceans. ",
-            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidification."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n..n,
+            debrief_text = "It's up to all of us to help protect the oceans and reduce ocean acidification. "..n..n.." Reducing the amount of carbon dioxide gas we release will help prevent further ocean acidification."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent coastal acidification. "..n..n..n..n,
             newscreen_cloud_string = "review_summary",
             -- OLDER: 
             --  debrief_text = "As humans continue to burn fossil fuels and release carbon dioxide gas, our oceans will continue to become more acidic unless we take action to prevent this from happening."..n..n.."In addition, reducing the amount of nutrient pollution that runs into our oceans will also help prevent acidification. "..n..n..n,
@@ -1635,7 +1644,7 @@ STR.Screenplay = {
             },
             disable_save_game_progress = true,
             hint_text = {
-                "Reducing the amount of fossil fuel use and nutrient pollution are very effective ways to reduce ocean acidification. "
+                "Reducing the amount of fossil fuel use and nutrient pollution are very effective ways to reduce acidification in ocean waters. "
             },
             question_cloud_string = "farmers",
             answer_options = {
@@ -1697,7 +1706,7 @@ STR.Screenplay = {
             disable_save_game_progress = true,
             question_cloud_string = "community_water",
             hint_text = {
-                "Reducing the amount of excess water and energy use helps reduce carbon dioxide emissions and helps decrease nutrient pollution runoff into the ocean. "
+                "Reducing the amount of excess water and energy use helps reduce carbon dioxide emissions and helps decrease nutrient pollution run-off into the ocean. "
             },
             answer_options = {
                 user_choice_1 = {
@@ -1920,7 +1929,7 @@ STR.Screenplay = {
 
         user_lesson_21b = {
             goal_text = "Review summary.",
-            display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! "..n..n.."We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part, then together we can help protect our oceans! "..n..n,
+            display_text = "Thank you for taking the time to learn about ocean acidification and ways to help! "..n..n.."We can all help reduce the impacts of ocean acidification by educating ourselves about our oceans, sharing what we have learned with others, limiting our nutrient pollution, and reducing how much energy we use. If we all do our part and share what we know, then together we can help protect our oceans! "..n..n,
             newscreen_cloud_string = "review_reminder",
             debrief_text = nil,
         },
