@@ -3,7 +3,7 @@
 
     Game:
 
-        Update fish species with species that are documented and evidenced to be affected by OA, and updated associated PDF information sheets and links accordingly. These updated fish species are also listed in the NOAA fisheries database, so students are still able to learn more about the species at those links. 
+        Updated fish species with species that are documented and evidenced to be affected by OA, and updated associated PDF information sheets and links accordingly. These updated fish species are also listed in the NOAA fisheries database, so students are still able to learn more about the species at those links. 
 
         Updated the game with stating general location of game setting, which is especially useful for inland students that might not be aware that waters of the US southeast and Gulf of Mexico have coral and other species living there. 
 
@@ -23,8 +23,6 @@
             change how boat is used 
 
             retune question on fish dumping to something else 
-
-
 
 
 
