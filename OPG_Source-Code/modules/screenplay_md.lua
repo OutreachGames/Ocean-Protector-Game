@@ -2035,13 +2035,13 @@ function STR:ValidCheck(stage_key, substage_key)
 
     local stage_info = self.Screenplay[stage_key]
     if stage_info == nil then
-        print("Error function Get Goal Text provided with invalid stage key <"..tostring(stage_key).."> \n")
+        print("Error function Valid Check provided with invalid stage key <"..tostring(stage_key).."> \n")
         return false
     end
 
     local substage_info = stage_info[substage_key]
     if substage_info == nil then
-        print("Error function Get Goal Text provided with invalid substage_info key <"..tostring(substage_info).."> \n")
+        print("Error function Valid Check provided with invalid substage_info key <"..tostring(substage_info).."> \n")
         return false
     end
 

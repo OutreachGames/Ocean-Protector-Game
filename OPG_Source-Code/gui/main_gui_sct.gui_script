@@ -1044,6 +1044,11 @@ local function Get_Coastal_OA_Percent_Helper(self)
 	local choice_key = decision_info.selection_choice_key
 	local character_role = self.player_data_tbl.character_role_key
 
+	if stage_key == nil or substage_key == nil or character_role == nil or choice_key == nil then
+		--if anything nil then that means returning 0
+		return 0
+	end
+
 	return STR:Get_Choice_PercentCoastalOA(stage_key, substage_key, character_role, choice_key)
 
 end
