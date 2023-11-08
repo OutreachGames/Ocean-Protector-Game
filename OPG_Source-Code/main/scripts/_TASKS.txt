@@ -3,29 +3,6 @@
 
     Game:
 
-        Updated fish species with species that are documented and evidenced to be affected by OA, and updated associated PDF information sheets and links accordingly. These updated fish species are also listed in the NOAA fisheries database, so students are still able to learn more about the species at those links. 
-
-        Updated the game with stating general location of game setting, which is especially useful for inland students that might not be aware that waters of the US southeast and Gulf of Mexico have coral and other species living there. 
-
-        Updated coral introductory text with additional information about internal symbiont plankton to highlight that many coral species have these relationships. 
-
-        Updated text of how oceans affect everyone, including noting the concept of watersheds and how everyone lives on a watershed that eventually runs into he ocean. Also included how oceans are very important culturally and support a way of life for people around the world.
-
-        Updated wording about ocean and coastal acidification following verbatim statements from NOAA website (https://oceanacidification.noaa.gov/what-is-ocean-acidification/), along with adding statements about how even freshwater bodies like the Great Lakes can experience acidification.
-
-        Updated that 'sharing what we know' is a really powerful way to collaboratively help spread awareness and knowledge about helping to reduce ocean acidification.
-
-        Updated introductory text with specific examples of shelled organisms and also added how many organisms are sensitive to ocean acidification especially when young, which can prevent many individuals from reaching a healthy adulthood. Also updated specific text for how each group may be affected by ocean acidification with additional specifics and less broad wording. 
-
-
-        Questions
-
-            change how boat is used 
-
-            retune question on fish dumping to something else 
-
-
-
     -- maybe add medals along with bronze, silver, and gold medal achievements as final popup to view?
 
     -- Add menu bar with pause no shake and mute

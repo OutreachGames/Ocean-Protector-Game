@@ -163,6 +163,19 @@ STR.CV = {
             msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
         end,
 
+        -- (0, but good for person)
+        func_option_outcome_default_human_only = function()
+            local send_tbl = {
+                minfo_item_score_update_tbl = {
+                    CV_Delta_Zero,
+                    item_humans = CV_Delta_Up*CV_Multiplier_Minor
+                },
+                minfo_was_best_choice = false,
+                minfo_was_player_choice = true
+            }
+            msg.post(CV_ID_HUD, HSH.msg_update_item_value, send_tbl)
+        end,
+
         -- (0)
         func_option_outcome_default_fair = function()
             local send_tbl = {
@@ -1272,30 +1285,30 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "new_computer",
                     debrief_text = {
-                        "You've chosen to upgrade the digital equipment aboard your boat. Your boat sensors and communication lines are higher resolution, but the amount of carbon dioxide that your boat emits remains the same. "
+                        "You've chosen to upgrade the digital equipment aboard your boat. Your boat sensors and communication have improved, but the amount of carbon dioxide that your boat emits remains the same."
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_human_only
                 },
                 user_choice_3 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Keep your current fishing boat the same. Instead, spend the money to go on more fishing trips."
+                            "Keep your current fishing boat the same. Instead, spend the money on painting buildings on land that your business uses."
                         },
                         role_ranger = {
-                            "Keep your current research boat the same. Instead, spend the money to go on more research trips."
+                            "Keep your current research boat the same. Instead, spend the money to update the exterior of your research station on the coast."
                         },
                         role_guide = {
-                            "Keep your current tour boat the same. Instead, spend the money to go on more tours."
+                            "Keep your current tour boat the same. Instead, spend the money to update the signs and paint of buildings on land your tour company uses."
                         },
                     },
                     choice_cloud_string = "no_change",
                     debrief_text = {
-                        "You've increased the number of trips you take on your boat. This earns you slightly more money in the short term, but also has cost a lot of money in the long term by buying more fuel. You have also increased the amount of carbon dioxide that your boat emits. "
+                        "You've chosen to update the exteriors of buildings that you use on land. This helps gain visibility for your ventures, but the amount of carbon dioxide that your boat emits remains the same."
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_human_only
                 },
 
             },
@@ -1331,7 +1344,7 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Catch less fish that help eat excess phytoplankton."
+                            "Do you best to not over catch groups of fish that help eat excess phytoplankton."
                         },
                         role_ranger = {
                             "Make extra rules to protect fish that consume excess phytoplankton."
@@ -1371,7 +1384,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "no_change",
                     debrief_text = {
-                        "You have chosen to keep practices the same as they were before. Carbon dioxide emissions also have not changed. "
+                        "You have chosen to keep practices the same as they were before. Carbon dioxide emissions also have not substantially changed. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
@@ -1521,42 +1534,51 @@ STR.Screenplay = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Do not change how you catch fish or how you use your fishing boat. "
+                            "Do not change how you use your fishing boat. "
                         },
                         role_ranger = {
-                            "Do not change how you manage fish or how you use your research boat. "
+                            "Do not change how you use your research boat. "
                         },
                         role_guide = {
-                            "Do not change how you attract fish or how you use your tour boat. "
+                            "Do not change how you use your tour boat. "
                         },
                     },
                     choice_cloud_string = "no_change",
                     debrief_text = {
-                        "You have chosen to not change how you interact with fish or how you use your boat. Carbon dioxide emissions have also not changed. "
+                        "You have chosen to not change how you use your boat. Carbon dioxide emissions have also not substantially changed. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_human_only
                 },
                 user_choice_3 = {
                     display_text = {
                         "",
                         role_captain = {
-                            "Buy a lot of fish bait and make many trips spreading it around to try attracting more fish to catch."
+                            "The dockyards are having a paint sale, so buy it at a discounted price and spend time repainting your boat. "
                         },
                         role_ranger = {
-                            "Purchase large amounts of food powder and go on many trips spreading it around the marine park to try attracting more fish."
+                            "The dockyards are having a sale on boat seats, so buy some at a discounted price and spend time updating your research boat with high-end seats. "
                         },
                         role_guide = {
-                            "Purchase a lot of fish bait and make many trips spreading it around to try attracting more fish for tourists to view."
+                            "The dockyards are having a sale on anchors, so buy a one at a discounted price and spend time replacing the anchor of your tour boat. "
                         },
                     },
-                    choice_cloud_string = "fishing_bait",
-                    coastal_oa_percent_to_run = 1.0,
+                    choice_cloud_string = "boat_paint",
+                    --coastal_oa_percent_to_run = 1.0,
                     debrief_text = {
-                        "You have chosen to try attracting more fish by spreading food powder and bait around the ocean over many trips. Unfortunately, this has cost you a lot of money and lead to more nutrient pollution, which ended up hurting the fish. Also, the additional boat trips have increased carbon dioxide emissions. "
+                        "",
+                        role_captain = {
+                            "You have chosen to spend your time repainting your boat at a discounted price. You have saved some money, but carbon dioxide emissions have not significantly changed. "
+                        },
+                        role_ranger = {
+                            "You have chosen to upgrade your boat with high-end seats. You have saved some money, but carbon dioxide emissions have not significantly changed."
+                        },
+                        role_guide = {
+                            "You have chosen to spend your time installing a new, discounted anchor for your boat. You have saved some money, but carbon dioxide emissions have not significantly changed. "
+                        }
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
-                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_bad
+                    outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_human_only
                 }
             },
         },
@@ -1788,7 +1810,7 @@ STR.Screenplay = {
                     },
                     choice_cloud_string = "new_computers",
                     debrief_text = {
-                        "The city council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not changed. "
+                        "The city council has followed your advice to help businesses upgrade their office equipment. Carbon dioxide emissions in the city have not substantially changed. "
                     },
                     debrief_extra = STR.CV.debrief_decision_view,
                     outcome_result_func = STR.CV.outcome_functions.func_option_outcome_default_fair

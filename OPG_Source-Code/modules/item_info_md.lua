@@ -511,7 +511,7 @@ INFO.item_info = {
                 extra_death_effect = 1,
                 object_anim_multi = {rate_idle = 1.0, rate_moving = 1.5, rate_float = 0.25, rate_extra = 0.7},
                 movement_easing_options = {move_go=1, move_stop=2},
-                info_url = "https://www.fisheries.noaa.gov/species/winter-flounder"
+                info_url = "https://www.fisheries.noaa.gov/species/summer-flounder"
             }
         }
 	},
