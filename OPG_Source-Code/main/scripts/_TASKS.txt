@@ -1,8 +1,5 @@
     --#TODOs Master List- 
 
-
-    Game:
-
     -- maybe add medals along with bronze, silver, and gold medal achievements as final popup to view?
 
     -- Add menu bar with pause no shake and mute

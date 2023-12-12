@@ -17,6 +17,15 @@ function EXT:math_sign(n)
 
 end
 
+---Calculates percent progress from start number to the end number given current number
+---@param val_current number Current value to get percentage of
+---@param val_start number Starting/minimum value of range 
+---@param val_end number Ending/maximum value of range 
+---@return number percent number, decimal
+function EXT:Calculate_Percentage(val_current, val_start, val_end)
+    return (val_current - val_start) / (val_end - val_start)
+end
+
 ---Performs a linear interpolation from the start number to the end number
 ---@param val_start number Starting value (value if delta = 0)
 ---@param val_end number Ending value (value if delta = 1)
