@@ -15,13 +15,13 @@ input_method = HiddenInputField
 
 [project]
 title = Ocean Protector
-version = 1.0
+version = 1.04
 publisher = Outreach Games
 developer = Alex Zimmerman
 bundle_exclude_resources = /.defold, /.idea, /.vscode
 dependencies#0 = https://github.com/britzl/gooey/archive/master.zip
 dependencies#1 = https://github.com/britzl/defold-orthographic/archive/master.zip
-dependencies#2 = https://github.com/defold/extension-spine/archive/master.zip
+dependencies#2 = https://github.com/defold/extension-spine/archive/refs/tags/2.14.0.zip
 
 [native_extension]
 app_manifest = /bundle_settings.appmanifest
@@ -31,6 +31,7 @@ show_made_with_defold = 0
 cssfile = /builtins/manifests/web/dark_theme.css
 splash_image = /asset_files/images/background/Asset_logo.png
 show_fullscreen_button = 0
+heap_size = 64
 
 [particle_fx]
 max_count = 128
