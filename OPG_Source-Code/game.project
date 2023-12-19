@@ -32,6 +32,7 @@ cssfile = /builtins/manifests/web/dark_theme.css
 splash_image = /asset_files/images/background/Asset_logo.png
 show_fullscreen_button = 0
 heap_size = 64
+show_console_banner = 0
 
 [particle_fx]
 max_count = 128
@@ -42,4 +43,30 @@ app_icon = /asset_files/images/icons/favicon.ico
 
 [osx]
 app_icon = /asset_files/images/icons/Asset_Logo.icns
+
+[factory]
+max_count = 16
+
+[mesh]
+max_count = 2
+
+[model]
+max_count = 2
+
+[sound]
+max_sound_data = 64
+
+[tilemap]
+max_count = 2
+max_tile_count = 32
+
+[collectionfactory]
+max_count = 64
+
+[collection_proxy]
+max_count = 4
+
+[gui]
+max_particlefx_count = 8
+max_particle_count = 128
 
