@@ -8,7 +8,6 @@ shared_state = 1
 [display]
 width = 1600
 height = 900
-high_dpi = 0
 
 [android]
 input_method = HiddenInputField
@@ -57,8 +56,8 @@ max_count = 2
 max_sound_data = 64
 
 [tilemap]
-max_count = 2
-max_tile_count = 32
+max_count = 1
+max_tile_count = 16
 
 [collectionfactory]
 max_count = 64
@@ -69,4 +68,11 @@ max_count = 4
 [gui]
 max_particlefx_count = 8
 max_particle_count = 128
+
+[input]
+use_accelerometer = 0
+
+[physics]
+max_collision_object_count = 32
+allow_dynamic_transforms = 0
 
