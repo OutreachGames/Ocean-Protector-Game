@@ -23,7 +23,9 @@ end
 ---@param val_end number Ending/maximum value of range 
 ---@return number percent number, decimal
 function EXT:Calculate_Percentage(val_current, val_start, val_end)
+
     return (val_current - val_start) / (val_end - val_start)
+
 end
 
 ---Performs a linear interpolation from the start number to the end number
@@ -71,21 +73,15 @@ end
 ---@return number rounded number
 function EXT:math_round(input_number, numDecimalPlaces)
 
-	local output
-
-	local input_arg = tonumber(input_number, 10) or 0
-	if numDecimalPlaces == nil then numDecimalPlaces = 0 end
-
-	if numDecimalPlaces == 0 then
-		output = math.floor(math.floor(input_arg + 0.5))
-	end
+	input_number = tonumber(input_number, 10) or 0
+	numDecimalPlaces = numDecimalPlaces or 0
 
 	if numDecimalPlaces > 0 then
 		local mult = 10^numDecimalPlaces
-		output = math.floor(input_arg * mult + 0.5) / mult
+		return math.floor(input_number * mult + 0.5) / mult
+	else
+		return math.floor(input_number + 0.5)
 	end
-
-	return output
 
 end
 
@@ -276,7 +272,7 @@ function EXT:Random_fromTable(tbl)
 
 	if type(tbl) == "table" then
 		local num = #tbl
-		local randomi = math.random(1,num)
+		local randomi = math.random(1, num)
 		local choice = tbl[randomi]
 		return choice
 	else
